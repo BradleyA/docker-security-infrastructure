@@ -1,11 +1,7 @@
 # dockerd-configuration-options/
 
-This xxXXXxxx
-
 #### WARNING: These instructions are incomplete. Consider them as notes quickly drafted on a napkin rather than proper documentation!
 #### Need to clean this up once I get everything working for Ubuntu 14.04 and Ubuntu 16.04
-
-setup-dockerd-configuration-file
 
 The docker daemon flags will be written to /etc/systemd/system/docker.service.d/override.conf by default for Ubuntu 16.04 (systemd) and /etc/default/docker for Ubuntu 14.04 (Upstart)
 
@@ -18,6 +14,8 @@ The docker daemon flags will be written to /etc/systemd/system/docker.service.d/
 644 dockerd-configuration-file.service
 
 dockerd-configuration-file.upstart
+
+setup-dockerd-configuration-file
 
 2) Append dockerd-configuration-file to /etc/default/docker for ubuntu 14.04 upstart docker daemon
 3) Run dockerd-configuration-file.service as a service to create $OVERRIDE_FILE before sudo systemctl start docker so this service is a pre-req of docker.service will need to add that to dockerd-configuration-file.service
