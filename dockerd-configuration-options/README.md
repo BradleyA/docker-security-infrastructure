@@ -9,8 +9,9 @@ setup-dockerd-configuration-file
 
 The docker daemon flags will be written to /etc/systemd/system/docker.service.d/override.conf by default for Ubuntu 16.04 (systemd) and /etc/default/docker for Ubuntu 14.04 (Upstart)
 
-1) Download the file below; 
-	440	10-override
+   1) Download the file below; 
+    
+    440	10-override
 		dockerd-configuration-file.service runs /etc/docker/start-dockerd-with-systemd.sh that creates /etc/systemd/system/docker.service.d/10-override.conf for docker.service to use from 10-override
 	640	dockerd-configuration-file
 		dockerd-configuration-file.service
