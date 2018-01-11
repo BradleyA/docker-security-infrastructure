@@ -1,0 +1,13 @@
+[Unit]
+Description=dockerd-configuration-file.service
+Documentation=https://www.youtube.com
+#       Requires=systemd-networkd-wait-online.service
+#       After=systemd-networkd-wait-online.service
+
+[Service]
+ExecStart=/etc/docker/start-dockerd-with-systemd.sh
+RemainAfterExit=yes
+Type=oneshot
+
+[Install]
+WantedBy=docker.service

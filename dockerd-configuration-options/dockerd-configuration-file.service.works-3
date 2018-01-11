@@ -1,0 +1,25 @@
+[Unit]
+Description=dockerd-configuration-file.service
+Documentation=https://www.youtube.com
+#       Requires=systemd-networkd-wait-online.service
+#       After=systemd-networkd-wait-online.service
+
+[Service]
+#	Environment=DROP_IN_DIRECTORY=/etc/systemd/system/docker.service.d
+#	Environment=OVERRIDE_FILE=10-override.conf
+#	Environment=WORK_DIRECTORY=/etc/docker
+#       Create systemd drop-in directory for docker.service drop-in $OVERRIDE_FILE
+#       ExecStartPre=-/bin/mkdir -p ${DROP_IN_DIRECTORY}
+#       Create start-dockerd-with-systemd.sh script 
+#       ExecStartPre=/etc/docker XXX xxx XXX
+#       Set execute permission for $WORK_DIRECTORY/start-dockerd-with-systemd.sh
+#       ExecStartPre=/bin/chmod 700 $WORK_DIRECTORY/start-dockerd-with-systemd.sh
+#       Run start-dockerd-with-systemd.sh script to create $WORK_DIRECTORY/$OVERRIDE_FILE
+#       ExecStartPre=${WORK_DIRECTORY}/start-dockerd-with-systemd.sh
+#       Move $WORK_DIRECTORY/$OVERRIDE_FILE to $DROP_IN_DIRECTORY
+#       ExecStart=/bin/mv $WORK_DIRECTORY/$OVERRIDE_FILE $DROP_IN_DIRECTORY
+#       ExecStart=/bin/mv ${WORK_DIRECTORY}/${OVERRIDE_FILE} ${DROP_IN_DIRECTORY}
+#       Run start-dockerd-with-systemd.sh script to create $WORK_DIRECTORY/$OVERRIDE_FILE
+ExecStart=/etc/docker/start-dockerd-with-systemd.sh
+RemainAfterExit=yes
+Type=oneshot
