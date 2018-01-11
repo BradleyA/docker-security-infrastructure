@@ -7,16 +7,18 @@ I have been using some of these for days, months, or years and just now uploadin
 
 This repository contains shell scripts for RaspBerry pi.
 
- * [system-stats](https://github.com/BradleyA/pi-scripts/tree/master/system-stats)
- * [cpu-temperature](https://github.com/BradleyA/pi-scripts/tree/master/cpu-temperature)
- * [cluster-shutdown](https://github.com/BradleyA/pi-scripts/tree/master/cluster-shutdown)
+ * 
+
+## System OS script tested
+
+    Ubuntu 14.04.3 LTS
 
 ## Install
 
 To install, change directory to the location you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have git then enter; "sudo apt-get install git". On the github page of this script use the "HTTPS clone URL" with the 'git clone' command.
 
-    git clone https://github.com/BradleyA/pi-scripts
-    cd pi-scripts
+    git clone https://github.com/BradleyA/docker-scripts
+    cd docker-scripts
 
 #### Design Principles
  * Have a simple setup process and a minimal learning curve
