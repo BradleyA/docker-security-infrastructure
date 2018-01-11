@@ -74,9 +74,9 @@ Contents of 644 dockerd-configuration-file.service
  ]
 Contents of dockerd-configuration-file
  [
-### Use DOCKER_OPTS to modify the daemon startup options.
-#
-#   Enable debug mode. Default is false
+	### Use DOCKER_OPTS to modify the daemon startup options.
+	#
+	#   Enable debug mode. Default is false
 #       --debug=true
 #   IPv4 address of the container default gateway; this address must be part of the bridge subnet (which is defined by -b or --bip)
 #       --default-gateway=""
