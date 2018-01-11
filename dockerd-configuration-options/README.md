@@ -3,8 +3,19 @@
 This xxXXXxxx
 
 #### WARNING: These instructions are incomplete. Consider them as notes quickly drafted on a napkin rather than proper documentation!
+#### Need to clean this up once I get everything working for Ubuntu 14.04 and Ubuntu 16.04
 
- 
+setup-dockerd-configuration-file
+
+The docker daemon flags will be written to /etc/systemd/system/docker.service.d/override.conf by default for Ubuntu 16.04 (systemd) and /etc/default/docker for Ubuntu 14.04 (Upstart)
+
+1) Download the file below; 
+	440	10-override
+	640	dockerd-configuration-file
+		dockerd-configuration-file.service
+		dockerd-configuration-file.upstart
+2) Append dockerd-configuration-file to /etc/default/docker for ubuntu 14.04 upstart docker daemon
+3) Run dockerd-configuration-file.service as a service to create $OVERRIDE_FILE before sudo systemctl start docker so this service is a pre-req of docker.service will need to add that to dockerd-configuration-file.service
 
 ## System OS script tested
 
@@ -19,21 +30,6 @@ To install, change directory to the location you want to download the scripts. U
 
     git clone https://github.com/BradleyA/docker-scripts
     cd docker-scripts
-
-#### Need to clean this up once I get everything working for Ubuntu 14.04 and Ubuntu 16.04
-
-setup-dockerd-configuration-file
-
-The docker daemon flags will be written to /etc/systemd/system/docker.service.d/override.conf by default for Ubuntu 16.04 (systemd) and /etc/default/docker for Ubuntu 14.04 (Upstart)
-
-1) Download the file below; 
-	440	10-override
-	640	dockerd-configuration-file
-		dockerd-configuration-file.service
-		dockerd-configuration-file.upstart
-2) Append dockerd-configuration-file to /etc/default/docker for ubuntu 14.04 upstart docker daemon
-3) Run dockerd-configuration-file.service as a service to create $OVERRIDE_FILE before sudo systemctl start docker so this service is a pre-req of docker.service will need to add that to dockerd-configuration-file.service
- 
 
 #### Contents of 440 $OVERRIDE_FILE created after each reboot by the above lines
  
@@ -128,7 +124,6 @@ The docker daemon flags will be written to /etc/systemd/system/docker.service.d/
 
 Note:
 	echo "DOCKER_OPTS="\"$DOCKER_OPTS\" >> $OVERRIDE_FILE
-	
 
 #### Design Principles
  * Have a simple setup process and a minimal learning curve
