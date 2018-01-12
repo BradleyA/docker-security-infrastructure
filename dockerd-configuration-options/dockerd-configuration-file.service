@@ -1,0 +1,13 @@
+[Unit]
+Description=dockerd-configuration-file.service
+Documentation=https://www.youtube.com
+After=network-online.target 
+Wants=network-online.target
+
+[Service]
+ExecStart=/etc/docker/start-dockerd-with-systemd.sh
+RemainAfterExit=yes
+Type=oneshot
+
+[Install]
+WantedBy=docker.service
