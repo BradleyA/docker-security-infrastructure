@@ -1,3 +1,7 @@
+#
+#	dockerd-configuration-file.service	1.0	2018-01-13_11:25:24_CST uadmin rpi3b-four.cptx86.com
+#	Initial commit
+#
 [Unit]
 Description=dockerd-configuration-file.service
 Documentation=https://www.youtube.com
