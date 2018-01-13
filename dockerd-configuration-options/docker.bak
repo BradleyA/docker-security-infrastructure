@@ -1,9 +1,25 @@
-#!/bin/bash
+# Docker Upstart and SysVinit configuration file
+
 #
-#	set -v
-#	set -x
+# THIS FILE DOES NOT APPLY TO SYSTEMD
 #
-# Dockerd configuration file
+#   Please see the documentation for "systemd drop-ins":
+#   https://docs.docker.com/engine/admin/systemd/
+#
+
+# Customize location of Docker binary (especially for development testing).
+#DOCKERD="/usr/local/bin/dockerd"
+
+# Use DOCKER_OPTS to modify the daemon startup options.
+#DOCKER_OPTS="--dns 8.8.8.8 --dns 8.8.4.4"
+
+# If you need Docker to use an HTTP proxy, it can also be specified here.
+#export http_proxy="http://127.0.0.1:3128/"
+
+# This is also a handy place to tweak where Docker's temporary files go.
+#export DOCKER_TMPDIR="/mnt/bigdrive/docker-tmp"
+
+### Custom Dockerd Configuration File
 #
 ### Use DOCKER_OPTS to modify the daemon startup options.
 #
@@ -69,22 +85,4 @@ DOCKER_OPTS="\
         --tlskey=/etc/docker/certs.d/daemon/`hostname --fqdn`-priv-key.pem \
         --userns-remap=default \
         "
-#
-#	Any changes to dockerd-configuration-file will be added to the override file during the next boot.
-DROP_IN_DIRECTORY="/etc/systemd/system/docker.service.d"
-OVERRIDE_FILE="10-override"
-WORK_DIRECTORY="/etc/docker/"
-#	Copy $WORK_DIRECTORY/$OVERRIDE_FILE to $WORK_DIRECTORY/$OVERRIDE_FILE.conf
-/bin/cp --force $WORK_DIRECTORY/$OVERRIDE_FILE $WORK_DIRECTORY/$OVERRIDE_FILE.conf
-#	Append the following line with $DOCKER_OPTS onto /etc/docker/10-override.conf
-/bin/echo "ExecStart=/usr/bin/dockerd $DOCKER_OPTS" >> $WORK_DIRECTORY/$OVERRIDE_FILE.conf
-#       Create docker.service drop-in directory for override file ($OVERRIDE_FILE.conf)
-/bin/mkdir -p ${DROP_IN_DIRECTORY}
-#	Move override file into docker.service.d directory
-/bin/mv --force $WORK_DIRECTORY/$OVERRIDE_FILE.conf $DROP_IN_DIRECTORY
-#	Unable to get docker.service to reload during boot for 10-override.conf file changes if any to be included in dockerd.
-#	/bin/systemctl reload docker.service 
-#	This is the warning I receive when uncommenting the previous line.
-#		Warning: docker.service changed on disk. Run 'systemctl daemon-reload' to reload units.
-#	/bin/systemctl daemon-reload
-#	No change when using this line,  I think systemd is not up yet so systemctl daemon-reload can not be used.
+###
