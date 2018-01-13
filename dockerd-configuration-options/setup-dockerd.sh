@@ -6,8 +6,6 @@
 #	set -x
 #
 
-
-
 #	Configure dockerd options for Ubuntu 14.04 (upstart)
 
 # if file /etc/default/docker then
