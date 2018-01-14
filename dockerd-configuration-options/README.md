@@ -1,4 +1,6 @@
 # dockerd-configuration-options/
+#	README.md	1.1	2018-01-13_19:58:15_CST uadmin rpi3b-four.cptx86.com
+#	changed 10-override to 10-override.begin
 
 #### WARNING: These instructions are incomplete. Consider them as notes quickly drafted on a napkin rather than proper documentation!
 #### Need to clean this up once I get everything working for Ubuntu 14.04 and Ubuntu 16.04
@@ -9,7 +11,7 @@ Gaol is to use one dockerd configuration file with dockerd flags.
 
 1) Download files:
     
-440	10-override - beginning default lines for /etc/systemd/system/docker.service.d/10-override.conf file used by docker.service.  Other lines for /etc/systemd/system/docker.service.d/10-override.conf file created by /etc/docker/start-dockerd-with-systemd.sh which runs dockerd-configuration-file.service 
+440	10-override.begin - beginning default lines for /etc/systemd/system/docker.service.d/10-override.conf file used by docker.service.  Other lines for /etc/systemd/system/docker.service.d/10-override.conf file created by /etc/docker/start-dockerd-with-systemd.sh which runs dockerd-configuration-file.service 
 
 640	dockerd-configuration-file - dockerd option file for setting DOCKER_OPTS= environment variable to be added to Ubuntu 14.04 (upstart) in /etc/default/docker file and Ubuntu 16.04 (systemd) in /etc/docker/start-dockerd-with-systemd.sh script
 
