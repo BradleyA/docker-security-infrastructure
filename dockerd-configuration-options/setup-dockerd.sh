@@ -54,7 +54,7 @@ if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] ; then
 	if grep -qF ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org ; then 
 		echo "${0} [INFO]:	Found ${CONFIGURATION_STRING} in ${WORK_DIRECTORY}docker.org"	1>&2
 #		Locate line number of ${CONFIGURATION_STRING} in ${WORK_DIRECTORY}docker
-		LINE=grep -n ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org | cut -f1 -d:
+		LINE=`grep -n ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org | cut -f1 -d:`
 #		Move line one to $LINE number into ${WORK_DIRECTORY}docker
 		tail -n +${LINE} ${WORK_DIRECTORY}docker.org > ${WORK_DIRECTORY}docker
 	else
