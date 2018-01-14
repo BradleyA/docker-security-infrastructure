@@ -20,7 +20,7 @@
 #
 WORK_DIRECTORY="/etc/docker/"
 UPSTART_SYSVINIT_DIRECTORY="/etc/default/"
-CONFIGURATION_STRING="cptx86"
+CONFIGURATION_STRING="Custom dockerd Configuration File"
 #
 echo -e "\n${0} [INFO]:	Changes made to ${WORK_DIRECTORY}dockerd-configuration-file will be copied to the correct locations.\n"	1>&2
 #	Must be root to run this script
