@@ -1,4 +1,6 @@
 #!/bin/bash
+#	setup-dockerd.sh	1.41	2018-01-14_09:37:25_CST uadmin rpi3b-four.cptx86.com
+#	correct systax of if ; then ; else
 #	setup-dockerd.sh	1.4	2018-01-14_09:26:57_CST uadmin rpi3b-four.cptx86.com
 #	update format of echo statements
 #	setup-dockerd.sh	1.3	2018-01-14_09:04:21_CST uadmin rpi3b-four.cptx86.com
@@ -18,7 +20,7 @@ CONFIGURATION_STRING="Custom Dockerd Configuration File"
 #
 #	Must be root to run this script
 if ! [ $(id -u) = 0 ]; then
-   echo "${0}[ERR]:	Use sudo setup-dockerd.sh"	1>&2
+   echo "${0}[ERR]:	Use sudo ./${0}"	1>&2
    exit 1
 fi
 #	Move files into /etc/docker ${WORK_DIRECTORY}
@@ -35,11 +37,11 @@ mv start-dockerd-with-systemd.end	${WORK_DIRECTORY}
 #
 #	As systemd complete all work in $WORK_DIRECTORY before moving the completed file in to /etc/defailt
 #	Check for dockerd configuration file
-if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] then
+if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ]; then
 	echo "${0}[INFO]:	Found ${UPSTART_SYSVINIT_DIRECTORY}docker"
 #	copy ${UPSTART_SYSVINIT_DIRECTORY}docker to ${WORK_DIRECTORY}docker.org
 	cp ${UPSTART_SYSVINIT_DIRECTORY}docker ${WORK_DIRECTORY}docker.org
-	if [ grep -qF ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org ] then 
+	if [ grep -qF ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org ]; then 
 		echo "${0}[INFO]:	Found ${CONFIGURATION_STRING} in ${WORK_DIRECTORY}docker.org"
 #		Locate line number of ${CONFIGURATION_STRING} in ${WORK_DIRECTORY}docker
 		LINE=grep -n ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org | cut -f1 -d:
