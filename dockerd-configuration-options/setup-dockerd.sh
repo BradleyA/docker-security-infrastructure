@@ -1,4 +1,6 @@
 #!/bin/bash
+#	setup-dockerd.sh	1.4	2018-01-14_09:26:57_CST uadmin rpi3b-four.cptx86.com
+#	update format of echo statements
 #	setup-dockerd.sh	1.3	2018-01-14_09:04:21_CST uadmin rpi3b-four.cptx86.com
 #	added code to check if script is being run as root and move files into /etc/docker
 #	setup-dockerd.sh	1.1	2018-01-13_20:14:44_CST uadmin rpi3b-four.cptx86.com
@@ -16,7 +18,7 @@ CONFIGURATION_STRING="Custom Dockerd Configuration File"
 #
 #	Must be root to run this script
 if ! [ $(id -u) = 0 ]; then
-   echo "Use sudo setup-dockerd.sh"	1>&2
+   echo "${0}[ERR]:	Use sudo setup-dockerd.sh"	1>&2
    exit 1
 fi
 #	Move files into /etc/docker ${WORK_DIRECTORY}
@@ -34,17 +36,17 @@ mv start-dockerd-with-systemd.end	${WORK_DIRECTORY}
 #	As systemd complete all work in $WORK_DIRECTORY before moving the completed file in to /etc/defailt
 #	Check for dockerd configuration file
 if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] then
-	echo "found ${UPSTART_SYSVINIT_DIRECTORY}docker"
+	echo "${0}[INFO]:	Found ${UPSTART_SYSVINIT_DIRECTORY}docker"
 #	copy ${UPSTART_SYSVINIT_DIRECTORY}docker to ${WORK_DIRECTORY}docker.org
 	cp ${UPSTART_SYSVINIT_DIRECTORY}docker ${WORK_DIRECTORY}docker.org
 	if [ grep -qF ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org ] then 
-		echo "found ${CONFIGURATION_STRING} in ${WORK_DIRECTORY}docker.org"
+		echo "${0}[INFO]:	Found ${CONFIGURATION_STRING} in ${WORK_DIRECTORY}docker.org"
 #		Locate line number of ${CONFIGURATION_STRING} in ${WORK_DIRECTORY}docker
 		LINE=grep -n ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org | cut -f1 -d:
 #		Move line one to $LINE number into ${WORK_DIRECTORY}docker
 		tail -n +${LINE} ${WORK_DIRECTORY}docker.org > ${WORK_DIRECTORY}docker
 	else
-		echo "copy ${WORK_DIRECTORY}docker.org to ${WORK_DIRECTORY}docker without ${CONFIGURATION_STRING}"
+		echo "${0}[INFO]:	copy ${WORK_DIRECTORY}docker.org to ${WORK_DIRECTORY}docker without ${CONFIGURATION_STRING}"
 		cp ${WORK_DIRECTORY}docker.org ${WORK_DIRECTORY}docker
 	fi
 #	Remove working copy ${WORK_DIRECTORY}docker.org
@@ -52,8 +54,9 @@ if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] then
 #	rm ${WORK_DIRECTORY}docker.org
 #	Append ${WORK_DIRECTORY}dockerd-configuration-file onto ${WORK_DIRECTORY}docker
 	cat ${WORK_DIRECTORY}dockerd-configuration-file >> ${WORK_DIRECTORY}docker
-	echo "Move ${WORK_DIRECTORY}docker to ${UPSTART_SYSVINIT_DIRECTORY}docker"
+	echo "${0}[INFO]:	Move ${WORK_DIRECTORY}docker to ${UPSTART_SYSVINIT_DIRECTORY}docker"
 	mv ${WORK_DIRECTORY}docker ${UPSTART_SYSVINIT_DIRECTORY}docker
+	echo -e "\n\n${0}[INFO]:     dockerd (Upstart and SysVinit configuration file) on Ubuntu 14.04 is configured.\n"
 fi
 #
 ###	Configure dockerd (systemd) on Ubuntu 16.04
@@ -69,3 +72,6 @@ cat start-dockerd-with-systemd.begin > ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 cat ${WORK_DIRECTORY}dockerd-configuration-file >> ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 #
 cat start-dockerd-with-systemd.end >> ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
+#
+echo -e "\n\n${0}[INFO]:     dockerd (systemd) on Ubuntu 16.04 configured.\n"
+echo "${0}[INFO]:	Run ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT} to complete systemd setup"
