@@ -1,4 +1,6 @@
 #!/bin/bash
+#	setup-dockerd.sh	1.3	2018-01-14_09:04:21_CST uadmin rpi3b-four.cptx86.com
+#	added code to check if script is being run as root and move files into /etc/docker
 #	setup-dockerd.sh	1.1	2018-01-13_20:14:44_CST uadmin rpi3b-four.cptx86.com
 #	complete Initial work and ready for testing
 #	setup-dockerd.sh	1.0	2018-01-13_11:26:31_CST uadmin rpi3b-four.cptx86.com
@@ -12,6 +14,21 @@ WORK_DIRECTORY="/etc/docker/"
 UPSTART_SYSVINIT_DIRECTORY="/etc/default/"
 CONFIGURATION_STRING="Custom Dockerd Configuration File"
 #
+#	Must be root to run this script
+if ! [ $(id -u) = 0 ]; then
+   echo "Use sudo setup-dockerd.sh"	1>&2
+   exit 1
+fi
+#	Move files into /etc/docker ${WORK_DIRECTORY}
+mv 10-override.begin			${WORK_DIRECTORY}
+mv dockerd-configuration-file		${WORK_DIRECTORY}
+mv dockerd-configuration-file.service	${WORK_DIRECTORY}
+mv README.md				${WORK_DIRECTORY}
+#	This may fail to move because it is running
+mv setup-dockerd.sh			${WORK_DIRECTORY}
+mv start-dockerd-with-systemd.begin	${WORK_DIRECTORY}
+mv start-dockerd-with-systemd.end	${WORK_DIRECTORY}
+#
 ###	Configure dockerd (Upstart and SysVinit configuration file) on Ubuntu 14.04
 #
 #	As systemd complete all work in $WORK_DIRECTORY before moving the completed file in to /etc/defailt
@@ -23,9 +40,9 @@ if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] then
 	if [ grep -qF ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org ] then 
 		echo "found ${CONFIGURATION_STRING} in ${WORK_DIRECTORY}docker.org"
 #		Locate line number of ${CONFIGURATION_STRING} in ${WORK_DIRECTORY}docker
-		LINE=`grep -n ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org | cut -f1 -d:`
+		LINE=grep -n ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org | cut -f1 -d:
 #		Move line one to $LINE number into ${WORK_DIRECTORY}docker
-		tail -n +$LINE ${WORK_DIRECTORY}docker.org > ${WORK_DIRECTORY}docker
+		tail -n +${LINE} ${WORK_DIRECTORY}docker.org > ${WORK_DIRECTORY}docker
 	else
 		echo "copy ${WORK_DIRECTORY}docker.org to ${WORK_DIRECTORY}docker without ${CONFIGURATION_STRING}"
 		cp ${WORK_DIRECTORY}docker.org ${WORK_DIRECTORY}docker
