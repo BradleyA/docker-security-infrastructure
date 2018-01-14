@@ -1,6 +1,4 @@
 # dockerd-configuration-options/
-#	README.md	1.1	2018-01-13_19:58:15_CST uadmin rpi3b-four.cptx86.com
-#	changed 10-override to 10-override.begin
 
 #### WARNING: These instructions are incomplete. Consider them as notes quickly drafted on a napkin rather than proper documentation!
 #### Need to clean this up once I get everything working for Ubuntu 14.04 and Ubuntu 16.04
