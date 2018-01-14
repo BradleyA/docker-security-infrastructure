@@ -1,8 +1,10 @@
-###	Custom dockerd Configuration File
+###	Custom dockerd Configuration File (cptx86)
+#	dockerd-configuration-file	1.1	2018-01-14_16:21:53_CST uadmin rpi3b-four.cptx86.com
+#	added cptx86 for a better search for grep
 #	dockerd-configuration-file	1.0	2018-01-13_10:13:06_CST uadmin rpi3b-four.cptx86.com
 #	Initial commit
 #####
-#	Date last modified:	1/13/2018
+#	Date last modified:	1/14/2018
 #####
 #
 ### Use DOCKER_OPTS to modify the daemon startup options.
