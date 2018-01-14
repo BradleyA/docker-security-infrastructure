@@ -1,4 +1,6 @@
 #!/bin/bash
+#	setup-dockerd.sh	1.43	2018-01-14_16:10:18_CST uadmin rpi3b-four.cptx86.com
+#	change quotes around string on if [ grep ] line
 #	setup-dockerd.sh	1.42	2018-01-14_14:05:44_CST uadmin rpi3b-four.cptx86.com
 #	correct errors during debug run
 #	setup-dockerd.sh	1.41	2018-01-14_09:37:25_CST uadmin rpi3b-four.cptx86.com
@@ -49,7 +51,7 @@ if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] ; then
 	echo "${0} [INFO]:	Found ${UPSTART_SYSVINIT_DIRECTORY}docker"	1>&2
 #	copy ${UPSTART_SYSVINIT_DIRECTORY}docker to ${WORK_DIRECTORY}docker.org
 	cp ${UPSTART_SYSVINIT_DIRECTORY}docker ${WORK_DIRECTORY}docker.org
-	if [ grep -qF "${CONFIGURATION_STRING}" ${WORK_DIRECTORY}docker.org ] ; then 
+	if [ grep -qF \"${CONFIGURATION_STRING}\" ${WORK_DIRECTORY}docker.org ] ; then 
 		echo "${0} [INFO]:	Found ${CONFIGURATION_STRING} in ${WORK_DIRECTORY}docker.org"	1>&2
 #		Locate line number of ${CONFIGURATION_STRING} in ${WORK_DIRECTORY}docker
 		LINE=grep -n ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org | cut -f1 -d:
