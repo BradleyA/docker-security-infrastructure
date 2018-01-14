@@ -51,7 +51,7 @@ if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] ; then
 	echo "${0} [INFO]:	Found ${UPSTART_SYSVINIT_DIRECTORY}docker"	1>&2
 #	copy ${UPSTART_SYSVINIT_DIRECTORY}docker to ${WORK_DIRECTORY}docker.org
 	cp ${UPSTART_SYSVINIT_DIRECTORY}docker ${WORK_DIRECTORY}docker.org
-	if [ grep -qF \"${CONFIGURATION_STRING}\" ${WORK_DIRECTORY}docker.org ] ; then 
+	if [ grep -qF ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org ] ; then 
 		echo "${0} [INFO]:	Found ${CONFIGURATION_STRING} in ${WORK_DIRECTORY}docker.org"	1>&2
 #		Locate line number of ${CONFIGURATION_STRING} in ${WORK_DIRECTORY}docker
 		LINE=grep -n ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org | cut -f1 -d:
