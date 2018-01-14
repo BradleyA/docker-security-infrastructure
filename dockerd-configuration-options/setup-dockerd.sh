@@ -83,4 +83,4 @@ cat ${WORK_DIRECTORY}dockerd-configuration-file >> ${WORK_DIRECTORY}${START_SYST
 cat ${WORK_DIRECTORY}start-dockerd-with-systemd.end >> ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 chmod 700 ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 #
-echo -e "\n\n${0} [INFO]:	Run ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT} to complete dockerd systemd setup.\n"	1>&2
+echo -e "\n\n${0} [INFO]:	Run sudo ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT} to complete dockerd systemd setup.\n"	1>&2
