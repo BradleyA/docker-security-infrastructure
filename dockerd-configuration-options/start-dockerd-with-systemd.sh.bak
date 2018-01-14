@@ -1,9 +1,9 @@
-###	Custom dockerd Configuration File
-#	dockerd-configuration-file	1.0	2018-01-13_10:13:06_CST uadmin rpi3b-four.cptx86.com
-#	Initial commit
-#####
-#	Date last modified:	1/13/2018
-#####
+#!/bin/bash
+#
+#	set -v
+#	set -x
+#
+# Dockerd configuration file
 #
 ### Use DOCKER_OPTS to modify the daemon startup options.
 #
@@ -34,8 +34,6 @@
 #       -p, --pidfile=""
 #   Force the Docker runtime to use a specific storage driver. Currently default on Ubuntu AUFS
 #       --storage-driver=overlay
-#         >>>>    Docker Daemon has more performance due the overlay2 storage, check to see if the directory changes from aufs to overlay2 (/usr/local/docker/362144.362144/aufs) which would be why all the images and container disappear because they are in the other directory.  If moving to overlay2 clear out the old directories try docker system pruge or something like that
-#       --storage-driver=overlay2
 # * Use TLS and verify the remote (daemon: verify client, client: verify daemon).  Default is false.
 #       --tlsverify=true|false
 #   Use TLS; implied by --tlsverify. Default is false.
@@ -71,4 +69,22 @@ DOCKER_OPTS="\
         --tlskey=/etc/docker/certs.d/daemon/`hostname --fqdn`-priv-key.pem \
         --userns-remap=default \
         "
-###
+#
+#	Any changes to dockerd-configuration-file will be added to the override file during the next boot.
+DROP_IN_DIRECTORY="/etc/systemd/system/docker.service.d"
+OVERRIDE_FILE="10-override"
+WORK_DIRECTORY="/etc/docker/"
+#	Copy $WORK_DIRECTORY/$OVERRIDE_FILE to $WORK_DIRECTORY/$OVERRIDE_FILE.conf
+/bin/cp --force $WORK_DIRECTORY/$OVERRIDE_FILE $WORK_DIRECTORY/$OVERRIDE_FILE.conf
+#	Append the following line with $DOCKER_OPTS onto /etc/docker/10-override.conf
+/bin/echo "ExecStart=/usr/bin/dockerd $DOCKER_OPTS" >> $WORK_DIRECTORY/$OVERRIDE_FILE.conf
+#       Create docker.service drop-in directory for override file ($OVERRIDE_FILE.conf)
+/bin/mkdir -p ${DROP_IN_DIRECTORY}
+#	Move override file into docker.service.d directory
+/bin/mv --force $WORK_DIRECTORY/$OVERRIDE_FILE.conf $DROP_IN_DIRECTORY
+#	Unable to get docker.service to reload during boot for 10-override.conf file changes if any to be included in dockerd.
+#	/bin/systemctl reload docker.service 
+#	This is the warning I receive when uncommenting the previous line.
+#		Warning: docker.service changed on disk. Run 'systemctl daemon-reload' to reload units.
+#	/bin/systemctl daemon-reload
+#	No change when using this line,  I think systemd is not up yet so systemctl daemon-reload can not be used.
