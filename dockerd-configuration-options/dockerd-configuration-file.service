@@ -1,10 +1,12 @@
 #
+#	dockerd-configuration-file.service	1.1	2018-01-13_19:35:08_CST uadmin rpi3b-four.cptx86.com
+#	changed Documentation to correct location
 #	dockerd-configuration-file.service	1.0	2018-01-13_11:25:24_CST uadmin rpi3b-four.cptx86.com
 #	Initial commit
 #
 [Unit]
 Description=dockerd-configuration-file.service
-Documentation=https://www.youtube.com
+Documentation=https://github.com/BradleyA/docker-scripts/blob/master/dockerd-configuration-options/README.md
 After=network-online.target 
 Wants=network-online.target
 
