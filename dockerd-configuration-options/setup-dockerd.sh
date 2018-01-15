@@ -1,4 +1,6 @@
 #!/bin/bash
+#	setup-dockerd.sh	1.44	2018-01-14_19:56:17_CST uadmin rpi3b-four.cptx86.com
+#	rework move files section to check if files already moved
 #	setup-dockerd.sh	1.43	2018-01-14_16:10:18_CST uadmin rpi3b-four.cptx86.com
 #	change quotes around string on if [ grep ] line
 #	setup-dockerd.sh	1.42	2018-01-14_14:05:44_CST uadmin rpi3b-four.cptx86.com
@@ -25,12 +27,15 @@ CONFIGURATION_STRING="Custom_dockerd_Configuration_File"
 echo -e "\n${0} ${LINENO} [INFO]:	Changes made to ${WORK_DIRECTORY}dockerd-configuration-file will be copied to the correct locations.\n"	1>&2
 #	Must be root to run this script
 if ! [ $(id -u) = 0 ] ; then
-   echo "${0} ${LINENO} [ERROR]:	Use sudo ./${0} to run this script"	1>&2
-   exit 1
+	echo "${0} ${LINENO} [ERROR]:	Use sudo ./${0} to run ${0}"	1>&2
+	exit 1
 fi
 #	Check for ${WORK_DIRECTORY}
-if [ -d ${WORK_DIRECTORY} ] ; then
-#	Move files into /etc/docker ${WORK_DIRECTORY}
+if [ ! -d ${WORK_DIRECTORY} ] ; then
+	echo "${0} ${LINENO} [ERROR]:	Is Docker installed?  Directory ${WORK_DIRECTORY} not found."	1>&2
+	exit 1
+elif [ ! -f ${WORK_DIRECTORY}setup-dockerd.sh ] ; then
+#	Move files into /etc/docker ${WORK_DIRECTORY} if not already moved
 	mv 10-override.begin			${WORK_DIRECTORY}
 	mv dockerd-configuration-file		${WORK_DIRECTORY}
 	mv dockerd-configuration-file.service	${WORK_DIRECTORY}
@@ -38,9 +43,6 @@ if [ -d ${WORK_DIRECTORY} ] ; then
 	mv setup-dockerd.sh			${WORK_DIRECTORY}
 	mv start-dockerd-with-systemd.begin	${WORK_DIRECTORY}
 	mv start-dockerd-with-systemd.end	${WORK_DIRECTORY}
-else
-	echo "${0} ${LINENO} [ERROR]:	Is Docker installed?  Directory ${WORK_DIRECTORY} not found."	1>&2
-	exit 1
 fi
 #
 ###	Configure dockerd (Upstart and SysVinit configuration file) on Ubuntu 14.04
