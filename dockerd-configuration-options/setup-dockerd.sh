@@ -1,4 +1,6 @@
 #!/bin/bash
+#	setup-dockerd.sh	1.45	2018-01-14_21:23:20_CST uadmin rpi3b-four.cptx86.com
+#	subtract 1 from ${LINE}
 #	setup-dockerd.sh	1.44	2018-01-14_19:56:17_CST uadmin rpi3b-four.cptx86.com
 #	rework move files section to check if files already moved
 #	setup-dockerd.sh	1.43	2018-01-14_16:10:18_CST uadmin rpi3b-four.cptx86.com
@@ -56,9 +58,10 @@ if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] ; then
 	if grep -qF ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org ; then 
 		echo "${0} ${LINENO} [INFO]:	Found ${CONFIGURATION_STRING} in ${WORK_DIRECTORY}docker.org"	1>&2
 #		Locate line number of ${CONFIGURATION_STRING} in ${WORK_DIRECTORY}docker
-		LINE=`grep -n ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org | cut -f1 -d:`
+		LINE=(`grep -n ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org | cut -f1 -d:`) - 1
+		LINE=`echo ${LINE} | awk '{print $1 - 1}'`
 #		Move line one to $LINE number into ${WORK_DIRECTORY}docker
-		tail -n +${LINE} ${WORK_DIRECTORY}docker.org > ${WORK_DIRECTORY}docker
+		head -n +${LINE} ${WORK_DIRECTORY}docker.org > ${WORK_DIRECTORY}docker
 	else
 		echo "${0} ${LINENO} [INFO]:	copy ${WORK_DIRECTORY}docker.org to ${WORK_DIRECTORY}docker without ${CONFIGURATION_STRING}"	1>&2
 		cp ${WORK_DIRECTORY}docker.org ${WORK_DIRECTORY}docker
