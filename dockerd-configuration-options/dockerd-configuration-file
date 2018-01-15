@@ -1,8 +1,7 @@
 ###	Custom_dockerd_Configuration_File
-#	dockerd-configuration-file	1.1	2018-01-14_16:21:53_CST uadmin rpi3b-four.cptx86.com
-#	added cptx86 for a better search for grep
-#	dockerd-configuration-file	1.0	2018-01-13_10:13:06_CST uadmin rpi3b-four.cptx86.com
-#	Initial commit
+#	dockerd-configuration-file	1.3	2018-01-14_19:09:59_CST uadmin rpi3b-four.cptx86.com
+#	modified first line so grep search would work with out error
+#
 #####
 #	Date last modified:	1/14/2018
 #####
