@@ -19,7 +19,7 @@
 #	Initial commit
 #
 #	set -v
-	set -x
+#	set -x
 #
 #
 WORK_DIRECTORY="/etc/docker/"
