@@ -26,7 +26,7 @@ WORK_DIRECTORY="/etc/docker/"
 UPSTART_SYSVINIT_DIRECTORY="/etc/default/"
 CONFIGURATION_STRING="Custom_dockerd_Configuration_File"
 #
-echo -e "\n${0} ${LINENO} [INFO]:	Changes made to ${WORK_DIRECTORY}dockerd-configuration-file will be copied to the correct locations.\n"	1>&2
+echo -e "\n${0} ${LINENO} [INFO]:	Changes made to ${WORK_DIRECTORY}dockerd-configuration-file will be add to Upstart and systemd configuration files for dockerd.\n"	1>&2
 #	Must be root to run this script
 if ! [ $(id -u) = 0 ] ; then
 	echo "${0} ${LINENO} [ERROR]:	Use sudo ./${0} to run ${0}"	1>&2
@@ -49,7 +49,7 @@ fi
 #
 ###	Configure dockerd (Upstart and SysVinit configuration file) on Ubuntu 14.04
 #
-echo "${0} ${LINENO} [INFO]:	Update files for dockerd (Upstart and SysVinit configuration file) on Ubuntu 14.04."	1>&2
+echo "${0} ${LINENO} [INFO]:	Update files for dockerd (Upstart and SysVinit configuration file) for Ubuntu 14.04."	1>&2
 #	Check for dockerd configuration file
 if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] ; then
 	echo "${0} ${LINENO} [INFO]:	Found ${UPSTART_SYSVINIT_DIRECTORY}docker"	1>&2
@@ -63,7 +63,7 @@ if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] ; then
 #		Move line one to $LINE number into ${WORK_DIRECTORY}docker
 		head -n +${LINE} ${WORK_DIRECTORY}docker.org > ${WORK_DIRECTORY}docker
 	else
-		echo "${0} ${LINENO} [INFO]:	copy ${WORK_DIRECTORY}docker.org to ${WORK_DIRECTORY}docker without ${CONFIGURATION_STRING}"	1>&2
+		echo "${0} ${LINENO} [INFO]:	Copy ${WORK_DIRECTORY}docker.org to ${WORK_DIRECTORY}docker without ${CONFIGURATION_STRING}"	1>&2
 		cp ${WORK_DIRECTORY}docker.org ${WORK_DIRECTORY}docker
 	fi
 #	Remove working copy ${WORK_DIRECTORY}docker.org
@@ -73,7 +73,7 @@ if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] ; then
 	cat ${WORK_DIRECTORY}dockerd-configuration-file >> ${WORK_DIRECTORY}docker
 	echo "${0} ${LINENO} [INFO]:	Move ${WORK_DIRECTORY}docker to ${UPSTART_SYSVINIT_DIRECTORY}docker"	1>&2
 	mv ${WORK_DIRECTORY}docker ${UPSTART_SYSVINIT_DIRECTORY}docker
-	echo -e "\n\n${0} [INFO]:     dockerd (Upstart and SysVinit configuration file) on Ubuntu 14.04 is configured.\n"	1>&2
+	echo -e "${0} [INFO]:     dockerd (Upstart and SysVinit configuration file) for Ubuntu 14.04 is configured.\n"	1>&2
 fi
 #
 ###	Configure dockerd (systemd) on Ubuntu 16.04
