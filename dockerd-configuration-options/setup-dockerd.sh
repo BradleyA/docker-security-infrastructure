@@ -30,7 +30,7 @@ CONFIGURATION_STRING="Custom_dockerd_Configuration_File"
 echo -e "\n${0} ${LINENO} [INFO]:	Changes made to ${WORK_DIRECTORY}dockerd-configuration-file will be add to Upstart and Systemd configuration files for dockerd.\n"	1>&2
 #	Must be root to run this script
 if ! [ $(id -u) = 0 ] ; then
-	echo "${0} ${LINENO} [ERROR]:	Use sudo ./${0} to run ${0}"	1>&2
+	echo "${0} ${LINENO} [ERROR]:	Use sudo ${0}"	1>&2
 	exit 1
 fi
 #	Check for ${WORK_DIRECTORY}
