@@ -47,8 +47,8 @@ elif [ ! -f ${WORK_DIRECTORY}setup-dockerd.sh ] ; then
 	mv setup-dockerd.sh			${WORK_DIRECTORY}
 	mv start-dockerd-with-systemd.begin	${WORK_DIRECTORY}
 	mv start-dockerd-with-systemd.end	${WORK_DIRECTORY}
-	chown root.root				${WORK_DIRECTORY}
-	chmod go-xw				${WORK_DIRECTORY}
+	chown root.root				${WORK_DIRECTORY}*
+	chmod go-xw				${WORK_DIRECTORY}*
 fi
 #
 ###	Configure dockerd (Upstart and SysVinit configuration file) on Ubuntu 14.04
