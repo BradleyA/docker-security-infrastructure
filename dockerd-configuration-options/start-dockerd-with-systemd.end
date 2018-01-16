@@ -15,13 +15,15 @@ DROP_IN_DIRECTORY="/etc/systemd/system/docker.service.d"
 OVERRIDE_FILE="10-override"
 WORK_DIRECTORY="/etc/docker/"
 #	
-/bin/echo -e "\n${0} ${LINENO} [INFO]:       Creating ${OVERRIDE_FILE}.conf and moving it to ${DROP_IN_DIRECTORY}." 1>&2
+/bin/echo -e "\n${0} ${LINENO} [INFO]:	Creating ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf file."	1>&2
 #	Copy ${WORK_DIRECTORY}${OVERRIDE_FILE}.begin to ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf
 /bin/cp --force ${WORK_DIRECTORY}${OVERRIDE_FILE}.begin ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf
 #	Append the following line with $DOCKER_OPTS onto ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf
 /bin/echo "ExecStart=/usr/bin/dockerd ${DOCKER_OPTS}" >> ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf
 #       Create docker.service drop-in directory for override file (${OVERRIDE_FILE}.conf)
 /bin/mkdir -p ${DROP_IN_DIRECTORY}
+#
+/bin/echo    "${0} ${LINENO} [INFO]:	${OVERRIDE_FILE}.conf moved to ${DROP_IN_DIRECTORY}." 1>&2
 #	Move override file into docker.service.d directory
 /bin/mv --force ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf ${DROP_IN_DIRECTORY}
 #	Unable to get docker.service to reload 10-override.conf file changes if any during boot.
@@ -31,3 +33,4 @@ WORK_DIRECTORY="/etc/docker/"
 #	/bin/systemctl daemon-reload
 #	No change when uncommenting the previous line.  I think systemd is not up yet so systemctl daemon-reload can not be used during boot.
 #
+/bin/echo    "${0} ${LINENO} [INFO]:	Done" 1>&2
