@@ -1,4 +1,6 @@
-#
+###	
+#	start-dockerd-with-systemd.end	1.2	2018-01-15_19:25:26_CST uadmin rpi3b-four.cptx86.com
+#	Added {} around variables
 #	start-dockerd-with-systemd.end	1.1	2018-01-13_19:56:37_CST uadmin rpi3b-four.cptx86.com
 #	changed ${OVERRIDE_FILE} to ${OVERRIDE_FILE}.begin
 #	start-dockerd-with-systemd.sh-end	1.0	2018-01-13_18:53:35_CST uadmin rpi3b-four.cptx86.com
@@ -13,20 +15,19 @@ DROP_IN_DIRECTORY="/etc/systemd/system/docker.service.d"
 OVERRIDE_FILE="10-override"
 WORK_DIRECTORY="/etc/docker/"
 #	
-echo -e "\n${0} ${LINENO} [INFO]:       Creating $OVERRIDE_FILE.conf and moving it to $DROP_IN_DIRECTORY." 1>&2
-#	Copy ${WORK_DIRECTORY}/${OVERRIDE_FILE}.begin to ${WORK_DIRECTORY}/${OVERRIDE_FILE}.conf
-/bin/cp --force ${WORK_DIRECTORY}/${OVERRIDE_FILE}.begin ${WORK_DIRECTORY}/${OVERRIDE_FILE}.conf
+echo -e "\n${0} ${LINENO} [INFO]:       Creating ${OVERRIDE_FILE}.conf and moving it to ${DROP_IN_DIRECTORY}." 1>&2
+#	Copy ${WORK_DIRECTORY}${OVERRIDE_FILE}.begin to ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf
+/bin/cp --force ${WORK_DIRECTORY}/${OVERRIDE_FILE}.begin ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf
 #	Append the following line with $DOCKER_OPTS onto ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf
-/bin/echo "ExecStart=/usr/bin/dockerd $DOCKER_OPTS" >> $WORK_DIRECTORY/$OVERRIDE_FILE.conf
-#       Create docker.service drop-in directory for override file ($OVERRIDE_FILE.conf)
+/bin/echo "ExecStart=/usr/bin/dockerd $DOCKER_OPTS" >> ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf
+#       Create docker.service drop-in directory for override file (${OVERRIDE_FILE}.conf)
 /bin/mkdir -p ${DROP_IN_DIRECTORY}
 #	Move override file into docker.service.d directory
-/bin/mv --force $WORK_DIRECTORY/$OVERRIDE_FILE.conf $DROP_IN_DIRECTORY
-#	Unable to get docker.service to reload during boot for 10-override.conf file changes if any to be included in dockerd.
+/bin/mv --force ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf ${DROP_IN_DIRECTORY}
+#	Unable to get docker.service to reload 10-override.conf file changes if any during boot.
 #	/bin/systemctl reload docker.service
-#	This is the warning I receive when uncommenting the previous line.
-#       	Responce received during testing:
-#		Warning: docker.service changed on disk. Run 'systemctl daemon-reload' to reload units.
+#	This is the warning I received when uncommenting the previous line.  Responce received during testing:
+#		Warning: docker.service changed on disk.  Run 'systemctl daemon-reload' to reload units.
 #	/bin/systemctl daemon-reload
-#	No change when using this line,  I think systemd is not up yet so systemctl daemon-reload can not be used.
+#	No change when uncommenting the previous line.  I think systemd is not up yet so systemctl daemon-reload can not be used during boot.
 #
