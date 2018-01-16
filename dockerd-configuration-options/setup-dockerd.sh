@@ -84,7 +84,7 @@ echo -e "\n${0} ${LINENO} [INFO]:	Run 'sudo service docker restart' for dockerd 
 #
 START_SYSTEMD_SCRIPT="start-dockerd-with-systemd.sh"
 #
-echo -e "${0} ${LINENO} [INFO]:	Update files for dockerd (systemd) on Ubuntu 16.04.\n"	1>&2
+echo    "${0} ${LINENO} [INFO]:	Update files for dockerd (systemd) on Ubuntu 16.04."	1>&2
 cat ${WORK_DIRECTORY}start-dockerd-with-systemd.begin > ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 cat ${WORK_DIRECTORY}dockerd-configuration-file >> ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 cat ${WORK_DIRECTORY}start-dockerd-with-systemd.end >> ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
@@ -94,7 +94,7 @@ ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 cp ${WORK_DIRECTORY}/dockerd-configuration-file.service /etc/systemd/system/
 systemctl daemon-reload
 #
-echo    "${0} ${LINENO} [INFO]:	Run 'sudo systemctl enable dockerd-configuration-file' to start on boot."	1>&2
+echo -e "\n${0} ${LINENO} [INFO]:	Run 'sudo systemctl enable dockerd-configuration-file' to start on boot."	1>&2
 echo    "${0} ${LINENO} [INFO]:	Run 'sudo systemctl daemon-reload' to start on boot."	1>&2
 #	echo    "${0} ${LINENO} [INFO]:	Run 'sudo systemctl start dockerd-configuration-file' to start."	1>&2
 echo    "${0} ${LINENO} [INFO]:	Run 'sudo systemctl start docker'"	1>&2
