@@ -5,7 +5,7 @@
 
 The docker daemon flags will be written to /etc/systemd/system/docker.service.d/override.conf by default for Ubuntu 16.04 (systemd) and /etc/default/docker for Ubuntu 14.04 (Upstart).
 
-Gaol is to use one dockerd configuration file with dockerd flags.
+Goal is to use one dockerd configuration file with dockerd flags for Ubuntu 16.04 (systemd) and /etc/default/docker for Ubuntu 14.04 (Upstart).
 
 1) Download files:
     
