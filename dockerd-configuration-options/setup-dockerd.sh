@@ -76,8 +76,8 @@ if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] ; then
 	echo "${0} ${LINENO} [INFO]:	Move ${WORK_DIRECTORY}docker to ${UPSTART_SYSVINIT_DIRECTORY}docker"	1>&2
 	mv ${WORK_DIRECTORY}docker ${UPSTART_SYSVINIT_DIRECTORY}docker
 fi
-echo "${0} ${LINENO} [INFO]:     dockerd (Upstart and SysVinit configuration file) for Ubuntu 14.04 has been updated."	1>&2
-echo -e "\n${0} ${LINENO} [INFO]:     Run 'sudo service docker restart' for dockerd to read ${UPSTART_SYSVINIT_DIRECTORY}docker or reboot.\n"	1>&2
+echo "${0} ${LINENO} [INFO]:	dockerd (Upstart and SysVinit configuration file) for Ubuntu 14.04 has been updated."	1>&2
+echo -e "\n${0} ${LINENO} [INFO]:	Run 'sudo service docker restart' for dockerd to read ${UPSTART_SYSVINIT_DIRECTORY}docker or reboot.\n"	1>&2
 #
 ###	Configure dockerd (systemd) on Ubuntu 16.04
 #		Any changes to dockerd-configuration-file will be added to ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
