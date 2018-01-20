@@ -1,15 +1,20 @@
 # dockerd-configuration-options/
 
 #### WARNING: These instructions are incomplete. Consider them as notes quickly drafted on a napkin rather than proper documentation!
-#### Need to clean this up once I get everything working for Ubuntu 14.04 and Ubuntu 16.04
 
-The docker daemon flags will be written to /etc/systemd/system/docker.service.d/override.conf by default for Ubuntu 16.04 (systemd) and /etc/default/docker for Ubuntu 14.04 (Upstart).
+#### Need to clean this up once I get everything working for Ubuntu 16.04.  During booting of a system, service dockerd-configuration-file.service changes service docker.service systemd 10-override.conf file.  Need service dockerd-configuration-file.service to force service docker.service to use the systemd 10-override.conf file changes when service docker.service starts during booting of the system.  It works for both Ubuntu 14.04 (Upstart) and Ubuntu 16.04 (systemd) when system boots but the lates chnages made during boot  by the service dockerd-configuration-file.service on Ubuntu 16.04 do not take effect until the next reboot.  
 
-Goal is to use one dockerd configuration file with dockerd flags for Ubuntu 16.04 (systemd) and /etc/default/docker for Ubuntu 14.04 (Upstart).
+Goal is to use one dockerd configuration file with dockerd flags for both Ubuntu 16.04 (systemd) and Ubuntu 14.04 (Upstart).  
+
+Running setup-dockerd.sh will create or change the /etc/systemd/system/docker.service.d/override.conf file (Ubuntu 16.04, systemd) and (or, see comment below) the /etc/default/docker (Ubuntu 14.04, Upstart).  To change the docker daemon flags, edit the /etc/docker/dockerd-configuration-file and run sudo /etc/docker/setup-dockerd.sh.  Docker daemon flag changes can be distributed to any Ubuntu cluster by copying /etc/docker/dockerd-configuration-file to each system and running setup-dockerd.sh on each system.  This has not been tested for other Linux OS's. 
+
+Comment: May need to add code in setup-dockerd.sh for :
+ if statements for checking which OS of the system is by using the follow command lsb_release -r -s
+ Not sure this is need other than to the echo statement are missleading , also this would prevent other OS's from using these scripts, so maybe not do this ... need to think through this  ... but near the end of the setup-dockerd.sh file it calls systemctl daemon-reload and that may error on Ubuntu 14.04
 
 1) Download files:
     
-440	10-override.begin - beginning default lines for /etc/systemd/system/docker.service.d/10-override.conf file used by docker.service.  Other lines for /etc/systemd/system/docker.service.d/10-override.conf file created by /etc/docker/start-dockerd-with-systemd.sh.
+440	10-override.begin - beginning default lines for /etc/systemd/system/docker.service.d/10-override.conf file used by systemd docker.service.  Other lines for /etc/systemd/system/docker.service.d/10-override.conf file are created by running /etc/docker/start-dockerd-with-systemd.sh.
 
 640	dockerd-configuration-file - dockerd option file for setting DOCKER_OPTS= environment variable to be added to Ubuntu 14.04 (upstart) in /etc/default/docker file and Ubuntu 16.04 (systemd) in /etc/systemd/system/docker.service.d/10-override.conf
 
