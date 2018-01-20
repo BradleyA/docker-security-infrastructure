@@ -40,7 +40,8 @@ setup-dockerd-configuration-file
 To install, change directory to the location you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have git then enter; "sudo apt-get install git". On the github page of this script use the "HTTPS clone URL" with the 'git clone' command.
 
     git clone https://github.com/BradleyA/docker-scripts
-    cd docker-scripts
+    cd docker-scripts/dockerd-configuration-options
+    sudo ./setup-dockerd.sh
 
 #### Note:
 	echo "DOCKER_OPTS="\"$DOCKER_OPTS\" >> $OVERRIDE_FILE
