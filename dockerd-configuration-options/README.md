@@ -4,7 +4,7 @@
 
 #### Need to clean this up once I get everything working for Ubuntu 16.04.  During booting of a system, dockerd-configuration-file.service changes docker.service systemd 10-override.conf file.  Need dockerd-configuration-file.service to force docker.service to use the systemd 10-override.conf file changes when docker.service starts during booting of the system.  It works for both Ubuntu 14.04 (Upstart) and Ubuntu 16.04 (systemd) when system boots but the lates chnages made during each boot by the dockerd-configuration-file.service on Ubuntu 16.04 do not take effect until the next reboot.  Tried several things but can't it to work during boot!
 
-Goal is to use one dockerd configuration file with dockerd flags for both Ubuntu 16.04 (systemd) and Ubuntu 14.04 (Upstart).  
+Goal is to use one dockerd configuration file with dockerd flags for both Ubuntu 16.04 (systemd) and Ubuntu 14.04 (Upstart) other than /etc/docker/daemon.json.  
 
 Running setup-dockerd.sh will create or change the /etc/systemd/system/docker.service.d/override.conf file (Ubuntu 16.04, systemd) and (or, see comment below) the /etc/default/docker (Ubuntu 14.04, Upstart).  To change the docker daemon flags, edit the /etc/docker/dockerd-configuration-file and run sudo /etc/docker/setup-dockerd.sh.  Docker daemon flag changes can be distributed to any Ubuntu cluster by copying /etc/docker/dockerd-configuration-file to each system and running setup-dockerd.sh on each system.  This has not been tested for other Linux OS's. 
 
