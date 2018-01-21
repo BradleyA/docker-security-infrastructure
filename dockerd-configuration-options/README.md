@@ -10,9 +10,7 @@ Running setup-dockerd.sh will create or change the /etc/systemd/system/docker.se
 
 This has not been tested for other Linux OS's.  Let me know if you use it on other Linus OS's.
 
-Comment: May need to add code in setup-dockerd.sh for :
- if statements for checking which OS of the system is by using the follow command lsb_release -r -s
- Not sure this is need other than to the echo statement are missleading , also this would prevent other OS's from using these scripts, so maybe not do this ... need to think through this  ... but near the end of the setup-dockerd.sh file it calls systemctl daemon-reload and that may error on Ubuntu 14.04
+
 
 1) Download files:
     
@@ -47,6 +45,8 @@ To install, change directory to the location you want to download the scripts. U
 
 #### Note:
 	echo "DOCKER_OPTS="\"$DOCKER_OPTS\" >> $OVERRIDE_FILE
+	
+	Comment: May need to add code in setup-dockerd.sh for :  if statements for checking which OS of the system is by using the follow command lsb_release -r -s  Not sure this is need other than to the echo statement are missleading , also this would prevent other OS's from using these scripts, so maybe not do this ... need to think through this  ... but near the end of the setup-dockerd.sh file it calls systemctl daemon-reload and that may error on Ubuntu 14.04
 
 #### Design Principles
  * Have a simple setup process and a minimal learning curve
