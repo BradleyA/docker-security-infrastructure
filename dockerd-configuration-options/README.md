@@ -41,6 +41,7 @@ To install, change directory to the location you want to download the scripts. U
 
     git clone https://github.com/BradleyA/docker-scripts
     cd docker-scripts/dockerd-configuration-options
+    edit dockerd-configuration-file
     sudo ./setup-dockerd.sh
 
 #### Note:
