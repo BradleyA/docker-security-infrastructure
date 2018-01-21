@@ -1,4 +1,4 @@
-# dockerd-configuration-options/
+# dockerd-configuration-options
 
 #### WARNING: These instructions are incomplete. Consider them as notes quickly drafted on a napkin rather than proper documentation!
 
