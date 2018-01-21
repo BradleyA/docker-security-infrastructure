@@ -30,6 +30,5 @@ WORK_DIRECTORY="/etc/docker/"
 /bin/mv --force ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf ${DROP_IN_DIRECTORY}
 #	Reload systemd manager configuration so docker.service will use the updated ${DROP_IN_DIRECTORY}${OVERRIDE_FILE}.conf file
 /bin/systemctl daemon-reload
-#	No change when uncommenting the previous line.  I think systemd is not up yet so systemctl daemon-reload can not be used during boot.
 #
 /bin/echo    "${0} ${LINENO} [INFO]:	Done" 1>&2
