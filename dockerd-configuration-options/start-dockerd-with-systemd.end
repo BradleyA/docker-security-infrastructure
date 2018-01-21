@@ -1,4 +1,6 @@
 ###	
+#	start-dockerd-with-systemd.end	1.3	2018-01-21_13:14:47_CST uadmin rpi3b-four.cptx86.com
+#	add Reload systemd manager configuration line
 #	start-dockerd-with-systemd.end	1.2	2018-01-15_19:25:26_CST uadmin rpi3b-four.cptx86.com
 #	Added {} around variables
 #	start-dockerd-with-systemd.end	1.1	2018-01-13_19:56:37_CST uadmin rpi3b-four.cptx86.com
@@ -26,11 +28,8 @@ WORK_DIRECTORY="/etc/docker/"
 /bin/echo    "${0} ${LINENO} [INFO]:	${OVERRIDE_FILE}.conf moved to ${DROP_IN_DIRECTORY}." 1>&2
 #	Move override file into docker.service.d directory
 /bin/mv --force ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf ${DROP_IN_DIRECTORY}
-#	Unable to get docker.service to reload 10-override.conf file changes if any during boot.
-#	/bin/systemctl reload docker.service
-#	This is the warning I received when uncommenting the previous line.  Responce received during testing:
-#		Warning: docker.service changed on disk.  Run 'systemctl daemon-reload' to reload units.
-#	/bin/systemctl daemon-reload
+#	Reload systemd manager configuration so docker.service will use the updated ${DROP_IN_DIRECTORY}${OVERRIDE_FILE}.conf file
+/bin/systemctl daemon-reload
 #	No change when uncommenting the previous line.  I think systemd is not up yet so systemctl daemon-reload can not be used during boot.
 #
 /bin/echo    "${0} ${LINENO} [INFO]:	Done" 1>&2
