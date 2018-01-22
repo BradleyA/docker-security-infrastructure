@@ -5,6 +5,10 @@
 #	DO NOT REMOVE OR CHANGE FIRST LINE ###     Custom_dockerd_Configuration_File
 #####
 #	Date last modified:	1/14/2018
+#       
+#       After modifying this file by, edit /etc/docker/dockerd-configuration-file
+#       Run sudo /etc/docker/setup-dockerd.sh, 
+#
 #####
 #
 ### Use DOCKER_OPTS to modify the daemon startup options.
