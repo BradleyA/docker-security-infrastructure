@@ -69,6 +69,8 @@ DOCKER_OPTS="\
         --label XHOST=`hostname --fqdn` \
         --label XIPADDRESS=`hostname --ip-address | awk '{ print $1 }'` \
         --label XOS=`lsb_release -d | awk '{ print $2"-"$3"-"$4 }'` \
+        --label XARCHITECTUR=`lscpu | grep "Architecture" | awk '{ print $2 }'` \
+        --label XCPU=`lscpu | grep "^CPU(s):" | awk '{ print $2 }'` \
         --label XSECURITY=namespace-control \
         --log-level warn \
         --log-driver=json-file \
