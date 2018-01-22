@@ -41,14 +41,13 @@ To install, change directory to the location you want to download the scripts. U
 Edit dockerd-configuration-file, change the [dockerd flags](https://docs.docker.com/engine/reference/commandline/dockerd/) to the flags your dockerd environment requires.  This file, dockerd-configuration-file, is an example.  It is what I am currently using.  You will want to remove --data-root=/usr/local/docker flag if you are using the default location (/var/lib/docker) or change it to your root of the Docker.  You will want to change the address of the local dns server (--dns 192.168.1.202) to your dns server address.  If you do not have [TLS CA certificates](https://docs.docker.com/engine/security/https/) setup or in a different location or using different names then you will want to remove or change those flag.  If you have not used --userns-remap=default before you WILL want to remove this flag until you read more about this security feature.
 
     edit dockerd-configuration-file
-After editing the dockerd-configuration-file with your dockerd flags run sudo ./setup-dockerd.sh.  It will move all the required files including setup-dockerd.sh into the /etc/docker directory.  The next time you want to make a change to the dockerd flags use sudo edit /etc/docker/dockerd-configuration-file and then sudo /etc/docker/setup-dockerd.sh.  
+
+After editing the dockerd-configuration-file with your dockerd flags, run sudo ./setup-dockerd.sh.  It will move all the required files including setup-dockerd.sh into the /etc/docker and /etc/systemd/system/ directories.  The next time you want to make a change to your dockerd flags use sudo edit /etc/docker/dockerd-configuration-file and then sudo /etc/docker/setup-dockerd.sh.  
     
     sudo ./setup-dockerd.sh
 
 #### Note:
-	echo "DOCKER_OPTS="\"$DOCKER_OPTS\" >> $OVERRIDE_FILE
-	
-	Comment: May need to add code in setup-dockerd.sh for :  if statements for checking which OS of the system is by using the follow command lsb_release -r -s  Not sure this is need other than to the echo statement are missleading , also this would prevent other OS's from using these scripts, so maybe not do this ... need to think through this  ... but near the end of the setup-dockerd.sh file it calls systemctl daemon-reload and that may error on Ubuntu 14.04
+	Comment: May need to add code in setup-dockerd.sh for :  if statements for checking which OS of the system is by using the follow command lsb_release -r -s  Not sure this is need other than to the echo statement so it is not so missleading if you do not know what OS you are using, also this would prevent other OS's from using these scripts, so maybe not do this ... need to think through this  ... but near the end of the setup-dockerd.sh file it calls systemctl daemon-reload and that may error on Ubuntu 14.04
 
 #### System OS script tested
  * Ubuntu 14.04.3 LTS
