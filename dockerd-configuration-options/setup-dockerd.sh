@@ -32,7 +32,7 @@ CONFIGURATION_STRING="Custom_dockerd_Configuration_File"
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 #
-echo -e "\n${0} ${LINENO} [INFO]:	Changes made to ${WORK_DIRECTORY}dockerd-configuration-file\n\twill be added to Upstart and Systemd configuration files for dockerd.\n"	1>&2
+echo -e "\n${0} ${LINENO} [INFO]:	Changes made to\n\t${WORK_DIRECTORY}dockerd-configuration-file will be added to Upstart and\n\tSystemd configuration files for dockerd.\n"	1>&2
 #	Must be root to run this script
 if ! [ $(id -u) = 0 ] ; then
 	echo "${0} ${LINENO} [ERROR]:	Use sudo ${0}"	1>&2
@@ -99,6 +99,6 @@ ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 cp ${WORK_DIRECTORY}/dockerd-configuration-file.service /etc/systemd/system/
 systemctl daemon-reload
 #
-echo -e "\n${0} ${LINENO} [INFO]:	If you are using systemd, Run\n\t'${BOLD}sudo systemctl enable\n\tdockerd-configuration-file.service${NORMAL}'\n\tto start on boot."	1>&2
+echo -e "\n${0} ${LINENO} [INFO]:	If you are using systemd, Run\n\t'${BOLD}sudo systemctl enable dockerd-configuration-file.service${NORMAL}'\n\tto start on boot."	1>&2
 echo -e "${0} ${LINENO} [INFO]:	Run '${BOLD}sudo systemctl enable docker${NORMAL}'\n\tto start on boot."	1>&2
 echo    "${0} ${LINENO} [INFO]:	Run '${BOLD}sudo systemctl restart docker${NORMAL}'"	1>&2
