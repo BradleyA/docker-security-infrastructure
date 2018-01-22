@@ -10,6 +10,7 @@
 #       Run sudo /etc/docker/setup-dockerd.sh, 
 #
 #####
+#       Do any local configuration here
 #
 ### Use DOCKER_OPTS to modify the daemon startup options.
 #
