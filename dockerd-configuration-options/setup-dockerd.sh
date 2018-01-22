@@ -1,4 +1,6 @@
 #!/bin/bash
+#	setup-dockerd.sh	1.5	2018-01-21_18:23:49_CST uadmin rpi3b-four.cptx86.com
+#	cleanup echo statements
 #	setup-dockerd.sh	1.46	2018-01-15_19:26:41_CST uadmin rpi3b-four.cptx86.com
 #	completed first edits for Configure dockerd (systemd) on Ubuntu 16.04 section
 #	setup-dockerd.sh	1.45	2018-01-14_21:23:20_CST uadmin rpi3b-four.cptx86.com
@@ -27,7 +29,10 @@ WORK_DIRECTORY="/etc/docker/"
 UPSTART_SYSVINIT_DIRECTORY="/etc/default/"
 CONFIGURATION_STRING="Custom_dockerd_Configuration_File"
 #
-echo -e "\n${0} ${LINENO} [INFO]:	Changes made to ${WORK_DIRECTORY}dockerd-configuration-file will be add to Upstart and Systemd configuration files for dockerd.\n"	1>&2
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
+#
+echo -e "\n${0} ${LINENO} [INFO]:	Changes made to ${WORK_DIRECTORY}dockerd-configuration-file\n\twill be added to Upstart and Systemd configuration files for dockerd.\n"	1>&2
 #	Must be root to run this script
 if ! [ $(id -u) = 0 ] ; then
 	echo "${0} ${LINENO} [ERROR]:	Use sudo ${0}"	1>&2
@@ -54,7 +59,7 @@ fi
 ###	Configure dockerd (Upstart and SysVinit configuration file) on Ubuntu 14.04
 #		Any changes to dockerd-configuration-file will be added to ${UPSTART_SYSVINIT_DIRECTORY}docker
 #
-echo "${0} ${LINENO} [INFO]:	Update files for dockerd (Upstart and SysVinit configuration file) for Ubuntu 14.04."	1>&2
+echo -e "${0} ${LINENO} [INFO]:	Update files for dockerd (Upstart and SysVinit\n\tconfiguration file) for Ubuntu 14.04."	1>&2
 #	Check for dockerd configuration file
 if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] ; then
 #	copy ${UPSTART_SYSVINIT_DIRECTORY}docker to ${WORK_DIRECTORY}docker.org
@@ -67,24 +72,24 @@ if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] ; then
 #		Write line one to ${LINE} number into ${WORK_DIRECTORY}docker
 		head -n +${LINE} ${WORK_DIRECTORY}docker.org > ${WORK_DIRECTORY}docker
 	else
-		echo "${0} ${LINENO} [INFO]:	Copy ${WORK_DIRECTORY}docker.org to ${WORK_DIRECTORY}docker without ${CONFIGURATION_STRING} section."	1>&2
+		echo -e "${0} ${LINENO} [INFO]:	Copy ${WORK_DIRECTORY}docker.org to\n\t${WORK_DIRECTORY}docker without ${CONFIGURATION_STRING} section."	1>&2
 		cp ${WORK_DIRECTORY}docker.org ${WORK_DIRECTORY}docker
 	fi
-	echo "${0} ${LINENO} [INFO]:	Append ${WORK_DIRECTORY}dockerd-configuration-file onto ${WORK_DIRECTORY}docker."	1>&2
+	echo -e "${0} ${LINENO} [INFO]:	Append ${WORK_DIRECTORY}dockerd-configuration-file\n\tonto ${WORK_DIRECTORY}docker."	1>&2
 #	Append ${WORK_DIRECTORY}dockerd-configuration-file onto ${WORK_DIRECTORY}docker
 	cat ${WORK_DIRECTORY}dockerd-configuration-file >> ${WORK_DIRECTORY}docker
 	echo "${0} ${LINENO} [INFO]:	Move ${WORK_DIRECTORY}docker to ${UPSTART_SYSVINIT_DIRECTORY}docker"	1>&2
 	mv ${WORK_DIRECTORY}docker ${UPSTART_SYSVINIT_DIRECTORY}docker
 fi
-echo "${0} ${LINENO} [INFO]:	dockerd (Upstart and SysVinit configuration file) for Ubuntu 14.04 has been updated."	1>&2
-echo -e "\n${0} ${LINENO} [INFO]:	Run 'sudo service docker restart' for dockerd to read ${UPSTART_SYSVINIT_DIRECTORY}docker or reboot.\n"	1>&2
+echo -e "${0} ${LINENO} [INFO]:	dockerd (Upstart and SysVinit configuration\n\tfile) for Ubuntu 14.04 has been updated."	1>&2
+echo -e "\n${0} ${LINENO} [INFO]:	If you are using upstart, Run\n\t'${BOLD}sudo service docker restart${NORMAL}' for dockerd to read ${UPSTART_SYSVINIT_DIRECTORY}docker.\n"	1>&2
 #
 ###	Configure dockerd (systemd) on Ubuntu 16.04
 #		Any changes to dockerd-configuration-file will be added to ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 #
 START_SYSTEMD_SCRIPT="start-dockerd-with-systemd.sh"
 #
-echo    "${0} ${LINENO} [INFO]:	Update files for dockerd (systemd) on Ubuntu 16.04."	1>&2
+echo -e "${0} ${LINENO} [INFO]:	Update files for dockerd (systemd configuration\n\tfile) on Ubuntu 16.04."	1>&2
 cat ${WORK_DIRECTORY}start-dockerd-with-systemd.begin > ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 cat ${WORK_DIRECTORY}dockerd-configuration-file >> ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 cat ${WORK_DIRECTORY}start-dockerd-with-systemd.end >> ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
@@ -94,8 +99,6 @@ ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 cp ${WORK_DIRECTORY}/dockerd-configuration-file.service /etc/systemd/system/
 systemctl daemon-reload
 #
-echo -e "\n${0} ${LINENO} [INFO]:	Run 'sudo systemctl enable dockerd-configuration-file' to start on boot."	1>&2
-echo    "${0} ${LINENO} [INFO]:	Run 'sudo systemctl daemon-reload' to start on boot."	1>&2
-#	echo    "${0} ${LINENO} [INFO]:	Run 'sudo systemctl start dockerd-configuration-file' to start."	1>&2
-echo    "${0} ${LINENO} [INFO]:	Run 'sudo systemctl start docker'"	1>&2
-echo    "${0} ${LINENO} [INFO]:	Run 'sudo systemctl enable docker' to dockerd to start on boot."	1>&2
+echo -e "\n${0} ${LINENO} [INFO]:	If you are using systemd, Run\n\t'${BOLD}sudo systemctl enable\n\tdockerd-configuration-file.service${NORMAL}'\n\tto start on boot."	1>&2
+echo -e "${0} ${LINENO} [INFO]:	Run '${BOLD}sudo systemctl enable docker${NORMAL}'\n\tto start on boot."	1>&2
+echo    "${0} ${LINENO} [INFO]:	Run '${BOLD}sudo systemctl restart docker${NORMAL}'"	1>&2
