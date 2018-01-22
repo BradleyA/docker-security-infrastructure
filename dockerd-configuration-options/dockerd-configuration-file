@@ -1,16 +1,19 @@
 ###	Custom_dockerd_Configuration_File
+#	dockerd-configuration-file	1.4	2018-01-22_14:33:44_CST uadmin rpi3b-four.cptx86.com
+#	add instructions how to use
 #	dockerd-configuration-file	1.3	2018-01-14_19:09:59_CST uadmin rpi3b-four.cptx86.com
 #	modified first line so grep search would work with out error
 #
 #	DO NOT REMOVE OR CHANGE FIRST LINE ###     Custom_dockerd_Configuration_File
-#####
-#	Date last modified:	1/14/2018
+#
+##### 	Date last modified:	1/22/2018
 #       
 #       After modifying this file by, edit /etc/docker/dockerd-configuration-file
-#       Run sudo /etc/docker/setup-dockerd.sh, 
+#       Run sudo /etc/docker/setup-dockerd.sh
+#		To move you changes into /etc/systemd/system/docker.service.d/10-override.conf file (Ubuntu 16.04, systemd)
+#		and /etc/default/docker file (Ubuntu 14.04, Upstart).
 #
-#####
-#       Do any local configuration here
+#####	Do any local configuration here
 #
 ### Use DOCKER_OPTS to modify the daemon startup options.
 #
