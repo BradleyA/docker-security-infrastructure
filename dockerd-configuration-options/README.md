@@ -31,17 +31,17 @@ After editing the dockerd-configuration-file with your dockerd flags, run sudo .
 	
 1) Download files:
     
-644	10-override.begin - beginning default lines for /etc/systemd/system/docker.service.d/10-override.conf file used by systemd docker.service.  Other lines for /etc/systemd/system/docker.service.d/10-override.conf file will be created by running /etc/docker/start-dockerd-with-systemd.sh.
+644	10-override.begin - beginning default lines for /etc/systemd/system/docker.service.d/10-override.conf file used by systemd docker.service.  Additional lines for /etc/systemd/system/docker.service.d/10-override.conf file will be created by running /etc/docker/start-dockerd-with-systemd.sh.
 
 644	dockerd-configuration-file - dockerd option file for setting DOCKER_OPTS= environment variable to be added to Ubuntu 14.04 (upstart) in /etc/default/docker file and Ubuntu 16.04 (systemd) in /etc/systemd/system/docker.service.d/10-override.conf
 
-644	dockerd-configuration-file.service
+644	dockerd-configuration-file.service - service that run /etc/docker/start-dockerd-with-systemd.sh during boot
 
-744	setup-dockerd.sh
+744	setup-dockerd.sh - script moves files into /etc/docker, updates /etc/default/docker file (Ubuntu 14.04, Upstart) with /etc/docker/dockerd-configuration-file, creates start-dockerd-with-systemd.sh script with /etc/docker/dockerd-configuration-file, moves dockerd-configuration-file.service to /etc/systemd/system/ directory, runs systemctl daemon-reload so docker.service will use dockerd-configuration-file and dockerd-configuration-file.service will link to docker.service
 
-644	start-dockerd-with-systemd.begin
+644	start-dockerd-with-systemd.begin - begining of /etc/docker/start-dockerd-with-systemd.sh script
 
-644	start-dockerd-with-systemd.end
+644	start-dockerd-with-systemd.end - end of /etc/docker/start-dockerd-with-systemd.sh script which creates 10-override.conf file and moves it into /etc/systemd/system/docker.service.d directory and runs /bin/systemctl daemon-reload so docker.service will use latest copy of file dockerd-configuration-file.service to 
 
 2) Append dockerd-configuration-file to /etc/default/docker for ubuntu 14.04 upstart docker daemon
 3) Run dockerd-configuration-file.service as a service to create $OVERRIDE_FILE before sudo systemctl start docker so this service is a pre-req of docker.service will need to add that to dockerd-configuration-file.service
