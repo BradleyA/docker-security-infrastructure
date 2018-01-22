@@ -66,11 +66,14 @@ DOCKER_OPTS="\
         --dns 8.8.8.8 \
         --dns 8.8.4.4 \
         --host=`hostname --fqdn`:2376 \
-        --label XHOST=`hostname --fqdn` \
+        --label XHOST=`hostname` \
+        --label XHOSTFQDN=`hostname --fqdn` \
         --label XIPADDRESS=`hostname --ip-address | awk '{ print $1 }'` \
-        --label XOS=`lsb_release -d | awk '{ print $2"-"$3"-"$4 }'` \
+        --label XOS=`lsb_release -d | awk '{ print $2"_"$3"_"$4 }'` \
+	--label XRELEASE=`docker version | grep -m 1 Version: |  awk '{ print $2 }'` \
+        --label XPRODUCT=`lshw | grep "^${XHOSa}T"  -A2 | grep product | sed -e 's/ /_/g'` \
         --label XARCHITECTUR=`lscpu | grep "Architecture" | awk '{ print $2 }'` \
-        --label XCPU=`lscpu | grep "^CPU(s):" | awk '{ print $2 }'` \
+        --label XCPUNUMBER=`lscpu | grep "^CPU(s):" | awk '{ print $2 }'` \
         --label XSECURITY=namespace-control \
         --log-level warn \
         --log-driver=json-file \
