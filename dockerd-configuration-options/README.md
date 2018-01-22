@@ -30,24 +30,30 @@ This has not been tested for other Linux OS's.  Let me know if you use it on oth
 2) Append dockerd-configuration-file to /etc/default/docker for ubuntu 14.04 upstart docker daemon
 3) Run dockerd-configuration-file.service as a service to create $OVERRIDE_FILE before sudo systemctl start docker so this service is a pre-req of docker.service will need to add that to dockerd-configuration-file.service
 
-## System OS script tested
 
-    Ubuntu 14.04.3 LTS
-    Ubuntu 16.04.3 LTS
 
 ## Install
-
 To install, change directory to the location you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have git then enter; "sudo apt-get install git". On the github page of this script use the "HTTPS clone URL" with the 'git clone' command.
 
     git clone https://github.com/BradleyA/docker-scripts
     cd docker-scripts/dockerd-configuration-options
+    
+Edit dockerd-configuration-file, change the [dockerd flags](https://docs.docker.com/engine/reference/commandline/dockerd/) to the flags your dockerd environment requires.  This file, dockerd-configuration-file, is an example.  It is what I am currently using.  You will want to remove --data-root=/usr/local/docker flag if you are using the default location (/var/lib/docker) or change it to your root of the Docker.  You will want to change the address of the local dns server (--dns 192.168.1.202) to your dns server address.  If you do not have [TLS CA certificates](https://docs.docker.com/engine/security/https/) setup or in a different location or using different names then you will want to remove or change those flag.  If you have not used --userns-remap=default before you WILL want to remove this flag until you read more about this security feature.
+
     edit dockerd-configuration-file
+    
+    
+    
     sudo ./setup-dockerd.sh
 
 #### Note:
 	echo "DOCKER_OPTS="\"$DOCKER_OPTS\" >> $OVERRIDE_FILE
 	
 	Comment: May need to add code in setup-dockerd.sh for :  if statements for checking which OS of the system is by using the follow command lsb_release -r -s  Not sure this is need other than to the echo statement are missleading , also this would prevent other OS's from using these scripts, so maybe not do this ... need to think through this  ... but near the end of the setup-dockerd.sh file it calls systemctl daemon-reload and that may error on Ubuntu 14.04
+
+#### System OS script tested
+ * Ubuntu 14.04.3 LTS
+ * Ubuntu 16.04.3 LTS
 
 #### Design Principles
  * Have a simple setup process and a minimal learning curve
