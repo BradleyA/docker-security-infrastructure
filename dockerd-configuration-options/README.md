@@ -41,6 +41,8 @@ After editing the dockerd-configuration-file with your dockerd flags, run sudo .
 
 644	start-dockerd-with-systemd.end - end of /etc/docker/start-dockerd-with-systemd.sh script which creates 10-override.conf file and moves it into /etc/systemd/system/docker.service.d directory and runs /bin/systemctl daemon-reload so docker.service will use latest copy of file dockerd-configuration-file.service to 
 
+#### Need to clean this up 
+
 2) Append dockerd-configuration-file to /etc/default/docker for ubuntu 14.04 upstart docker daemon
 3) Run dockerd-configuration-file.service as a service to create $OVERRIDE_FILE before sudo systemctl start docker so this service is a pre-req of docker.service will need to add that to dockerd-configuration-file.service
 
