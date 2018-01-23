@@ -42,7 +42,7 @@ After editing the dockerd-configuration-file with your dockerd flags, run sudo .
 #### Need to clean this up 
 Comment: May need to add code in near the end of setup-dockerd.sh script because it calls systemctl daemon-reload and that may error on Ubuntu 14.04, it has not yet but needs more testing
 
-Comment: add steps about updating dockerd flags and pushing the changes out
+Comment: add steps about updating dockerd flags and pushing the changes out, include commands and output
 
 #### System OS script tested
  * Ubuntu 14.04.3 LTS
