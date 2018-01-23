@@ -8,7 +8,7 @@ Running setup-dockerd.sh will move files into /etc/docker and create or update t
 
 I chose not to use [/etc/docker/daemon.json](https://docs.docker.com/engine/reference/commandline/dockerd/) for docker daemon configuration because json does not support [comments](https://plus.google.com/+DouglasCrockfordEsq/posts/RK8qyGVaGSr).
 
-This has not been tested for other Linux OS's.  Let me know if you use it on other Linus OS's.
+This has not been tested for other Linux OS's but should work.  Let me know if you use it on other Linus OS's.
 
 ## Install
 To install, change directory to the location you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have git then enter; "sudo apt-get install git". On the github page of this script use the "HTTPS clone URL" with the 'git clone' command.
