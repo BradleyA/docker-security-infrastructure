@@ -24,9 +24,6 @@ After editing the dockerd-configuration-file with your dockerd flags, run sudo .
     
     sudo ./setup-dockerd.sh
 
-#### Note:
-Comment: May need to add code in near the end of setup-dockerd.sh script because it calls systemctl daemon-reload and that may error on Ubuntu 14.04, it has not yet but needs more testing
-	
 #### Download files:
     
 644	10-override.begin - beginning default lines for /etc/systemd/system/docker.service.d/10-override.conf file used by systemd docker.service.  Additional lines for /etc/systemd/system/docker.service.d/10-override.conf file will be created by running /etc/docker/start-dockerd-with-systemd.sh.
@@ -41,7 +38,10 @@ Comment: May need to add code in near the end of setup-dockerd.sh script because
 
 644	start-dockerd-with-systemd.end - end of /etc/docker/start-dockerd-with-systemd.sh script which creates 10-override.conf file and moves it into /etc/systemd/system/docker.service.d directory and runs /bin/systemctl daemon-reload so docker.service will use latest copy of file dockerd-configuration-file.service to 
 
+### Note:
 #### Need to clean this up 
+Comment: May need to add code in near the end of setup-dockerd.sh script because it calls systemctl daemon-reload and that may error on Ubuntu 14.04, it has not yet but needs more testing
+
 add steps about updating dockerd flags and pushing the changes out
 
 #### System OS script tested
