@@ -25,9 +25,9 @@ After editing the dockerd-configuration-file with your dockerd flags, run sudo .
     sudo ./setup-dockerd.sh
 
 #### Note:
-	Comment: May need to add code in setup-dockerd.sh for :  if statements for checking which OS of the system is by using the follow command lsb_release -r -s  Not sure this is need other than to the echo statement so it is not so missleading if you do not know what OS you are using, also this would prevent other OS's from using these scripts, so maybe not do this ... need to think through this  ... but near the end of the setup-dockerd.sh file it calls systemctl daemon-reload and that may error on Ubuntu 14.04
+Comment: May need to add code in near the end of setup-dockerd.sh script because it calls systemctl daemon-reload and that may error on Ubuntu 14.04, it has not yet but needs more testing
 	
-1) Download files:
+#### Download files:
     
 644	10-override.begin - beginning default lines for /etc/systemd/system/docker.service.d/10-override.conf file used by systemd docker.service.  Additional lines for /etc/systemd/system/docker.service.d/10-override.conf file will be created by running /etc/docker/start-dockerd-with-systemd.sh.
 
@@ -42,10 +42,7 @@ After editing the dockerd-configuration-file with your dockerd flags, run sudo .
 644	start-dockerd-with-systemd.end - end of /etc/docker/start-dockerd-with-systemd.sh script which creates 10-override.conf file and moves it into /etc/systemd/system/docker.service.d directory and runs /bin/systemctl daemon-reload so docker.service will use latest copy of file dockerd-configuration-file.service to 
 
 #### Need to clean this up 
-add information about updating dockerd flags and pushing the changes out
-
-2) Append dockerd-configuration-file to /etc/default/docker for ubuntu 14.04 upstart docker daemon
-3) Run dockerd-configuration-file.service as a service to create $OVERRIDE_FILE before sudo systemctl start docker so this service is a pre-req of docker.service will need to add that to dockerd-configuration-file.service
+add steps about updating dockerd flags and pushing the changes out
 
 #### System OS script tested
  * Ubuntu 14.04.3 LTS
