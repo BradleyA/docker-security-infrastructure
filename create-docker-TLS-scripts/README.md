@@ -29,7 +29,7 @@ Run this script first on your host to create your site private and public TLS ke
     create-site-private-public-tls.sh
 
 ## Output
-    $ create-site-private-public-tls.sh
+    $ ./create-site-private-public-tls.sh
     mkdir: created directory '/home/uadmin/.docker/docker-ca'
     mkdir: created directory '/home/uadmin/.docker/docker-ca/.private'
     
@@ -83,14 +83,12 @@ Run this script first on your host to create your site private and public TLS ke
     a reminder to schedule new site certificates.
 
 ## Usage
-    sudo create-new-openssl.cnf-tls
+Run this script second on your host that be used to create all your certificates.  It makes a change to the openssl.cnf file.
+
+    sudo ./create-new-openssl.cnf-tls.sh
 
 ## Output
-    $ sudo create-new-openssl.cnf-tls
-    >>	SCRIPT MUST BE RUN AS ROOT TO CHANGE THE /etc/ssl/openssl.cnf FILE	<<
-    
-    >>			sudo ./create-new-openssl.cnf-tls	 <<
-    
+    $ sudo ./create-new-openssl.cnf-tls
     This script will make changes to the openssl.cnf file.  These changes are required
     before creating user and host TLS files for Docker.  Run this script before running
     the user and host TLS scripts.  It is not required to be run on hosts not creating TLS files.
