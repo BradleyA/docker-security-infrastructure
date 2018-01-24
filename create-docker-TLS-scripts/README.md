@@ -98,43 +98,68 @@ Run this script second on your host that be used to create all your certificates
     Adding the extended KeyUsage at the beginning of the [ v3_ca ] section.
 
 ## Usage
-    create-client-tls <user> <#days> 
+Run this script for each user that requires a new Docker public and private TLS key.
+
+    ./create-client-tls.sh <user> <#days> 
 
 ## Output
-    $ create-client-tls sally 30
-    >>	The /home/uthree/.docker/docker-ca/.private/ directory does exist.
-    
-    >>	Creating client private key for user sally.
-    
+    $ ./create-client-tls.sh sally 30
+    ./create-client-tls.sh 25 [INFO]:	The /home/uadmin/.docker/docker-ca/.private/ directory does exist.
+
+    ./create-client-tls.sh 32 [INFO]:	Creating client private key for user sally.
+
     Generating RSA private key, 2048 bit long modulus
-    ..........................................................................+++
-    .....................................................+++
+    ............................................+++
+    ......................+++
     e is 65537 (0x10001)
-    
-    >>	Generate a Certificate Signing Request (CSR) for user sally.
-    
-    >>	Create and sign a 30 day certificate for user sally.
-    
+
+    ./create-client-tls.sh 35 [INFO]:	Generate a Certificate Signing Request (CSR) for user sally.
+
+    ./create-client-tls.sh 38 [INFO]:	Create and sign a 30 day certificate for user sally.
+
     Signature ok
     subject=/subjectAltName=client
     Getting CA Private Key
     Enter pass phrase for .private/ca-priv-key.pem:
-    
-    >>	Removing certificate signing requests (CSR) and set file permissions for sally key pairs.
-    
-    >>	The following are instructions for setting up the public, private, and certificate files for sally.
-    
+
+    ./create-client-tls.sh 41 [INFO]:	Removing certificate signing requests (CSR) and set file permissions for sally key pairs.
+
+    ./create-client-tls.sh 49 [INFO]:	The following are instructions for setting up the public, private, and certificate files for sally.
+
     Copy the CA's public key (also called certificate) from the working directory to ~sally/.docker.
-    cp -pv ca.pem ~sally/.docker
-        or if copying to remote host, five.cptx86.com, and to user sally.
-        scp -pv ca.pem sally@five.cptx86.com:~sally/.docker
-    
+	sudo mkdir -pv ~sally/.docker
+	sudo chmod 700 ~sally/.docker
+	sudo cp -pv ca.pem ~sally/.docker
+		or if copying to remove host, five, and to user sally
+		ssh sally@five.cptx86.com mkdir -pv ~sally/.docker
+		ssh sally@five.cptx86.com chmod 700 ~sally/.docker
+		scp -p ca.pem sally@five.cptx86.com:~sally/.docker
+
     Copy the key pair files signed by the CA from the working directory to ~sally/.docker.
-    cp -pv sally-client-cert.pem ~sally/.docker
-    cp -pv sally-client-priv-key.pem ~sally/.docker
-	or if copying to remote host, five.cptx86.com, and for user sally.
-	scp -pv sally-client-cert.pem sally@five.cptx86.com:~sally/.docker
-	scp -pv sally-client-priv-key.pem sally@five.cptx86.com:~sally/.docker
+	sudo cp -pv sally-client-cert.pem ~sally/.docker
+	sudo cp -pv sally-client-priv-key.pem ~sally/.docker
+		or if copying to remove host, five, and for user sally
+		scp -p sally-client-cert.pem sally@five.cptx86.com:~sally/.docker
+		scp -p sally-client-priv-key.pem sally@five.cptx86.com:~sally/.docker
+
+    Create symbolic links to point to the default Docker TLS file names.
+	sudo ln -s ~sally/.docker/sally-client-cert.pem ~sally/.docker/cert.pem
+	sudo ln -s ~sally/.docker/sally-client-priv-key.pem ~sally/.docker/key.pem
+	sudo chown -R sally:sally ~sally/.docker
+		or if remove host, five, and for user sally
+		ssh sally@five.cptx86.com ln -s ~sally/.docker/sally-client-cert.pem ~sally/.docker/cert.pem
+		ssh sally@five.cptx86.com ln -s ~sally/.docker/sally-client-priv-key.pem ~sally/.docker/key.pem
+
+    In bash you can set environment variables permanently by adding them to the user's .bashrc.  These
+    environment variables will be set each time the user logs into the test computer system.  Edit your .bashrc
+    file (or the correct shell if different) and append the following two lines.
+	vi  sally/.bashrc
+
+    export DOCKER_HOST=tcp://rpi3b-four.cptx86.com:2376
+	export DOCKER_TLS_VERIFY=1
+
+    
+ 
     
     Create symbolic links to point to the default Docker TLS file names.
     cd ~sally/.docker
@@ -148,7 +173,7 @@ Run this script second on your host that be used to create all your certificates
     environment variables will be set each time the user logs into the test computer system.  Edit your .bashrc
     file (or the correct file if using a different shell) and append the following two export lines.
         vi /home/uthree/.bashrc
-    
+	
     export DOCKER_HOST=tcp://three.cptx86.com:2376
     export DOCKER_TLS_VERIFY=1
 
