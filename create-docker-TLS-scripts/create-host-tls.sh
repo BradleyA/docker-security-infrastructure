@@ -73,7 +73,7 @@ echo "		ln -s ${FQDN}-priv-key.pem key.pem"
 echo "		exit"
 echo -e "\nAdd the TLS flags to dockerd so dockerd will know you are using TLS. (--tlsverify, --tlscacert, --tlscert, --tlskey)\n"
 echo -e "\nThe scripts in https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options"
-echo -e "will help with systems running Ubuntu 16.04 (systemd) and Ubuntu 14.04 (Upstart).\n\n"
+echo -e "will help configure dockerd on systems running Ubuntu 16.04 (systemd) and Ubuntu 14.04 (Upstart).\n\n"
 
 echo "For systems running Ubuntu 14.04 (Upstart) you can just follow these steps and not use dockerd-configuration-options scripts."
 echo "Modify the Docker daemon startup configuration file on host ${FQDN} and restart Docker."
