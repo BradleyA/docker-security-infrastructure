@@ -26,11 +26,14 @@ Move the scripts or create a symbolic link to a location in your working path; e
 ## Usage
 Run this script first on your host to create your site private and public TLS keys.  To change the default number of days (1460 days = 4 years) enter a number of days as the parameter (example: create-site-private-public-tls 365 ).
 
-    create-site-private-public-tls
+    create-site-private-public-tls.sh
 
 ## Output
-    $ create-site-private-public-tls
-    >>	Creating private key with passphrase
+    $ create-site-private-public-tls.sh
+    mkdir: created directory '/home/uadmin/.docker/docker-ca'
+    mkdir: created directory '/home/uadmin/.docker/docker-ca/.private'
+    
+    ./create-site-private-public-tls.sh 17 [INFO]:	Creating private key with passphrase in /home/uadmin/.docker/docker-ca/.private
     Generating RSA private key, 4096 bit long modulus
     .............................++
     .......................................++
@@ -43,7 +46,7 @@ Run this script first on your host to create your site private and public TLS ke
     Remove the private key from all systems and store the USB memory stick in a locked
     fireproof location.
     
-    >>	Creating public key
+    ./create-site-private-public-tls.sh 24 [INFO]:	Creating public key good for 1460 days in /home/uadmin/.docker/docker-ca
     
     The public key is copied to all systems in an environment so that those systems
     trust signed certificates.
@@ -73,7 +76,8 @@ Run this script first on your host to create your site private and public TLS ke
     Common Name (e.g. server FQDN or YOUR name) []:two.cptx86.com
     Email Address []:
     
-    These certificate are valid for 1460 days.
+    ./create-site-private-public-tls.sh 39 [INFO]:	These certificate are valid for 1460 days.
+    
     It would be prudent to document the date when to renew these certificates and set
     an operations or project management calendar entry about 15 days before renewal as
     a reminder to schedule new site certificates.
