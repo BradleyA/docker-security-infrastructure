@@ -73,4 +73,4 @@ echo "environment variables will be set each time the user logs into the test co
 echo "file (or the correct shell if different) and append the following two lines."
 echo "	vi  ${CLIENT}/.bashrc"
 echo -e "\nexport DOCKER_HOST=tcp://`hostname -f`:2376"
-echo "	export DOCKER_TLS_VERIFY=1"
+echo    "export DOCKER_TLS_VERIFY=1"
