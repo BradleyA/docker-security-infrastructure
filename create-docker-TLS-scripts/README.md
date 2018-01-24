@@ -235,8 +235,7 @@ Run this script for each host that requires a new Docker public and private TLS 
     will help configure dockerd on systems running Ubuntu 16.04 (systemd) and Ubuntu 14.04 (Upstart).
 
 
-    For systems running Ubuntu 14.04 (Upstart) you can just follow these steps and not use dockerd-configuration-options scripts.
-		
+    For systems running Ubuntu 14.04 (Upstart) you can just follow these steps and not use dockerd-configuration-options script	
     Modify the Docker daemon startup configuration file on host two.cptx86.com and restart Docker.
 		sudo vi /etc/default/docker
     DOCKER_OPTS="\ 
