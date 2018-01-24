@@ -178,71 +178,72 @@ Run this script for each user that requires a new Docker public and private TLS 
     export DOCKER_TLS_VERIFY=1
 
 ## Usage
-    create-host-tls <FQDN> <#days>
+Run this script for each host that requires a new Docker public and private TLS key.
+
+    ./create-host-tls.sh <FQDN> <#days>
 
 ## Output
-    $ create-host-tls two 365
-    >>	The /home/uthree/.docker/docker-ca/.private/ directory does exist.
-    
-    >>	Creating private key for host two
-    
+    $ ./create-host-tls.sh two.cptx86.com 365
+    ./create-host-tls.sh 26 [INFO]:	The /home/uadmin/.docker/docker-ca/.private/ directory does exist.
+
+    ./create-host-tls.sh 37 [INFO]:	Creating private key for host two.cptx86.com
+
     Generating RSA private key, 2048 bit long modulus
-    ..+++
-    ...............+++
+    .......................+++
+    ..............................+++
     e is 65537 (0x10001)
-    
-    >>	Generate a Certificate Signing Request (CSR) for host two.
-    
-    >>	Create and sign a 365 day certificate for host two
-    
+
+    ./create-host-tls.sh 39 [INFO]:	Generate a Certificate Signing Request (CSR) for host two.cptx86.com.
+
+    ./create-host-tls.sh 42 [INFO]:	Create and sign a 365 day certificate for host two.cptx86.com
+
     Signature ok
-    subject=/CN=two/subjectAltName=two
+    subject=/CN=two.cptx86.com/subjectAltName=two.cptx86.com
     Getting CA Private Key
     Enter pass phrase for .private/ca-priv-key.pem:
     writing RSA key
-    
-    >>	Removing certificate signing requests (CSR) and set file permissions for host two key pairs.
-    
-    >>	Instructions for setting up the public, private, and certificate files.
-    
+
+    ./create-host-tls.sh 45 [INFO]:	Removing certificate signing requests (CSR) and set file permissions for host two.cptx86.com key pairs.
+
+    ./create-host-tls.sh 53 [INFO]:	Instructions for setting up the public, private, and certificate files.
+
     Login to host two.cptx86.com and create a Docker daemon TLS directory.  
-        ssh <user>@two.cptx86.com
-        sudo mkdir -p /etc/docker/certs.d/daemon
-    Change the directory permission for the Docker daemon TLS directory on host two and logout.
-        sudo chmod 0700 /etc/docker/certs.d/daemon
-        logout
-    Copy the keys from the working directory on host two to /tmp directory on host two.
-        scp ./ca.pem <user>@two.cptx86.com:'/tmp/ca.pem'
-        scp ./two-cert.pem <user>@two.cptx86.com:'/tmp/two-cert.pem'
-        scp ./two-priv-key.pem <user>@two.cptx86.com:'/tmp/two-priv-key.pem'
+		ssh <user>@two.cptx86.com
+		sudo mkdir -p /etc/docker/certs.d/daemon
+    Change the directory permission for the Docker daemon TLS directory on host two.cptx86.com and logout.
+		sudo chmod 0700 /etc/docker/certs.d/daemon
+		logout
+    Copy the keys from the working directory on host two to /tmp directory on host two.cptx86.com.
+		scp ./ca.pem <user>@two.cptx86.com:'/tmp/ca.pem'
+		scp ./two.cptx86.com-cert.pem <user>@two.cptx86.com:'/tmp/two.cptx86.com-cert.pem'
+		scp ./two.cptx86.com-priv-key.pem <user>@two.cptx86.com:'/tmp/two.cptx86.com-priv-key.pem'
     Login to host two.cptx86.com and move the key pair files signed by the CA from the /tmp directory to the Docker daemon TLS directory.
-        ssh <user>@two.cptx86.com
-        cd /tmp
-        sudo mv *.pem /etc/docker/certs.d/daemon
-        sudo chown -R root.root /etc/docker/certs.d/daemon
-        sudo -i
-        cd /etc/docker/certs.d/daemon
-        ln -s $FQDN-cert.pem cert.pem
-        ln -s $FQDN-priv-key.pem key.pem
-        exit
-    
+		ssh <user>@two.cptx86.com
+		cd /tmp
+		sudo mv *.pem /etc/docker/certs.d/daemon
+		sudo chown -R root.root /etc/docker/certs.d/daemon
+		sudo -i
+		cd /etc/docker/certs.d/daemon
+		ln -s two.cptx86.com-cert.pem cert.pem
+		ln -s two.cptx86.com-priv-key.pem key.pem
+		exit
     Modify the Docker daemon startup configuration file on host two.cptx86.com and restart Docker.
-        sudo vi /etc/default/docker
-        DOCKER_OPTS="\ 
-        --graph=/usr/local/docker \ 
-        --dns 192.168.1.202 \ 
-        --dns 8.8.8.8 \ 
-        --dns 8.8.4.4 \ 
-        --log-level warn \ 
-        --tlsverify \ 
-        --tlscacert=/etc/docker/certs.d/daemon/ca.pem \ 
-        --tlscert=/etc/docker/certs.d/daemon/two.cptx86.com-cert.pem \ 
-        --tlskey=/etc/docker/certs.d/daemon/two.cptx86.com-priv-key.pem \ 
-        -H=two.cptx86.com:2376 \
-        "
-    
-        sudo service docker restart
-        logout
+		sudo vi /etc/default/docker
+    DOCKER_OPTS="\ 
+      --graph=/usr/local/docker \ 
+      --dns 192.168.1.202 \ 
+      --dns 8.8.8.8 \ 
+      --dns 8.8.4.4 \ 
+      --log-level warn \ 
+      --tlsverify \ 
+      --tlscacert=/etc/docker/certs.d/daemon/ca.pem \ 
+      --tlscert=/etc/docker/certs.d/daemon/two.cptx86.com-cert.pem \ 
+      --tlskey=/etc/docker/certs.d/daemon/two.cptx86.com-priv-key.pem \ 
+      -H=two.cptx86.com:2376 \ 
+      "
+
+	sudo service docker restart
+	logout
 
 #### System OS script tested
  * Ubuntu 14.04.4 LTS
