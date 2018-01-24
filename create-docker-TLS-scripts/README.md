@@ -227,6 +227,16 @@ Run this script for each host that requires a new Docker public and private TLS 
 		ln -s two.cptx86.com-cert.pem cert.pem
 		ln -s two.cptx86.com-priv-key.pem key.pem
 		exit
+	    	
+    Add the TLS flags to dockerd so dockerd will know you are using TLS. (--tlsverify, --tlscacert, --tlscert, --tlskey)
+    
+
+    The scripts in https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options
+    will help configure dockerd on systems running Ubuntu 16.04 (systemd) and Ubuntu 14.04 (Upstart).
+
+
+    For systems running Ubuntu 14.04 (Upstart) you can just follow these steps and not use dockerd-configuration-options scripts.
+		
     Modify the Docker daemon startup configuration file on host two.cptx86.com and restart Docker.
 		sudo vi /etc/default/docker
     DOCKER_OPTS="\ 
