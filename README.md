@@ -7,6 +7,7 @@ I have been using some of these for days, months, or years and just now uploadin
 
 This repository contains shell scripts for RaspBerry pi.
 
+ * [create-docker-TLS-scripts](https://github.com/BradleyA/docker-scripts/tree/master/create-docker-TLS-scripts)
  * [dockerd-configuration-options](https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options)
 
 ## System OS script tested
