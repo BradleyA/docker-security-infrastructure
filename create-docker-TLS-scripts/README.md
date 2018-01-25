@@ -19,8 +19,8 @@ Move the scripts or create a symbolic link to a location in your working path; e
     
     sudo mkdir -p /usr/local/bin
     sudo mv create-*-tls /usr/local/bin
-    cd ..
-    rm -r create-docker-TLS-scripts
+    cd ../..
+    rm -r docker-scripts
     chmod 0750 /usr/local/bin/create-*-tls
 
 ## Usage
