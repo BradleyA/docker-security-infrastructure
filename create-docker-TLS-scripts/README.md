@@ -26,7 +26,7 @@ Move the scripts or create a symbolic link to a location in your working path; e
 ## Usage
 Run this script first on your host to create your site private and public TLS keys.  To change the default number of days (1460 days = 4 years) enter a number of days as the parameter (example: create-site-private-public-tls 365 ).
 
-    create-site-private-public-tls.sh
+    create-site-private-public-tls.sh <#days>
 
 ## Output
     $ ./create-site-private-public-tls.sh
