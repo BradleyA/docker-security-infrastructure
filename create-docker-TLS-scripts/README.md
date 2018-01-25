@@ -12,7 +12,7 @@ create-host-tls.sh - The order of the last two scripts does not matter as long a
 ## Install
 To install, change directory to the location you want to download the scripts.  Use git to pull or clone these scripts into your directory.  If you do not have git then enter; "sudo apt-get install git".  On the github page of this script use the "HTTPS clone URL" with the 'git clone' command. 
     
-    git clone git clone https://github.com/BradleyA/docker-scripts
+    git clone https://github.com/BradleyA/docker-scripts
     cd docker-scripts/create-docker-TLS-scripts
     
 Move the scripts or create a symbolic link to a location in your working path; example /usr/local/bin. To find directories in your working path use; "echo $PATH".
