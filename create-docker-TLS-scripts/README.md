@@ -1,11 +1,11 @@
 # create-docker-TLS-scripts
-create-site-private-public-tls.sh, create-new-openssl.cnf-tls.sh, create-client-tls.sh, and create-host-tls.sh are bash scripts that create TLS public keys, private keys, and self-signed certificates for the docker user, daemon, and swarm.  After many reinstalls of OS's and Docker, I got tried of entering the cryptic command line text required to setup Docker to use TLS.  Each example I found on-line was different than the last example.
+create-site-private-public-tls.sh, create-new-openssl.cnf-tls.sh, create-user-tls.sh, and create-host-tls.sh are bash scripts that create TLS public keys, private keys, and self-signed certificates for the docker user, daemon, and swarm.  After many reinstalls of OS's and Docker, I got tried of entering the cryptic command line text required to setup Docker to use TLS.  Each example I found on-line was different than the last example.
 
-create-site-private-public-tls.sh - Run this script first on your host that will be creating all your TLS keys.  It creates the site private and public keys that all other TLS keys at your site will be using.  It creates the working directories  $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private for your site public and private keys.  These site cerificates are set for four years until new certificates are needed.  You may change the default four year (1460) by including a parameter with the number of days you prefer.  At that time this script will need to be run to create another set of four year public and private site certificates.  If you choose to use a different host to continue creating your client and host TLS keys, cp the $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private to the new host.
+create-site-private-public-tls.sh - Run this script first on your host that will be creating all your TLS keys.  It creates the site private and public keys that all other TLS keys at your site will be using.  It creates the working directories  $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private for your site public and private keys.  These site cerificates are set for four years until new certificates are needed.  You may change the default four year (1460) by including a parameter with the number of days you prefer.  At that time this script will need to be run to create another set of four year public and private site certificates.  If you choose to use a different host to continue creating your user and host TLS keys, cp the $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private to the new host.
 
-create-new-openssl.cnf-tls.sh - Run this script second, it is required to make changes to the openssl.cnf file on your host which are required for the create-client-tls and create-host-tls scripts.  It is only required to run once on your host that will be creating all your TLS keys.  If you choose to use a different host to continue creating your client and host TLS keys, run this script on the new host before running the follow two scripts.
+create-new-openssl.cnf-tls.sh - Run this script second, it is required to make changes to the openssl.cnf file on your host which are required for the create-user-tls and create-host-tls scripts.  It is only required to run once on your host that will be creating all your TLS keys.  If you choose to use a different host to continue creating your user and host TLS keys, run this script on the new host before running the follow two scripts.
 
-create-client-tls.sh - The order of the last two scripts does not matter as long as they are run on your host that is creating all the TLS keys.  See notes about using a different host in the first two scripts.  Run this script any time a user requires a new Docker public and private TLS key.
+create-user-tls.sh - The order of the last two scripts does not matter as long as they are run on your host that is creating all the TLS keys.  See notes about using a different host in the first two scripts.  Run this script any time a user requires a new Docker public and private TLS key.
 
 create-host-tls.sh - The order of the last two scripts does not matter as long as they are run on your host that is creating all the TLS keys.  See notes about using a different host in the first two scripts.  Run this script any time a host requires a new Docker public and private TLS key.
 
@@ -26,7 +26,7 @@ Move the scripts or create a symbolic link to a location in your working path; e
 ## Usage
 Run this script first on your host to create your site private and public TLS keys.  To change the default number of days (1460 days = 4 years) enter a number of days as the parameter (example: create-site-private-public-tls 365 ).
 
-    create-site-private-public-tls.sh
+    create-site-private-public-tls.sh <#days>
 
 ## Output
     $ ./create-site-private-public-tls.sh
@@ -100,31 +100,31 @@ Run this script second on your host that be used to create all your certificates
 ## Usage
 Run this script for each user that requires a new Docker public and private TLS key.
 
-    ./create-client-tls.sh <user> <#days> 
+    ./create-user-tls.sh <user> <#days> 
 
 ## Output
-    $ ./create-client-tls.sh sally 30
-    ./create-client-tls.sh 25 [INFO]:	The /home/uadmin/.docker/docker-ca/.private/ directory does exist.
+    $ ./create-user-tls.sh sally 30
+    ./create-user-tls.sh 25 [INFO]:	The /home/uadmin/.docker/docker-ca/.private/ directory does exist.
 
-    ./create-client-tls.sh 32 [INFO]:	Creating client private key for user sally.
+    ./create-user-tls.sh 32 [INFO]:	Creating user private key for user sally.
 
     Generating RSA private key, 2048 bit long modulus
     ............................................+++
     ......................+++
     e is 65537 (0x10001)
 
-    ./create-client-tls.sh 35 [INFO]:	Generate a Certificate Signing Request (CSR) for user sally.
+    ./create-user-tls.sh 35 [INFO]:	Generate a Certificate Signing Request (CSR) for user sally.
 
-    ./create-client-tls.sh 38 [INFO]:	Create and sign a 30 day certificate for user sally.
+    ./create-user-tls.sh 38 [INFO]:	Create and sign a 30 day certificate for user sally.
 
     Signature ok
     subject=/subjectAltName=client
     Getting CA Private Key
     Enter pass phrase for .private/ca-priv-key.pem:
 
-    ./create-client-tls.sh 41 [INFO]:	Removing certificate signing requests (CSR) and set file permissions for sally key pairs.
+    ./create-user-tls.sh 41 [INFO]:	Removing certificate signing requests (CSR) and set file permissions for sally key pairs.
 
-    ./create-client-tls.sh 49 [INFO]:	The following are instructions for setting up the public, private, and certificate files for sally.
+    ./create-user-tls.sh 49 [INFO]:	The following are instructions for setting up the public, private, and certificate files for sally.
 
     Copy the CA's public key (also called certificate) from the working directory to ~sally/.docker.
 	sudo mkdir -pv ~sally/.docker
@@ -136,19 +136,19 @@ Run this script for each user that requires a new Docker public and private TLS 
 		scp -p ca.pem sally@five.cptx86.com:~sally/.docker
 
     Copy the key pair files signed by the CA from the working directory to ~sally/.docker.
-	sudo cp -pv sally-client-cert.pem ~sally/.docker
-	sudo cp -pv sally-client-priv-key.pem ~sally/.docker
+	sudo cp -pv sally-user-cert.pem ~sally/.docker
+	sudo cp -pv sally-user-priv-key.pem ~sally/.docker
 		or if copying to remove host, five, and for user sally
-		scp -p sally-client-cert.pem sally@five.cptx86.com:~sally/.docker
-		scp -p sally-client-priv-key.pem sally@five.cptx86.com:~sally/.docker
+		scp -p sally-user-cert.pem sally@five.cptx86.com:~sally/.docker
+		scp -p sally-user-priv-key.pem sally@five.cptx86.com:~sally/.docker
 
     Create symbolic links to point to the default Docker TLS file names.
-	sudo ln -s ~sally/.docker/sally-client-cert.pem ~sally/.docker/cert.pem
-	sudo ln -s ~sally/.docker/sally-client-priv-key.pem ~sally/.docker/key.pem
+	sudo ln -s ~sally/.docker/sally-user-cert.pem ~sally/.docker/cert.pem
+	sudo ln -s ~sally/.docker/sally-user-priv-key.pem ~sally/.docker/key.pem
 	sudo chown -R sally:sally ~sally/.docker
 		or if remove host, five, and for user sally
-		ssh sally@five.cptx86.com ln -s ~sally/.docker/sally-client-cert.pem ~sally/.docker/cert.pem
-		ssh sally@five.cptx86.com ln -s ~sally/.docker/sally-client-priv-key.pem ~sally/.docker/key.pem
+		ssh sally@five.cptx86.com ln -s ~sally/.docker/sally-user-cert.pem ~sally/.docker/cert.pem
+		ssh sally@five.cptx86.com ln -s ~sally/.docker/sally-user-priv-key.pem ~sally/.docker/key.pem
 
     In bash you can set environment variables permanently by adding them to the user's .bashrc.  These
     environment variables will be set each time the user logs into the test computer system.  Edit your .bashrc
@@ -163,11 +163,11 @@ Run this script for each user that requires a new Docker public and private TLS 
     
     Create symbolic links to point to the default Docker TLS file names.
     cd ~sally/.docker
-    ln -s sally-client-cert.pem cert.pem
-    ln -s sally-client-priv-key.pem key.pem
+    ln -s sally-user-cert.pem cert.pem
+    ln -s sally-user-priv-key.pem key.pem
         or if remote host, five.cptx86.com, and for user sally.
-        ssh sally@five.cptx86.com ln -s ~sally/.docker/sally-client-cert.pem ~sally/.docker/cert.pem
-        ssh sally@five.cptx86.com ln -s ~sally/.docker/sally-client-priv-key.pem ~sally/.docker/key.pem
+        ssh sally@five.cptx86.com ln -s ~sally/.docker/sally-user-cert.pem ~sally/.docker/cert.pem
+        ssh sally@five.cptx86.com ln -s ~sally/.docker/sally-user-priv-key.pem ~sally/.docker/key.pem
     
     In bash you can set environment variables permanently by adding them to the user's .bashrc.  These
     environment variables will be set each time the user logs into the test computer system.  Edit your .bashrc
@@ -263,7 +263,7 @@ Run this script for each host that requires a new Docker public and private TLS 
  * Be easy to install and configure
 
 ## License ::
-create-site-private-public-tls, create-new-openssl.cnf-tls, create-client-tls, and create-host-tls are free software/open source.
+create-site-private-public-tls, create-new-openssl.cnf-tls, create-user-tls, and create-host-tls are free software/open source.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software, associated documentation, and files (the "Software") without restriction, including without limitation of rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so.
 
