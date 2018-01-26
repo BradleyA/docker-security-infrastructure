@@ -42,7 +42,7 @@ openssl x509 -in ${USERHOME}${TLSUSER}/.docker/cert.pem -noout -enddate
 echo -e "\nView ${USERHOME}${TLSUSER}/.docker certificate issuer data of the ca.pem file."
 openssl x509 -in ${USERHOME}${TLSUSER}/.docker/ca.pem -noout -issuer
 #	View user certificate issuer data of the cert.pem file.
-echo -e "\nView ${USERHOME}${TLSUSER}/.docker certificate issuer data of the cert.pem file.\n"
+echo -e "\nView ${USERHOME}${TLSUSER}/.docker certificate issuer data of the cert.pem file."
 openssl x509 -in ${USERHOME}${TLSUSER}/.docker/cert.pem -noout -issuer
 #	Verify that user public key in your certificate matches the public portion of your private key.
 echo -e "\nVerify that user public key in your certificate matches the public portion of your private key."
