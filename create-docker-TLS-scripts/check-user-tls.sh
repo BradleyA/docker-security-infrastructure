@@ -1,25 +1,26 @@
 #!/bin/bash
+#	check-user-tls.sh	1.0	2018-01-25_21:46:22_CST uadmin rpi3b-four.cptx86.com
+#	change logic to allow user to check own certs without being root
 #
-#       set -x
-#       set -v
+#	set -x
+#	set -v
 #
 #	View public and private key and CA for user
 #
 ###
 TLSUSER=$1
-#	Where user home directories are created.  Sometimes on a different filesystem /home/north-office/
+#	Where home directories are created. Some sites have different home directories (/u/north-office/<user>)
 USERHOME=/home/
-#       Must be root to run this script
-if ! [ $(id -u) = 0 ] ; then
-        echo "${0} ${LINENO} [ERROR]:   Use sudo ${0} <TLSUSER>"  1>&2
-        echo -e "\n>>   SCRIPT MUST BE RUN AS ROOT TO VIEW ${TLSUSER}/.docker DIRECTORY. <<"     1>&2
-        exit 1
-fi
 #	Check if user is entered as parameter
-if [ -z ${TLSUSER} ]
-then
-        echo "Enter user ID to check TLS keys:"
-        read TLSUSER
+if ! [ -z ${TLSUSER} ] ; then
+#       Root is required to check other users or user can check own certs
+	if ! [ $(id -u) = 0 -o ${USER} = ${TLSUSER} ] ; then
+        	echo "${0} ${LINENO} [ERROR]:   Use sudo ${0} <TLSUSER>"  1>&2
+        	echo -e "\n>>   SCRIPT MUST BE RUN AS ROOT TO CHECK <another-user>/.docker DIRECTORY. <<\n"     1>&2
+        	exit 1
+	fi
+else
+	TLSUSER=${USER}
 fi
 #	Check if user has home directory on system
 if [ ! -d ${USERHOME}${TLSUSER} ] ; then 
