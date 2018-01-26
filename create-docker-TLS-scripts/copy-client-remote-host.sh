@@ -1,42 +1,55 @@
 #!/bin/bash
-#	copy-client-remote-host	3.1	2017-12-19_15:32:23_CST utwo two.cptx86.com
+#	copy-client-remote-host.sh	3.2	2018-01-25_23:23:05_CST uadmin rpi3b-four.cptx86.com
+#	changed variable names and added test login, need alot of testing
+#	copy-user-remote-host	3.1	2017-12-19_15:32:23_CST utwo two.cptx86.com
 #	Adding version number and upload latest
 #
-#       set -x
-#       set -v
+#	set -x
+#	set -v
 #
-#       Copy public and private key and CA for client to remote host
-###               
-CLIENT=$1
+#	Copy public and private key and CA for user to remote host
+###
+TLSUSER=$1
 REMOTEHOST=$2
-cd ${HOME}/.docker/docker-ca
-if [ -z ${CLIENT} ]
-then
-        echo "Enter user name needing new TLS keys:"
-        read CLIENT
+#	Working directory to create public and private certificates for clusters at site
+WORKTLSDIR= ${HOME}/.docker/docker-ca/
+#       Check if certificate directory exists
+if [ ! -d ${WORKTLSDIR} ] ; then
+        echo -e "${0} ${LINENO} [ERROR]:	${WORKTLSDIR} directory does not exist"   1>&2
+        exit 1
 fi
-if [ -z ${REMOTEHOST} ]
-then
+cd ${WORKTLSDIR}
+#
+if [ -z ${TLSUSER} ] ; then
+        echo "Enter user name needing new TLS keys:"
+        read TLSUSER
+fi
+#	Need to test to determine how to support this for uadmin to admin@remotesystem and uadmin to <otheruser>@remotesystem
+#	
+#	will require more logic to support all use cases and updated prompts
+#	uadmin is the account for site and all clusters
+#	may want to see how to support more than one uadmin account in clusters for this script
+#	this opens up challenge with different users needing to chown and chgrp for different remote users
+#
+if [ -z ${REMOTEHOST} ] ; then
         echo "Enter remote host to copy TLS keys:"
         read REMOTEHOST
 fi
-if [ -a "./.private/ca-priv-key.pem" ]
-then
-        echo "${0} ${LINENO} [INFO]:	The ${HOME}/.docker/docker-ca/.private/ directory found."	1>&2
+if [ -a "./.private/ca-priv-key.pem" ] ; then
+        echo "${0} ${LINENO} [INFO]:	The ${WORKTLSDIR}.private/ directory found."	1>&2
 else
-        echo "${0} ${LINENO} [ERROR]:	Private key not found (${HOME}/.docker/docker-ca/.private/ca-priv-key.pem)"	1>&2
-        exit
+        echo "${0} ${LINENO} [ERROR]:	Private key not found (${WORKTLSDIR}.private/ca-priv-key.pem)"	1>&2
+        exit 1
 fi
-if [ -n ${CLIENT} ]
-then
-	echo -e "\n${0} ${LINENO} [INFO]:	Create directory, change permissions, and\n\tcopy ca.pem TLS Key to ${CLIENT}@${REMOTEHOST}.\n"	1>&2
-	ssh ${CLIENT}@${REMOTEHOST} mkdir -pv ~${CLIENT}/.docker
-	ssh ${CLIENT}@${REMOTEHOST} chmod -v 700 ~${CLIENT}/.docker
-	scp -p ca.pem ${CLIENT}@${REMOTEHOST}:~${CLIENT}/.docker
-	echo -e "\n${0} ${LINENO} [INFO]:	Copy the key pair files signed by the CA\n\t${REMOTEHOST}:~${CLIENT}/.docker.\n"	1>&2
-	scp -p ${CLIENT}-client-cert.pem ${CLIENT}@${REMOTEHOST}:~${CLIENT}/.docker
-	scp -p ${CLIENT}-client-priv-key.pem ${CLIENT}@${REMOTEHOST}:~${CLIENT}/.docker
+if [ -n ${TLSUSER} ] ; then
+	echo -e "\n${0} ${LINENO} [INFO]:	Create directory, change permissions, and\n\tcopy ca.pem TLS key to ${TLSUSER}@${REMOTEHOST}.\n"	1>&2
+	ssh ${TLSUSER}@${REMOTEHOST} mkdir -p  ~${TLSUSER}/.docker
+	ssh ${TLSUSER}@${REMOTEHOST} chmod 700 ~${TLSUSER}/.docker
+	scp -p ca.pem ${TLSUSER}@${REMOTEHOST}:~${TLSUSER}/.docker
+	echo -e "\n${0} ${LINENO} [INFO]:	Copy key pair files signed by CA\n\t${REMOTEHOST}:~${TLSUSER}/.docker.\n"	1>&2
+	scp -p ${TLSUSER}-user-cert.pem ${TLSUSER}@${REMOTEHOST}:~${TLSUSER}/.docker
+	scp -p ${TLSUSER}-user-priv-key.pem ${TLSUSER}@${REMOTEHOST}:~${TLSUSER}/.docker
 	echo -e "\n${0} ${LINENO} [INFO]:	Create symbolic links to point to the\n\tdefault Docker TLS file names.\n"	1>&2
-	ssh ${CLIENT}@${REMOTEHOST} ln -vs ~${CLIENT}/.docker/${CLIENT}-client-cert.pem ~${CLIENT}/.docker/cert.pem
-	ssh ${CLIENT}@${REMOTEHOST} ln -vs ~${CLIENT}/.docker/${CLIENT}-client-priv-key.pem ~${CLIENT}/.docker/key.pem
+	ssh ${TLSUSER}@${REMOTEHOST} ln -s ~${TLSUSER}/.docker/${TLSUSER}-user-cert.pem ~${TLSUSER}/.docker/cert.pem
+	ssh ${TLSUSER}@${REMOTEHOST} ln -s ~${TLSUSER}/.docker/${TLSUSER}-user-priv-key.pem ~${TLSUSER}/.docker/key.pem
 fi
