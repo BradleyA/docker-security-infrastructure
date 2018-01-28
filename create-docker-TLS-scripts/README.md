@@ -1,4 +1,4 @@
-# create-docker-TLS-scripts
+# docker-TLS-scripts
 create-site-private-public-tls.sh, create-new-openssl.cnf-tls.sh, create-user-tls.sh, and create-host-tls.sh are bash scripts that create TLS public keys, private keys, and self-signed certificates for the docker user, daemon, and swarm.  After many reinstalls of OS's and Docker, I got tried of entering the cryptic command line text required to setup Docker to use TLS.  Each example I found on-line was different than the last example.
 
 create-site-private-public-tls.sh - Run this script first on your host that will be creating all your TLS keys.  It creates the site private and public keys that all other TLS keys at your site will be using.  It creates the working directories  $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private for your site public and private keys.  These site cerificates are set for four years until new certificates are needed.  You may change the default four year (1460) by including a parameter with the number of days you prefer.  At that time this script will need to be run to create another set of four year public and private site certificates.  If you choose to use a different host to continue creating your user and host TLS keys, cp the $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private to the new host.
@@ -8,6 +8,10 @@ create-new-openssl.cnf-tls.sh - Run this script second, it is required to make c
 create-user-tls.sh - The order of the last two scripts does not matter as long as they are run on your host that is creating all the TLS keys.  See notes about using a different host in the first two scripts.  Run this script any time a user requires a new Docker public and private TLS key.
 
 create-host-tls.sh - The order of the last two scripts does not matter as long as they are run on your host that is creating all the TLS keys.  See notes about using a different host in the first two scripts.  Run this script any time a host requires a new Docker public and private TLS key.
+
+check-user-tls.sh - 
+
+check-host-tls.sh - 
 
 ## Install
 To install, change directory to the location you want to download the scripts.  Use git to pull or clone these scripts into your directory.  If you do not have git then enter; "sudo apt-get install git".  On the github page of this script use the "HTTPS clone URL" with the 'git clone' command. 
