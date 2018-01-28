@@ -9,9 +9,11 @@ create-user-tls.sh - The order of the last two scripts does not matter as long a
 
 create-host-tls.sh - The order of the last two scripts does not matter as long as they are run on your host that is creating all the TLS keys.  See notes about using a different host in the first two scripts.  Run this script any time a host requires a new Docker public and private TLS key.
 
-check-user-tls.sh - 
+check-user-tls.sh - A user can check their public, private keys, and CA in $HOME/.docker or a user can check other users certificates by using sudo.
 
 check-host-tls.sh - 
+
+copy-client-remote-host.sh - 
 
 ## Install
 To install, change directory to the location you want to download the scripts.  Use git to pull or clone these scripts into your directory.  If you do not have git then enter; "sudo apt-get install git".  On the github page of this script use the "HTTPS clone URL" with the 'git clone' command. 
