@@ -93,12 +93,13 @@ Run this script second on your host that will be used to create all your certifi
     sudo ./create-new-openssl.cnf-tls.sh
 
 ## Output
-    $ sudo ./create-new-openssl.cnf-tls
-    This script will make changes to the openssl.cnf file.  These changes are required
-    before creating user and host TLS files for Docker.  Run this script before running
-    the user and host TLS scripts.  It is not required to be run on hosts not creating TLS files.
+    $ sudo ./create-new-openssl.cnf-tls.sh
+    This script will make changes to /etc/ssl/openssl.cnf file.  These changes are required
+    before creating user and host TLS keys for Docker.  Run this script before running
+    the user and host TLS scripts.  It is not required to be run on hosts not creating
+    TLS keys.
     
-    Creating backup file of /etc/ssl/openssl.cnf and naming it /etc/ssl/openssl.cnf-160718
+    Creating backup file of /etc/ssl/openssl.cnf and naming it /etc/ssl/openssl.cnf-2018-01-29_15:36:55_CST
     
     Adding the extended KeyUsage at the beginning of the [ v3_ca ] section.
 
