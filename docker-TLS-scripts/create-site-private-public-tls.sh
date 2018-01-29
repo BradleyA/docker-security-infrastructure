@@ -5,7 +5,11 @@
 #	set -x
 #	set -v
 #
-#	Create the CA Private Key
+#	Create site private and public keys
+#	This script uses one arguement; 
+#		NUMBERDAYS - number of days site CA is valid, default 1460 days (four years)
+#	This script creates site private and public keys that all other TLS keys require
+#	Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts
 ###		
 #	The defualt value is 4 years (1460 days).  Parameter 1 will over ride default value.
 NUMBERDAYS=${1:-1460}

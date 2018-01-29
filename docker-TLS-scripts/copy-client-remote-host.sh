@@ -8,6 +8,11 @@
 #	set -v
 #
 #	Copy public and private key and CA for user to remote host
+#	This script uses two arguements;
+#		TLSUSER - user
+#		REMOTEHOST - name of host to copy certificates 
+# >>>>> This script
+#	Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts
 ###
 TLSUSER=$1
 REMOTEHOST=$2
@@ -24,7 +29,7 @@ if [ -z ${TLSUSER} ] ; then
         echo "Enter user name needing new TLS keys:"
         read TLSUSER
 fi
-#	Need to test to determine how to support this for uadmin to admin@remotesystem and uadmin to <otheruser>@remotesystem
+# >>>>>	Need to test to determine how to support this for uadmin to admin@remotesystem and uadmin to <otheruser>@remotesystem
 #	
 #	will require more logic to support all use cases and updated prompts
 #	uadmin is the account for site and all clusters

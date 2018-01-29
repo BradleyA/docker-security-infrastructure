@@ -13,7 +13,10 @@
 #	This script uses two arguements;
 #		TLSUSER - user, default is user running script
 #		USERHOME - location of user home directory, default is /home/
-#			Many sites have different home directories locations (/u/north-office/<user>)
+#		   Many sites have different home directories locations (/u/north-office/<user>)
+#	This script allows a user to check their public, private keys, and CA in $HOME/.docker.
+#	This script can also be run with sudo to check other users certificates.
+#       Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts
 ###
 TLSUSER=$1
 USERHOME=${2:-/home/}

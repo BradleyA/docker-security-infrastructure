@@ -5,7 +5,9 @@
 #	set -x
 #	set -v
 #
-#	modify /etc/ssl/openssl.conf file
+#	Modify /etc/ssl/openssl.conf file
+#	This script makes changes to openssl.cnf file which are required for create-user-tls and create-host-tls scripts.
+#	Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts
 ###		
 BACKUPFILE=/etc/ssl/openssl.cnf-`date +%y%m%d`
 #       Must be root to run this script

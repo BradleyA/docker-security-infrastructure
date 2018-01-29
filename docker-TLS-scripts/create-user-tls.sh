@@ -6,6 +6,11 @@
 #	set -v
 #
 #	Create public and private key and CA for user
+#       This script uses two arguements;
+#               TLSUSER - user
+#               DAY - number of days user keys & CA are valid
+#       This script creates public, private keys and CA for user.
+#       Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts
 ###		
 TLSUSER=$1
 DAY=$2

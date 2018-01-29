@@ -6,11 +6,17 @@
 #	set -v
 #
 #	Create public and private key and CA for host
+#	This script uses two arguements;
+#		FQDN - Fully qualified domain name
+#		DAY - number of days host CA is valid, default 1460 days (four years)
+#	This script creates public and private key and CA in working directory,${HOME}/.docker/docker-ca.
+#	Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts
 ###		
 FQDN=$1
 DAY=$2
-mkdir -pv ${HOME}/.docker/docker-ca
-cd ${HOME}/.docker/docker-ca
+WORKDIR=${3:-${HOME}/.docker/docker-ca/}
+mkdir -pv ${WORKDIR}
+cd ${WORKDIR}
 if [ -z ${FQDN} ]
 then
 	echo "Enter fully qualified domain name (FQDN, hostname and domain name) needing new TLS keys (example:`hostname -f`):"
@@ -23,10 +29,10 @@ then
 fi
 if [ -a "./.private/ca-priv-key.pem" ]
 then
-	echo "${0} ${LINENO} [INFO]:	The ${HOME}/.docker/docker-ca/.private/ directory does exist."	1>&2
+	echo "${0} ${LINENO} [INFO]:	The ${WORKDIR}.private/ directory does exist."	1>&2
 	rm -f ${FQDN}-priv-key.pem ${FQDN}-cert.pem ${FQDN}.csr
 else
-	echo -e "${0} ${LINENO} [ERROR]:	Private key not found (${HOME}/.docker/docker-ca/.private/ca-priv-key.pem)"	1>&2
+	echo -e "${0} ${LINENO} [ERROR]:	Private key not found (${WORKDIR}.private/ca-priv-key.pem)"	1>&2
 	echo -e "\n>>>  Create or restore the area private key before continuing.  To create a new  <<<"
 	echo ">>>       area private key run the script _________ and place the file in directory <<<"
 	echo ">>>       noted above.  <<<"

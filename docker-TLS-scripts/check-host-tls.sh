@@ -8,9 +8,10 @@
 #       set -v
 #
 #	Check public, private keys, and CA for host
-#
 #       This script uses one arguement;
 #               CERTDIR - dockerd certification directory, default /etc/docker/certs.d/daemon/
+#       This script run as root checks host public, private keys, and CA in /etc/docker/certs.d/daemon directory
+#       Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts
 ### 
 CERTDIR=${1:-/etc/docker/certs.d/daemon/}
 #       Must be root to run this script
