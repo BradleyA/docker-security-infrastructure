@@ -80,5 +80,3 @@ fi
 #
 #	May want to create a version of this script that automates this process for SRE tools,
 #		but keep this script for users to run manually,
-#		but remove the root requirement from the manual version
-#		because users can view their own ~/.docker directory
