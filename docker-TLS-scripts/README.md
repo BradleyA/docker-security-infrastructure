@@ -37,23 +37,21 @@ Run this script first on your host to create your site private and public TLS ke
 
 ## Output
     $ ./create-site-private-public-tls.sh
-    mkdir: created directory '/home/uadmin/.docker/docker-ca'
-    mkdir: created directory '/home/uadmin/.docker/docker-ca/.private'
     
-    ./create-site-private-public-tls.sh 17 [INFO]:	Creating private key with passphrase in /home/uadmin/.docker/docker-ca/.private
+    ./create-site-private-public-tls.sh 38 [INFO]:	Creating private key with passphrase in /home/uadmin/.docker/docker-ca/.private
     Generating RSA private key, 4096 bit long modulus
-    .............................++
-    .......................................++
+    ............................................++
+    ................++
     e is 65537 (0x10001)
     Enter pass phrase for ca-priv-key.pem:
     Verifying - Enter pass phrase for ca-priv-key.pem:
     
     Once all the certificates and keys have been generated with this private key,
     it would be prudent to move the private key to a Universal Serial Bus (USB) memory stick.
-    Remove the private key from all systems and store the USB memory stick in a locked
+    Remove the private key from the system and store the USB memory stick in a locked
     fireproof location.
     
-    ./create-site-private-public-tls.sh 24 [INFO]:	Creating public key good for 730 days in /home/uadmin/.docker/docker-ca
+    ./create-site-private-public-tls.sh 45 [INFO]:	Creating public key good for 730 days in /home/uadmin/.docker/docker-ca
     
     The public key is copied to all systems in an environment so that those systems
     trust signed certificates.
@@ -79,15 +77,15 @@ Run this script first on your host to create your site private and public TLS ke
     State or Province Name (full name) [Some-State]:Texas
     Locality Name (eg, city) []:Cedar Park
     Organization Name (eg, company) [Internet Widgits Pty Ltd]:Company Name
-    Organizational Unit Name (eg, section) []:IT
+    Organizational Unit Name (eg, section) []:IT - SRE Team Central US
     Common Name (e.g. server FQDN or YOUR name) []:two.cptx86.com
     Email Address []:
     
-    ./create-site-private-public-tls.sh 39 [INFO]:	These certificate are valid for 730 days.
+    ./create-site-private-public-tls.sh 65 [INFO]:	These certificate are valid for 730 days.
     
     It would be prudent to document the date when to renew these certificates and set
     an operations or project management calendar entry about 15 days before renewal as
-    a reminder to schedule new site certificates.
+    a reminder to schedule a new site certificate or open a work ticket.
 
 ## Usage
 Run this script second on your host that be used to create all your certificates.  It makes a change to the openssl.cnf file.
