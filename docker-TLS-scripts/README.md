@@ -28,7 +28,7 @@ Move the scripts or create a symbolic link to a location in your working path; e
     sudo mkdir -p /usr/local/bin
     sudo mv  c*.sh /usr/local/bin
     cd ../..
-    rm -r docker-scripts
+    rm -rf docker-scripts
 
 ## Usage
 Run this script first on your host to create your site private and public TLS keys.  To change the default number of days (730 days = 2 years) enter a number of days as the parameter (example: create-site-private-public-tls 365 ).
