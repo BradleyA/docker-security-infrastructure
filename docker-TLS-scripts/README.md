@@ -1,7 +1,7 @@
 # docker-TLS-scripts
 create-site-private-public-tls.sh, create-new-openssl.cnf-tls.sh, create-user-tls.sh, and create-host-tls.sh are bash scripts that create TLS public keys, private keys, and self-signed certificates for the docker user, daemon, and swarm.  After many reinstalls of OS's and Docker, I got tried of entering the cryptic command line text required to setup Docker to use TLS.  Each example I found on-line was different than the last example.
 
-create-site-private-public-tls.sh - Run this script first on your host that will be creating all your TLS keys.  It creates the site private and public keys that all other TLS keys at your site will be using.  It creates the working directories  $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private for your site public and private keys.  These site cerificates are set for four years until new certificates are needed.  You may change the default four year (1460) by including a parameter with the number of days you prefer.  At that time this script will need to be run to create another set of four year public and private site certificates.  If you choose to use a different host to continue creating your user and host TLS keys, cp the $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private to the new host.
+create-site-private-public-tls.sh - Run this script first on your host that will be creating all your TLS keys.  It creates the site private and public keys that all other TLS keys at your site will be using.  It creates the working directories  $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private for your site public and private keys.  These site cerificates are set for two years until new certificates are needed.  You may change the default two years (730 days) by including a parameter with the number of days you prefer.  At that time this script will need to be run to create another set of four year public and private site certificates.  If you choose to use a different host to continue creating your user and host TLS keys, cp the $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private to the new host and run create-new-openssl.cnf-tls.sh scipt.
 
 create-new-openssl.cnf-tls.sh - Run this script second, it is required to make changes to the openssl.cnf file on your host which are required for the create-user-tls and create-host-tls scripts.  It is only required to run once on your host that will be creating all your TLS keys.  If you choose to use a different host to continue creating your user and host TLS keys, run this script on the new host before running the follow two scripts.
 
@@ -21,18 +21,17 @@ copy-client-remote-host.sh -
 To install, change directory to the location you want to download the scripts.  Use git to pull or clone these scripts into your directory.  If you do not have git then enter; "sudo apt-get install git".  On the github page of this script use the "HTTPS clone URL" with the 'git clone' command. 
     
     git clone https://github.com/BradleyA/docker-scripts
-    cd docker-scripts/create-docker-TLS-scripts
+    cd docker-scripts/docker-TLS-scripts
     
 Move the scripts or create a symbolic link to a location in your working path; example /usr/local/bin. To find directories in your working path use; "echo $PATH".
     
     sudo mkdir -p /usr/local/bin
-    sudo mv create-*-tls /usr/local/bin
+    sudo mv  c*.sh /usr/local/bin
     cd ../..
     rm -r docker-scripts
-    chmod 0750 /usr/local/bin/create-*-tls
 
 ## Usage
-Run this script first on your host to create your site private and public TLS keys.  To change the default number of days (1460 days = 4 years) enter a number of days as the parameter (example: create-site-private-public-tls 365 ).
+Run this script first on your host to create your site private and public TLS keys.  To change the default number of days (730 days = 2 years) enter a number of days as the parameter (example: create-site-private-public-tls 365 ).
 
     create-site-private-public-tls.sh <#days>
 
@@ -64,7 +63,7 @@ Run this script first on your host to create your site private and public TLS ke
     State or Province Name (Texas)
     Locality Name (Cedar Park)
     Organization Name (Company Name)
-    Organizational Unit Name (IT)
+    Organizational Unit Name (IT - SRE Team Central US)
     Common Name (two.cptx86.com)
     Email Address ()
     
@@ -262,7 +261,34 @@ Run this script for each host that requires a new Docker public and private TLS 
 	sudo service docker restart
 	logout
 
-#### System OS script tested
+#### WARNING: These instructions are incomplete. Need to complete the follow script
+
+complete script examples
+./check-user-tls.sh 
+
+View /home/uadmin/.docker certificate expiration date of ca.pem file.
+notAfter=Dec  5 22:34:44 2020 GMT
+
+View /home/uadmin/.docker certificate expiration date of cert.pem file
+notAfter=Jun  9 20:11:49 2018 GMT
+
+View /home/uadmin/.docker certificate issuer data of the ca.pem file.
+issuer= /C=US/ST=Texas/L=Cedar Park/O=Company Name/OU=IT/CN=two.cptx86.com
+
+View /home/uadmin/.docker certificate issuer data of the cert.pem file.
+issuer= /C=US/ST=Texas/L=Cedar Park/O=Company Name/OU=IT/CN=two.cptx86.com
+
+Verify that user public key in your certificate matches the public portion of your private key.
+(stdin)= 6975eae3931a740f6086568c23301018
+If only one line of output is returned then the public key matches the public portion of your private key.
+
+Verify that user certificate was issued by the CA.
+/home/uadmin/.docker/cert.pem: OK
+./check-user-tls.sh 80 [ERROR]:	Directory permissions for /home/uadmin/.docker
+	are not 700.  Correcting 775 to 700 directory permissions
+
+
+### System OS script tested
  * Ubuntu 14.04.4 LTS
 
 #### Design Principles
