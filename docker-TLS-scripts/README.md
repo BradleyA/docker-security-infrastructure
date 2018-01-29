@@ -11,7 +11,9 @@ create-host-tls.sh - The order of the last two scripts does not matter as long a
 
 check-user-tls.sh - A user can check their public, private keys, and CA in $HOME/.docker or a user can check other users certificates by using sudo.
 
-check-host-tls.sh - 
+check-host-tls.sh - Checks host public, private keys, and CA in /etc/docker/certs.d/daemon
+
+#### WARNING: These instructions are incomplete. Need to complete the follow script
 
 copy-client-remote-host.sh - 
 
