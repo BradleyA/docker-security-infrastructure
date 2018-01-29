@@ -72,9 +72,9 @@ if [ $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker/key.pem) != 400 ]; then
 	echo -e "${0} ${LINENO} [ERROR]:	File permissions for ${USERHOME}${TLSUSER}/.docker/key.pem\n\tare not 400.  Correcting $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker/key.pem) to 0400 file permissions"	1>&2
 	chmod 0400 ${USERHOME}${TLSUSER}/.docker/key.pem
 fi
-#	Verify and correct file permissions for ${USERHOME}${TLSUSER}/.docker directory
+#	Verify and correct directory permissions for ${USERHOME}${TLSUSER}/.docker directory
 if [ $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker) != 700 ]; then
-	echo -e "${0} ${LINENO} [ERROR]:	File permissions for ${USERHOME}${TLSUSER}/.docker\n\tare not 700.  Correcting $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker) to 700 directory permissions"	1>&2
+	echo -e "${0} ${LINENO} [ERROR]:	Directory permissions for ${USERHOME}${TLSUSER}/.docker\n\tare not 700.  Correcting $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker) to 700 directory permissions"	1>&2
 	chmod 700 ${USERHOME}${TLSUSER}/.docker
 fi
 #
