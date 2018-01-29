@@ -88,7 +88,7 @@ Run this script first on your host to create your site private and public TLS ke
     a reminder to schedule a new site certificate or open a work ticket.
 
 ## Usage
-Run this script second on your host that be used to create all your certificates.  It makes a change to the openssl.cnf file.
+Run this script second on your host that will be used to create all your certificates.  This script makes a change to the openssl.cnf file.
 
     sudo ./create-new-openssl.cnf-tls.sh
 
