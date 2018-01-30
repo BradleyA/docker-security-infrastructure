@@ -18,6 +18,8 @@
 #		and chown chmod and write to remote user home directory 
 #	think about using tar to create transfer and untar then chown and chmod
 #	need a host version that copies keys and cert to remote system in secure directory to untar
+#	does the remote system have the same home directory for user on remote system
+#	
 #	
 ###
 TLSUSER=$1
