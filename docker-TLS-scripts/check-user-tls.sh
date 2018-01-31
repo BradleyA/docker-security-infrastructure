@@ -20,6 +20,10 @@
 ###
 TLSUSER=$1
 USERHOME=${2:-/home/}
+#
+#
+# >>>>> Add systax --help -? -h -help for scripts
+#
 #	Check if user is entered as first arguement
 if ! [ -z ${TLSUSER} ] ; then
 #       Root is required to check other users or user can check own certs

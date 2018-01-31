@@ -14,6 +14,10 @@
 #       Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts
 ### 
 CERTDIR=${1:-/etc/docker/certs.d/daemon/}
+#
+#
+# >>>>> Add systax --help -? -h -help for scripts
+#
 #       Must be root to run this script
 if ! [ $(id -u) = 0 ] ; then
         echo "${0} ${LINENO} [ERROR]:   Use sudo ${0}"  1>&2
