@@ -1,5 +1,5 @@
 #!/bin/bash
-#	copy-client-remote-host.sh	3.2	2018-01-25_23:23:05_CST uadmin rpi3b-four.cptx86.com
+#	copy-user-remote-host.sh	3.2	2018-01-25_23:23:05_CST uadmin rpi3b-four.cptx86.com
 #	changed variable names and added test login, need alot of testing
 #	copy-user-remote-host	3.1	2017-12-19_15:32:23_CST utwo two.cptx86.com
 #	Adding version number and upload latest
@@ -11,8 +11,16 @@
 #	This script uses two arguements;
 #		TLSUSER - user
 #		REMOTEHOST - name of host to copy certificates 
-# >>>>> This script
+# >>>>> This scrip 
 #	Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts
+#	use case 1 TLSUSER is able to copy TLS keys and CA to remote system with same user ID
+#	use case 2 uadmin is able to copy TLS keys and CA to remote system with another USER ID
+#		and chown chmod and write to remote user home directory 
+#	think about using tar to create transfer and untar then chown and chmod
+#	need a host version that copies keys and cert to remote system in secure directory to untar
+#	does the remote system have the same home directory for user on remote system
+#	
+#	
 ###
 TLSUSER=$1
 REMOTEHOST=$2
