@@ -35,10 +35,10 @@ fi
 if [ ! -d ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private ] ; then
 	echo -e "${0} ${LINENO} [ERROR]:        default directory,"	1>&2
 	echo -e "\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private,\n\tnot on system."  1>&2
-	echo    "\tRunning create-site-private-public-tls.sh will create directories"
-	echo    "\tand site private and public keys.  Then run sudo"
-	echo    "\tcreate-new-openssl.cnf-tls.sh to modify openssl.cnf file.  Then run"
-	echo    "\tcreate-host-tls.sh or create-user-tls.sh as many times as you want."
+	echo -e "\tRunning create-site-private-public-tls.sh will create directories"
+	echo -e "\tand site private and public keys.  Then run sudo"
+	echo -e "\tcreate-new-openssl.cnf-tls.sh to modify openssl.cnf file.  Then run"
+	echo -e "\tcreate-host-tls.sh or create-user-tls.sh as many times as you want."
 	exit 1
 fi
 #
@@ -59,16 +59,16 @@ if [ -e ${TLSUSER}-user-priv-key.pem ] ; then
 	mv ${TLSUSER}-user-cert.pem ${TLSUSER}-user-cert.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
 fi
 #	Creating private key for user ${TLSUSER}
-echo -e "\n${0} ${LINENO} [INFO]:	Creating private key for user ${TLSUSER}.\n"	1>&2
+echo    "${0} ${LINENO} [INFO]:	Creating private key for user ${TLSUSER}."	1>&2
 openssl genrsa -out ${TLSUSER}-user-priv-key.pem 2048
 #	Generate a Certificate Signing Request (CSR)
-echo -e "\n${0} ${LINENO} [INFO]:	Generate a Certificate Signing Request (CSR) for user ${TLSUSER}.\n"	1>&2
+echo -e "${0} ${LINENO} [INFO]:	Generate a Certificate Signing\n\tRequest (CSR) for user ${TLSUSER}."	1>&2
 openssl req -subj '/subjectAltName=client' -new -key ${TLSUSER}-user-priv-key.pem -out ${TLSUSER}-user.csr
 #	Create and sign a ${NUMBERDAYS} day certificate
-echo -e "${0} ${LINENO} [INFO]:	Create and sign a ${NUMBERDAYS} day certificate for user ${TLSUSER}.\n"	1>&2
+echo -e "${0} ${LINENO} [INFO]:	Create and sign a ${NUMBERDAYS} day\n\tcertificate for user ${TLSUSER}."	1>&2
 openssl x509 -req -days ${NUMBERDAYS} -sha256 -in ${TLSUSER}-user.csr -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out ${TLSUSER}-user-cert.pem || { echo "${0} ${LINENO} [ERROR]:	Wrong pass phrase for .private/ca-priv-key.pem: " ; exit 1; }
 #	Removing certificate signing requests (CSR)
-echo -e "\n${0} ${LINENO} [INFO]:	Removing certificate signing requests (CSR) and set file permissions for ${TLSUSER} key pairs.\n"	1>&2
+echo -e "${0} ${LINENO} [INFO]:	Removing certificate signing\n\trequests (CSR) and set file permissions for ${TLSUSER} key pairs."	1>&2
 #
 rm ${TLSUSER}-user.csr
 chmod 0400 ${TLSUSER}-user-priv-key.pem
@@ -99,10 +99,9 @@ echo    "		ssh ${TLSUSER}@two.cptx86.com sudo ln -s ~${TLSUSER}/.docker/${TLSUSE
 echo    "		ssh ${TLSUSER}@two.cptx86.com sudo ln -s ~${TLSUSER}/.docker/${TLSUSER}-user-priv-key.pem ~${TLSUSER}/.docker/key.pem"
 echo    "		ssh ${TLSUSER}@two.cptx86.com sudo chown -R ${TLSUSER}:${TLSUSER} ~${TLSUSER}/.docker"
 echo -e "\nTo set environment variables permanently, add them to the user's"
-echo    "\t.bashrc.  These environment variables will be set each time the user"
-echo    "\tlogs into the computer system.  Edit your .bashrc file (or the"
-echo    "\tcorrect shell if different) and append the following two lines."
-echo    "\t	vi  ${TLSUSER}/.bashrc"
-echo    "\texport DOCKER_HOST=tcp://`hostname -f`:2376"
-echo    "\texport DOCKER_TLS_VERIFY=1"
+echo -e "\t.bashrc.  These environment variables will be set each time the user"
+echo -e "\tlogs into the computer system.  Edit your .bashrc file (or the"
+echo -e "\tcorrect shell if different) and append the following two lines."
+echo -e "\texport DOCKER_HOST=tcp://\`hostname -f\`:2376"
+echo -e "\texport DOCKER_TLS_VERIFY=1"
 ###
