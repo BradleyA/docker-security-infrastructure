@@ -164,25 +164,6 @@ Run this script for each user that requires a new Docker public and private TLS 
     export DOCKER_HOST=tcp://rpi3b-four.cptx86.com:2376
 	export DOCKER_TLS_VERIFY=1
 
-    
- 
-    
-    Create symbolic links to point to the default Docker TLS file names.
-    cd ~sally/.docker
-    ln -s sally-user-cert.pem cert.pem
-    ln -s sally-user-priv-key.pem key.pem
-        or if remote host, five.cptx86.com, and for user sally.
-        ssh sally@five.cptx86.com ln -s ~sally/.docker/sally-user-cert.pem ~sally/.docker/cert.pem
-        ssh sally@five.cptx86.com ln -s ~sally/.docker/sally-user-priv-key.pem ~sally/.docker/key.pem
-    
-    In bash you can set environment variables permanently by adding them to the user's .bashrc.  These
-    environment variables will be set each time the user logs into the test computer system.  Edit your .bashrc
-    file (or the correct file if using a different shell) and append the following two export lines.
-        vi /home/uthree/.bashrc
-	
-    export DOCKER_HOST=tcp://three.cptx86.com:2376
-    export DOCKER_TLS_VERIFY=1
-
 ## Usage
 Run this script for each host that requires a new Docker public and private TLS key.
 
