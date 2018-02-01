@@ -1,4 +1,6 @@
 #!/bin/bash
+#	./copy-user-2-remote-host.sh	3.4	2018-02-01_13:12:19_CST uadmin six-rpi3b.cptx86.com
+#	added login for display_help()
 #	./copy-user-2-remote-host.sh	3.3	2018-02-01_12:34:08_CST uadmin six-rpi3b.cptx86.com
 #	debug complete for admin user copy user TLS keys to remote system ~/.docker
 #	copy-user-remote-host.sh	3.2	2018-01-25_23:23:05_CST uadmin rpi3b-four.cptx86.com
@@ -9,17 +11,18 @@
 #	set -x
 #	set -v
 #
-#	Copy public and private key and CA for user to remote host
-#	This script uses two arguements;
-#		TLSUSER - user requiring new TLS keys on remote host, default is user running script
-#		REMOTEHOST - name of host to copy certificates to
-#               USERHOME - location of admin user directory, default is /home/
-#                  Many sites have different home directories (/u/north-office/<user>)
-#               ADMTLSUSER - site administrator account creating TLS keys, default is user running script
-#		   site administrator will have accounts on all systems
-#		SSHPORT - SSH server port, default port 22
-#	Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts
-#
+display_help() {
+echo -e "\nCopy public and private key and CA for user to remote host."
+echo    "This script uses five arguements;"
+echo    "   TLSUSER - user requiring new TLS keys on remote host, default is user running script"
+echo    "   REMOTEHOST - name of host to copy certificates to"
+echo    "   USERHOME - location of admin user directory, default is /home/"
+echo    "      Many sites have different home directories (/u/north-office/<user>)"
+echo    "   ADMTLSUSER - site administrator account creating TLS keys, default is user running script"
+echo    "      site administrator will have accounts on all systems"
+echo    "   SSHPORT - SSH server port, default is port 22"
+echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts\n"
+}
 # >>>>> Test this script 
 #	use case 1 TLSUSER is able to copy TLS keys and CA to remote system with same user ID
 #	use case 2 uadmin is able to copy TLS keys and CA to remote system with another USER ID
@@ -32,6 +35,12 @@
 #	uadmin is the account for site and all clusters
 #	may want to see how to support more than one uadmin account in clusters for this script
 #	this opens up challenge with different users needing to chown and chgrp for different remote users
+#
+###
+if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
+	display_help
+	exit 0
+fi 
 ###
 TLSUSER=${1:-${USER}}
 REMOTEHOST=$2
@@ -64,10 +73,11 @@ if [ -z ${REMOTEHOST} ] ; then
 fi
 #	Check if ${REMOTEHOST} string length is zero
 if [ -z ${REMOTEHOST} ] ; then
-	echo -e "${0} ${LINENO} [ERROR]:	Remote host is required."       1>&2
+	echo -e "${0} ${LINENO} [ERROR]:	Remote host is required.\n"       1>&2
+	display_help
 	exit 1
 fi
-#	check if ${REMOTEHOST} is available on port ${SSHPORT}
+#	Check if ${REMOTEHOST} is available on port ${SSHPORT}
 if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	echo -e "${0} ${LINENO} [INFO]:	Create directory, change\n\tfile permissions, and copy TLS keys to ${TLSUSER}@${REMOTEHOST}."
 	cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
@@ -90,9 +100,10 @@ if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	cd ..
 	rm -rf ${TLSUSER}
 	echo -e "${0} ${LINENO} [INFO]:	Done."
-###
+	exit 0
 else
 	echo -e "${0} ${LINENO} [ERROR]:	${REMOTEHOST} not responding on port ${SSHPORT}.\n"  1>&2
+	display_help
 	exit 1
 fi
 ###
