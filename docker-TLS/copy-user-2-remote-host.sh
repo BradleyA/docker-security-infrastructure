@@ -2,7 +2,7 @@
 #	copy-user-2-remote-host.sh	3.5	2018-02-01_15:58:23_CST uadmin six-rpi3b.cptx86.com
 #	all known use cases tested, no known issues
 #	./copy-user-2-remote-host.sh	3.4	2018-02-01_13:12:19_CST uadmin six-rpi3b.cptx86.com
-#	added login for display_help()
+#	added logic for display_help()
 #	./copy-user-2-remote-host.sh	3.3	2018-02-01_12:34:08_CST uadmin six-rpi3b.cptx86.com
 #	debug complete for admin user copy user TLS keys to remote system ~/.docker
 #	copy-user-remote-host.sh	3.2	2018-01-25_23:23:05_CST uadmin rpi3b-four.cptx86.com
