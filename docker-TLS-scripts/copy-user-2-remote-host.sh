@@ -26,12 +26,6 @@ echo    "   SSHPORT - SSH server port, default is port 22"
 echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts\n"
 echo -e "Example:\t${0} bob two.cptx96.com /u/north-office/ uadmin 22\n"
 }
-# >>>>> Test use cases
-#	works -	use case 1 TLSUSER is able to copy TLS keys and CA to remote system with same user ID
-#	works -	use case 2 uadmin is able to copy TLS keys and CA to remote system with another USER ID
-#		and chown chmod and write to remote user home directory 
-#	does not mater because using ~ - does the remote system have the same home directory for user on remote system
-#
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
 	exit 0
