@@ -1,4 +1,4 @@
-# docker-TLS-scripts
+# docker-TLS
 These bash scripts will create, copy, and check TLS public keys, private keys, and self-signed certificates for the docker user, daemon, and docker swarm.  After many reinstalls of OS's and Docker, I got tried of entering the cryptic command line text required to setup Docker to use TLS.  Each example I found on-line was different than the last example.
 
 create-site-private-public-tls.sh - Run this script first on your host that will be creating all your TLS keys.  It creates the site private and public keys that all other TLS keys at your site will be using.  It creates the working directories  $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private for your site public and private keys.  These site cerificates are set for two years until new certificates are needed.  You may change the default two years (730 days) by including a parameter with the number of days you prefer.  At that time this script will need to be run to create another set of two year public and private site certificates.  If you choose to use a different host to continue creating your user and host TLS keys, cp the $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private to the new host and run create-new-openssl.cnf-tls.sh scipt.
@@ -21,7 +21,7 @@ copy-client-remote-host.sh -
 To install, change directory to the location you want to download the scripts.  Use git to pull or clone these scripts into your directory.  If you do not have git then enter; "sudo apt-get install git".  On the github page of this script use the "HTTPS clone URL" with the 'git clone' command. 
     
     git clone https://github.com/BradleyA/docker-scripts
-    cd docker-scripts/docker-TLS-scripts
+    cd docker-scripts/docker-TLS
     
 Move the scripts or create a symbolic link to a location in your working path; example /usr/local/bin. To find directories in your working path use; "echo $PATH".
     
