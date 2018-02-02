@@ -1,6 +1,6 @@
 #!/bin/bash
 #	create-user-tls.sh	3.4	2018-02-01_21:03:44_CST uadmin six-rpi3b.cptx86.com
-#	added logic for display_help():w
+#	added logic for display_help()
 #	create-user-tls.sh	3.3	2018-01-31_09:09:37_CST uadmin six-rpi3b.cptx86.com
 #	Improve user feed back messages
 #	create-user-tls.sh	3.2	2018-01-30_19:15:34_CST uadmin six-rpi3b.cptx86.com

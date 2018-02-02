@@ -100,6 +100,14 @@ if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 #	Remove ${TLSUSER}/.docker and tar file from ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
 	cd ..
 	rm -rf ${TLSUSER}
+#	Display instructions about cert environment variables
+	echo -e "\nTo set environment variables permanently, add them to the user's"
+	echo -e "\t.bashrc.  These environment variables will be set each time the user"
+	echo -e "\tlogs into the computer system.  Edit your .bashrc file (or the"
+	echo -e "\tcorrect shell if different) and append the following two lines."
+	echo -e "\texport DOCKER_HOST=tcp://\`hostname -f\`:2376"
+	echo -e "\texport DOCKER_TLS_VERIFY=1"
+
 	echo -e "${0} ${LINENO} [INFO]:	Done."
 	exit 0
 else
