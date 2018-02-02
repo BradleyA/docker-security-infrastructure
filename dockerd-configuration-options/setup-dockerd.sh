@@ -1,4 +1,6 @@
 #!/bin/bash
+#	setup-dockerd.sh	2.6	2018-02-01_21:29:23_CST uadmin six-rpi3b.cptx86.com
+#	added logic for display_help()
 #	setup-dockerd.sh	1.5	2018-01-21_18:23:49_CST uadmin rpi3b-four.cptx86.com
 #	cleanup echo statements
 #	setup-dockerd.sh	1.46	2018-01-15_19:26:41_CST uadmin rpi3b-four.cptx86.com
@@ -25,9 +27,23 @@
 #	set -v
 #	set -x
 #
-WORK_DIRECTORY="/etc/docker/"
-UPSTART_SYSVINIT_DIRECTORY="/etc/default/"
-CONFIGURATION_STRING="Custom_dockerd_Configuration_File"
+display_help() {
+echo -e "\n"
+echo    "This script uses three arguements;"
+echo    "  WORK_DIRECTORY - working directory, default is /etc/docker/"
+echo    "  UPSTART_SYSVINIT_DIRECTORY - Ubuntu 14.04 (Upstart) directory, default is /etc/default/"
+echo    "  CONFIGURATION_STRING - , default is Custom_dockerd_Configuration_File"
+echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options\n"
+echo -e "Example:\t${0}"
+}
+if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
+	display_help
+	exit 0
+fi
+###
+WORK_DIRECTORY=${1:-/etc/docker/}
+UPSTART_SYSVINIT_DIRECTORY=${2:-/etc/default/}
+CONFIGURATION_STRING=${3:-Custom_dockerd_Configuration_File}
 #
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
