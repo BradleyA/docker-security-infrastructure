@@ -1,15 +1,11 @@
 #!/bin/bash
-###	#	create-host-tls.sh	3.3	2018-01-31_09:08:41_CST uadmin six-rpi3b.cptx86.com
-###	#	Improve user feed back messages
-###	#	create-host-tls.sh	3.2	2018-01-31_07:18:02_CST uadmin six-rpi3b.cptx86.com
-###	#	during testing added more checks for files and directories
-###	#	create-host-tls	3.1	2017-12-18_20:16:56_CST uthree
-###	#	Adding version number
+#	copy-host-2-remote-host.sh	1.0	2018-02-02_14:46:10_CST uadmin six-rpi3b.cptx86.com
+#	initial commit
 ###	#
 ###	#	set -x
 ###	#	set -v
 ###	#
-###	display_help() {
+display_help() {
 ###	echo -e "\nCreate public, private keys and CA for host in ${HOME}/.docker/docker-ca"
 ###	echo    "This script uses two arguements;"
 ###	echo    "   FQDN - Fully qualified domain name of host requiring new TLS keys"
@@ -20,7 +16,7 @@
 ###	echo    "      site administrator will have accounts on all systems"
 ###	echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS\n"
 ###	echo -e "Example::\t${0} two.cptx86.com 180 /u/north-office/ uadmin\n"
-###	}
+}
 ###	if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 ###		display_help
 ###		exit 0
