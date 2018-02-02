@@ -19,7 +19,7 @@ echo    "   USERHOME - location of user home directory, default is /home/"
 echo    "      Many sites have different home directories locations (/u/north-office/<user>)"
 echo    "This script allows a user to check their public, private keys, and CA in ${HOME}/.docker."
 echo    "This script can also be run with sudo to check other users certificates."
-echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts\n"
+echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS\n"
 echo -e "Example:\t${0} bob /u/north-office/\n"
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then

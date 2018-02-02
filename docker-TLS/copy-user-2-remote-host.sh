@@ -23,7 +23,7 @@ echo    "      Many sites have different home directories (/u/north-office/<user
 echo    "   ADMTLSUSER - site administrator account creating TLS keys, default is user running script"
 echo    "      site administrator will have accounts on all systems"
 echo    "   SSHPORT - SSH server port, default is port 22"
-echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts\n"
+echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS\n"
 echo -e "Example:\t${0} bob two.cptx96.com /u/north-office/ uadmin 22\n"
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then

@@ -15,7 +15,7 @@ echo    "This script uses one arguement;"
 echo    "   CERTDIR - dockerd certification directory, default /etc/docker/certs.d/daemon/"
 echo    "This script has to be run as root to check host public, private keys, and\n\tCA in /etc/docker/certs.d/daemon directory."
 echo    "This script currently DOES NOT CHECK REMOTE HOSTS."
-echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts\n"
+echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS\n"
 echo -e "Example:\tsudo ${0}\n"
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
