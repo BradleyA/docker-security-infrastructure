@@ -1,4 +1,6 @@
 #!/bin/bash
+#	create-user-tls.sh	3.4	2018-02-01_21:03:44_CST uadmin six-rpi3b.cptx86.com
+#	added logic for display_help():w
 #	create-user-tls.sh	3.3	2018-01-31_09:09:37_CST uadmin six-rpi3b.cptx86.com
 #	Improve user feed back messages
 #	create-user-tls.sh	3.2	2018-01-30_19:15:34_CST uadmin six-rpi3b.cptx86.com
@@ -9,26 +11,31 @@
 #	set -x
 #	set -v
 #
-#	Create public and private key and CA for user
-#       This script uses four arguements;
-#		TLSUSER - user requiring new TLS keys, default is user running script
-#               NUMBERDAYS - number of days user keys are valid, default 90 days
-#		USERHOME - location of admin user directory, default is /home/
-#                  Many sites have different home directories (/u/north-office/<user>)
-#               ADMTLSUSER - administration user creating TLS accounts, default is user running script
-#       This script creates public, private keys and CA for user.
-#       Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts
+display_help() {
+echo -e "\nCreate public and private key and CA for user"
+echo    "This script uses four arguements;"
+echo    "   TLSUSER - user requiring new TLS keys, default is user running script"
+echo    "   NUMBERDAYS - number of days user keys are valid, default 90 days"
+echo    "   USERHOME - location of admin user directory, default is /home/"
+echo    "      Many sites have different home directories (/u/north-office/<user>)"
+echo    "   ADMTLSUSER - administration user creating TLS accounts, default is user running script"
+echo    "This script creates public, private keys and CA for a user."
+echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts\n"
+echo -e "Example:\t${0} bob 30 /u/north-office/ uadmin\n"
+}
+if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
+	display_help
+	exit 0
+fi
 ###		
 TLSUSER=${1:-${USER}}
 NUMBERDAYS=${2:-90}
 USERHOME=${3:-/home/}
 ADMTLSUSER=${4:-${USER}}
-#
-# >>>>>	Add systax --help -? -h -help for scripts
-#
 #	Check if admin user has home directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER} ] ; then
 	echo -e "${0} ${LINENO} [ERROR]:        ${ADMTLSUSER} does not have a home directory\n\ton this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}"  1>&2
+	display_help
 	exit 1
 fi
 #	Check if site CA directory on system
@@ -39,6 +46,7 @@ if [ ! -d ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private ] ; then
 	echo -e "\tand site private and public keys.  Then run sudo"
 	echo -e "\tcreate-new-openssl.cnf-tls.sh to modify openssl.cnf file.  Then run"
 	echo -e "\tcreate-host-tls.sh or create-user-tls.sh as many times as you want."
+	display_help
 	exit 1
 fi
 #
@@ -50,6 +58,7 @@ if ! [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem ] 
 	echo -e "\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/"
 	echo -e "\tOr run create-site-private-public-tls.sh and sudo"
 	echo -e "\tcreate-new-openssl.cnf-tls.sh to create a new one."
+	display_help
 	exit 1
 fi
 #	Check if ${TLSUSER}-user-priv-key.pem file on system
@@ -73,35 +82,5 @@ echo -e "${0} ${LINENO} [INFO]:	Removing certificate signing\n\trequests (CSR) a
 rm ${TLSUSER}-user.csr
 chmod 0400 ${TLSUSER}-user-priv-key.pem
 chmod 0444 ${TLSUSER}-user-cert.pem
-#
-echo -e "${0} ${LINENO} [INFO]:	Instructions for setting up\n\tpublic, private, and certificate files for ${TLSUSER}.\n"	1>&2
-echo    "Copy CA's public key from working directory to ~${TLSUSER}/.docker."
-echo    "	sudo mkdir -p  ~${TLSUSER}/.docker"
-echo    "	sudo chmod 700 ~${TLSUSER}/.docker"
-echo    "	sudo cp -p ca.pem ~${TLSUSER}/.docker"
-echo    "	   or if copying to remove host (two.cptx86.com)"
-echo    "		ssh ${ADMTLSUSER}@two.cptx86.com sudo mkdir -p  ~${TLSUSER}/.docker"
-echo    "		ssh ${ADMTLSUSER}@two.cptx86.com sudo chmod 700 ~${TLSUSER}/.docker"
-# >>>>>	TEst if this next line will even works without being root
-echo    "		scp -p ca.pem ${ADMTLSUSER}@two.cptx86.com:~${TLSUSER}/.docker"
-echo -e "\nCopy key pair files from working directory to ~${TLSUSER}/.docker."
-echo    "	sudo cp -p ${TLSUSER}-user-cert.pem ~${TLSUSER}/.docker"
-echo    "	sudo cp -p ${TLSUSER}-user-priv-key.pem ~${TLSUSER}/.docker"
-echo    "	   or if copying to remove host (two.cptx86.com)"
-echo    "		scp -p ${TLSUSER}-user-cert.pem ${ADMTLSUSER}@two.cptx86.com:~${TLSUSER}/.docker"
-echo    "		scp -p ${TLSUSER}-user-priv-key.pem ${ADMTLSUSER}@two.cptx86.com:~${TLSUSER}/.docker"
-echo -e "\nCreate symbolic links to point to default Docker TLS file names."
-echo    "	sudo ln -s ~${TLSUSER}/.docker/${TLSUSER}-user-cert.pem ~${TLSUSER}/.docker/cert.pem"
-echo    "	sudo ln -s ~${TLSUSER}/.docker/${TLSUSER}-user-priv-key.pem ~${TLSUSER}/.docker/key.pem"
-echo    "	sudo chown -R ${TLSUSER}:${TLSUSER} ~${TLSUSER}/.docker"
-echo    "	   or if remove host, two, and for user ${TLSUSER}"
-echo    "		ssh ${TLSUSER}@two.cptx86.com sudo ln -s ~${TLSUSER}/.docker/${TLSUSER}-user-cert.pem ~${TLSUSER}/.docker/cert.pem"
-echo    "		ssh ${TLSUSER}@two.cptx86.com sudo ln -s ~${TLSUSER}/.docker/${TLSUSER}-user-priv-key.pem ~${TLSUSER}/.docker/key.pem"
-echo    "		ssh ${TLSUSER}@two.cptx86.com sudo chown -R ${TLSUSER}:${TLSUSER} ~${TLSUSER}/.docker"
-echo -e "\nTo set environment variables permanently, add them to the user's"
-echo -e "\t.bashrc.  These environment variables will be set each time the user"
-echo -e "\tlogs into the computer system.  Edit your .bashrc file (or the"
-echo -e "\tcorrect shell if different) and append the following two lines."
-echo -e "\texport DOCKER_HOST=tcp://\`hostname -f\`:2376"
-echo -e "\texport DOCKER_TLS_VERIFY=1"
+echo -e "${0} ${LINENO} [INFO]: Done."
 ###
