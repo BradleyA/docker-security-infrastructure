@@ -14,7 +14,7 @@
 #	set -v
 #
 display_help() {
-echo -e "\nCopy public and private key and CA for user to remote host."
+echo -e "\nCopy public, private keys and CA for user to remote host."
 echo    "This script uses five arguements;"
 echo    "   TLSUSER - user requiring new TLS keys on remote host, default is user running script"
 echo    "   REMOTEHOST - name of host to copy certificates to"
@@ -72,7 +72,7 @@ if [ -z ${REMOTEHOST} ] ; then
 fi
 #	Check if ${REMOTEHOST} is available on port ${SSHPORT}
 if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
-	echo -e "${0} ${LINENO} [INFO]:	May receive ${ADMTLSUSER} password prompt from ${REMOTEHOST}."
+	echo -e "${0} ${LINENO} [INFO]:	May receive ${ADMTLSUSER} password and passphrase prompt from ${REMOTEHOST}."
 	ssh -t ${ADMTLSUSER}@${REMOTEHOST} " cd ~${TLSUSER} " || { echo "${0} ${LINENO} [ERROR]:	${TLSUSER} does not have home directory on ${REMOTEHOST}" ; exit 1; }
 	echo -e "${0} ${LINENO} [INFO]:	Create directory, change\n\tfile permissions, and copy TLS keys to ${TLSUSER}@${REMOTEHOST}."
 	cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
@@ -91,10 +91,8 @@ if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	scp -p  ./${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ${ADMTLSUSER}@${REMOTEHOST}:/tmp
 #	Check if ${TLSUSER} == ${ADMTLSUSER} because sudo is not required for user copying their certs
 	if [ ${TLSUSER} == ${ADMTLSUSER} ] ; then
-		echo " root not needed"
 		ssh -t ${ADMTLSUSER}@${REMOTEHOST} " cd ~${TLSUSER} ; tar -xf /tmp/${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ; rm /tmp/${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ; chown -R ${TLSUSER}.${TLSUSER} .docker "
 	else
-		echo " root IS needed"
 		ssh -t ${ADMTLSUSER}@${REMOTEHOST} " cd ~${TLSUSER} ; sudo tar -xf /tmp/${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ; rm /tmp/${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ; sudo chown -R ${TLSUSER}.${TLSUSER} .docker "
 	fi
 #	Remove ${TLSUSER}/.docker and tar file from ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
@@ -107,7 +105,7 @@ if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	echo -e "\tcorrect shell if different) and append the following two lines."
 	echo -e "\texport DOCKER_HOST=tcp://\`hostname -f\`:2376"
 	echo -e "\texport DOCKER_TLS_VERIFY=1"
-
+#
 	echo -e "${0} ${LINENO} [INFO]:	Done."
 	exit 0
 else

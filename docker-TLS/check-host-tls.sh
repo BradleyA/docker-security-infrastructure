@@ -13,6 +13,8 @@ display_help() {
 echo -e "\nCheck public, private keys, and CA for host"
 echo    "This script uses one arguement;"
 echo    "   CERTDIR - dockerd certification directory,\n default /etc/docker/certs.d/daemon/"
+echo    "      This directory was selected to place dockerd TLS certifications because"
+echo    "      docker registry stores it's TLS certifications in /etc/docker/certs.d."
 echo    "This script has to be run as root to check host public, private keys, and\n\tCA in /etc/docker/certs.d/daemon directory."
 echo    "This script currently DOES NOT CHECK REMOTE HOSTS."
 echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS\n"
