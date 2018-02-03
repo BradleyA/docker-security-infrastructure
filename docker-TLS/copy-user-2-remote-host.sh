@@ -72,7 +72,7 @@ if [ -z ${REMOTEHOST} ] ; then
 fi
 #	Check if ${REMOTEHOST} is available on port ${SSHPORT}
 if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
-	echo -e "${0} ${LINENO} [INFO]:	May receive ${ADMTLSUSER} password and passphrase prompt from ${REMOTEHOST}."
+	echo -e "${0} ${LINENO} [INFO]:	${ADMTLSUSER} may receive password and\n\tpassphrase prompt from ${REMOTEHOST}. Running\n\tssh-copy-id ${ADMTLSUSER}@${REMOTEHOST} may stop the prompts."
 	ssh -t ${ADMTLSUSER}@${REMOTEHOST} " cd ~${TLSUSER} " || { echo "${0} ${LINENO} [ERROR]:	${TLSUSER} does not have home directory on ${REMOTEHOST}" ; exit 1; }
 	echo -e "${0} ${LINENO} [INFO]:	Create directory, change\n\tfile permissions, and copy TLS keys to ${TLSUSER}@${REMOTEHOST}."
 	cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
