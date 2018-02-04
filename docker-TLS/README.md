@@ -186,6 +186,10 @@ An administration user can run this script to copy user public, private TLS keys
 
 copy-host-2-remote-host.sh
 
+check-user-tls.sh
+
+check-host-tls.sh
+
 ### System OS script tested
  * Ubuntu 14.04.4 LTS
 
