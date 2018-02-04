@@ -74,5 +74,5 @@ chmod 0444 ca.pem
 echo -e "\n${0} ${LINENO} [INFO]:	These certificate\n\tare valid for ${NUMBERDAYS} days.\n"	1>&2
 echo    "It would be prudent to document the date when to renew these certificates and"
 echo    "set an operations or project management calendar entry about 15 days before"
-echo    "renewal as a reminder to schedule a new site certificate or open a work\nticket."
+echo -e "renewal as a reminder to schedule a new site certificate or open a work\nticket."
 ###
