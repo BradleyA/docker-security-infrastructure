@@ -146,32 +146,45 @@ Run this script for each host that requires a new Docker public and private TLS 
 	(CSR) and set file permissions for host two.cptx86.com key pairs.
 	./create-host-tls.sh 95 [INFO]:	Done.
 
+
+## Usage
+An administration user can run this script to copy user public, private TLS keys, and CA to a remote host.
+
+    ./copy-user-2-remote-host.sh <user> <remotehost> 
+    
+## Output
+    $ ./copy-user-2-remote-host.sh sally two.cptx86.com
+    ./copy-user-2-remote-host.sh 75 [INFO]:	uadmin may receive password and
+	passphrase prompt from two.cptx86.com. Running
+	ssh-copy-id uadmin@two.cptx86.com may stop the prompts.
+	#################################################
+	#         All connections are monitored         #
+	#################################################
+    Connection to two.cptx86.com closed.
+    ./copy-user-2-remote-host.sh 77 [INFO]:	Create directory, change
+	file permissions, and copy TLS keys to sally@two.cptx86.com.
+    ./copy-user-2-remote-host.sh 90 [INFO]:	Transfer TLS keys to sally@two.cptx86.com.
+	#################################################
+	#         All connections are monitored         #
+	#################################################
+    sallytwo.cptx86.com2018-02-04-13-54-27-CST.tar                                   100%   10KB  10.0KB/s   00:00    
+	#################################################
+	#         All connections are monitored         #
+	#################################################
+    [sudo] password for uadmin:
+    Connection to two.cptx86.com closed.
+    
+    To set environment variables permanently, add them to the user's
+	.bashrc.  These environment variables will be set each time the user
+	logs into the computer system.  Edit your .bashrc file (or the
+	correct shell if different) and append the following two lines.
+	export DOCKER_HOST=tcp://`hostname -f`:2376
+	export DOCKER_TLS_VERIFY=1
+    ./copy-user-2-remote-host.sh 109 [INFO]:	Done.
+
 #### WARNING: These instructions are incomplete. Need to complete the follow script
 
-complete script examples
-./check-user-tls.sh 
-
-View /home/uadmin/.docker certificate expiration date of ca.pem file.
-notAfter=Dec  5 22:34:44 2020 GMT
-
-View /home/uadmin/.docker certificate expiration date of cert.pem file
-notAfter=Jun  9 20:11:49 2018 GMT
-
-View /home/uadmin/.docker certificate issuer data of the ca.pem file.
-issuer= /C=US/ST=Texas/L=Cedar Park/O=Company Name/OU=IT/CN=two.cptx86.com
-
-View /home/uadmin/.docker certificate issuer data of the cert.pem file.
-issuer= /C=US/ST=Texas/L=Cedar Park/O=Company Name/OU=IT/CN=two.cptx86.com
-
-Verify that user public key in your certificate matches the public portion of your private key.
-(stdin)= 6975eae3931a740f6086568c23301018
-If only one line of output is returned then the public key matches the public portion of your private key.
-
-Verify that user certificate was issued by the CA.
-/home/uadmin/.docker/cert.pem: OK
-./check-user-tls.sh 80 [ERROR]:	Directory permissions for /home/uadmin/.docker
-	are not 700.  Correcting 775 to 700 directory permissions
-
+copy-host-2-remote-host.sh
 
 ### System OS script tested
  * Ubuntu 14.04.4 LTS
