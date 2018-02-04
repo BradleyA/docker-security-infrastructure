@@ -11,8 +11,8 @@
 #
 display_help() {
 echo -e "\nModify /etc/ssl/openssl.conf file"
-echo    "This script makes changes to openssl.cnf file which are required for"
-echo    "create-user-tls and create-host-tls scripts.  It must be run as root."
+echo    "This script makes a change to openssl.cnf file which is required for"
+echo    "create-user-tls.sh and create-host-tls.sh scripts.  It must be run as root."
 echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS\n"
 echo -e "Example:\tsudo ${0}\n"
 }
