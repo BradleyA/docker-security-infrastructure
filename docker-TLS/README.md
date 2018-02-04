@@ -1,21 +1,23 @@
 # docker-TLS
 These bash scripts will create, copy, and check TLS public keys, private keys, and self-signed certificates for the docker user, daemon, and docker swarm.  After many reinstalls of OS's and Docker, I got tried of entering the cryptic command line text required to setup Docker to use TLS.  Each example I found on-line was different than the last example.
 
-create-site-private-public-tls.sh - Run this script first on your host that will be creating all your TLS keys.  It creates the site private and public keys that all other TLS keys at your site will be using.  It creates the working directories  $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private for your site public and private keys.  These site cerificates are set for two years until new certificates are needed.  You may change the default two years (730 days) by including a parameter with the number of days you prefer.  At that time this script will need to be run to create another set of two year public and private site certificates.  If you choose to use a different host to continue creating your user and host TLS keys, cp the $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private to the new host and run create-new-openssl.cnf-tls.sh scipt.
+create-site-private-public-tls.sh - Run this script first on your host that will be creating all your TLS keys.  It creates the site private and public keys that all other TLS keys at your site will be using.  It creates the working directories  $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private for your site public and private keys.  These site cerificates are set for two years until new certificates are needed.  You may change the default two years (730 days) by including a parameter with the number of days you prefer.  If you choose to use a different host to continue creating your user and host TLS keys, cp the $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private to the new host and run create-new-openssl.cnf-tls.sh scipt.
 
-create-new-openssl.cnf-tls.sh - Run this script second.  It is required to make changes to the openssl.cnf file on your host.  These changes are required to run create-user-tls and create-host-tls scripts.  This script is not required to run create-site-private-public-tls.sh script.  It is only required to be run once on a host that will be creating all your TLS host and user keys.  If you choose to use a different host to continue creating your user and host TLS keys, run this script on the new hosta to modify openssl.cnf file.
+create-new-openssl.cnf-tls.sh - Run this script second.  It is required to make changes to the openssl.cnf file on your host.  These changes are required to run create-user-tls and create-host-tls scripts.  This script is not required to run create-site-private-public-tls.sh script.  It is only required to be run once on a host that will be creating all your TLS host and user keys.  If you choose to use a different host to continue creating your user and host TLS keys, run this script on the new host to modify openssl.cnf file.
 
-create-user-tls.sh - The order of the last two scripts does not matter as long as they are run on your host that is creating all the TLS keys.  See notes about using a different host in the first two scripts.  Run this script any time a user requires a new Docker public and private TLS key.
+create-user-tls.sh - Run this script any time a user requires a new Docker public and private TLS key.
 
-create-host-tls.sh - The order of the last two scripts does not matter as long as they are run on your host that is creating all the TLS keys.  See notes about using a different host in the first two scripts.  Run this script any time a host requires a new Docker public and private TLS key.
+create-host-tls.sh - Run this script any time a host requires a new Docker public and private TLS key.
 
 check-user-tls.sh - A user can check their public, private keys, and CA in $HOME/.docker or a user can check other users certificates by using sudo.
 
-check-host-tls.sh - Checks host public, private keys, and CA in /etc/docker/certs.d/daemon
+check-host-tls.sh - An administration user can check a host public, private keys, and CA in /etc/docker/certs.d/daemon by using sudo.
+
+copy-user-2-remote-host.sh - An administration user can run this script to copy user public, private TLS keys, and CA to a remote host.
+
+copy-host-2-remote-host.sh - An administration user can run this script to copy host public, private TLS keys, and CA to a remote host.
 
 #### WARNING: These instructions are incomplete. Need to complete the follow script
-
-copy-client-remote-host.sh - 
 
 ## Install
 To install, change directory to the location you want to download the scripts.  Use git to pull or clone these scripts into your directory.  If you do not have git then enter; "sudo apt-get install git".  On the github page of this script use the "HTTPS clone URL" with the 'git clone' command. 
