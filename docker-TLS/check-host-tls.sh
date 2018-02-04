@@ -14,16 +14,16 @@
 display_help() {
 echo -e "\nCheck public, private keys, and CA for host"
 echo    "This script uses two arguement;"
-echo    "   REMOTEHOST - name of remote host to check for certifications, no default"
-echo    "   CERTDIR - dockerd certification directory, default\n\t/etc/docker/certs.d/daemon/"
+echo    "   REMOTEHOST - (UNDER DEVELOPMENT) name of remote host to check for certifications, no default"
+echo -e "   CERTDIR - dockerd certification directory, default\n\t/etc/docker/certs.d/daemon/"
 echo    "      This directory was selected to place dockerd TLS certifications because"
 echo    "      docker registry stores it's TLS certifications in /etc/docker/certs.d."
-echo    "This script has to be run as root to check host public, private keys, and\n\tCA in /etc/docker/certs.d/daemon directory."
+echo -e "This script has to be run as root to check host public, private keys, and\n\tCA in /etc/docker/certs.d/daemon directory."
 #
-echo    " >>> This script currently DOES NOT CHECK REMOTE HOSTS."
+echo    " >>> This script currently DOES NOT CHECK REMOTE HOSTS.(UNDER DEVELOPMENT) "
 #
 echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS\n"
-echo -e "Example:\tsudo ${0} ${HOST} /etc/docker/certs.d/daemon/\n"
+echo -e "(UNDER DEVELOPMENT) Example:\tsudo ${0} ${HOST} /etc/docker/certs.d/daemon/\n"
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
