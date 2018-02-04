@@ -1,8 +1,6 @@
 # docker-scripts
 This repository contains shell scripts for docker.
 
-#### WARNING: These instructions are incomplete. Consider them as notes quickly drafted on a napkin rather than proper documentation!
-
 I have been using some of these for days, months, or years and just now uploading them. I need to complete some cleanup before it is shareable and documented . . .
 
 This repository contains shell scripts for RaspBerry pi.
@@ -24,7 +22,7 @@ To install, change directory to the location you want to download the scripts. U
 
 #### Design Principles
  * Have a simple setup process and a minimal learning curve
- * Be usable as non-root - [failed]
+ * Be usable as non-root - [some of these scripts require root]
  * Be easy to install and configure
 
 ## License::
