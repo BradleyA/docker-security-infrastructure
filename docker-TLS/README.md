@@ -1,7 +1,7 @@
 # docker-TLS
 These bash scripts will create, copy, and check TLS public keys, private keys, and self-signed certificates for the docker user, daemon, and docker swarm.  After many reinstalls of OS's and Docker, I got tried of entering the cryptic command line text required to setup Docker to use TLS.  Each example I found on-line was different than the last example.
 
-create-site-private-public-tls.sh - Run this script first on your host that will be creating all your TLS keys.  It creates the site private and public keys that all other TLS keys at your site will be using.  It creates the working directories  $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private for your site public and private keys.  These site cerificates are set for two years until new certificates are needed.  You may change the default two years (730 days) by including a parameter with the number of days you prefer.  If you choose to use a different host to continue creating your user and host TLS keys, cp the $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private to the new host and run create-new-openssl.cnf-tls.sh scipt.
+create-site-private-public-tls.sh - Run this script first on your host that will be creating all your TLS keys.  It creates the site private and CA keys that all other TLS keys at your site will be using.  It creates the working directories  $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private for your site public and private keys.  If you later choose to use a different host to continue creating your user and host TLS keys, cp the $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private to the new host and run create-new-openssl.cnf-tls.sh scipt.
 
 create-new-openssl.cnf-tls.sh - Run this script second.  It is required to make changes to the openssl.cnf file on your host.  These changes are required to run create-user-tls and create-host-tls scripts.  This script is not required to run create-site-private-public-tls.sh script.  It is only required to be run once on a host that will be creating all your TLS host and user keys.  If you choose to use a different host to continue creating your user and host TLS keys, run this script on the new host to modify openssl.cnf file.
 
@@ -17,8 +17,6 @@ copy-user-2-remote-host.sh - An administration user can run this script to copy 
 
 copy-host-2-remote-host.sh - An administration user can run this script to copy host public, private TLS keys, and CA to a remote host.
 
-#### WARNING: These instructions are incomplete. Need to complete the follow script
-
 ## Install
 To install, change directory to the location you want to download the scripts.  Use git to pull or clone these scripts into your directory.  If you do not have git then enter; "sudo apt-get install git".  On the github page of this script use the "HTTPS clone URL" with the 'git clone' command. 
     
@@ -31,6 +29,9 @@ Move the scripts or create a symbolic link to a location in your working path; e
     sudo mv  c*.sh /usr/local/bin
     cd ../..
     rm -rf docker-scripts
+    
+    
+#### WARNING: These instructions are incomplete. Need to complete the follow script
 
 ## Usage
 Run this script first on your host to create your site private and public TLS keys.  To change the default number of days (730 days = 2 years) enter a number of days as the parameter (example: create-site-private-public-tls 365 ).
@@ -38,27 +39,26 @@ Run this script first on your host to create your site private and public TLS ke
     create-site-private-public-tls.sh <#days>
 
 ## Output
-    $ ./create-site-private-public-tls.sh
+    $ create-site-private-public-tls.sh
     
-    ./create-site-private-public-tls.sh 38 [INFO]:	Creating private key with passphrase in /home/uadmin/.docker/docker-ca/.private
+    ./create-site-private-public-tls.sh 48 [INFO]:	Creating private key with passphrase in /home/uadmin/.docker/docker-ca/.private
     Generating RSA private key, 4096 bit long modulus
-    ............................................++
-    ................++
+    .............................................................................................................++
+    ................................................++
     e is 65537 (0x10001)
     Enter pass phrase for ca-priv-key.pem:
     Verifying - Enter pass phrase for ca-priv-key.pem:
     
     Once all the certificates and keys have been generated with this private key,
-    it would be prudent to move the private key to a Universal Serial Bus (USB) memory stick.
-    Remove the private key from the system and store the USB memory stick in a locked
-    fireproof location.
+    it would be prudent to move the private key to a Universal Serial Bus (USB)
+    memory stick.  Remove the private key from the system and store the USB memory
+    stick in a locked fireproof location.
     
-    ./create-site-private-public-tls.sh 45 [INFO]:	Creating public key good for 730 days in /home/uadmin/.docker/docker-ca
-    
-    The public key is copied to all systems in an environment so that those systems
-    trust signed certificates.
-    The following is a list of prompts from the following command and example answers are
-    in parentheses.
+    ./create-site-private-public-tls.sh 55 [INFO]:	Creating public key good for
+	730 days in /home/uadmin/.docker/docker-ca
+    The public key is copied to all systems in an environment so that those
+    systems trust signed certificates.  The following is a list of prompts from
+    the following command and example answers are in parentheses.
     Country Name (US)
     State or Province Name (Texas)
     Locality Name (Cedar Park)
@@ -83,11 +83,11 @@ Run this script first on your host to create your site private and public TLS ke
     Common Name (e.g. server FQDN or YOUR name) []:two.cptx86.com
     Email Address []:
     
-    ./create-site-private-public-tls.sh 65 [INFO]:	These certificate are valid for 730 days.
-    
-    It would be prudent to document the date when to renew these certificates and set
-    an operations or project management calendar entry about 15 days before renewal as
-    a reminder to schedule a new site certificate or open a work ticket.
+    ./create-site-private-public-tls.sh 74 [INFO]:	These certificate
+	are valid for 730 days.
+    It would be prudent to document the date when to renew these certificates and
+    set an operations or project management calendar entry about 15 days before
+    renewal as a reminder to schedule
 
 ## Usage
 Run this script second on your host that will be used to create all your certificates.  This script makes a change to the openssl.cnf file.
