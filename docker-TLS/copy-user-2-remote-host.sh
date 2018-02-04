@@ -24,7 +24,7 @@ echo    "   ADMTLSUSER - site administrator account creating TLS keys, default i
 echo    "      site administrator will have accounts on all systems"
 echo    "   SSHPORT - SSH server port, default is port 22"
 echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS\n"
-echo -e "Example:\t${0} bob two.cptx96.com /u/north-office/ uadmin 22\n"
+echo -e "Example:\t${0} bob two.cptx86.com /u/north-office/ uadmin 22\n"
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
