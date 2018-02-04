@@ -22,24 +22,14 @@ To install, change directory to the location you want to download the scripts.  
     
     git clone https://github.com/BradleyA/docker-scripts
     cd docker-scripts/docker-TLS
-    
-Move the scripts or create a symbolic link to a location in your working path; example /usr/local/bin. To find directories in your working path use; "echo $PATH".
-    
-    sudo mkdir -p /usr/local/bin
-    sudo mv  c*.sh /usr/local/bin
-    cd ../..
-    rm -rf docker-scripts
-    
-    
-#### WARNING: These instructions are incomplete. Need to complete the follow script
-
+   
 ## Usage
 Run this script first on your host to create your site private and public TLS keys.  To change the default number of days (730 days = 2 years) enter a number of days as the parameter (example: create-site-private-public-tls 365 ).
 
     create-site-private-public-tls.sh <#days>
 
 ## Output
-    $ create-site-private-public-tls.sh
+    $ ./create-site-private-public-tls.sh
     
     ./create-site-private-public-tls.sh 48 [INFO]:	Creating private key with passphrase in /home/uadmin/.docker/docker-ca/.private
     Generating RSA private key, 4096 bit long modulus
@@ -96,14 +86,15 @@ Run this script second on your host that will be used to create all your certifi
 
 ## Output
     $ sudo ./create-new-openssl.cnf-tls.sh
-    This script will make changes to /etc/ssl/openssl.cnf file.  These changes are required
-    before creating user and host TLS keys for Docker.  Run this script before running
-    the user and host TLS scripts.  It is not required to be run on hosts not creating
-    TLS keys.
+    This script will make changes to /etc/ssl/openssl.cnf file.
+    These changes are required before creating user and host TLS keys for Docker.
+    Run this script before running the user and host TLS scripts.  It is not
+    required to be run on hosts not creating tTLS keys.
     
-    Creating backup file of /etc/ssl/openssl.cnf and naming it /etc/ssl/openssl.cnf-2018-01-29_15:36:55_CST
+    Creating backup file of /etc/ssl/openssl.cnf and naming it /etc/ssl/openssl.cnf-2018-02-04_13:23:04_CST
     
-    Adding the extended KeyUsage at the beginning of the [ v3_ca ] section.
+    ./create-new-openssl.cnf-tls.sh 41 [INFO]:	Adding the extended KeyUsage
+	at the beginning of [ v3_ca ] section.
 
 ## Usage
 Run this script for each user that requires a new Docker public and private TLS key.
@@ -112,60 +103,23 @@ Run this script for each user that requires a new Docker public and private TLS 
 
 ## Output
     $ ./create-user-tls.sh sally 30
-    ./create-user-tls.sh 25 [INFO]:	The /home/uadmin/.docker/docker-ca/.private/ directory does exist.
-
-    ./create-user-tls.sh 32 [INFO]:	Creating user private key for user sally.
-
+    ./create-user-tls.sh 71 [INFO]:	Creating private key for user sally.
     Generating RSA private key, 2048 bit long modulus
-    ............................................+++
-    ......................+++
+    .........+++
+    .....................................................+++
     e is 65537 (0x10001)
-
-    ./create-user-tls.sh 35 [INFO]:	Generate a Certificate Signing Request (CSR) for user sally.
-
-    ./create-user-tls.sh 38 [INFO]:	Create and sign a 30 day certificate for user sally.
-
-    Signature ok
-    subject=/subjectAltName=client
-    Getting CA Private Key
-    Enter pass phrase for .private/ca-priv-key.pem:
-
-    ./create-user-tls.sh 41 [INFO]:	Removing certificate signing requests (CSR) and set file permissions for sally key pairs.
-
-    ./create-user-tls.sh 49 [INFO]:	The following are instructions for setting up the public, private, and certificate files for sally.
-
-    Copy the CA's public key (also called certificate) from the working directory to ~sally/.docker.
-	sudo mkdir -pv ~sally/.docker
-	sudo chmod 700 ~sally/.docker
-	sudo cp -pv ca.pem ~sally/.docker
-		or if copying to remove host, five, and to user sally
-		ssh sally@five.cptx86.com mkdir -pv ~sally/.docker
-		ssh sally@five.cptx86.com chmod 700 ~sally/.docker
-		scp -p ca.pem sally@five.cptx86.com:~sally/.docker
-
-    Copy the key pair files signed by the CA from the working directory to ~sally/.docker.
-	sudo cp -pv sally-user-cert.pem ~sally/.docker
-	sudo cp -pv sally-user-priv-key.pem ~sally/.docker
-		or if copying to remove host, five, and for user sally
-		scp -p sally-user-cert.pem sally@five.cptx86.com:~sally/.docker
-		scp -p sally-user-priv-key.pem sally@five.cptx86.com:~sally/.docker
-
-    Create symbolic links to point to the default Docker TLS file names.
-	sudo ln -s ~sally/.docker/sally-user-cert.pem ~sally/.docker/cert.pem
-	sudo ln -s ~sally/.docker/sally-user-priv-key.pem ~sally/.docker/key.pem
-	sudo chown -R sally:sally ~sally/.docker
-		or if remove host, five, and for user sally
-		ssh sally@five.cptx86.com ln -s ~sally/.docker/sally-user-cert.pem ~sally/.docker/cert.pem
-		ssh sally@five.cptx86.com ln -s ~sally/.docker/sally-user-priv-key.pem ~sally/.docker/key.pem
-
-    In bash you can set environment variables permanently by adding them to the user's .bashrc.  These
-    environment variables will be set each time the user logs into the test computer system.  Edit your .bashrc
-    file (or the correct shell if different) and append the following two lines.
-	vi  sally/.bashrc
-
-    export DOCKER_HOST=tcp://rpi3b-four.cptx86.com:2376
-	export DOCKER_TLS_VERIFY=1
-
+    ./create-user-tls.sh 74 [INFO]:	Generate a Certificate Signing
+	Request (CSR) for user sally.
+	./create-user-tls.sh 77 [INFO]:	Create and sign a 30 day
+	certificate for user sally.
+	Signature ok
+	subject=/subjectAltName=client
+	Getting CA Private Key
+	Enter pass phrase for .private/ca-priv-key.pem:
+	./create-user-tls.sh 80 [INFO]:	Removing certificate signing
+	requests (CSR) and set file permissions for sally key pairs.
+	./create-user-tls.sh 85 [INFO]: Done.
+	
 ## Usage
 Run this script for each host that requires a new Docker public and private TLS key.
 
@@ -173,75 +127,24 @@ Run this script for each host that requires a new Docker public and private TLS 
 
 ## Output
     $ ./create-host-tls.sh two.cptx86.com 365
-    ./create-host-tls.sh 26 [INFO]:	The /home/uadmin/.docker/docker-ca/.private/ directory does exist.
-
-    ./create-host-tls.sh 37 [INFO]:	Creating private key for host two.cptx86.com
-
-    Generating RSA private key, 2048 bit long modulus
-    .......................+++
-    ..............................+++
-    e is 65537 (0x10001)
-
-    ./create-host-tls.sh 39 [INFO]:	Generate a Certificate Signing Request (CSR) for host two.cptx86.com.
-
-    ./create-host-tls.sh 42 [INFO]:	Create and sign a 365 day certificate for host two.cptx86.com
-
-    Signature ok
-    subject=/CN=two.cptx86.com/subjectAltName=two.cptx86.com
-    Getting CA Private Key
-    Enter pass phrase for .private/ca-priv-key.pem:
-    writing RSA key
-
-    ./create-host-tls.sh 45 [INFO]:	Removing certificate signing requests (CSR) and set file permissions for host two.cptx86.com key pairs.
-
-    ./create-host-tls.sh 53 [INFO]:	Instructions for setting up the public, private, and certificate files.
-
-    Login to host two.cptx86.com and create a Docker daemon TLS directory.  
-		ssh <user>@two.cptx86.com
-		sudo mkdir -p /etc/docker/certs.d/daemon
-    Change the directory permission for the Docker daemon TLS directory on host two.cptx86.com and logout.
-		sudo chmod 0700 /etc/docker/certs.d/daemon
-		logout
-    Copy the keys from the working directory on host two to /tmp directory on host two.cptx86.com.
-		scp ./ca.pem <user>@two.cptx86.com:'/tmp/ca.pem'
-		scp ./two.cptx86.com-cert.pem <user>@two.cptx86.com:'/tmp/two.cptx86.com-cert.pem'
-		scp ./two.cptx86.com-priv-key.pem <user>@two.cptx86.com:'/tmp/two.cptx86.com-priv-key.pem'
-    Login to host two.cptx86.com and move the key pair files signed by the CA from the /tmp directory to the Docker daemon TLS directory.
-		ssh <user>@two.cptx86.com
-		cd /tmp
-		sudo mv *.pem /etc/docker/certs.d/daemon
-		sudo chown -R root.root /etc/docker/certs.d/daemon
-		sudo -i
-		cd /etc/docker/certs.d/daemon
-		ln -s two.cptx86.com-cert.pem cert.pem
-		ln -s two.cptx86.com-priv-key.pem key.pem
-		exit
-	    	
-    Add the TLS flags to dockerd so dockerd will know you are using TLS. (--tlsverify, --tlscacert, --tlscert, --tlskey)
-    
-
-    The scripts in https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options
-    will help configure dockerd on systems running Ubuntu 16.04 (systemd) and Ubuntu 14.04 (Upstart).
-
-
-    For systems running Ubuntu 14.04 (Upstart) you can just follow these steps and not use dockerd-configuration-options scripts.	
-    Modify the Docker daemon startup configuration file on host two.cptx86.com and restart Docker.
-		sudo vi /etc/default/docker
-    DOCKER_OPTS="\ 
-      --graph=/usr/local/docker \ 
-      --dns 192.168.1.202 \ 
-      --dns 8.8.8.8 \ 
-      --dns 8.8.4.4 \ 
-      --log-level warn \ 
-      --tlsverify \ 
-      --tlscacert=/etc/docker/certs.d/daemon/ca.pem \ 
-      --tlscert=/etc/docker/certs.d/daemon/two.cptx86.com-cert.pem \ 
-      --tlskey=/etc/docker/certs.d/daemon/two.cptx86.com-priv-key.pem \ 
-      -H=two.cptx86.com:2376 \ 
-      "
-
-	sudo service docker restart
-	logout
+    ./create-host-tls.sh 82 [INFO]:	Creating private key for host
+	two.cptx86.com.
+	Generating RSA private key, 2048 bit long modulus
+	..................+++
+	.................................................................................................................+++
+	e is 65537 (0x10001)
+	./create-host-tls.sh 85 [INFO]:	Generate a Certificate Signing Request
+	(CSR) for host two.cptx86.com.
+	./create-host-tls.sh 88 [INFO]:	Create and sign a 365 day
+	certificate for host two.cptx86.com.
+	Signature ok
+	subject=/CN=two.cptx86.com/subjectAltName=two.cptx86.com
+	Getting CA Private Key
+	Enter pass phrase for .private/ca-priv-key.pem:
+	writing RSA key
+	./create-host-tls.sh 91 [INFO]:	Removing certificate signing requests
+	(CSR) and set file permissions for host two.cptx86.com key pairs.
+	./create-host-tls.sh 95 [INFO]:	Done.
 
 #### WARNING: These instructions are incomplete. Need to complete the follow script
 
