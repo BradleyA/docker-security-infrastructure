@@ -23,7 +23,7 @@ echo -e "This script has to be run as root to check host public, private keys, a
 echo    " >>> This script currently DOES NOT CHECK REMOTE HOSTS.(UNDER DEVELOPMENT) "
 #
 echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS\n"
-echo -e "(UNDER DEVELOPMENT) Example:\tsudo ${0} ${HOST} /etc/docker/certs.d/daemon/\n"
+echo -e "Example:\tsudo ${0} ${HOST}\n"
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
