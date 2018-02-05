@@ -30,7 +30,7 @@ if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" =
 	exit 0
 fi
 ### 
-REMOTEHOST=${1:-${HOST}}
+REMOTEHOST=${1:-`hostname -f`}
 CERTDIR=${2:-/etc/docker/certs.d/daemon/}
 # >>>	REMOTEHOST: check if ${REMOTEHOST} -eq ${HOSTS} if true check for root on local host
 # >>>	REMOTEHOST:    if NOT EQUAL because no need for local hosts root  <<<
@@ -51,6 +51,7 @@ if [ ! -d ${CERTDIR} ] ; then
 	display_help
 	exit 1
 fi
+echo    "${0} ${LINENO} [INFO]:	Checking ${REMOTEHOST} TLS certifications and directory permissions."   1>&2
 #	View dockerd daemon certificate expiration date of ca.pem file
 echo -e "\nView dockerd daemon certificate expiration date of ca.pem file."
 openssl x509 -in ${CERTDIR}ca.pem -noout -enddate
