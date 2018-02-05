@@ -228,7 +228,6 @@ An administration user can run this script to copy host public, private TLS keys
 	Ubuntu 14.04 (systemd) sudo service docker restart
 	./copy-host-2-remote-host.sh 125 [INFO]:	Done.
 
-#### WARNING: These instructions are incomplete. Need to complete the follow lines
 ## Usage
 A user can check their public, private keys, and CA in $HOME/.docker or a user can check other users certificates by using sudo.
     
@@ -256,15 +255,35 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
     
     Verify that user certificate was issued by the CA.
     /home/bob/.docker/cert.pem: OK
-  
+
 ## Usage
 
-check-host-tls.sh
+    ./check-host-tls.sh
 
 ## Output
 
+    $ sudo ./check-host-tls.sh
+    ./check-host-tls.sh 54 [INFO]:	Checking six-rpi3b.cptx86.com TLS
+	certifications and directory permissions.
+	
+    View dockerd daemon certificate expiration date of ca.pem file.
+    notAfter=Dec  5 22:34:44 2020 GMT
+    
+    View dockerd daemon certificate expiration date of cert.pem file
+    notAfter=Jan 21 18:52:28 2019 GMT
+    
+    View dockerd daemon certificate issuer data of the ca.pem file
+    issuer= /C=US/ST=Texas/L=Cedar Park/O=Company Name/OU=IT/CN=two.cptx86.com
+    
+    View dockerd daemon certificate issuer data of the cert.pem file
+    issuer= /C=US/ST=Texas/L=Cedar Park/O=Company Name/OU=IT/CN=two.cptx86.com
+    
+    Verify that dockerd daemon certificate was issued by the CA.
+    /etc/docker/certs.d/daemon/cert.pem: OK
+
 ### System OS script tested
  * Ubuntu 14.04.4 LTS
+ * Ubuntu 16.04.3 LTS
 
 #### Design Principles
  * Have a simple setup process and a minimal learning curve
