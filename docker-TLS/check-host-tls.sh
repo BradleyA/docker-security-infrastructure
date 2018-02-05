@@ -13,8 +13,9 @@
 #
 display_help() {
 echo -e "\nCheck public, private keys, and CA for host"
-echo    "This script uses two arguement;"
-echo    "   REMOTEHOST - (UNDER DEVELOPMENT) name of remote host to check for certifications, no default"
+echo    "UNDER DEVELOPMENT to add REMOTEHOST.  Currently works for local host only."
+#	echo    "This script uses two arguement;"
+#	echo    "   REMOTEHOST - (UNDER DEVELOPMENT) name of remote host to check for certifications, no default"
 echo -e "   CERTDIR - dockerd certification directory, default\n\t/etc/docker/certs.d/daemon/"
 echo    "      This directory was selected to place dockerd TLS certifications because"
 echo    "      docker registry stores it's TLS certifications in /etc/docker/certs.d."
@@ -30,8 +31,9 @@ if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" =
 	exit 0
 fi
 ### 
-REMOTEHOST=${1:-`hostname -f`}
-CERTDIR=${2:-/etc/docker/certs.d/daemon/}
+#	REMOTEHOST=${1:-`hostname -f`}
+REMOTEHOST=`hostname -f`
+CERTDIR=${1:-/etc/docker/certs.d/daemon/}
 # >>>	REMOTEHOST: check if ${REMOTEHOST} -eq ${HOSTS} if true check for root on local host
 # >>>	REMOTEHOST:    if NOT EQUAL because no need for local hosts root  <<<
 # >>>	REMOTEHOST:  NOTE: scp & ssh does not work as root 	<<<<<<<<
