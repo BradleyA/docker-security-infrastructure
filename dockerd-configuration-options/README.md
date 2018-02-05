@@ -1,6 +1,6 @@
 # dockerd-configuration-options
 
-#### WARNING: These instructions are incomplete. Consider them as notes quickly drafted on a napkin rather than proper documentation!
+
 
 Goal is to use one dockerd configuration file with dockerd flags for both Ubuntu 16.04 (systemd) and Ubuntu 14.04 (Upstart) other than /etc/docker/daemon.json.  
 
@@ -37,6 +37,8 @@ After editing the dockerd-configuration-file with your dockerd flags, run sudo .
 644	start-dockerd-with-systemd.begin - begining of /etc/docker/start-dockerd-with-systemd.sh script
 
 644	start-dockerd-with-systemd.end - end of /etc/docker/start-dockerd-with-systemd.sh script which creates 10-override.conf file and moves it into /etc/systemd/system/docker.service.d directory and runs /bin/systemctl daemon-reload so docker.service will use latest copy of file dockerd-configuration-file.service to 
+
+#### WARNING: These instructions are incomplete. Consider them as notes quickly drafted on a napkin rather than proper documentation!
 
 ### Note:
 #### Need to clean this up 
