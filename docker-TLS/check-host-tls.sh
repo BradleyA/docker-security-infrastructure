@@ -51,7 +51,7 @@ if [ ! -d ${CERTDIR} ] ; then
 	display_help
 	exit 1
 fi
-echo    "${0} ${LINENO} [INFO]:	Checking ${REMOTEHOST} TLS certifications and directory permissions."   1>&2
+echo -e "${0} ${LINENO} [INFO]:	Checking ${REMOTEHOST} TLS\n\tcertifications and directory permissions."   1>&2
 #	View dockerd daemon certificate expiration date of ca.pem file
 echo -e "\nView dockerd daemon certificate expiration date of ca.pem file."
 openssl x509 -in ${CERTDIR}ca.pem -noout -enddate
