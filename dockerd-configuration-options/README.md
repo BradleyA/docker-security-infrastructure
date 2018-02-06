@@ -48,7 +48,7 @@ Comment: add steps about updating dockerd flags and pushing the changes out, inc
 
 #### System OS script tested
  * Ubuntu 14.04.3 LTS
- * Ubuntu 16.04.3 LTS
+ * Ubuntu 16.04.3 LTS (armv7l)
 
 #### Design Principles
  * Have a simple setup process and a minimal learning curve
