@@ -9,9 +9,8 @@ This repository contains shell scripts for RaspBerry pi.
  * [dockerd-configuration-options](https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options)
 
 ## System OS script tested
-
-    Ubuntu 14.04.3 LTS
-    Ubuntu 16.04.3 LTS (armv7l)
+ * Ubuntu 14.04.3 LTS
+ * Ubuntu 16.04.3 LTS (armv7l)
 
 ## Install
 

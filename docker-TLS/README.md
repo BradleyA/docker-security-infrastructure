@@ -283,7 +283,7 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
 
 ### System OS script tested
  * Ubuntu 14.04.4 LTS
- * Ubuntu 16.04.3 LTS
+ * Ubuntu 16.04.3 LTS (armv7l)
 
 #### Design Principles
  * Have a simple setup process and a minimal learning curve

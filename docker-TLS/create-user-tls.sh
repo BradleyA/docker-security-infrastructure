@@ -24,7 +24,7 @@ echo    "   USERHOME - location of admin user directory, default is /home/"
 echo    "      Many sites have different home directories (/u/north-office/<user>)"
 echo    "   ADMTLSUSER - administration user creating TLS accounts, default is user running script"
 echo    "This script creates public, private keys and CA for a user."
-echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS-scripts\n"
+echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS\n"
 echo -e "Example:\t${0} bob 30 /u/north-office/ uadmin\n"
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
