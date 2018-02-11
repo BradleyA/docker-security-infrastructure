@@ -1,5 +1,5 @@
 #!/bin/bash
-#	create-user-tls.sh	3.6.266	2018-02-10_18:54:43_CST uadmin six-rpi3b.cptx86.com v0.1-260-g2013df8 
+#	create-user-tls.sh	3.6.276	2018-02-10_19:26:37_CST uadmin six-rpi3b.cptx86.com 3.6-9-g8424312 
 #	docker-scripts/docker-TLS; modify format of display_help; closes #6 
 #	create-user-tls.sh	3.4	2018-02-01_21:03:44_CST uadmin six-rpi3b.cptx86.com
 #	added logic for display_help()
@@ -14,18 +14,20 @@
 #	set -v
 #
 display_help() {
-echo -e "\nCreate public and private key and CA for user"
-echo    "      ${0} [--help | -help | help | -h | h | -? | ?]"
-
-echo    "This script uses four arguements;"
-echo    "   TLSUSER - user requiring new TLS keys, default is user running script"
-echo    "   NUMBERDAYS - number of days user keys are valid, default 90 days"
-echo    "   USERHOME - location of admin user directory, default is /home/"
-echo    "      Many sites have different home directories (/u/north-office/<user>)"
-echo    "   ADMTLSUSER - administration user creating TLS accounts, default is user running script"
-echo    "This script creates public, private keys and CA for a user."
-echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS\n"
-echo -e "Example:\t${0} bob 30 /u/north-office/ uadmin\n"
+echo -e "\n${0} - Create user public and private key and CA"
+echo -e "\nUSAGE\n   ${0} <TLS-user> <#-of-days> <home-directory> <administrator>"
+echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo -e "\nDESCRIPTION\nRun this script any time a user requires a new Docker public and private"
+echo    "TLS key."
+echo -e "\nOPTIONS "
+echo    "   TLSUSER      user requiring new TLS keys, default is user running script"
+echo    "   NUMBERDAYS   number of days user keys are valid, default 90 days"
+echo    "   USERHOME     location of admin user directory, default is /home/"
+echo    "                Many sites have different home directories (/u/north-office/)"
+echo    "   ADMTLSUSER   administration user creating TLS accounts, default is user"
+echo    "                running script"
+echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
+echo -e "\nEXAMPLES\n   Create TLS keys for user bob for 30 days in /u/north-office/ uadmin\n\t${0} bob 30 /u/north-office/ uadmin\n"
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help

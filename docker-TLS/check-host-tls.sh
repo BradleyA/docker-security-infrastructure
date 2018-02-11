@@ -1,5 +1,5 @@
 #!/bin/bash
-#	check-host-tls.sh	3.6.266	2018-02-10_18:54:43_CST uadmin six-rpi3b.cptx86.com v0.1-260-g2013df8 
+#	check-host-tls.sh	3.6.276	2018-02-10_19:26:37_CST uadmin six-rpi3b.cptx86.com 3.6-9-g8424312 
 #	docker-scripts/docker-TLS; modify format of display_help; closes #6 
 #	check-host-tls.sh	3.5	2018-02-04_09:02:47_CST uadmin six-rpi3b.cptx86.com
 #	add note for checking remote host
