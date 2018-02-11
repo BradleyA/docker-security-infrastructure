@@ -1,4 +1,6 @@
 #!/bin/bash
+#	create-site-private-public-tls.sh	3.6.266	2018-02-10_18:54:43_CST uadmin six-rpi3b.cptx86.com v0.1-260-g2013df8 
+#	docker-scripts/docker-TLS; modify format of display_help; closes #6 
 #	create-site-private-public-tls.sh	3.4	2018-02-01_20:40:19_CST uadmin six-rpi3b.cptx86.com
 #	added logic for display_help()
 #	create-site-private-public-tls.sh	3.2	2018-01-29_11:48:25_CST uadmin six-rpi3b.cptx86.com
@@ -10,15 +12,26 @@
 #	set -v
 #
 display_help() {
-echo -e "\nCreate site private and public keys"
-echo    "This script uses three arguement; "
-echo    "   NUMBERDAYS - number of days site CA is valid, default 730 days (two years)"
-echo    "   USERHOME - location of admin home directory, default is /home/"
-echo    "      Many sites have different home directories (/u/north-office/<user>)"
-echo    "   ADMTLSUSER - administration user creating TLS accounts, default is user running script"
-echo    "This script creates site private, public keys that all other TLS keys require."
-echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS\n"
-echo -e "Example:\t${0} 365 /u/north-office/ uadmin\n"
+echo -e "\n${0} - Create site private and CA keys"
+echo -e "\nUSAGE\n   ${0} <#-of-days> <home-directory> <administrator>"
+echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo -e "\nDESCRIPTION\nAn administration user can run this script to create site private and CA"
+echo    "keys.  Run this script first on your host that will be creating all your TLS"
+echo    "keys for your site.  It creates the working directories"
+echo    "${HOME}/.docker/docker-ca and ${HOME}/.docker/docker-ca/.private"
+echo    "for your site private and CA keys.  If you later choose to use a different"
+echo    "host to continue creating your user and host TLS keys, cp the"
+echo    "${HOME}/.docker/docker-ca and ${HOME}/.docker/docker-ca/.private"
+echo    "to the new host and run create-new-openssl.cnf-tls.sh scipt."
+echo -e "\nOPTIONS\n "
+echo    "   NUMBERDAYS   number of days site CA is valid, default 730 days (two years)"
+echo    "   USERHOME     location of admin home directory, default is /home/"
+echo    "                Many sites have different home directories (/u/north-office/)"
+echo    "   ADMTLSUSER   administration user creating TLS accounts, default is user"
+echo    "                running script"
+echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
+echo -e "\nEXAMPLES\n   Create site private and public keys for one year in /u/north-office/ uadmin 
+${0} 365 /u/north-office/ uadmin\n"
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
@@ -30,8 +43,8 @@ USERHOME=${2:-/home/}
 ADMTLSUSER=${3:-${USER}}
 #	Check if admin user has home directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER} ] ; then
-	echo -e "${0} ${LINENO} [ERROR]:        ${ADMTLSUSER} does not have a home directory\n\ton this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}"  1>&2
 	display_help
+	echo -e "${0} ${LINENO} [ERROR]:	${ADMTLSUSER} does not have a home directory\n\ton this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}"	1>&2
 	exit 1
 fi
 #

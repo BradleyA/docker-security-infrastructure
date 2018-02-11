@@ -1,4 +1,6 @@
 #!/bin/bash
+#	check-host-tls.sh	3.6.266	2018-02-10_18:54:43_CST uadmin six-rpi3b.cptx86.com v0.1-260-g2013df8 
+#	docker-scripts/docker-TLS; modify format of display_help; closes #6 
 #	check-host-tls.sh	3.5	2018-02-04_09:02:47_CST uadmin six-rpi3b.cptx86.com
 #	add note for checking remote host
 #	check-host-tls.sh	3.4	2018-02-01_17:18:43_CST uadmin six-rpi3b.cptx86.com
@@ -12,19 +14,24 @@
 #	set -v
 #
 display_help() {
-echo -e "\nCheck public, private keys, and CA for host"
-echo    "UNDER DEVELOPMENT to add REMOTEHOST.  Currently works for local host only."
-#	echo    "This script uses two arguement;"
-#	echo    "   REMOTEHOST - (UNDER DEVELOPMENT) name of remote host to check for certifications, no default"
-echo -e "   CERTDIR - dockerd certification directory, default\n\t/etc/docker/certs.d/daemon/"
-echo    "      This directory was selected to place dockerd TLS certifications because"
-echo    "      docker registry stores it's TLS certifications in /etc/docker/certs.d."
-echo -e "This script has to be run as root to check host public, private keys, and\n\tCA in /etc/docker/certs.d/daemon directory."
-#
-echo    " >>> This script currently DOES NOT CHECK REMOTE HOSTS.(UNDER DEVELOPMENT) "
-#
-echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS\n"
-echo -e "Example:\tsudo ${0} ${HOST}\n"
+echo -e "\n${0} - Check public, private keys, and CA for host"
+echo    "   UNDER DEVELOPMENT to add REMOTEHOST.  Currently works for local host only."
+echo -e "\nUSAGE\n   sudo ${0} "
+echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo -e "\nDESCRIPTION\nThis script has to be run as root to check host public, private keys, and CA"
+echo    "in /etc/docker/certs.d/daemon directory.  This directory was selected to place"
+echo    "dockerd TLS certifications because docker registry stores it's TLS"
+echo    "certifications in /etc/docker/certs.d.  The certification files and"
+echo    "and directory permissions are also checked."
+echo    " >>> This script currently DOES NOT CHECK REMOTE HOSTS.(UNDER DEVELOPMENT) <<<"
+echo -e "\nOPTIONS"
+echo    "   REMOTEHOST  (UNDER DEVELOPMENT) name of remote host to check for"
+echo    "               certifications, no default"
+echo -e "   CERTDIR     (UNDER DEVELOPMENT) dockerd certification directory, default"
+echo    "               /etc/docker/certs.d/daemon/"
+echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
+echo -e "\nEXAMPLES\n   Administration user checks local host TLS public, private keys,"
+echo -e "   CA, and file and directory permissions.\n\tsudo ${0}\n"
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
@@ -42,15 +49,15 @@ CERTDIR=${1:-/etc/docker/certs.d/daemon/}
 #
 #	Must be root to run this script
 if ! [ $(id -u) = 0 ] ; then
-	echo "${0} ${LINENO} [ERROR]:   Use sudo ${0}"  1>&2
-	echo -e "\n>>   SCRIPT MUST BE RUN AS ROOT <<"     1>&2
 	display_help
+	echo "${0} ${LINENO} [ERROR]:   Use sudo ${0}"	1>&2
+	echo -e "\n>>   SCRIPT MUST BE RUN AS ROOT <<"	1>&2
 	exit 1
 fi
 #	Check for ${CERTDIR} directory
 if [ ! -d ${CERTDIR} ] ; then
-	echo -e "${0} ${LINENO} [ERROR]:	${CERTDIR} does not exist"   1>&2
 	display_help
+	echo -e "${0} ${LINENO} [ERROR]:	${CERTDIR} does not exist"   1>&2
 	exit 1
 fi
 echo -e "${0} ${LINENO} [INFO]:	Checking ${REMOTEHOST} TLS\n\tcertifications and directory permissions."   1>&2

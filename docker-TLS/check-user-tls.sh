@@ -1,4 +1,6 @@
 #!/bin/bash
+#	check-user-tls.sh	3.6.266	2018-02-10_18:54:43_CST uadmin six-rpi3b.cptx86.com v0.1-260-g2013df8 
+#	docker-scripts/docker-TLS; modify format of display_help; closes #6 
 #	check-user-tls.sh	3.4	2018-02-01_18:57:23_CST uadmin six-rpi3b.cptx86.com
 #	added logic for display_help()
 #	./check-user-tls.sh	1.2	2018-01-28_22:51:08_CST uadmin four-rpi3b.cptx86.com
@@ -12,15 +14,22 @@
 #	set -v
 #
 display_help() {
-echo -e "\nCheck public, private keys, and CA for a user"
-echo    "This script uses two arguements;"
-echo    "   TLSUSER - user, default is user running script"
-echo    "   USERHOME - location of user home directory, default is /home/"
-echo    "      Many sites have different home directories locations (/u/north-office/<user>)"
-echo    "This script allows a user to check their public, private keys, and CA in ${HOME}/.docker."
-echo    "This script can also be run with sudo to check other users certificates."
-echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS\n"
-echo -e "Example:\t${0} bob /u/north-office/\n"
+echo -e "\n${0} - Check public, private keys, and CA for a user"
+echo -e "\nUSAGE\n   ${0} <user-name> <home-directoty>"
+echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo -e "\nDESCRIPTION\nUsers can check their public, private keys, and CA in /home or other"
+echo    "non-default home directories.  The file and directory permissions are also"
+echo    "checked.  Administrators can check other users certificates by using"
+echo    "sudo ${0} <TLS-user>."
+echo -e "\nOPTIONS"
+echo    "   TLSUSER   user, default is user running script"
+echo    "   USERHOME  location of user home directory, default /home/"
+echo    "      Many sites have different home directories locations (/u/north-office/)"
+echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
+echo -e "\nEXAMPLES\n   User sam can check their certificates\n\t${0}"
+echo -e "   User sam checks their certificates in a non-default home directory\n\t${0} sam /u/north-office/"
+echo -e "   Administrator checks user bob certificates\n\tsudo ${0} bob"
+echo -e "   Administrator checks user sam certificates in a different home directory\n\tsudo ${0} sam /u/north-office/"
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
@@ -31,21 +40,21 @@ TLSUSER=${1:-${USER}}
 USERHOME=${2:-/home/}
 #	Root is required to check other users or user can check own certs
 if ! [ $(id -u) = 0 -o ${USER} = ${TLSUSER} ] ; then
-	echo "${0} ${LINENO} [ERROR]:   Use sudo ${0}  ${TLSUSER}"  1>&2
-	echo -e "\n>>   SCRIPT MUST BE RUN AS ROOT TO CHECK <another-user>/.docker DIRECTORY. <<\n"     1>&2
 	display_help
+	echo "${0} ${LINENO} [ERROR]:   Use sudo ${0}  ${TLSUSER}"	1>&2
+	echo -e "\n>>   SCRIPT MUST BE RUN AS ROOT TO CHECK <another-user>/.docker DIRECTORY. <<\n"	1>&2
 	exit 1
 fi
 #	Check if user has home directory on system
 if [ ! -d ${USERHOME}${TLSUSER} ] ; then 
-	echo -e "${0} ${LINENO} [ERROR]:	${TLSUSER} does not have a home directory\n\ton this system or ${TLSUSER} home directory is not ${USERHOME}${TLSUSER}"	1>&2
 	display_help
+	echo -e "${0} ${LINENO} [ERROR]:	${TLSUSER} does not have a home directory\n\ton this system or ${TLSUSER} home directory is not ${USERHOME}${TLSUSER}"	1>&2
 	exit 1
 fi
 #	Check if user has .docker directory
 if [ ! -d ${USERHOME}${TLSUSER}/.docker ] ; then 
-	echo -e "${0} ${LINENO} [ERROR]:	${TLSUSER} does not have a .docker directory"	1>&2
 	display_help
+	echo -e "${0} ${LINENO} [ERROR]:	${TLSUSER} does not have a .docker directory"	1>&2
 	exit 1
 fi
 #	View user certificate expiration date of ca.pem file

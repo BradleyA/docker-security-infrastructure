@@ -1,4 +1,6 @@
 #!/bin/bash
+#	create-user-tls.sh	3.6.266	2018-02-10_18:54:43_CST uadmin six-rpi3b.cptx86.com v0.1-260-g2013df8 
+#	docker-scripts/docker-TLS; modify format of display_help; closes #6 
 #	create-user-tls.sh	3.4	2018-02-01_21:03:44_CST uadmin six-rpi3b.cptx86.com
 #	added logic for display_help()
 #	create-user-tls.sh	3.3	2018-01-31_09:09:37_CST uadmin six-rpi3b.cptx86.com
@@ -13,6 +15,8 @@
 #
 display_help() {
 echo -e "\nCreate public and private key and CA for user"
+echo    "      ${0} [--help | -help | help | -h | h | -? | ?]"
+
 echo    "This script uses four arguements;"
 echo    "   TLSUSER - user requiring new TLS keys, default is user running script"
 echo    "   NUMBERDAYS - number of days user keys are valid, default 90 days"
@@ -34,19 +38,19 @@ USERHOME=${3:-/home/}
 ADMTLSUSER=${4:-${USER}}
 #	Check if admin user has home directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER} ] ; then
-	echo -e "${0} ${LINENO} [ERROR]:        ${ADMTLSUSER} does not have a home directory\n\ton this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}"  1>&2
 	display_help
+	echo -e "${0} ${LINENO} [ERROR]:	${ADMTLSUSER} does not have a home directory\n\ton this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}"	1>&2
 	exit 1
 fi
 #	Check if site CA directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private ] ; then
-	echo -e "${0} ${LINENO} [ERROR]:        default directory,"	1>&2
-	echo -e "\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private,\n\tnot on system."  1>&2
+	display_help
+	echo -e "${0} ${LINENO} [ERROR]:	default directory,"	1>&2
+	echo -e "\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private,\n\tnot on system."	1>&2
 	echo -e "\tRunning create-site-private-public-tls.sh will create directories"
 	echo -e "\tand site private and public keys.  Then run sudo"
 	echo -e "\tcreate-new-openssl.cnf-tls.sh to modify openssl.cnf file.  Then run"
 	echo -e "\tcreate-host-tls.sh or create-user-tls.sh as many times as you want."
-	display_help
 	exit 1
 fi
 #
@@ -54,11 +58,11 @@ cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
 #	Check if ca-priv-key.pem file on system
 if ! [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem ] ; then
 	echo -e "${0} ${LINENO} [ERROR]:        Site private key\n\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem\n\tis not in this location."   1>&2
+	display_help
 	echo -e "\tEither move it from your site secure location to"
 	echo -e "\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/"
 	echo -e "\tOr run create-site-private-public-tls.sh and sudo"
 	echo -e "\tcreate-new-openssl.cnf-tls.sh to create a new one."
-	display_help
 	exit 1
 fi
 #	Check if ${TLSUSER}-user-priv-key.pem file on system

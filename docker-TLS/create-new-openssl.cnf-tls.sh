@@ -1,4 +1,6 @@
 #!/bin/bash
+#	create-new-openssl.cnf-tls.sh	3.6.266	2018-02-10_18:54:43_CST uadmin six-rpi3b.cptx86.com v0.1-260-g2013df8 
+#	docker-scripts/docker-TLS; modify format of display_help; closes #6 
 #	./create-new-openssl.cnf-tls.sh	3.4	2018-02-01_19:52:46_CST uadmin six-rpi3b.cptx86.com
 #	added logic for display_help()
 #	create-new-openssl.cnf-tls.sh	3.2	2018-01-29_15:29:42_CST uadmin six-rpi3b.cptx86.com
@@ -10,11 +12,13 @@
 #	set -v
 #
 display_help() {
-echo -e "\nModify /etc/ssl/openssl.conf file"
-echo    "This script makes a change to openssl.cnf file which is required for"
+echo -e "\n${0} - Modify /etc/ssl/openssl.conf file"
+echo -e "\nUSAGE\n   sudo ${0}"
+echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo -e "\nDESCRIPTION\nThis script makes a change to openssl.cnf file which is required for"
 echo    "create-user-tls.sh and create-host-tls.sh scripts.  It must be run as root."
-echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS\n"
-echo -e "Example:\tsudo ${0}\n"
+echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
+echo -e "\nnEXAMPLES\n   sudo ${0}\n"
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
@@ -25,9 +29,9 @@ BACKUPFILE=/etc/ssl/openssl.cnf-`date +%Y-%m-%d_%H:%M:%S_%Z`
 ORIGINALFILE=/etc/ssl/openssl.cnf
 #       Must be root to run this script
 if ! [ $(id -u) = 0 ] ; then
-        echo -e "\n${0} ${LINENO} [ERROR]:   Use sudo ${0}"  1>&2
-	echo -e "\n>>	SCRIPT MUST BE RUN AS ROOT TO MODIFY THE ${ORIGINALFILE}	<<\n"	1>&2
 	display_help
+        echo -e "\n${0} ${LINENO} [ERROR]:	Use sudo ${0}"	1>&2
+	echo -e "\n>>	SCRIPT MUST BE RUN AS ROOT TO MODIFY THE ${ORIGINALFILE}	<<\n"	1>&2
         exit 1
 fi
 #	Check if ${ORIGINALFILE} file has previously been modified

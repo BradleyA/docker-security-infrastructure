@@ -1,4 +1,6 @@
 #!/bin/bash
+#	copy-host-2-remote-host.sh	3.6.266	2018-02-10_18:54:43_CST uadmin six-rpi3b.cptx86.com v0.1-260-g2013df8 
+#	docker-scripts/docker-TLS; modify format of display_help; closes #6 
 #	./copy-host-2-remote-host.sh	3.2	2018-02-02_21:57:45_CST uadmin six-rpi3b.cptx86.com
 #	Finished first round of testing
 #	copy-host-2-remote-host.sh	3.1	2018-02-02_19:39:51_CST uadmin six-rpi3b.cptx86.com
@@ -10,17 +12,28 @@
 #	set -v
 #
 display_help() {
-echo -e "\nCopy public, private keys and CA to remote host."
-echo    "This script uses four arguements;"
-echo    "   REMOTEHOST - name of host to copy certificates to"
-echo    "   USERHOME - location of admin user directory, default is /home/"
-echo    "      Many sites have different home directories (/u/north-office/<user>)"
-echo -e "   ADMTLSUSER - site administrator account creating TLS keys,\n\tdefault is user running script"
-echo    "      site administrator will have accounts on all systems"
-echo    "   SSHPORT - SSH server port, default is port 22"
-
-echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS\n"
-echo -e "Example::\t${0} two.cptx86.com /u/north-office/ uadmin 22\n"
+echo -e "\n${0} - Copy public, private keys and CA to remote host."
+echo -e "\nUSAGE\n   ${0} <remote-host> <home-directory> <administrator> <ssh-port>"
+echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo -e "\nDESCRIPTION\nAn administration user can run this script to copy host TLS public, private"
+echo    "keys, and CA to a remote host.  The administration user may receive password"
+echo    "and passphrase prompts from a remote host; running"
+echo    "ssh-copy-id <admin-user>@x.x.x.x may stop the prompts in your cluster."
+echo -e "\nOPTIONS"
+echo    "   REMOTEHOST   remote host to copy certificates to"
+echo    "   USERHOME     location of admin user directory, default is /home/"
+echo    "      Many sites have different home directories (/u/north-office/)"
+echo -e "   ADMTLSUSER   site administrator account creating TLS keys,"
+echo    "      default is user running script.  Site administrator will have accounts"
+echo    "      on all systems in cluster."
+echo    "   SSHPORT      SSH server port, default is port 22"
+echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
+echo -e "\nEXAMPLES\n   Administrator user copies TLS keys and CA to remote host, two.cptx86.com,"
+echo    "   using default home directory, /home/, default administrator, user running"
+echo -e "   script, on default port 22.  ssh port, 22.\n\t${0} two.cptx86.com"
+echo -e "   Administrator user copies TLS keys and CA to remote host, two.cptx86.com,"
+echo    "   using local home directory, /u/north-office/, administrator account, uadmin,"
+echo -e "   on ssh port, 22.\n\t${0} two.cptx86.com /u/north-office/ uadmin 22\n"
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
@@ -33,18 +46,18 @@ ADMTLSUSER=${3:-${USER}}
 SSHPORT=${4:-22}
 #	Check if admin user has home directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER} ] ; then
-	echo -e "${0} ${LINENO} [ERROR]:        ${ADMTLSUSER} does not have a home directory\n\ton this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}"  1>&2
 	display_help
+	echo -e "${0} ${LINENO} [ERROR]:        ${ADMTLSUSER} does not have a home directory\n\ton this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}"	1>&2
 	exit 1
 fi
 #	Check if ${USERHOME}${ADMTLSUSER}/.docker/docker-ca directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER}/.docker/docker-ca ] ; then
-	echo -e "${0} ${LINENO} [ERROR]:        default directory,"     1>&2
+	display_help
+	echo -e "${0} ${LINENO} [ERROR]:	default directory,"     1>&2
 	echo -e "\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca,\n\tnot on system."  1>&2
 	echo -e "\tRunning create-site-private-public-tls.sh will create directories"
 	echo -e "\tand site private and public keys.  Then run sudo"
 	echo -e "\tcreate-new-openssl.cnf-tls.sh to modify openssl.cnf file."
-	display_help
 	exit 1
 fi
 cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
@@ -55,15 +68,15 @@ if [ -z ${REMOTEHOST} ] ; then
 fi
 #	Check if ${REMOTEHOST} string length is zero
 if [ -z ${REMOTEHOST} ] ; then
-	echo -e "${0} ${LINENO} [ERROR]:        Remote host is required.\n"       1>&2
 	display_help
+	echo -e "${0} ${LINENO} [ERROR]:	Remote host is required.\n"	1>&2
 	exit 1
 fi
 #	Check if ${REMOTEHOST}-priv-key.pem file on system
 if ! [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/${REMOTEHOST}-priv-key.pem ] ; then
-	echo -e "${0} ${LINENO} [ERROR]:        The ${REMOTEHOST}-priv-key.pem\n\tfile was not found in ${USERHOME}${ADMTLSUSER}/.docker/docker-ca."   1>&2
-	echo -e "\tRunning create-host-tls.sh will create public and private keys."
 	display_help
+	echo -e "${0} ${LINENO} [ERROR]:	The ${REMOTEHOST}-priv-key.pem\n\tfile was not found in ${USERHOME}${ADMTLSUSER}/.docker/docker-ca."	1>&2
+	echo -e "\tRunning create-host-tls.sh will create public and private keys."
 	exit 1
 fi
 #	Check if ${REMOTEHOST} is available on port ${SSHPORT}
@@ -71,9 +84,9 @@ if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	echo -e "${0} ${LINENO} [INFO]:	${ADMTLSUSER} may receive password and\n\tpassphrase prompts from ${REMOTEHOST}. Running ssh-copy-id\n\t${ADMTLSUSER}@${REMOTEHOST} may stop the prompts."
 #	Check if /etc/docker directory on ${REMOTEHOST}
 	if ! $(ssh -t ${ADMTLSUSER}@${REMOTEHOST} "test -d /etc/docker") ; then
+		display_help
 		echo -e "${0} ${LINENO} [ERROR]:	/etc/docker directory missing,"	1>&2
 		echo -e "\tis docker installed on ${REMOTEHOST}."	1>&2
-		display_help
 		exit 1
 	fi
 #	Check if /etc/docker/certs.d directory exists on remote system
@@ -125,8 +138,13 @@ if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	echo -e "${0} ${LINENO} [INFO]:	Done."
 	exit 0
 else
-	echo -e "${0} ${LINENO} [ERROR]:	${REMOTEHOST} not responding on port ${SSHPORT}.\n"  1>&2
 	display_help
+	echo -e "${0} ${LINENO} [ERROR]:	${REMOTEHOST} not responding on port ${SSHPORT}.\n"	1>&2
 	exit 1
 fi
 ###
+#
+#       May want to create a version of this script that automates this process for SRE tools,
+#       but keep this script for users to run manually,
+#       open ticket and remove this comment
+#
