@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	create-new-openssl.cnf-tls.sh	3.6.286	2018-02-15_13:21:37_CST uadmin six-rpi3b.cptx86.com 3.6-19-g7e77a24 
+# 	   added --version and -v close #9 
 #	create-new-openssl.cnf-tls.sh	3.6.276	2018-02-10_19:26:37_CST uadmin six-rpi3b.cptx86.com 3.6-9-g8424312 
 #	docker-scripts/docker-TLS; modify format of display_help; closes #6 
 #	./create-new-openssl.cnf-tls.sh	3.4	2018-02-01_19:52:46_CST uadmin six-rpi3b.cptx86.com
@@ -14,7 +16,7 @@
 display_help() {
 echo -e "\n${0} - Modify /etc/ssl/openssl.conf file"
 echo -e "\nUSAGE\n   sudo ${0}"
-echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo    "   ${0} [--help | -help | help | -h | h | -? | ?] [--version | -v]"
 echo -e "\nDESCRIPTION\nThis script makes a change to openssl.cnf file which is required for"
 echo    "create-user-tls.sh and create-host-tls.sh scripts.  It must be run as root."
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
@@ -23,6 +25,10 @@ echo -e "\nnEXAMPLES\n   sudo ${0}\n"
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
 	exit 0
+fi
+if [ "$1" == "--version" ] || [ "$1" == "-v" ] ; then
+        head -2 ${0} | awk {'print$2"\t"$3'}
+        exit 0
 fi
 ###		
 BACKUPFILE=/etc/ssl/openssl.cnf-`date +%Y-%m-%d_%H:%M:%S_%Z`

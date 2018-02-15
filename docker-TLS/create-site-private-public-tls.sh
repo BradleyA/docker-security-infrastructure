@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	create-site-private-public-tls.sh	3.6.286	2018-02-15_13:21:37_CST uadmin six-rpi3b.cptx86.com 3.6-19-g7e77a24 
+# 	   added --version and -v close #9 
 #	create-site-private-public-tls.sh	3.6.276	2018-02-10_19:26:37_CST uadmin six-rpi3b.cptx86.com 3.6-9-g8424312 
 #	docker-scripts/docker-TLS; modify format of display_help; closes #6 
 #	create-site-private-public-tls.sh	3.4	2018-02-01_20:40:19_CST uadmin six-rpi3b.cptx86.com
@@ -14,7 +16,7 @@
 display_help() {
 echo -e "\n${0} - Create site private and CA keys"
 echo -e "\nUSAGE\n   ${0} <#-of-days> <home-directory> <administrator>"
-echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo    "   ${0} [--help | -help | help | -h | h | -? | ?] [--version | -v]"
 echo -e "\nDESCRIPTION\nAn administration user can run this script to create site private and CA"
 echo    "keys.  Run this script first on your host that will be creating all your TLS"
 echo    "keys for your site.  It creates the working directories"
@@ -36,6 +38,10 @@ ${0} 365 /u/north-office/ uadmin\n"
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
 	exit 0
+fi
+if [ "$1" == "--version" ] || [ "$1" == "-v" ] ; then
+        head -2 ${0} | awk {'print$2"\t"$3'}
+        exit 0
 fi
 ###		
 NUMBERDAYS=${1:-730}

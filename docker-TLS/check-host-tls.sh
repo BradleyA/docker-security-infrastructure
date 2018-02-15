@@ -1,14 +1,10 @@
 #!/bin/bash
+# 	check-host-tls.sh	3.6.286	2018-02-15_13:21:37_CST uadmin six-rpi3b.cptx86.com 3.6-19-g7e77a24 
+# 	   added --version and -v close #9 
 #	check-host-tls.sh	3.6.276	2018-02-10_19:26:37_CST uadmin six-rpi3b.cptx86.com 3.6-9-g8424312 
 #	docker-scripts/docker-TLS; modify format of display_help; closes #6 
-#	check-host-tls.sh	3.5	2018-02-04_09:02:47_CST uadmin six-rpi3b.cptx86.com
-#	add note for checking remote host
 #	check-host-tls.sh	3.4	2018-02-01_17:18:43_CST uadmin six-rpi3b.cptx86.com
 #	added logic for display_help()
-#	check-host-tls.sh	1.2	2018-01-28_23:17:45_CST uadmin four-rpi3b.cptx86.com
-#	tested files & dir check & correct section permissions
-#	check-host-tls.sh	1.0	2018-01-25_22:17:05_CST uadmin rpi3b-four.cptx86.com
-#	initial commit
 #
 #	set -x
 #	set -v
@@ -17,7 +13,7 @@ display_help() {
 echo -e "\n${0} - Check public, private keys, and CA for host"
 echo    "   UNDER DEVELOPMENT to add REMOTEHOST.  Currently works for local host only."
 echo -e "\nUSAGE\n   sudo ${0} "
-echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo    "   ${0} [--help | -help | help | -h | h | -? | ?] [--version | -v]"
 echo -e "\nDESCRIPTION\nThis script has to be run as root to check host public, private keys, and CA"
 echo    "in /etc/docker/certs.d/daemon directory.  This directory was selected to place"
 echo    "dockerd TLS certifications because docker registry stores it's TLS"
@@ -36,6 +32,10 @@ echo -e "   CA, and file and directory permissions.\n\tsudo ${0}\n"
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
 	exit 0
+fi
+if [ "$1" == "--version" ] || [ "$1" == "-v" ] ; then
+        head -2 ${0} | awk {'print$2"\t"$3'}
+        exit 0
 fi
 ### 
 #	REMOTEHOST=${1:-`hostname -f`}

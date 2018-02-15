@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	copy-user-2-remote-host.sh	3.6.286	2018-02-15_13:21:37_CST uadmin six-rpi3b.cptx86.com 3.6-19-g7e77a24 
+# 	   added --version and -v close #9 
 #	copy-user-2-remote-host.sh	3.6.276	2018-02-10_19:26:37_CST uadmin six-rpi3b.cptx86.com 3.6-9-g8424312 
 #	docker-scripts/docker-TLS; modify format of display_help; closes #6 
 #	copy-user-2-remote-host.sh	3.5	2018-02-01_15:58:23_CST uadmin six-rpi3b.cptx86.com
@@ -18,7 +20,7 @@
 display_help() {
 echo -e "\n${0} - Copy user TLS public, private keys and CA to remote host."
 echo -e "\nUSAGE\n   ${0} REMOTE_HOST <home-directory> <administrator> <ssh-port>"
-echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo    "   ${0} [--help | -help | help | -h | h | -? | ?] [--version | -v]"
 echo -e "\nDESCRIPTION\nAn administration user can run this script to copy user TLS public, private"
 echo    "keys, and CA to a remote host."
 echo -e "\nOPTIONS"
@@ -40,6 +42,10 @@ if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" =
 	display_help
 	exit 0
 fi 
+if [ "$1" == "--version" ] || [ "$1" == "-v" ] ; then
+        head -2 ${0} | awk {'print$2"\t"$3'}
+        exit 0
+fi
 ###
 REMOTEHOST=$1
 TLSUSER=${2:-${USER}}
