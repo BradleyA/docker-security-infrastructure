@@ -1,14 +1,6 @@
 ###	
-#	start-dockerd-with-systemd.end	1.5	2018-01-21_18:24:42_CST uadmin rpi3b-four.cptx86.com
-#	cleanup echo statements
-#	start-dockerd-with-systemd.end	1.3	2018-01-21_13:14:47_CST uadmin rpi3b-four.cptx86.com
-#	add Reload systemd manager configuration line
-#	start-dockerd-with-systemd.end	1.2	2018-01-15_19:25:26_CST uadmin rpi3b-four.cptx86.com
-#	Added {} around variables
-#	start-dockerd-with-systemd.end	1.1	2018-01-13_19:56:37_CST uadmin rpi3b-four.cptx86.com
-#	changed ${OVERRIDE_FILE} to ${OVERRIDE_FILE}.begin
-#	start-dockerd-with-systemd.sh-end	1.0	2018-01-13_18:53:35_CST uadmin rpi3b-four.cptx86.com
-#	Initial commit
+#	start-dockerd-with-systemd.end	3.7.290	2018-02-18_23:07:16_CST uadmin six-rpi3b.cptx86.com 3.6-23-gccdac10 
+#	   New release, ready for production 
 #
 ###	Configure dockerd (systemd) on Ubuntu 16.04
 #

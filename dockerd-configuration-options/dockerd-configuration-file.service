@@ -1,8 +1,6 @@
 #
-#	dockerd-configuration-file.service	1.1	2018-01-13_19:35:08_CST uadmin rpi3b-four.cptx86.com
-#	changed Documentation to correct location
-#	dockerd-configuration-file.service	1.0	2018-01-13_11:25:24_CST uadmin rpi3b-four.cptx86.com
-#	Initial commit
+#	dockerd-configuration-file.service	3.7.290	2018-02-18_23:07:16_CST uadmin six-rpi3b.cptx86.com 3.6-23-gccdac10 
+#	   New release, ready for production 
 #
 [Unit]
 Description=dockerd-configuration-file.service

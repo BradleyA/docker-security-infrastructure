@@ -1,6 +1,6 @@
 # dockerd-configuration-options
-
-
+#	README.md	3.7.290	2018-02-18_23:07:16_CST uadmin six-rpi3b.cptx86.com 3.6-23-gccdac10 
+#	   New release, ready for production 
 
 Goal is to use one dockerd configuration file with dockerd flags for both Ubuntu 16.04 (systemd) and Ubuntu 14.04 (Upstart) other than /etc/docker/daemon.json.  
 
@@ -10,6 +10,7 @@ Running setup-dockerd.sh will move files into /etc/docker and create or update t
 
 This has not been tested for other Linux OS's but should work.  Let me know if you use it on other Linus OS's.
 
+##### WARNING: These instructions are incomplete. Consider them as notes quickly drafted on a napkin rather than proper documentation!
 ## Install
 To install, change directory to the location you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have git then enter; "sudo apt-get install git". On the github page of this script use the "HTTPS clone URL" with the 'git clone' command.
 

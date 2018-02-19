@@ -1,6 +1,6 @@
 #!/bin/bash
-#	start-dockerd-with-systemd.sh-begin	1.0	2018-01-13_18:51:11_CST uadmin rpi3b-four.cptx86.com
-#	Initial commit
+#	start-dockerd-with-systemd.begin	3.7.290	2018-02-18_23:07:16_CST uadmin six-rpi3b.cptx86.com 3.6-23-gccdac10 
+#	   New release, ready for production 
 #
 #	set -v
 #	set -x
