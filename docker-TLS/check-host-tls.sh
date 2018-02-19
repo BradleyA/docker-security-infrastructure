@@ -1,10 +1,10 @@
 #!/bin/bash
+# 	check-host-tls.sh	3.7.291	2018-02-18_23:16:00_CST uadmin six-rpi3b.cptx86.com 3.7 
+# 	   New release, ready for production 
 # 	check-host-tls.sh	3.6.286	2018-02-15_13:21:37_CST uadmin six-rpi3b.cptx86.com 3.6-19-g7e77a24 
 # 	   added --version and -v close #9 
 #	check-host-tls.sh	3.6.276	2018-02-10_19:26:37_CST uadmin six-rpi3b.cptx86.com 3.6-9-g8424312 
 #	docker-scripts/docker-TLS; modify format of display_help; closes #6 
-#	check-host-tls.sh	3.4	2018-02-01_17:18:43_CST uadmin six-rpi3b.cptx86.com
-#	added logic for display_help()
 #
 #	set -x
 #	set -v

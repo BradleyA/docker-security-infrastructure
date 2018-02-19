@@ -1,14 +1,10 @@
 #!/bin/bash
+# 	copy-host-2-remote-host.sh	3.7.291	2018-02-18_23:16:00_CST uadmin six-rpi3b.cptx86.com 3.7 
+# 	   New release, ready for production 
 # 	copy-host-2-remote-host.sh	3.6.286	2018-02-15_13:21:37_CST uadmin six-rpi3b.cptx86.com 3.6-19-g7e77a24 
 # 	   added --version and -v close #9 
 #	copy-host-2-remote-host.sh	3.6.276	2018-02-10_19:26:37_CST uadmin six-rpi3b.cptx86.com 3.6-9-g8424312 
 #	docker-scripts/docker-TLS; modify format of display_help; closes #6 
-#	./copy-host-2-remote-host.sh	3.2	2018-02-02_21:57:45_CST uadmin six-rpi3b.cptx86.com
-#	Finished first round of testing
-#	copy-host-2-remote-host.sh	3.1	2018-02-02_19:39:51_CST uadmin six-rpi3b.cptx86.com
-#	first cut at entering code before testing
-#	copy-host-2-remote-host.sh	1.0	2018-02-02_14:46:10_CST uadmin six-rpi3b.cptx86.com
-#	initial commit
 #
 #	set -x
 #	set -v

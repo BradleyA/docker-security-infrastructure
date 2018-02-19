@@ -1,16 +1,10 @@
 #!/bin/bash
+# 	check-user-tls.sh	3.7.291	2018-02-18_23:16:00_CST uadmin six-rpi3b.cptx86.com 3.7 
+# 	   New release, ready for production 
 # 	check-user-tls.sh	3.6.286	2018-02-15_13:21:37_CST uadmin six-rpi3b.cptx86.com 3.6-19-g7e77a24 
 # 	   added --version and -v close #9 
 #	check-user-tls.sh	3.6.276	2018-02-10_19:26:37_CST uadmin six-rpi3b.cptx86.com 3.6-9-g8424312 
 #	docker-scripts/docker-TLS; modify format of display_help; closes #6 
-#	check-user-tls.sh	3.4	2018-02-01_18:57:23_CST uadmin six-rpi3b.cptx86.com
-#	added logic for display_help()
-#	./check-user-tls.sh	1.2	2018-01-28_22:51:08_CST uadmin four-rpi3b.cptx86.com
-#	tested files & dir check & correct section permissions
-#	check-user-tls.sh	1.1	2018-01-28_15:25:06_CST uadmin four-rpi3b.cptx86.com
-#	add section to check file permissions and correct if not correct ${USERHOME}${TLSUSER}/.docker
-#	check-user-tls.sh	1.0	2018-01-25_21:46:22_CST uadmin rpi3b-four.cptx86.com
-#	change logic to allow user to check own certs without being root
 #
 #	set -x
 #	set -v

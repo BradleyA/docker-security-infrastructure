@@ -1,16 +1,10 @@
 #!/bin/bash
+# 	create-host-tls.sh	3.7.291	2018-02-18_23:16:00_CST uadmin six-rpi3b.cptx86.com 3.7 
+# 	   New release, ready for production 
 # 	create-host-tls.sh	3.6.286	2018-02-15_13:21:37_CST uadmin six-rpi3b.cptx86.com 3.6-19-g7e77a24 
 # 	   added --version and -v close #9 
 #	create-host-tls.sh	3.6.276	2018-02-10_19:26:37_CST uadmin six-rpi3b.cptx86.com 3.6-9-g8424312 
 #	docker-scripts/docker-TLS; modify format of display_help; closes #6 
-#	create-host-tls.sh	3.4	2018-02-01_19:31:40_CST uadmin six-rpi3b.cptx86.com
-#	added logic for display_help()
-#	create-host-tls.sh	3.3	2018-01-31_09:08:41_CST uadmin six-rpi3b.cptx86.com
-#	Improve user feed back messages
-#	create-host-tls.sh	3.2	2018-01-31_07:18:02_CST uadmin six-rpi3b.cptx86.com
-#	during testing added more checks for files and directories
-#	create-host-tls	3.1	2017-12-18_20:16:56_CST uthree
-#	Adding version number
 #
 #	set -x
 #	set -v

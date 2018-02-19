@@ -1,18 +1,10 @@
 #!/bin/bash
+# 	copy-user-2-remote-host.sh	3.7.291	2018-02-18_23:16:00_CST uadmin six-rpi3b.cptx86.com 3.7 
+# 	   New release, ready for production 
 # 	copy-user-2-remote-host.sh	3.6.286	2018-02-15_13:21:37_CST uadmin six-rpi3b.cptx86.com 3.6-19-g7e77a24 
 # 	   added --version and -v close #9 
 #	copy-user-2-remote-host.sh	3.6.276	2018-02-10_19:26:37_CST uadmin six-rpi3b.cptx86.com 3.6-9-g8424312 
 #	docker-scripts/docker-TLS; modify format of display_help; closes #6 
-#	copy-user-2-remote-host.sh	3.5	2018-02-01_15:58:23_CST uadmin six-rpi3b.cptx86.com
-#	all known use cases tested, no known issues
-#	./copy-user-2-remote-host.sh	3.4	2018-02-01_13:12:19_CST uadmin six-rpi3b.cptx86.com
-#	added logic for display_help()
-#	./copy-user-2-remote-host.sh	3.3	2018-02-01_12:34:08_CST uadmin six-rpi3b.cptx86.com
-#	debug complete for admin user copy user TLS keys to remote system ~/.docker
-#	copy-user-remote-host.sh	3.2	2018-01-25_23:23:05_CST uadmin rpi3b-four.cptx86.com
-#	changed variable names and added test login, need alot of testing
-#	copy-user-remote-host	3.1	2017-12-19_15:32:23_CST utwo two.cptx86.com
-#	Adding version number and upload latest
 #
 #	set -x
 #	set -v
