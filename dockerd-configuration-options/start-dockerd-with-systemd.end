@@ -4,8 +4,8 @@
 #
 ###	Configure dockerd (systemd) on Ubuntu 16.04
 #
-#	Any changes to dockerd-configuration-file will be added to the override file during 
-#		the next boot or when ${START_SYSTEMD_SCRIPT} is run.
+#	Any changes to dockerd-configuration-file will be added to the override
+#	file during the next boot or when ${START_SYSTEMD_SCRIPT} is run.
 #
 DROP_IN_DIRECTORY="/etc/systemd/system/docker.service.d"
 OVERRIDE_FILE="10-override"

@@ -6,10 +6,11 @@
 #
 ##### 	Date last modified:	1/22/2018
 #       
-#       After modifying this file by, edit /etc/docker/dockerd-configuration-file
+#       After modifying this file, edit /etc/docker/dockerd-configuration-file
 #       Run sudo /etc/docker/setup-dockerd.sh
-#		To move you changes into /etc/systemd/system/docker.service.d/10-override.conf file (Ubuntu 16.04, systemd)
-#		and /etc/default/docker file (Ubuntu 14.04, Upstart).
+#	   To move your changes into
+#	   /etc/systemd/system/docker.service.d/10-override.conf file (systemd)
+#	   and /etc/default/docker file (Ubuntu 14.04, Upstart).
 #
 #####	Do any local configuration here
 #
