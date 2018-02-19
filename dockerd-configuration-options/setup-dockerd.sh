@@ -1,44 +1,39 @@
 #!/bin/bash
-#	setup-dockerd.sh	2.6	2018-02-01_21:29:23_CST uadmin six-rpi3b.cptx86.com
-#	added logic for display_help()
-#	setup-dockerd.sh	1.5	2018-01-21_18:23:49_CST uadmin rpi3b-four.cptx86.com
-#	cleanup echo statements
-#	setup-dockerd.sh	1.46	2018-01-15_19:26:41_CST uadmin rpi3b-four.cptx86.com
-#	completed first edits for Configure dockerd (systemd) on Ubuntu 16.04 section
-#	setup-dockerd.sh	1.45	2018-01-14_21:23:20_CST uadmin rpi3b-four.cptx86.com
-#	subtract 1 from ${LINE}
-#	setup-dockerd.sh	1.44	2018-01-14_19:56:17_CST uadmin rpi3b-four.cptx86.com
-#	rework move files section to check if files already moved
-#	setup-dockerd.sh	1.43	2018-01-14_16:10:18_CST uadmin rpi3b-four.cptx86.com
-#	change quotes around string on if [ grep ] line
-#	setup-dockerd.sh	1.42	2018-01-14_14:05:44_CST uadmin rpi3b-four.cptx86.com
-#	correct errors during debug run
-#	setup-dockerd.sh	1.41	2018-01-14_09:37:25_CST uadmin rpi3b-four.cptx86.com
-#	correct systax of if ; then ; else
-#	setup-dockerd.sh	1.4	2018-01-14_09:26:57_CST uadmin rpi3b-four.cptx86.com
-#	update format of echo statements
-#	setup-dockerd.sh	1.3	2018-01-14_09:04:21_CST uadmin rpi3b-four.cptx86.com
-#	added code to check if script is being run as root and move files into /etc/docker
-#	setup-dockerd.sh	1.1	2018-01-13_20:14:44_CST uadmin rpi3b-four.cptx86.com
-#	complete Initial work and ready for testing
-#	setup-dockerd.sh	1.0	2018-01-13_11:26:31_CST uadmin rpi3b-four.cptx86.com
-#	Initial commit
 #
 #	set -v
 #	set -x
 #
 display_help() {
-echo -e "\n"
-echo    "This script uses three arguements;"
-echo    "  WORK_DIRECTORY - working directory, default is /etc/docker/"
-echo    "  UPSTART_SYSVINIT_DIRECTORY - Ubuntu 14.04 (Upstart) directory, default is /etc/default/"
-echo    "  CONFIGURATION_STRING - , default is Custom_dockerd_Configuration_File"
-echo -e "Documentation: https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options\n"
-echo -e "Example:\t${0}"
+echo -e "\n${0} - setup system to support dockerd on Systemd and Upstart."
+echo -e "\nUSAGE\n   sudo ${0} "
+echo    "   sudo ${0} [--help | -help | help | -h | h | -? | ?] [--version | -v]"
+echo -e "\nDESCRIPTION\nThis script has to be run as root to move files into /etc/docker and create"
+echo    "or update the /etc/systemd/system/docker.service.d/10-override.conf"
+echo    "file (Ubuntu 16.04, systemd) and the /etc/default/docker (Ubuntu"
+echo    "14.04, Upstart). To change the docker daemon flags, sudo edit"
+echo    "/etc/docker/dockerd-configuration-file and run sudo"
+echo    "/etc/docker/setup-dockerd.sh. Docker daemon flag changes can be"
+echo    "distributed to any Ubuntu cluster that use systemd or upstart by"
+echo    "copying /etc/docker/dockerd-configuration-file to each system and"
+echo    "running sudo /etc/docker/setup-dockerd.sh on each system."
+echo -e "\nOPTIONS"
+echo    "   WORK_DIRECTORY             . working directory,"
+echo    "                                default is /etc/docker/"
+echo    "   UPSTART_SYSVINIT_DIRECTORY   Ubuntu 14.04 (Upstart) directory,"
+echo    "                                default is /etc/default/"
+echo    "   CONFIGURATION_STRING         >> NEED TO COMPLETE <<<,"
+echo    "                                default is Custom_dockerd_Configuration_File"
+echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options"
+echo -e "\nEXAMPLES\n   >>> NEED TO COMPLETE Example description goes here <<< "
+echo -e "\tsudo ${0}\n"
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
 	exit 0
+fi
+if [ "$1" == "--version" ] || [ "$1" == "-v" ] ; then
+        head -2 ${0} | awk {'print$2"\t"$3'}
+        exit 0
 fi
 ###
 WORK_DIRECTORY=${1:-/etc/docker/}
