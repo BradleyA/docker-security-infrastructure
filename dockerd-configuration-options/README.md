@@ -28,13 +28,13 @@ If you are using systemd, run the following to; enable two docker services on bo
     sudo systemctl enable docker
     sudo systemctl restart docker
 
-#### Note: The default in this configuration (/etc/docker/dockerd-configuration-file) uses requires docker TLS.  Here are the scripts to help you setup [docker-TLS](https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS).
+#### Note: The default in this dockerd configuration (/etc/docker/dockerd-configuration-file) requires docker TLS.  Here are the scripts to help you setup [docker-TLS](https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS).  If you are using docker without TLS then remove the --tls flags from dockerd-configuration-file.  See the steps below:
 
-Edit dockerd-configuration-file, change the [dockerd flags](https://docs.docker.com/engine/reference/commandline/dockerd/) to the flags your dockerd environment requires.  This file, dockerd-configuration-file, is an example.  It is what I am currently using.  You will want to remove --data-root=/usr/local/docker flag if you are using the default location (/var/lib/docker) or change it to your root of the Docker.  You will want to change the address of the local dns server (--dns 192.168.1.202) to your dns server address.  If you do not have [TLS CA certificates](https://docs.docker.com/engine/security/https/) setup or in a different location or using different names then you will want to remove or change those flag.  If you have not used --userns-remap=default before you WILL want to remove this flag until you read more about this security feature.
+Edit dockerd-configuration-file, change the [dockerd flags](https://docs.docker.com/engine/reference/commandline/dockerd/) to the flags your dockerd environment requires.  This file, dockerd-configuration-file, is an example.  It is what I am currently using.  You will want to remove --data-root=/usr/local/docker flag if you are using the default location (/var/lib/docker) or change it to your root of Docker.  You will want to change the address of the local dns server (--dns 192.168.1.202) to your dns server address.  If you do not have [TLS CA certificates](https://docs.docker.com/engine/security/https/) setup or in a different location or using different names then you will want to remove or change those --tls flag.  If you have not used --userns-remap=default before you WILL want to remove this flag until you read more about this security feature.
 
     edit dockerd-configuration-file
 
-After editing the dockerd-configuration-file with your dockerd flags, run sudo ./setup-dockerd.sh.  It will move all the required files including setup-dockerd.sh into the /etc/docker and /etc/systemd/system/ directories.  The next time you want to make a change to your dockerd flags use sudo edit /etc/docker/dockerd-configuration-file and then sudo /etc/docker/setup-dockerd.sh.  
+After editing the dockerd-configuration-file with your dockerd flags, run sudo /etc/docker/setup-dockerd.sh.  It will move all the required files including setup-dockerd.sh into the /etc/docker and /etc/systemd/system/ directories.  The next time you want to make a change to your dockerd flags use sudo edit /etc/docker/dockerd-configuration-file and then sudo /etc/docker/setup-dockerd.sh.  
     
     sudo ./setup-dockerd.sh
 
@@ -54,11 +54,9 @@ After editing the dockerd-configuration-file with your dockerd flags, run sudo .
 
 #### WARNING: These instructions are incomplete. Consider them as notes quickly drafted on a napkin rather than proper documentation!
 
-### Note:
-#### Need to clean this up 
-Comment: May need to add code in near the end of setup-dockerd.sh script because it calls systemctl daemon-reload and that may error on Ubuntu 14.04, it has not yet but needs more testing
-
-Comment: add steps about updating dockerd flags and pushing the changes out, include commands and output
+### Note:  Need to clean this up 
+    Comment: May need to add code near the end of setup-dockerd.sh script because it calls systemctl daemon-reload and that may error on Ubuntu 14.04, it has not yet but needs more testing
+    Comment: add steps about updating dockerd flags and pushing the changes out, include commands and output
 
 #### System OS script tested
  * Ubuntu 14.04.3 LTS
@@ -66,7 +64,7 @@ Comment: add steps about updating dockerd flags and pushing the changes out, inc
 
 #### Design Principles
  * Have a simple setup process and a minimal learning curve
- * Be usable as non-root - [failed- must us sudo ]
+ * Be usable as non-root - [failed- must use sudo ]
  * Be easy to install and configure
 
 ## License::
