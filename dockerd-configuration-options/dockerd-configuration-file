@@ -1,4 +1,6 @@
 ###	Custom_dockerd_Configuration_File
+#	dockerd-configuration-file	3.8.304	2018-02-19_20:26:27_CST uadmin six-rpi3b.cptx86.com 3.7-13-g5018397 
+#	   dockerd-configuration-options change _ to - in XOS 
 #	dockerd-configuration-file	3.7.290	2018-02-18_23:07:16_CST uadmin six-rpi3b.cptx86.com 3.6-23-gccdac10 
 #	   New release, ready for production 
 #
@@ -72,7 +74,7 @@ DOCKER_OPTS="\
         --label XHOST=`hostname` \
         --label XHOSTFQDN=`hostname --fqdn` \
         --label XIPADDRESS=`hostname --ip-address | awk '{ print $1 }'` \
-        --label XOS=`lsb_release -d | awk '{ print $2"_"$3"_"$4 }'` \
+        --label XOS=`lsb_release -d | awk '{ print $2"-"$3"-"$4 }'` \
         --label XCPUARCHITECTURE=`lscpu | grep "Architecture" | awk '{ print $2 }'` \
         --label XCPUAMOUNT=`lscpu | grep "^CPU(s):" | awk '{ print $2 }'` \
         --label XSECURITY=namespace-control \
