@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	check-user-tls.sh	3.10.311	2018-02-20_16:07:47_CST uadmin six-rpi3b.cptx86.com 3.9-4-g2cf76f8 
+# 	   added file check for ca.pem, cert.pem, key.pem; closes #8 
 # 	check-user-tls.sh	3.7.291	2018-02-18_23:16:00_CST uadmin six-rpi3b.cptx86.com 3.7 
 # 	   New release, ready for production 
 # 	check-user-tls.sh	3.6.286	2018-02-15_13:21:37_CST uadmin six-rpi3b.cptx86.com 3.6-19-g7e77a24 
@@ -38,7 +40,7 @@ fi
 ###
 TLSUSER=${1:-${USER}}
 USERHOME=${2:-/home/}
-#	Root is required to check other users or user can check own certs
+#	Root is required to check other users or user can check their own certs
 if ! [ $(id -u) = 0 -o ${USER} = ${TLSUSER} ] ; then
 	display_help
 	echo "${0} ${LINENO} [ERROR]:   Use sudo ${0}  ${TLSUSER}"	1>&2
@@ -54,7 +56,22 @@ fi
 #	Check if user has .docker directory
 if [ ! -d ${USERHOME}${TLSUSER}/.docker ] ; then 
 	display_help
-	echo -e "${0} ${LINENO} [ERROR]:	${TLSUSER} does not have a .docker directory"	1>&2
+	echo -e "\n${0} ${LINENO} [ERROR]:	${TLSUSER} does not have a .docker directory"	1>&2
+	exit 1
+fi
+#	Check if user has .docker ca.pem file
+if [ ! -e ${USERHOME}${TLSUSER}/.docker/ca.pem ] ; then 
+	echo -e "\n${0} ${LINENO} [ERROR]:	${TLSUSER} does not have a .docker/ca.pem file"	1>&2
+	exit 1
+fi
+#	Check if user has .docker cert.pem file
+if [ ! -e ${USERHOME}${TLSUSER}/.docker/cert.pem ] ; then 
+	echo -e "\n${0} ${LINENO} [ERROR]:	${TLSUSER} does not have a .docker/cert.pem file"	1>&2
+	exit 1
+fi
+#	Check if user has .docker key.pem file
+if [ ! -e ${USERHOME}${TLSUSER}/.docker/key.pem ] ; then 
+	echo -e "\n${0} ${LINENO} [ERROR]:	${TLSUSER} does not have a .docker/key.pem file"	1>&2
 	exit 1
 fi
 #	View user certificate expiration date of ca.pem file
@@ -77,6 +94,7 @@ echo -e "If only one line of output is returned then the public key matches the 
 echo    "Verify that user certificate was issued by the CA."
 openssl verify -verbose -CAfile ${USERHOME}${TLSUSER}/.docker/ca.pem ${USERHOME}${TLSUSER}/.docker/cert.pem
 #	Verify and correct file permissions for ${USERHOME}${TLSUSER}/.docker/ca.pem
+echo    "Verify and correct file permissions for ${USERHOME}${TLSUSER}/.docker"
 if [ $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker/ca.pem) != 444 ]; then
 	echo -e "${0} ${LINENO} [ERROR]:	File permissions for ${USERHOME}${TLSUSER}/.docker/ca.pem\n\tare not 444.  Correcting $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker/ca.pem) to 0444 file permissions"	1>&2
 	chmod 0444 ${USERHOME}${TLSUSER}/.docker/ca.pem
@@ -96,6 +114,7 @@ if [ $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker) != 700 ]; then
 	echo -e "${0} ${LINENO} [ERROR]:	Directory permissions for ${USERHOME}${TLSUSER}/.docker\n\tare not 700.  Correcting $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker) to 700 directory permissions"	1>&2
 	chmod 700 ${USERHOME}${TLSUSER}/.docker
 fi
+echo -e "\n${0} ${LINENO} [INFO]:	Done.\n"	1>&2
 #
 #	May want to create a version of this script that automates this process for SRE tools,
 #		but keep this script for users to run manually,
