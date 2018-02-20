@@ -22,7 +22,7 @@ If you are using upstart, run the following for dockerd to read /etc/default/doc
     
     sudo service docker restart
 
-If you are using systemd, run the following to; enable two docker services on boot and restart dockerd.
+If you are using systemd, run the following to enable two docker services on each boot and restart dockerd.
     
     sudo systemctl enable dockerd-configuration-file.service
     sudo systemctl enable docker
