@@ -155,20 +155,20 @@ Run this script for each host that requires a new Docker public and private TLS 
 ## Usage
 An administration user can run this script to copy user public, private TLS keys, and CA to a remote host.
 
-    ./copy-user-2-remote-host.sh <user> <remotehost> 
+    ./copy-user-2-remote-host-tls.sh <user> <remotehost> 
     
 ## Output
-    $ ./copy-user-2-remote-host.sh sally two.cptx86.com
-    ./copy-user-2-remote-host.sh 75 [INFO]:	uadmin may receive password and
+    $ ./copy-user-2-remote-host-tls.sh sally two.cptx86.com
+    ./copy-user-2-remote-host-tls.sh 75 [INFO]:	uadmin may receive password and
 	passphrase prompt from two.cptx86.com. Running
 	ssh-copy-id uadmin@two.cptx86.com may stop the prompts.
 	#################################################
 	#         All connections are monitored         #
 	#################################################
     Connection to two.cptx86.com closed.
-    ./copy-user-2-remote-host.sh 77 [INFO]:	Create directory, change
+    ./copy-user-2-remote-host-tls.sh 77 [INFO]:	Create directory, change
 	file permissions, and copy TLS keys to sally@two.cptx86.com.
-    ./copy-user-2-remote-host.sh 90 [INFO]:	Transfer TLS keys to sally@two.cptx86.com.
+    ./copy-user-2-remote-host-tls.sh 90 [INFO]:	Transfer TLS keys to sally@two.cptx86.com.
 	#################################################
 	#         All connections are monitored         #
 	#################################################
@@ -185,17 +185,17 @@ An administration user can run this script to copy user public, private TLS keys
 	correct shell if different) and append the following two lines.
 	export DOCKER_HOST=tcp://`hostname -f`:2376
 	export DOCKER_TLS_VERIFY=1
-    ./copy-user-2-remote-host.sh 109 [INFO]:	Done.
+    ./copy-user-2-remote-host-tls.sh 109 [INFO]:	Done.
 
 ## Usage
 An administration user can run this script to copy host public, private TLS keys, and CA to a remote host.
 
-    ./copy-host-2-remote-host.sh <remote-host>
+    ./copy-host-2-remote-host-tls.sh <remote-host>
 
 ## Output
 
-     $ ./copy-host-2-remote-host.sh one-rpi3b.cptx86.com
-     ./copy-host-2-remote-host.sh 71 [INFO]:	uadmin may receive password and
+     $ ./copy-host-2-remote-host-tls.sh one-rpi3b.cptx86.com
+     ./copy-host-2-remote-host-tls.sh 71 [INFO]:	uadmin may receive password and
 	passphrase prompt from one-rpi3b.cptx86.com. Running ssh-copy-id
 	uadmin@one-rpi3b.cptx86.com may stop the prompts.
 	#################################################
@@ -206,13 +206,13 @@ An administration user can run this script to copy host public, private TLS keys
 	#         All connections are monitored         #
 	#################################################
     Connection to one-rpi3b.cptx86.com closed.
-    ./copy-host-2-remote-host.sh 102 [INFO]: Transfer TLS keys to
+    ./copy-host-2-remote-host-tls.sh 102 [INFO]: Transfer TLS keys to
 	one-rpi3b.cptx86.com.
 	#################################################
 	#         All connections are monitored         #
 	#################################################
     one-rpi3b.cptx86.com2018-02-05-08-46-39-CST.tar                      100%   20KB  20.0KB/s   00:00
-    ./copy-host-2-remote-host.sh 107 [INFO]:	Create dockerd certification
+    ./copy-host-2-remote-host-tls.sh 107 [INFO]:	Create dockerd certification
 	directory on one-rpi3b.cptx86.com
 	#################################################
 	#         All connections are monitored         #
@@ -231,7 +231,7 @@ An administration user can run this script to copy host public, private TLS keys
 	If dockerd is already using TLS certifications then:
 	Ubuntu 16.04 (systemd) sudo systemctl restart docker
 	Ubuntu 14.04 (systemd) sudo service docker restart
-	./copy-host-2-remote-host.sh 125 [INFO]:	Done.
+	./copy-host-2-remote-host-tls.sh 125 [INFO]:	Done.
 
 ## Usage
 A user can check their public, private keys, and CA in $HOME/.docker or a user can check other users certificates by using sudo.
