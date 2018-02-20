@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	setup-dockerd.sh	3.9.306	2018-02-19_22:32:18_CST uadmin six-rpi3b.cptx86.com 3.8-1-gd07d521 
+# 	   docker-scripts//dockerd-configuration-options; modify format of display_help close #7 
 # 	setup-dockerd.sh	3.7.290	2018-02-18_23:07:16_CST uadmin six-rpi3b.cptx86.com 3.6-23-gccdac10 
 # 	   New release, ready for production 
 #
@@ -19,14 +21,14 @@ echo    "distributed to any Ubuntu cluster that use systemd or upstart by"
 echo    "copying /etc/docker/dockerd-configuration-file to each system and"
 echo    "running sudo /etc/docker/setup-dockerd.sh on each system."
 echo -e "\nOPTIONS"
-echo    "   WORK_DIRECTORY             . working directory,"
+echo    "   WORK_DIRECTORY               working directory,"
 echo    "                                default is /etc/docker/"
 echo    "   UPSTART_SYSVINIT_DIRECTORY   Ubuntu 14.04 (Upstart) directory,"
 echo    "                                default is /etc/default/"
-echo    "   CONFIGURATION_STRING         >> NEED TO COMPLETE <<<,"
-echo    "                                default is Custom_dockerd_Configuration_File"
+#	echo    "   CONFIGURATION_STRING   >> no use case currently, future development <<<"
+#	echo    "                          default is Custom_dockerd_Configuration_File"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options"
-echo -e "\nEXAMPLES\n   >>> NEED TO COMPLETE Example description goes here <<< "
+echo -e "\nEXAMPLES\n   After editing /etc/docker/dockerd-configuration-file, run"
 echo -e "\tsudo ${0}\n"
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
