@@ -1,6 +1,4 @@
 # dockerd-configuration-options
-#	README.md	3.9.306	2018-02-19_22:32:18_CST uadmin six-rpi3b.cptx86.com 3.8-1-gd07d521 
-#	   docker-scripts//dockerd-configuration-options; modify format of display_help close #7 
 
 Goal is to use one dockerd configuration file with dockerd flags for both Ubuntu 16.04 (systemd) and Ubuntu 14.04 (Upstart) other than /etc/docker/daemon.json.  
 
