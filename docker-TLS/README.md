@@ -13,9 +13,9 @@ check-user-tls.sh - A user can check their public, private keys, and CA in $HOME
 
 check-host-tls.sh - An administration user can check a host public, private keys, and CA in /etc/docker/certs.d/daemon by using sudo.
 
-copy-user-2-remote-host.sh - An administration user can run this script to copy user public, private TLS keys, and CA to a remote host.
+copy-user-2-remote-host-tls.sh - An administration user can run this script to copy user public, private TLS keys, and CA to a remote host.
 
-copy-host-2-remote-host.sh - An administration user can run this script to copy host public, private TLS keys, and CA to a remote host.
+copy-host-2-remote-host-tls.sh - An administration user can run this script to copy host public, private TLS keys, and CA to a remote host.
 
 ## Install
 To install, change to the directory you want to download the scripts. 
