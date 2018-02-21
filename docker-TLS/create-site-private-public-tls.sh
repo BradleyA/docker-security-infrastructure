@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	create-site-private-public-tls.sh	3.11.312	2018-02-20_19:14:15_CST uadmin six-rpi3b.cptx86.com 3.10 
+# 	   create-site-private-public-tls.sh add error code and exit for entering wrong passphrase; closes #3 
 # 	create-site-private-public-tls.sh	3.7.291	2018-02-18_23:16:00_CST uadmin six-rpi3b.cptx86.com 3.7 
 # 	   New release, ready for production 
 # 	create-site-private-public-tls.sh	3.6.286	2018-02-15_13:21:37_CST uadmin six-rpi3b.cptx86.com 3.6-19-g7e77a24 
@@ -57,11 +59,11 @@ chmod 0700 ${USERHOME}${ADMTLSUSER}/.docker
 cd         ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private
 #	Check if ca-priv-key.pem file exists
 if [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem ] ; then
-	echo -e "${0} ${LINENO} [ERROR]:	Site private key\n\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem\n\talready exists, renaming existing site private key."   1>&2
+	echo -e "${0} ${LINENO} [WARN]:	Site private key\n\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem\n\talready exists, renaming existing site private key."   1>&2
 	mv ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
 fi
 echo -e "\n${0} ${LINENO} [INFO]:	Creating private key with passphrase in ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private"	1>&2
-openssl genrsa -aes256 -out ca-priv-key.pem 4096
+openssl genrsa -aes256 -out ca-priv-key.pem 4096  || { echo -e "\n${0} ${LINENO} [ERROR]:   Pass phrase does not match." ; exit 1; }
 chmod 0400 ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem
 echo -e "\nOnce all the certificates and keys have been generated with this private key,"
 echo    "it would be prudent to move the private key to a Universal Serial Bus (USB)"
@@ -81,13 +83,14 @@ echo -e "Email Address ()\n"
 cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
 #       Check if ca.pem file exists
 if [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/ca.pem ] ; then
-        echo -e "${0} ${LINENO} [ERROR]:	Site CA ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/ca.pem\n\talready exists, renaming existing site CA"   1>&2
+        echo -e "${0} ${LINENO} [WARN]:	Site CA ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/ca.pem\n\talready exists, renaming existing site CA"   1>&2
 	mv ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/ca.pem ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/ca.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
 fi
-openssl req -x509 -days ${NUMBERDAYS} -sha256 -new -key .private/ca-priv-key.pem -out ca.pem
+openssl req -x509 -days ${NUMBERDAYS} -sha256 -new -key .private/ca-priv-key.pem -out ca.pem || { echo -e "\n${0} ${LINENO} [ERROR]:   Incorrect pass phrase for .private/ca-priv-key.pem." ; exit 1; }
 chmod 0444 ca.pem
 echo -e "\n${0} ${LINENO} [INFO]:	These certificate\n\tare valid for ${NUMBERDAYS} days.\n"	1>&2
 echo    "It would be prudent to document the date when to renew these certificates and"
 echo    "set an operations or project management calendar entry about 15 days before"
 echo -e "renewal as a reminder to schedule a new site certificate or open a work\nticket."
+echo -e "\n${0} ${LINENO} [INFO]:	Done.\n"	1>&2
 ###
