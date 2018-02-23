@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	check-user-tls.sh	3.12.313	2018-02-23_12:52:05_CST uadmin three-rpi3b.cptx86.com 3.11 
+# 	   check-user-tls.sh added error message for User certificate NOT issued by CA and BOLD test messages 
 # 	check-user-tls.sh	3.10.311	2018-02-20_16:07:47_CST uadmin six-rpi3b.cptx86.com 3.9-4-g2cf76f8 
 # 	   added file check for ca.pem, cert.pem, key.pem; closes #8 
 # 	check-user-tls.sh	3.7.291	2018-02-18_23:16:00_CST uadmin six-rpi3b.cptx86.com 3.7 
@@ -40,78 +42,81 @@ fi
 ###
 TLSUSER=${1:-${USER}}
 USERHOME=${2:-/home/}
+LOCALHOSTNAME=`hostname -f`
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
 #	Root is required to check other users or user can check their own certs
 if ! [ $(id -u) = 0 -o ${USER} = ${TLSUSER} ] ; then
 	display_help
-	echo "${0} ${LINENO} [ERROR]:   Use sudo ${0}  ${TLSUSER}"	1>&2
-	echo -e "\n>>   SCRIPT MUST BE RUN AS ROOT TO CHECK <another-user>/.docker DIRECTORY. <<\n"	1>&2
+	echo "${NORMAL}${0} ${LINENO} ${BOLD}[ERROR]${NORMAL}:   Use sudo ${0}  ${TLSUSER}"	1>&2
+	echo -e "${BOLD}\n>>   SCRIPT MUST BE RUN AS ROOT TO CHECK <another-user>/.docker DIRECTORY. <<\n${NORMAL}"	1>&2
 	exit 1
 fi
 #	Check if user has home directory on system
 if [ ! -d ${USERHOME}${TLSUSER} ] ; then 
 	display_help
-	echo -e "${0} ${LINENO} [ERROR]:	${TLSUSER} does not have a home directory\n\ton this system or ${TLSUSER} home directory is not ${USERHOME}${TLSUSER}"	1>&2
+	echo -e "${NORMAL}${0} ${LINENO} ${BOLD}[ERROR]${NORMAL}:	${TLSUSER} does not have a home directory\n\ton this system or ${TLSUSER} home directory is not ${USERHOME}${TLSUSER}"	1>&2
 	exit 1
 fi
 #	Check if user has .docker directory
 if [ ! -d ${USERHOME}${TLSUSER}/.docker ] ; then 
 	display_help
-	echo -e "\n${0} ${LINENO} [ERROR]:	${TLSUSER} does not have a .docker directory"	1>&2
+	echo -e "${NORMAL}\n${0} ${LINENO} ${BOLD}[ERROR]${NORMAL}:	${TLSUSER} does not have a .docker directory"	1>&2
 	exit 1
 fi
 #	Check if user has .docker ca.pem file
 if [ ! -e ${USERHOME}${TLSUSER}/.docker/ca.pem ] ; then 
-	echo -e "\n${0} ${LINENO} [ERROR]:	${TLSUSER} does not have a .docker/ca.pem file"	1>&2
+	echo -e "${NORMAL}\n${0} ${LINENO} ${BOLD}[ERROR]${NORMAL}:	${TLSUSER} does not have a .docker/ca.pem file"	1>&2
 	exit 1
 fi
 #	Check if user has .docker cert.pem file
 if [ ! -e ${USERHOME}${TLSUSER}/.docker/cert.pem ] ; then 
-	echo -e "\n${0} ${LINENO} [ERROR]:	${TLSUSER} does not have a .docker/cert.pem file"	1>&2
+	echo -e "${NORMAL}\n${0} ${LINENO} ${BOLD}[ERROR]${NORMAL}:	${TLSUSER} does not have a .docker/cert.pem file"	1>&2
 	exit 1
 fi
 #	Check if user has .docker key.pem file
 if [ ! -e ${USERHOME}${TLSUSER}/.docker/key.pem ] ; then 
-	echo -e "\n${0} ${LINENO} [ERROR]:	${TLSUSER} does not have a .docker/key.pem file"	1>&2
+	echo -e "${NORMAL}\n${0} ${LINENO} ${BOLD}[ERROR]${NORMAL}:	${TLSUSER} does not have a .docker/key.pem file"	1>&2
 	exit 1
 fi
 #	View user certificate expiration date of ca.pem file
-echo -e "\nView ${USERHOME}${TLSUSER}/.docker certificate expiration date of ca.pem file."
+echo -e "\n${NORMAL}View ${USERHOME}${TLSUSER}/.docker certificate ${BOLD}expiration date of ca.pem ${NORMAL}file."
 openssl x509 -in  ${USERHOME}${TLSUSER}/.docker/ca.pem -noout -enddate
 #	View user certificate expiration date of cert.pem file
-echo -e "\nView ${USERHOME}${TLSUSER}/.docker certificate expiration date of cert.pem file"
+echo -e "\nView ${USERHOME}${TLSUSER}/.docker certificate ${BOLD}expiration date of cert.pem ${NORMAL}file"
 openssl x509 -in ${USERHOME}${TLSUSER}/.docker/cert.pem -noout -enddate
 #	View user certificate issuer data of the ca.pem file.
-echo -e "\nView ${USERHOME}${TLSUSER}/.docker certificate issuer data of the ca.pem file."
+echo -e "\nView ${USERHOME}${TLSUSER}/.docker certificate ${BOLD}issuer data of the ca.pem ${NORMAL}file."
 openssl x509 -in ${USERHOME}${TLSUSER}/.docker/ca.pem -noout -issuer
 #	View user certificate issuer data of the cert.pem file.
-echo -e "\nView ${USERHOME}${TLSUSER}/.docker certificate issuer data of the cert.pem file."
+echo -e "\nView ${USERHOME}${TLSUSER}/.docker certificate ${BOLD}issuer data of the cert.pem ${NORMAL}file."
 openssl x509 -in ${USERHOME}${TLSUSER}/.docker/cert.pem -noout -issuer
 #	Verify that user public key in your certificate matches the public portion of your private key.
 echo -e "\nVerify that user public key in your certificate matches the public portion of your private key."
 (cd ${USERHOME}${TLSUSER}/.docker ; openssl x509 -noout -modulus -in cert.pem | openssl md5 ; openssl rsa -noout -modulus -in key.pem | openssl md5) | uniq
-echo -e "If only one line of output is returned then the public key matches the public portion of your private key.\n"
+echo -e "${BOLD}WARNING:${NORMAL}  -> If ONLY ONE line of output is returned then the public key matches the public portion of your private key.\n"
 #	Verify that user certificate was issued by the CA.
 echo    "Verify that user certificate was issued by the CA."
-openssl verify -verbose -CAfile ${USERHOME}${TLSUSER}/.docker/ca.pem ${USERHOME}${TLSUSER}/.docker/cert.pem
+openssl verify -verbose -CAfile ${USERHOME}${TLSUSER}/.docker/ca.pem ${USERHOME}${TLSUSER}/.docker/cert.pem  || { echo -e "${0} ${LINENO} ${BOLD}[ERROR]${NORMAL}:	User certificate for ${TLSUSER} on ${LOCALHOSTNAME} was NOT issued by CA." ; exit 1; }
 #	Verify and correct file permissions for ${USERHOME}${TLSUSER}/.docker/ca.pem
 echo    "Verify and correct file permissions for ${USERHOME}${TLSUSER}/.docker"
 if [ $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker/ca.pem) != 444 ]; then
-	echo -e "${0} ${LINENO} [ERROR]:	File permissions for ${USERHOME}${TLSUSER}/.docker/ca.pem\n\tare not 444.  Correcting $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker/ca.pem) to 0444 file permissions"	1>&2
+	echo -e "${0} ${LINENO} ${BOLD}[ERROR]${NORMAL}:	File permissions for ${USERHOME}${TLSUSER}/.docker/ca.pem\n\tare not 444.  Correcting $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker/ca.pem) to 0444 file permissions"	1>&2
 	chmod 0444 ${USERHOME}${TLSUSER}/.docker/ca.pem
 fi
 #	Verify and correct file permissions for ${USERHOME}${TLSUSER}/.docker/cert.pem
 if [ $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker/cert.pem) != 444 ]; then
-	echo -e "${0} ${LINENO} [ERROR]:	File permissions for ${USERHOME}${TLSUSER}/.docker/cert.pem\n\tare not 444.  Correcting $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker/cert.pem) to 0444 file permissions"	1>&2
+	echo -e "${0} ${LINENO} ${BOLD}[ERROR]${NORMAL}:	File permissions for ${USERHOME}${TLSUSER}/.docker/cert.pem\n\tare not 444.  Correcting $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker/cert.pem) to 0444 file permissions"	1>&2
 	chmod 0444 ${USERHOME}${TLSUSER}/.docker/cert.pem
 fi
 #	Verify and correct file permissions for ${USERHOME}${TLSUSER}/.docker/key.pem
 if [ $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker/key.pem) != 400 ]; then
-	echo -e "${0} ${LINENO} [ERROR]:	File permissions for ${USERHOME}${TLSUSER}/.docker/key.pem\n\tare not 400.  Correcting $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker/key.pem) to 0400 file permissions"	1>&2
+	echo -e "${0} ${LINENO} ${BOLD}[ERROR]${NORMAL}:	File permissions for ${USERHOME}${TLSUSER}/.docker/key.pem\n\tare not 400.  Correcting $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker/key.pem) to 0400 file permissions"	1>&2
 	chmod 0400 ${USERHOME}${TLSUSER}/.docker/key.pem
 fi
 #	Verify and correct directory permissions for ${USERHOME}${TLSUSER}/.docker directory
 if [ $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker) != 700 ]; then
-	echo -e "${0} ${LINENO} [ERROR]:	Directory permissions for ${USERHOME}${TLSUSER}/.docker\n\tare not 700.  Correcting $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker) to 700 directory permissions"	1>&2
+	echo -e "${0} ${LINENO} ${BOLD}[ERROR]${NORMAL}:	Directory permissions for ${USERHOME}${TLSUSER}/.docker\n\tare not 700.  Correcting $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker) to 700 directory permissions"	1>&2
 	chmod 700 ${USERHOME}${TLSUSER}/.docker
 fi
 echo -e "\n${0} ${LINENO} [INFO]:	Done.\n"	1>&2
