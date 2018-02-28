@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	create-site-private-public-tls.sh  3.14.315  2018-02-27_21:01:40_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.13  
+# 	   added BOLD and NORMAL with little testing 
 # 	create-site-private-public-tls.sh  3.13.314  2018-02-27_19:55:54_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.12  
 # 	   added version 
 # 	create-site-private-public-tls.sh	3.11.312	2018-02-20_19:14:15_CST uadmin six-rpi3b.cptx86.com 3.10 
@@ -47,10 +49,12 @@ fi
 NUMBERDAYS=${1:-730}
 USERHOME=${2:-/home/}
 ADMTLSUSER=${3:-${USER}}
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
 #	Check if admin user has home directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER} ] ; then
 	display_help
-	echo -e "${0} ${LINENO} [ERROR]:	${ADMTLSUSER} does not have a home directory\n\ton this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}"	1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	${ADMTLSUSER} does not have a home directory\n\ton this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}"	1>&2
 	exit 1
 fi
 #
@@ -61,11 +65,11 @@ chmod 0700 ${USERHOME}${ADMTLSUSER}/.docker
 cd         ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private
 #	Check if ca-priv-key.pem file exists
 if [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem ] ; then
-	echo -e "${0} ${LINENO} [WARN]:	Site private key\n\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem\n\talready exists, renaming existing site private key."   1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARN${NORMAL}]:	Site private key\n\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem\n\talready exists, renaming existing site private key."   1>&2
 	mv ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
 fi
-echo -e "\n${0} ${LINENO} [INFO]:	Creating private key with passphrase in ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private"	1>&2
-openssl genrsa -aes256 -out ca-priv-key.pem 4096  || { echo -e "\n${0} ${LINENO} [ERROR]:   Pass phrase does not match." ; exit 1; }
+echo -e "${NORMAL}\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Creating private key with passphrase in ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private"	1>&2
+openssl genrsa -aes256 -out ca-priv-key.pem 4096  || { echo -e "\n${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:   Pass phrase does not match." ; exit 1; }
 chmod 0400 ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem
 echo -e "\nOnce all the certificates and keys have been generated with this private key,"
 echo    "it would be prudent to move the private key to a Universal Serial Bus (USB)"
@@ -85,14 +89,14 @@ echo -e "Email Address ()\n"
 cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
 #       Check if ca.pem file exists
 if [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/ca.pem ] ; then
-        echo -e "${0} ${LINENO} [WARN]:	Site CA ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/ca.pem\n\talready exists, renaming existing site CA"   1>&2
+        echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARN${NORMAL}]:	Site CA ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/ca.pem\n\talready exists, renaming existing site CA"   1>&2
 	mv ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/ca.pem ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/ca.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
 fi
-openssl req -x509 -days ${NUMBERDAYS} -sha256 -new -key .private/ca-priv-key.pem -out ca.pem || { echo -e "\n${0} ${LINENO} [ERROR]:   Incorrect pass phrase for .private/ca-priv-key.pem." ; exit 1; }
+openssl req -x509 -days ${NUMBERDAYS} -sha256 -new -key .private/ca-priv-key.pem -out ca.pem || { echo -e "\n${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:   Incorrect pass phrase for .private/ca-priv-key.pem." ; exit 1; }
 chmod 0444 ca.pem
-echo -e "\n${0} ${LINENO} [INFO]:	These certificate\n\tare valid for ${NUMBERDAYS} days.\n"	1>&2
+echo -e "${NORMAL}\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	These certificate\n\tare valid for ${NUMBERDAYS} days.\n"	1>&2
 echo    "It would be prudent to document the date when to renew these certificates and"
 echo    "set an operations or project management calendar entry about 15 days before"
 echo -e "renewal as a reminder to schedule a new site certificate or open a work\nticket."
-echo -e "\n${0} ${LINENO} [INFO]:	Done.\n"	1>&2
+echo -e "${NORMAL}\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Done.\n"	1>&2
 ###

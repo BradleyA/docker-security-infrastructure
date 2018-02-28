@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	copy-host-2-remote-host-tls.sh  3.14.315  2018-02-27_21:01:40_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.13  
+# 	   added BOLD and NORMAL with little testing 
 # 	copy-host-2-remote-host-tls.sh  3.13.314  2018-02-27_19:55:54_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.12  
 # 	   added version 
 # 	copy-host-2-remote-host.sh	3.7.291	2018-02-18_23:16:00_CST uadmin six-rpi3b.cptx86.com 3.7 
@@ -48,16 +50,18 @@ REMOTEHOST=$1
 USERHOME=${2:-/home/}
 ADMTLSUSER=${3:-${USER}}
 SSHPORT=${4:-22}
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
 #	Check if admin user has home directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER} ] ; then
 	display_help
-	echo -e "${0} ${LINENO} [ERROR]:        ${ADMTLSUSER} does not have a home directory\n\ton this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}"	1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:        ${ADMTLSUSER} does not have a home directory\n\ton this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}"	1>&2
 	exit 1
 fi
 #	Check if ${USERHOME}${ADMTLSUSER}/.docker/docker-ca directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER}/.docker/docker-ca ] ; then
 	display_help
-	echo -e "${0} ${LINENO} [ERROR]:	default directory,"     1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	default directory,"     1>&2
 	echo -e "\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca,\n\tnot on system."  1>&2
 	echo -e "\tRunning create-site-private-public-tls.sh will create directories"
 	echo -e "\tand site private and public keys.  Then run sudo"
@@ -73,23 +77,23 @@ fi
 #	Check if ${REMOTEHOST} string length is zero
 if [ -z ${REMOTEHOST} ] ; then
 	display_help
-	echo -e "${0} ${LINENO} [ERROR]:	Remote host is required.\n"	1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	Remote host is required.\n"	1>&2
 	exit 1
 fi
 #	Check if ${REMOTEHOST}-priv-key.pem file on system
 if ! [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/${REMOTEHOST}-priv-key.pem ] ; then
 	display_help
-	echo -e "${0} ${LINENO} [ERROR]:	The ${REMOTEHOST}-priv-key.pem\n\tfile was not found in ${USERHOME}${ADMTLSUSER}/.docker/docker-ca."	1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	The ${REMOTEHOST}-priv-key.pem\n\tfile was not found in ${USERHOME}${ADMTLSUSER}/.docker/docker-ca."	1>&2
 	echo -e "\tRunning create-host-tls.sh will create public and private keys."
 	exit 1
 fi
 #	Check if ${REMOTEHOST} is available on port ${SSHPORT}
 if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
-	echo -e "${0} ${LINENO} [INFO]:	${ADMTLSUSER} may receive password and\n\tpassphrase prompts from ${REMOTEHOST}. Running ssh-copy-id\n\t${ADMTLSUSER}@${REMOTEHOST} may stop the prompts."
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	${ADMTLSUSER} may receive password and\n\tpassphrase prompts from ${REMOTEHOST}. Running ssh-copy-id\n\t${ADMTLSUSER}@${REMOTEHOST} may stop the prompts."
 #	Check if /etc/docker directory on ${REMOTEHOST}
 	if ! $(ssh -t ${ADMTLSUSER}@${REMOTEHOST} "test -d /etc/docker") ; then
 		display_help
-		echo -e "${0} ${LINENO} [ERROR]:	/etc/docker directory missing,"	1>&2
+		echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	/etc/docker directory missing,"	1>&2
 		echo -e "\tis docker installed on ${REMOTEHOST}."	1>&2
 		exit 1
 	fi
@@ -97,7 +101,7 @@ if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	if $(ssh -t ${ADMTLSUSER}@${REMOTEHOST} "test -d /etc/docker/certs.d" ) ; then
 #	Check if /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem file exists on remote system
 		if $(ssh -t ${ADMTLSUSER}@${REMOTEHOST} "test -e /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem" ) ; then
-			echo -e "${0} ${LINENO} [ERROR]:	/etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem\n\talready exists, renaming existing keys so new keys can be created."	1>&2
+			echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	/etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem\n\talready exists, renaming existing keys so new keys can be created."	1>&2
 			ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mv /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem`date +%Y-%m-%d_%H:%M:%S_%Z`"
 			ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mv /etc/docker/certs.d/daemon/${REMOTEHOST}-cert.pem /etc/docker/certs.d/daemon/${REMOTEHOST}-cert.pem`date +%Y-%m-%d_%H:%M:%S_%Z`"
 			ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mv /etc/docker/certs.d/daemon/ca.pem /etc/docker/certs.d/daemon/ca.pem`date +%Y-%m-%d_%H:%M:%S_%Z`"
@@ -116,12 +120,12 @@ if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	ln -s ${REMOTEHOST}-cert.pem cert.pem
 	cd ../../../..
 	tar -cf ./${REMOTEHOST}${TIMESTAMP}.tar ./etc/docker/certs.d/daemon
-	echo -e "${0} ${LINENO} [INFO]: Transfer TLS keys to\n\t${REMOTEHOST}."
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]: Transfer TLS keys to\n\t${REMOTEHOST}."
 	scp -p  ./${REMOTEHOST}${TIMESTAMP}.tar ${ADMTLSUSER}@${REMOTEHOST}:/tmp
 #	Create remote directory /etc/docker/certs.d/daemon
 #	This directory was selected to place dockerd TLS certifications because
 #	docker registry stores it's TLS certifications in /etc/docker/certs.d.
-	echo -e "${0} ${LINENO} [INFO]:	Create dockerd certification\n\tdirectory on ${REMOTEHOST}"
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Create dockerd certification\n\tdirectory on ${REMOTEHOST}"
 #	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mkdir -p /etc/docker/certs.d/daemon ; sudo chmod -R 0700 /etc/docker/certs.d"
 	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mkdir -p /etc/docker/certs.d/daemon ; sudo chmod -R 0700 /etc/docker/certs.d ; cd / ; sudo tar -xf /tmp/${REMOTEHOST}${TIMESTAMP}.tar ; rm /tmp/${REMOTEHOST}${TIMESTAMP}.tar ; sudo chown -R root.root /etc/docker/certs.d"
 #	Remove ${TLSUSER}/.docker and tar file from ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
@@ -143,7 +147,7 @@ if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	exit 0
 else
 	display_help
-	echo -e "${0} ${LINENO} [ERROR]:	${REMOTEHOST} not responding on port ${SSHPORT}.\n"	1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	${REMOTEHOST} not responding on port ${SSHPORT}.\n"	1>&2
 	exit 1
 fi
 ###

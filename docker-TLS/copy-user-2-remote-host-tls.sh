@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	copy-user-2-remote-host-tls.sh  3.14.315  2018-02-27_21:01:40_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.13  
+# 	   added BOLD and NORMAL with little testing 
 # 	copy-user-2-remote-host-tls.sh  3.13.314  2018-02-27_19:55:54_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.12  
 # 	   added version 
 # 	copy-user-2-remote-host.sh	3.7.291	2018-02-18_23:16:00_CST uadmin six-rpi3b.cptx86.com 3.7 
@@ -46,16 +48,18 @@ TLSUSER=${2:-${USER}}
 USERHOME=${3:-/home/}
 ADMTLSUSER=${4:-${USER}}
 SSHPORT=${5:-22}
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
 #	Check if admin user has home directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER} ] ; then
 	display_help
-	echo -e "${0} ${LINENO} [ERROR]:	${ADMTLSUSER} does not have a home directory\n\ton this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}"	1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	${ADMTLSUSER} does not have a home directory\n\ton this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}"	1>&2
 	exit 1
 fi
 #	Check if ${USERHOME}${ADMTLSUSER}/.docker/docker-ca directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER}/.docker/docker-ca ] ; then
 	display_help
-	echo -e "${0} ${LINENO} [ERROR]:	default directory,"	1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	default directory,"	1>&2
 	echo -e "\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca,\n\tnot on system."	1>&2
 	echo -e "\tRunning create-site-private-public-tls.sh will create directories"
 	echo -e "\tand site private and public keys.  Then run sudo"
@@ -65,7 +69,7 @@ fi
 #	Check if ${TLSUSER}-user-priv-key.pem file on system
 if ! [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/${TLSUSER}-user-priv-key.pem ] ; then
 	display_help
-	echo -e "${0} ${LINENO} [ERROR]:	The ${TLSUSER}-user-priv-key.pem\n\tfile was not found in ${USERHOME}${ADMTLSUSER}/.docker/docker-ca."	1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	The ${TLSUSER}-user-priv-key.pem\n\tfile was not found in ${USERHOME}${ADMTLSUSER}/.docker/docker-ca."	1>&2
 	echo -e "\tRunning create-user-tls.sh will create public and private keys."
 	exit 1
 fi
@@ -77,14 +81,14 @@ fi
 #	Check if ${REMOTEHOST} string length is zero
 if [ -z ${REMOTEHOST} ] ; then
 	display_help
-	echo -e "${0} ${LINENO} [ERROR]:	Remote host is required.\n"	1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	Remote host is required.\n"	1>&2
 	exit 1
 fi
 #	Check if ${REMOTEHOST} is available on port ${SSHPORT}
 if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
-	echo -e "${0} ${LINENO} [INFO]:	${ADMTLSUSER} may receive password and\n\tpassphrase prompt from ${REMOTEHOST}. Running\n\tssh-copy-id ${ADMTLSUSER}@${REMOTEHOST} may stop the prompts."
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	${ADMTLSUSER} may receive password and\n\tpassphrase prompt from ${REMOTEHOST}. Running\n\tssh-copy-id ${ADMTLSUSER}@${REMOTEHOST} may stop the prompts."
 	ssh -t ${ADMTLSUSER}@${REMOTEHOST} " cd ~${TLSUSER} " || { echo "${0} ${LINENO} [ERROR]:	${TLSUSER} does not have home directory on ${REMOTEHOST}" ; exit 1; }
-	echo -e "${0} ${LINENO} [INFO]:	Create directory, change\n\tfile permissions, and copy TLS keys to ${TLSUSER}@${REMOTEHOST}."
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Create directory, change\n\tfile permissions, and copy TLS keys to ${TLSUSER}@${REMOTEHOST}."
 	cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
 	mkdir -p ${TLSUSER}/.docker
 	chmod 700 ${TLSUSER}/.docker
@@ -97,7 +101,7 @@ if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	ln -s ${TLSUSER}-user-priv-key.pem key.pem
 	cd ..
 	tar -cf ./${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar .docker
-	echo -e "${0} ${LINENO} [INFO]:	Transfer TLS keys to ${TLSUSER}@${REMOTEHOST}."
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Transfer TLS keys to ${TLSUSER}@${REMOTEHOST}."
 	scp -p  ./${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ${ADMTLSUSER}@${REMOTEHOST}:/tmp
 #	Check if ${TLSUSER} == ${ADMTLSUSER} because sudo is not required for user copying their certs
 	if [ ${TLSUSER} == ${ADMTLSUSER} ] ; then
@@ -116,11 +120,11 @@ if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	echo -e "\texport DOCKER_HOST=tcp://\`hostname -f\`:2376"
 	echo -e "\texport DOCKER_TLS_VERIFY=1"
 #
-	echo -e "${0} ${LINENO} [INFO]:	Done."
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Done."
 	exit 0
 else
 	display_help
-	echo -e "${0} ${LINENO} [ERROR]:	${REMOTEHOST} not responding on port ${SSHPORT}.\n"	1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	${REMOTEHOST} not responding on port ${SSHPORT}.\n"	1>&2
 	exit 1
 fi
 ###

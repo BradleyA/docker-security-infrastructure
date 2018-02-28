@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	create-host-tls.sh  3.14.315  2018-02-27_21:01:40_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.13  
+# 	   added BOLD and NORMAL with little testing 
 # 	create-host-tls.sh  3.13.314  2018-02-27_19:55:54_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.12  
 # 	   added version 
 # 	create-host-tls.sh	3.7.291	2018-02-18_23:16:00_CST uadmin six-rpi3b.cptx86.com 3.7 
@@ -40,16 +42,18 @@ FQDN=$1
 NUMBERDAYS=${2:-365}
 USERHOME=${3:-/home/}
 ADMTLSUSER=${4:-${USER}}
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
 #	Check if admin user has home directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER} ] ; then
 	display_help
-	echo -e "${0} ${LINENO} [ERROR]:	${ADMTLSUSER} does not have a home directory\n\ton this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}"	1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	${ADMTLSUSER} does not have a home directory\n\ton this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}"	1>&2
 	exit 1
 fi
 #       Check if site CA directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private ] ; then
 	display_help
-	echo -e "${0} ${LINENO} [ERROR]:	default directory,"	1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	default directory,"	1>&2
 	echo -e "\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private,\n\tnot on system."	1>&2
 	echo -e "\tRunning create-site-private-public-tls.sh will create directories"
 	echo -e "\tand site private and public keys.  Then run sudo"
@@ -62,7 +66,7 @@ cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
 #       Check if ca-priv-key.pem file on system
 if ! [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem ] ; then
 	display_help
-	echo -e "${0} ${LINENO} [ERROR]:	Site private key\n\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem\n\tis not in this location."	1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	Site private key\n\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem\n\tis not in this location."	1>&2
 	echo -e "\tEither move it from your site secure location to"
 	echo -e "\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/"
 	echo -e "\tOr run create-site-private-public-tls.sh and sudo"
@@ -77,28 +81,28 @@ fi
 #	Check if ${FQDN} string length is zero
 if [ -z ${FQDN} ] ; then
 	display_help
-	echo -e "${0} ${LINENO} [ERROR]:	A Fully Qualified Domain Name\n\t(FQDN) is required to create new host TLS keys."	1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	A Fully Qualified Domain Name\n\t(FQDN) is required to create new host TLS keys."	1>&2
 	exit 1
 fi
 #	Check if ${FQDN}-priv-key.pem file exists
 if [ -e ${FQDN}-priv-key.pem ] ; then
-	echo -e "${0} ${LINENO} [ERROR]:        ${FQDN}-priv-key.pem already\n\texists, renaming existing keys so new keys can be created."   1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:        ${FQDN}-priv-key.pem already\n\texists, renaming existing keys so new keys can be created."   1>&2
 	mv ${FQDN}-priv-key.pem ${FQDN}-priv-key.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
 	mv ${FQDN}-cert.pem ${FQDN}-cert.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
 fi
 #	Creating private key for host ${FQDN}
-echo -e "${0} ${LINENO} [INFO]:	Creating private key for host\n\t${FQDN}."	1>&2
+echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Creating private key for host\n\t${FQDN}."	1>&2
 openssl genrsa -out ${FQDN}-priv-key.pem 2048
 #	Create CSR for host ${FQDN}
-echo -e "${0} ${LINENO} [INFO]:	Generate a Certificate Signing Request\n\t(CSR) for host ${FQDN}."	1>&2
+echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Generate a Certificate Signing Request\n\t(CSR) for host ${FQDN}."	1>&2
 openssl req -sha256 -new -key ${FQDN}-priv-key.pem -subj "/CN=${FQDN}/subjectAltName=${FQDN}" -out ${FQDN}.csr
 #	Create and sign certificate for host ${FQDN}
 echo -e "${0} ${LINENO} [INFO]:	Create and sign a ${NUMBERDAYS} day\n\tcertificate for host ${FQDN}."	1>&2
-openssl x509 -req -days ${NUMBERDAYS} -sha256 -in ${FQDN}.csr -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out ${FQDN}-cert.pem -extensions v3_req -extfile /usr/lib/ssl/openssl.cnf || { echo "${0} ${LINENO} [ERROR]:       Wrong pass phrase for .private/ca-priv-key.pem: " ; exit 1; }
+openssl x509 -req -days ${NUMBERDAYS} -sha256 -in ${FQDN}.csr -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out ${FQDN}-cert.pem -extensions v3_req -extfile /usr/lib/ssl/openssl.cnf || { echo "${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:       Wrong pass phrase for .private/ca-priv-key.pem: " ; exit 1; }
 openssl rsa -in ${FQDN}-priv-key.pem -out ${FQDN}-priv-key.pem
-echo -e "${0} ${LINENO} [INFO]:	Removing certificate signing requests\n\t(CSR) and set file permissions for host ${FQDN} key pairs."	1>&2
+echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Removing certificate signing requests\n\t(CSR) and set file permissions for host ${FQDN} key pairs."	1>&2
 rm ${FQDN}.csr
 chmod 0400 ${FQDN}-priv-key.pem
 chmod 0444 ${FQDN}-cert.pem
-echo -e "${0} ${LINENO} [INFO]:	Done.\n"	1>&2
+echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Done.\n"	1>&2
 ###

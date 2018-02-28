@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	create-new-openssl.cnf-tls.sh  3.14.315  2018-02-27_21:01:40_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.13  
+# 	   added BOLD and NORMAL with little testing 
 # 	create-new-openssl.cnf-tls.sh  3.13.314  2018-02-27_19:55:54_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.12  
 # 	   added version 
 # 	create-new-openssl.cnf-tls.sh	3.7.291	2018-02-18_23:16:00_CST uadmin six-rpi3b.cptx86.com 3.7 
@@ -31,10 +33,12 @@ fi
 ###		
 BACKUPFILE=/etc/ssl/openssl.cnf-`date +%Y-%m-%d_%H:%M:%S_%Z`
 ORIGINALFILE=/etc/ssl/openssl.cnf
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
 #       Must be root to run this script
 if ! [ $(id -u) = 0 ] ; then
 	display_help
-        echo -e "\n${0} ${LINENO} [ERROR]:	Use sudo ${0}"	1>&2
+        echo -e "${NORMAL}\n${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	Use sudo ${0}"	1>&2
 	echo -e "\n>>	SCRIPT MUST BE RUN AS ROOT TO MODIFY THE ${ORIGINALFILE}	<<\n"	1>&2
         exit 1
 fi
