@@ -1,23 +1,21 @@
-# docker-scripts
-This repository contains shell scripts for docker.
-
-I have been using some of these for days, months, or years and just now uploading them. I need to complete some cleanup before it is shareable and documented . . .
+## docker-scripts
+This repository contains shell scripts that setup and manage both TLS and dockerd on Ubuntu 14.04 (upstart) and Ubuntu 16.04 (systemd).
 
 This repository contains shell scripts for RaspBerry pi.
 
  * [docker-TLS](https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS)
  * [dockerd-configuration-options](https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options)
 
-## System OS script tested
- * Ubuntu 14.04.3 LTS
- * Ubuntu 16.04.3 LTS (armv7l)
-
-## Install
+#### Clone
 
 To install, change to the location you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have git then enter; "sudo apt-get install git". On the github page of this script use the "HTTPS clone URL" with the 'git clone' command.
 
     git clone https://github.com/BradleyA/docker-scripts
     cd docker-scripts
+    
+#### System OS script tested
+ * Ubuntu 14.04.3 LTS
+ * Ubuntu 16.04.3 LTS (armv7l)
 
 #### Design Principles
  * Have a simple setup process and a minimal learning curve
