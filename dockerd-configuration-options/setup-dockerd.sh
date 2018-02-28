@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	../dockerd-configuration-options/setup-dockerd.sh  3.13.314  2018-02-27_19:55:54_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.12  
+# 	   added version 
 # 	setup-dockerd.sh	3.9.306	2018-02-19_22:32:18_CST uadmin six-rpi3b.cptx86.com 3.8-1-gd07d521 
 # 	   docker-scripts//dockerd-configuration-options; modify format of display_help close #7 
 # 	setup-dockerd.sh	3.7.290	2018-02-18_23:07:16_CST uadmin six-rpi3b.cptx86.com 3.6-23-gccdac10 
@@ -35,7 +37,7 @@ if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" =
 	display_help
 	exit 0
 fi
-if [ "$1" == "--version" ] || [ "$1" == "-v" ] ; then
+if [ "$1" == "--version" ] || [ "$1" == "-v" ] || [ "$1" == "version" ] ; then
         head -2 ${0} | awk {'print$2"\t"$3'}
         exit 0
 fi

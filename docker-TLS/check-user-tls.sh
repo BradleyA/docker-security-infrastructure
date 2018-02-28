@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	check-user-tls.sh  3.13.314  2018-02-27_19:55:54_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.12  
+# 	   added version 
 # 	check-user-tls.sh	3.12.313	2018-02-23_12:52:05_CST uadmin three-rpi3b.cptx86.com 3.11 
 # 	   check-user-tls.sh added error message for User certificate NOT issued by CA and BOLD test messages 
 # 	check-user-tls.sh	3.10.311	2018-02-20_16:07:47_CST uadmin six-rpi3b.cptx86.com 3.9-4-g2cf76f8 
@@ -35,7 +37,7 @@ if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" =
 	display_help
 	exit 0
 fi
-if [ "$1" == "--version" ] || [ "$1" == "-v" ] ; then
+if [ "$1" == "--version" ] || [ "$1" == "-v" ] || [ "$1" == "version" ] ; then
         head -2 ${0} | awk {'print$2"\t"$3'}
         exit 0
 fi

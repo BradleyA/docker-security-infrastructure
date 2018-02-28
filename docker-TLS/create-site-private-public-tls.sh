@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	create-site-private-public-tls.sh  3.13.314  2018-02-27_19:55:54_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.12  
+# 	   added version 
 # 	create-site-private-public-tls.sh	3.11.312	2018-02-20_19:14:15_CST uadmin six-rpi3b.cptx86.com 3.10 
 # 	   create-site-private-public-tls.sh add error code and exit for entering wrong passphrase; closes #3 
 # 	create-site-private-public-tls.sh	3.7.291	2018-02-18_23:16:00_CST uadmin six-rpi3b.cptx86.com 3.7 
@@ -37,7 +39,7 @@ if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" =
 	display_help
 	exit 0
 fi
-if [ "$1" == "--version" ] || [ "$1" == "-v" ] ; then
+if [ "$1" == "--version" ] || [ "$1" == "-v" ] || [ "$1" == "version" ] ; then
         head -2 ${0} | awk {'print$2"\t"$3'}
         exit 0
 fi
