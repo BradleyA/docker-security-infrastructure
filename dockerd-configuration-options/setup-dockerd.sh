@@ -1,12 +1,8 @@
 #!/bin/bash
+# 	dockerd-configuration-options/setup-dockerd.sh  3.15.318  2018-02-28_21:41:27_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.14-2-g9866315  
+# 	   ready for production 
 # 	../dockerd-configuration-options/setup-dockerd.sh  3.14.315  2018-02-27_21:01:40_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.13  
 # 	   added BOLD and NORMAL with little testing 
-# 	../dockerd-configuration-options/setup-dockerd.sh  3.13.314  2018-02-27_19:55:54_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.12  
-# 	   added version 
-# 	setup-dockerd.sh	3.9.306	2018-02-19_22:32:18_CST uadmin six-rpi3b.cptx86.com 3.8-1-gd07d521 
-# 	   docker-scripts//dockerd-configuration-options; modify format of display_help close #7 
-# 	setup-dockerd.sh	3.7.290	2018-02-18_23:07:16_CST uadmin six-rpi3b.cptx86.com 3.6-23-gccdac10 
-# 	   New release, ready for production 
 #
 #	set -v
 #	set -x

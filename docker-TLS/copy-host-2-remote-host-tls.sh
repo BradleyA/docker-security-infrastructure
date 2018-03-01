@@ -1,14 +1,8 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.15.318  2018-02-28_21:41:27_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.14-2-g9866315  
+# 	   ready for production 
 # 	copy-host-2-remote-host-tls.sh  3.14.315  2018-02-27_21:01:40_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.13  
 # 	   added BOLD and NORMAL with little testing 
-# 	copy-host-2-remote-host-tls.sh  3.13.314  2018-02-27_19:55:54_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.12  
-# 	   added version 
-# 	copy-host-2-remote-host.sh	3.7.291	2018-02-18_23:16:00_CST uadmin six-rpi3b.cptx86.com 3.7 
-# 	   New release, ready for production 
-# 	copy-host-2-remote-host.sh	3.6.286	2018-02-15_13:21:37_CST uadmin six-rpi3b.cptx86.com 3.6-19-g7e77a24 
-# 	   added --version and -v close #9 
-#	copy-host-2-remote-host.sh	3.6.276	2018-02-10_19:26:37_CST uadmin six-rpi3b.cptx86.com 3.6-9-g8424312 
-#	docker-scripts/docker-TLS; modify format of display_help; closes #6 
 #
 #	set -x
 #	set -v
