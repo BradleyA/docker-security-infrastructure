@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	check-user-ssh.sh  3.20.327  2018-03-05_13:41:10_CST  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.19-1-g31ed959  
+# 	   changes to display help 
 # 	check-user-ssh.sh  3.19.325  2018-03-05_13:21:09_CST  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.18  
 # 	   skip known_hosts & authorized_keys tests if files are missing, remove matching code because passphrase prompt 
 # 	check-user-ssh.sh  3.18.324  2018-03-05_11:29:32_CST  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.17  
@@ -16,7 +18,10 @@ echo    "   ${0} [--help | -help | help | -h | h | -? | ?] [--version | -v]"
 echo -e "\nDESCRIPTION\nUsers can make sure that the file and directory permissions are"
 echo    "correct and corrected if needed.  Administrators can check other users ssh"
 echo    "keys by using: sudo ${0} <SSH-USER>.  Currently not"
-echo    "supporting id_dsa.pub.  To create a new ssh key; ssh-keygen -t rsa"
+echo    "supporting id_dsa.pub."
+echo -e "\nTo create a new ssh key; ssh-keygen -t rsa"
+echo    "Enter the following command to test if public and private key match:"
+echo    "diff -qs <(ssh-keygen -yf ~/.ssh/id_rsa) <(cut -d ' ' -f 1,2 ~/.ssh/id_rsa.pub)"
 echo -e "\nOPTIONS"
 echo    "   SSH-USER   user, default is user running script"
 echo    "   USER-HOME  location of user home directory, default /home/"
