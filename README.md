@@ -3,6 +3,7 @@ This repository contains shell scripts that setup and manage both TLS and docker
 
  * [docker-TLS](https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS)
  * [dockerd-configuration-options](https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options)
+ * [ssh](https://github.com/BradleyA/docker-scripts/tree/master/ssh)
 
 ### Clone
 
