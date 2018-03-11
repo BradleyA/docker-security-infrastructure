@@ -25,6 +25,7 @@ To install, change to the location you want to download the scripts. Use git to 
     cd docker-scripts/ssh
 
 ### System OS script tested
+ * Ubuntu 14.04.3 LTS
  * Ubuntu 16.04.3 LTS (armv7l)
 
 ### Design Principles
