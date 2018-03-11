@@ -1,20 +1,19 @@
 ## ssh
 
-#### WARNING: These instructions are incomplete. Consider them as notes quickly drafted on a napkin rather than proper documentation!
+Check user RSA ssh file permissions
 
-#### To watch future updates in this repository select in the upper-right corner, the "Watch" list, and select Watching. 
+This script allows users to make sure that the ssh files and directory permissions are correct and corrected if not correct.  Administrators can check other users ssh keys by using: sudo /usr/local/bin/check-user-ssh.sh <SSH-USER>.  Currently not supporting id_dsa.pub.
 
-I need to complete some cleanup before it is shareable and documented . . .
+    drwx------  2 uadmin uadmin 4096 Mar  5 13:55 .
+    drwxr-xr-x 15 uadmin uadmin 4096 Mar 10 19:22 ..
+    -rw-------  1 uadmin uadmin 3563 Feb 22 12:27 authorized_keys
+    -rw-------  1 uadmin uadmin 1675 Oct  7 20:37 id_rsa
+    -rw-r--r--  1 uadmin uadmin  398 Oct  7 20:37 id_rsa.pub
+    -rw-r--r--  1 uadmin uadmin 5324 Mar  1 14:38 known_hosts
 
-need a script to check a users file permissions
-If you are being prompted for a password prompt instead of a passphrase prompt then check your file permissions for;
-    ls -ld $HOME/.ssh (700 or drwx------) and 
-    ls -l $HOME/.ssh/id_rsa (600 or -rw------). 
-
--rw------- 1 uadmin uadmin 3563 Feb 22 12:27 authorized_keys
--rw------- 1 uadmin uadmin 1675 Oct  7 20:37 id_rsa
--rw-r--r-- 1 uadmin uadmin  398 Oct  7 20:37 id_rsa.pub
--rw-r--r-- 1 uadmin uadmin 5324 Mar  1 14:38 known_hosts
+To create a new ssh key; ssh-keygen -t rsa
+Users can enter the following command to test if public and private key match:
+diff -qs <(ssh-keygen -yf ~/.ssh/id_rsa) <(cut -d ' ' -f 1,2 ~/.ssh/id_rsa.pub)
 
 Repeat the SSH login with the -vvv for verbose mode to help resolve this incident.
 ssh -vvv uthree@192.168.1.203
