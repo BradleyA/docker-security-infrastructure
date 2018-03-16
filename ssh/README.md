@@ -12,6 +12,7 @@ This script allows users to make sure that the ssh files and directory permissio
     -rw-r--r--  1 uadmin uadmin 5324 Mar  1 14:38 known_hosts
 
 To create a new ssh key; ssh-keygen -t rsa
+
 Users can enter the following command to test if public and private key match:
 diff -qs <(ssh-keygen -yf ~/.ssh/id_rsa) <(cut -d ' ' -f 1,2 ~/.ssh/id_rsa.pub)
 
