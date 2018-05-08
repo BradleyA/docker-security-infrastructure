@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	uninstall-dockerd-scripts.sh  3.22.335  2018-05-07_22:26:50_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.21  
+# 	   add exit line while working on script 
 # 	uninstall-dockerd-scripts.sh  3.21.334  2018-05-07_11:08:06_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.20-6-g270eb14  
 # 	   Initial submit 
 #
@@ -44,28 +46,28 @@ CONFIGURATION_STRING=${3:-Custom_dockerd_Configuration_File}
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 #
-echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Changes made to\n\t${WORK_DIRECTORY}dockerd-configuration-file will be added to Upstart and\n\tSystemd configuration files for dockerd.\n"	1>&2
+echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Begin uninstalling scripts and supporting files.\n"	1>&2
 #	Must be root to run this script
 if ! [ $(id -u) = 0 ] ; then
 	echo "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	Use sudo ${0}"	1>&2
 	exit 1
 fi
+echo "THis is not complete.  Need a few days" ; exit 1
 #	Check for ${WORK_DIRECTORY}
 if [ ! -d ${WORK_DIRECTORY} ] ; then
 	echo "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	Is Docker installed?  Directory ${WORK_DIRECTORY} not found."	1>&2
 	exit 1
+# >>> #	may want to continue even if /etc/docker is missing because the files are not in directory
 elif [ ! -f ${WORK_DIRECTORY}setup-dockerd.sh ] ; then
-#	Move files into /etc/docker ${WORK_DIRECTORY} if not already moved
-	echo "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Move files to ${WORK_DIRECTORY}."	1>&2
-	mv 10-override.begin			${WORK_DIRECTORY}
-	mv dockerd-configuration-file		${WORK_DIRECTORY}
-	mv dockerd-configuration-file.service	${WORK_DIRECTORY}
-	mv README.md				${WORK_DIRECTORY}
-	mv setup-dockerd.sh			${WORK_DIRECTORY}
-	mv start-dockerd-with-systemd.begin	${WORK_DIRECTORY}
-	mv start-dockerd-with-systemd.end	${WORK_DIRECTORY}
-	chown root.root				${WORK_DIRECTORY}*
-	chmod go-xw				${WORK_DIRECTORY}*
+#	Removing files from ${WORK_DIRECTORY} if not already removed
+	echo "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Removing files from ${WORK_DIRECTORY}."	1>&2
+	rm -f ${WORK_DIRECTORY}10-override.begin
+	rm -f ${WORK_DIRECTORY}dockerd-configuration-file
+	rm -f ${WORK_DIRECTORY}dockerd-configuration-file.service
+	rm -f ${WORK_DIRECTORY}README.md
+	rm -f ${WORK_DIRECTORY}setup-dockerd.sh
+	rm -f ${WORK_DIRECTORY}start-dockerd-with-systemd.begin
+	rm -f ${WORK_DIRECTORY}start-dockerd-with-systemd.end
 fi
 #
 ###	Configure dockerd (Upstart and SysVinit configuration file) on Ubuntu 14.04
