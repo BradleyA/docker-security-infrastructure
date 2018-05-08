@@ -1,8 +1,8 @@
 #!/bin/bash
+# 	uninstall-dockerd-scripts.sh  3.26.339  2018-05-08_10:38:18_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.25  
+# 	   completed some testing, incident with Upstart cleanup 
 # 	uninstall-dockerd-scripts.sh  3.25.338  2018-05-08_10:34:15_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.24  
 # 	   cleanup command help messages 
-# 	uninstall-dockerd-scripts.sh  3.24.337  2018-05-08_10:11:37_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.23  
-# 	   cleanup help page 
 #
 #	set -v
 #	set -x
@@ -54,7 +54,7 @@ fi
 #	Check for ${WORK_DIRECTORY}
 if [ ! -d ${WORK_DIRECTORY} ] ; then
 	echo "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	Is Docker installed?  Directory ${WORK_DIRECTORY} not found."	1>&2
-elif [ ! -f ${WORK_DIRECTORY}setup-dockerd.sh ] ; then
+else
 #	Removing files from ${WORK_DIRECTORY}
 	echo "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Removing files from ${WORK_DIRECTORY}."	1>&2
 	rm -f ${WORK_DIRECTORY}10-override.begin
