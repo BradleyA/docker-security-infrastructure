@@ -50,7 +50,7 @@ After editing the dockerd-configuration-file with your dockerd flags, run sudo /
 
 644	start-dockerd-with-systemd.begin - begining of /etc/docker/start-dockerd-with-systemd.sh script
 
-644	start-dockerd-with-systemd.end - end of /etc/docker/start-dockerd-with-systemd.sh script which creates 10-override.conf file and moves it into /etc/systemd/system/docker.service.d directory and runs /bin/systemctl daemon-reload so docker.service will use latest copy of file dockerd-configuration-file.service to 
+644	start-dockerd-with-systemd.end - end of /etc/docker/start-dockerd-with-systemd.sh script which creates 10-override.conf file and moves it into /etc/systemd/system/docker.service.d directory and runs /bin/systemctl daemon-reload so docker.service will use latest copy of dockerd-configuration-file.service file.
 
 #### System OS script tested
  * Ubuntu 14.04.3 LTS
