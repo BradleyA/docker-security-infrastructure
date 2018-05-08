@@ -10,7 +10,7 @@ This has not been tested for other Linux OS's but should work.  Let me know if y
 
 ##### WARNING: These instructions are incomplete. Consider them as notes quickly drafted on a napkin rather than proper documentation!
 ## Install
-To install, change to a location you want to download these files. Use git to pull or clone these files into a directory. If you do not have git then enter; "sudo apt-get install git". On the github page of this script use the "HTTPS clone URL" with the 'git clone' command.
+To install, change to a location you want to download these files. Use git to pull or clone these files into a directory. If you do not have git then enter; "sudo apt-get install git". On the github repository page use the "HTTPS clone URL" with the 'git clone' command.
 
     git clone https://github.com/BradleyA/docker-scripts
     cd docker-scripts/dockerd-configuration-options
@@ -30,7 +30,7 @@ If you are using systemd, run the following to enable two docker services on eac
 
 #### Note: The default in this dockerd configuration (/etc/docker/dockerd-configuration-file) requires docker TLS.  Here are the scripts to help you setup [docker-TLS](https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS).  See the steps below:
 
-Edit dockerd-configuration-file, change the [dockerd flags](https://docs.docker.com/engine/reference/commandline/dockerd/) to the flags your dockerd environment requires.  This file, dockerd-configuration-file, is an example.  It is what I am currently using.  You will want to remove --data-root=/usr/local/docker flag if you are using the default location (/var/lib/docker) or change it to your root of Docker.  You will want to change the address of the local dns server (--dns 192.168.1.202) to your dns server address.  If you do not have [TLS CA certificates](https://docs.docker.com/engine/security/https/) setup or in a different location or using different names then you will want to remove or change those --tls flags.  If you have not used --userns-remap=default before you WILL want to remove this flag until you read more about this security feature.
+Edit dockerd-configuration-file, change the [dockerd flags](https://docs.docker.com/engine/reference/commandline/dockerd/) to the flags your dockerd environment requires.  This file, dockerd-configuration-file, is an example.  It is what I am currently using.  You will want to remove --data-root=/usr/local/docker flag if you are using the default location (/var/lib/docker) or change it to your root of Docker.  You will want to change the address of the local DNS server (--dns 192.168.1.202) to your DNS server address.  If you do not have [TLS CA certificates](https://docs.docker.com/engine/security/https/) setup or in a different location or using different names then you will want to remove or change those --tls flags.  If you have not used --userns-remap=default before you WILL want to remove this flag until you read more about this security feature.
 
     edit dockerd-configuration-file
 
@@ -50,7 +50,9 @@ After editing the dockerd-configuration-file with your dockerd flags, run sudo /
 
 644	start-dockerd-with-systemd.begin - begining of /etc/docker/start-dockerd-with-systemd.sh script
 
-644	start-dockerd-with-systemd.end - end of /etc/docker/start-dockerd-with-systemd.sh script which creates 10-override.conf file and moves it into /etc/systemd/system/docker.service.d directory and runs /bin/systemctl daemon-reload so docker.service will use latest copy of file dockerd-configuration-file.service to 
+644	start-dockerd-with-systemd.end - end of /etc/docker/start-dockerd-with-systemd.sh script which creates 10-override.conf file and moves it into /etc/systemd/system/docker.service.d directory and runs /bin/systemctl daemon-reload so docker.service will use latest copy of dockerd-configuration-file.service file.
+
+700 uninstall-dockerd-scripts.sh - script removes from your system the above files from /etc/docker directory and /etc/systemd/system/dockerd-configuration-file.service file; removes files and directories from /etc/systemd/system/docker.service.d and /etc/systemd/system/docker.service.wants; and displays what commands to run to remove this script and information from memory by dockerd.  Thus resetting your system back to its previous state.
 
 #### System OS script tested
  * Ubuntu 14.04.3 LTS
