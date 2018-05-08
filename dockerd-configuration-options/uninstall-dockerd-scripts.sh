@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	uninstall-dockerd-scripts.sh  3.25.338  2018-05-08_10:34:15_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.24  
+# 	   cleanup command help messages 
 # 	uninstall-dockerd-scripts.sh  3.24.337  2018-05-08_10:11:37_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.23  
 # 	   cleanup help page 
 #
@@ -6,8 +8,9 @@
 #	set -x
 #
 display_help() {
-echo -e "\n${0} - uninstall scripts that support dockerd on Systemd and Upstart."
+echo -e "\n${0} - uninstall scripts that support dockerd on Systemd and Upstart"
 echo -e "\nUSAGE\n   sudo ${0} "
+echo    "   sudo ${0} [OPTIONS]"
 echo    "   sudo ${0} [--help | -help | help | -h | h | -? | ?] [--version | -v]"
 echo -e "\nDESCRIPTION\nThis script has to be run as root to remove scripts and files from /etc/docker"
 echo    "and /etc/systemd/system."
@@ -17,6 +20,12 @@ echo    "                                default is /etc/docker/"
 echo    "   UPSTART_SYSVINIT_DIRECTORY   Ubuntu 14.04 (Upstart) directory,"
 echo    "                                default is /etc/default/"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options"
+echo -e "\nEXAMPLES\n   To remove scripts and files using defulat directories, run"
+echo -e "\tsudo ${0}\n"
+echo -e "   To use non-default directories for WORK_DIRECTORY (/mnt/etc/docker/) and"
+echo    "   UPSTART_SYSVINIT_DIRECTORY (/mnt/etc/default/), run"
+echo -e "\tsudo ${0} /mnt/etc/docker/ /mnt/etc/default/\n"
+
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help

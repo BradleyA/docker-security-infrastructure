@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	setup-dockerd.sh  3.25.338  2018-05-08_10:34:15_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.24  
+# 	   cleanup command help messages 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.15.318  2018-02-28_21:41:27_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.14-2-g9866315  
 # 	   ready for production 
 # 	../dockerd-configuration-options/setup-dockerd.sh  3.14.315  2018-02-27_21:01:40_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.13  
@@ -10,6 +12,7 @@
 display_help() {
 echo -e "\n${0} - setup system to support dockerd on Systemd and Upstart."
 echo -e "\nUSAGE\n   sudo ${0} "
+echo    "   sudo ${0} [OPTIONS]"
 echo    "   sudo ${0} [--help | -help | help | -h | h | -? | ?] [--version | -v]"
 echo -e "\nDESCRIPTION\nThis script has to be run as root to move files into /etc/docker and create"
 echo    "or update the /etc/systemd/system/docker.service.d/10-override.conf"
@@ -30,6 +33,9 @@ echo    "                                default is /etc/default/"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options"
 echo -e "\nEXAMPLES\n   After editing /etc/docker/dockerd-configuration-file, run"
 echo -e "\tsudo ${0}\n"
+echo -e "   To use non-default directory for WORK_DIRECTORY (/mnt/etc/docker/) and"
+echo    "   UPSTART_SYSVINIT_DIRECTORY (/mnt/etc/default/), run"
+echo -e "\tsudo ${0} /mnt/etc/docker/ /mnt/etc/default/\n"
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
