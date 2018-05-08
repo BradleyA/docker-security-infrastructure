@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	uninstall-dockerd-scripts.sh  3.26.339  2018-05-08_10:38:18_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.25  
-# 	   completed some testing, incident with Upstart cleanup 
+# 	uninstall-dockerd-scripts.sh  3.27.340  2018-05-08_10:54:15_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.26  
+# 	   testing complete, additional testing maybe needed, ready for use 
 # 	uninstall-dockerd-scripts.sh  3.25.338  2018-05-08_10:34:15_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.24  
 # 	   cleanup command help messages 
 #
@@ -25,7 +25,6 @@ echo -e "\tsudo ${0}\n"
 echo -e "   To use non-default directories for WORK_DIRECTORY (/mnt/etc/docker/) and"
 echo    "   UPSTART_SYSVINIT_DIRECTORY (/mnt/etc/default/), run"
 echo -e "\tsudo ${0} /mnt/etc/docker/ /mnt/etc/default/\n"
-
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
@@ -67,7 +66,7 @@ else
 	rm -f ${WORK_DIRECTORY}start-dockerd-with-systemd.sh
 #	Check for dockerd configuration file
 	if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] ; then
-#	copy ${WORK_DIRECTORY}docker.org to ${UPSTART_SYSVINIT_DIRECTORY}docker
+		echo "Copy ${WORK_DIRECTORY}docker.org to ${UPSTART_SYSVINIT_DIRECTORY}docker"
         	cp   ${WORK_DIRECTORY}docker.org    ${UPSTART_SYSVINIT_DIRECTORY}docker
 	else
 		echo -e "${NORMAL}\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:      ${UPSTART_SYSVINIT_DIRECTORY}docker not found."
