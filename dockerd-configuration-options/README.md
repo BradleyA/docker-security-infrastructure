@@ -10,7 +10,7 @@ This has not been tested for other Linux OS's but should work.  Let me know if y
 
 ##### WARNING: These instructions are incomplete. Consider them as notes quickly drafted on a napkin rather than proper documentation!
 ## Install
-To install, change to a location you want to download these files. Use git to pull or clone these files into a directory. If you do not have git then enter; "sudo apt-get install git". On the github page of this script use the "HTTPS clone URL" with the 'git clone' command.
+To install, change to a location you want to download these files. Use git to pull or clone these files into a directory. If you do not have git then enter; "sudo apt-get install git". On the github repository page use the "HTTPS clone URL" with the 'git clone' command.
 
     git clone https://github.com/BradleyA/docker-scripts
     cd docker-scripts/dockerd-configuration-options
