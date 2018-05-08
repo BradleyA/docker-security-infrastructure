@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	uninstall-dockerd-scripts.sh  3.28.341  2018-05-08_16:23:59_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.27  
+# 	   add instruction to remove this script when complete 
 # 	uninstall-dockerd-scripts.sh  3.27.340  2018-05-08_10:54:15_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.26  
 # 	   testing complete, additional testing maybe needed, ready for use 
 # 	uninstall-dockerd-scripts.sh  3.25.338  2018-05-08_10:34:15_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.24  
@@ -86,4 +88,5 @@ rm -rf /etc/systemd/system/docker.service.wants
 systemctl daemon-reload
 #
 echo    "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Run '${BOLD}sudo systemctl restart docker${NORMAL}'"	1>&2
+echo    "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:        Run '${BOLD}rm ${0}${NORMAL}'"  1>&2
 ###
