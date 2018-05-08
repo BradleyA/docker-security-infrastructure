@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	uninstall-dockerd-scripts.sh  3.23.336  2018-05-08_07:39:15_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.22  
+# 	   finished upstart section 
 # 	uninstall-dockerd-scripts.sh  3.22.335  2018-05-07_22:26:50_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.21  
 # 	   add exit line while working on script 
 # 	uninstall-dockerd-scripts.sh  3.21.334  2018-05-07_11:08:06_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.20-6-g270eb14  
@@ -57,7 +59,9 @@ echo "THis is not complete.  Need a few days" ; exit 1
 if [ ! -d ${WORK_DIRECTORY} ] ; then
 	echo "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	Is Docker installed?  Directory ${WORK_DIRECTORY} not found."	1>&2
 	exit 1
-# >>> #	may want to continue even if /etc/docker is missing because the files are not in directory
+
+ # >>> #	may want to continue even if /etc/docker is missing because the files are in other directories!
+
 elif [ ! -f ${WORK_DIRECTORY}setup-dockerd.sh ] ; then
 #	Removing files from ${WORK_DIRECTORY} if not already removed
 	echo "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Removing files from ${WORK_DIRECTORY}."	1>&2
@@ -68,34 +72,14 @@ elif [ ! -f ${WORK_DIRECTORY}setup-dockerd.sh ] ; then
 	rm -f ${WORK_DIRECTORY}setup-dockerd.sh
 	rm -f ${WORK_DIRECTORY}start-dockerd-with-systemd.begin
 	rm -f ${WORK_DIRECTORY}start-dockerd-with-systemd.end
+	rm -f ${WORK_DIRECTORY}start-dockerd-with-systemd.sh
 fi
-#
-###	Configure dockerd (Upstart and SysVinit configuration file) on Ubuntu 14.04
-#		Any changes to dockerd-configuration-file will be added to ${UPSTART_SYSVINIT_DIRECTORY}docker
-#
-echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Update files for dockerd (Upstart and SysVinit\n\tconfiguration file) for Ubuntu 14.04."	1>&2
 #	Check for dockerd configuration file
 if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] ; then
-#	copy ${UPSTART_SYSVINIT_DIRECTORY}docker to ${WORK_DIRECTORY}docker.org
-	cp ${UPSTART_SYSVINIT_DIRECTORY}docker ${WORK_DIRECTORY}docker.org
-	if grep -qF ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org ; then 
-		echo "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Remove previous dockerd configuration."	1>&2
-#		Locate line number of ${CONFIGURATION_STRING} in ${WORK_DIRECTORY}docker
-		LINE=`grep -n ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org | cut -f1 -d:`
-		LINE=`echo ${LINE} | awk '{print $1 - 1}'`
-#		Write line one to ${LINE} number into ${WORK_DIRECTORY}docker
-		head -n +${LINE} ${WORK_DIRECTORY}docker.org > ${WORK_DIRECTORY}docker
-	else
-		echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Copy ${WORK_DIRECTORY}docker.org to\n\t${WORK_DIRECTORY}docker without ${CONFIGURATION_STRING} section."	1>&2
-		cp ${WORK_DIRECTORY}docker.org ${WORK_DIRECTORY}docker
-	fi
-	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Append ${WORK_DIRECTORY}dockerd-configuration-file\n\tonto ${WORK_DIRECTORY}docker."	1>&2
-#	Append ${WORK_DIRECTORY}dockerd-configuration-file onto ${WORK_DIRECTORY}docker
-	cat ${WORK_DIRECTORY}dockerd-configuration-file >> ${WORK_DIRECTORY}docker
-	echo "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Move ${WORK_DIRECTORY}docker to ${UPSTART_SYSVINIT_DIRECTORY}docker"	1>&2
-	mv ${WORK_DIRECTORY}docker ${UPSTART_SYSVINIT_DIRECTORY}docker
+#	copy ${WORK_DIRECTORY}docker.org to ${UPSTART_SYSVINIT_DIRECTORY}docker
+        cp   ${WORK_DIRECTORY}docker.org    ${UPSTART_SYSVINIT_DIRECTORY}docker
 fi
-echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	dockerd (Upstart and SysVinit configuration\n\tfile) for Ubuntu 14.04 has been updated."	1>&2
+rm -f ${WORK_DIRECTORY}docker.org
 echo -e "${NORMAL}\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	If you are using upstart, Run\n\t'${BOLD}sudo service docker restart${NORMAL}' for dockerd to read ${UPSTART_SYSVINIT_DIRECTORY}docker.\n"	1>&2
 #
 ###	Configure dockerd (systemd) on Ubuntu 16.04
