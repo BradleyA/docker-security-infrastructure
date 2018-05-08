@@ -52,7 +52,7 @@ After editing the dockerd-configuration-file with your dockerd flags, run sudo /
 
 644	start-dockerd-with-systemd.end - end of /etc/docker/start-dockerd-with-systemd.sh script which creates 10-override.conf file and moves it into /etc/systemd/system/docker.service.d directory and runs /bin/systemctl daemon-reload so docker.service will use latest copy of dockerd-configuration-file.service file.
 
-700 uninstall-dockerd-scripts.sh - script removes from your system the above files from /etc/docker directory and /etc/systemd/system/dockerd-configuration-file.service file; removes files and directories from /etc/systemd/system/docker.service.d and /etc/systemd/system/docker.service.wants; and displays what commands to run to remove that information from memory the running dockerd.  Thus resetting your system back to its previous state.
+700 uninstall-dockerd-scripts.sh - script removes from your system the above files from /etc/docker directory and /etc/systemd/system/dockerd-configuration-file.service file; removes files and directories from /etc/systemd/system/docker.service.d and /etc/systemd/system/docker.service.wants; and displays what commands to run to remove this script and information from memory by dockerd.  Thus resetting your system back to its previous state.
 
 #### System OS script tested
  * Ubuntu 14.04.3 LTS
