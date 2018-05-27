@@ -24,7 +24,7 @@ To clone, change to the directory you want to download the scripts.  Use git to 
     cd docker-scripts/docker-TLS
 
 ## Install
-To install, change to the directory you want to download the scripts. 
+To install, change to the directory you want to download these scripts. 
 
     curl -L https://api.github.com/repos/BradleyA/docker-scripts/tarball | tar -xzf - --wildcards */c* ; mv BradleyA-docker-scripts*/docker-TLS/c* . ; rm -rf BradleyA-docker-scripts-*/
 
