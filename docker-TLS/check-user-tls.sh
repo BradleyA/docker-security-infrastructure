@@ -1,10 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-user-tls.sh  3.15.318  2018-02-28_21:41:27_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.14-2-g9866315  
-# 	   ready for production 
-# 	check-user-tls.sh  3.14.315  2018-02-27_21:01:40_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.13  
-# 	   added BOLD and NORMAL with little testing 
-# 	check-user-tls.sh  3.13.314  2018-02-27_19:55:54_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.12  
-# 	   added version 
+# 	check-user-tls.sh	3.29.361	2018-06-22_11:36:41_CDT uadmin two.cptx86.com 3.28-19-ga977649 
+# 	   format output to help user 
 #
 #	set -x
 #	set -v

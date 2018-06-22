@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-host-tls.sh  3.15.318  2018-02-28_21:41:27_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.14-2-g9866315  
-# 	   ready for production 
-# 	create-host-tls.sh  3.14.315  2018-02-27_21:01:40_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.13  
-# 	   added BOLD and NORMAL with little testing 
+# 	create-host-tls.sh	3.29.361	2018-06-22_11:36:41_CDT uadmin two.cptx86.com 3.28-19-ga977649 
+# 	   format output to help user 
 #
 #	set -x
 #	set -v
@@ -98,5 +96,5 @@ echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Removing certificate si
 rm ${FQDN}.csr
 chmod 0400 ${FQDN}-priv-key.pem
 chmod 0444 ${FQDN}-cert.pem
-echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Done.\n"	1>&2
+echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Done.\n"	1>&2
 ###
