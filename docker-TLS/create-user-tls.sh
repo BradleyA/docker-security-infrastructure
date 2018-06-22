@@ -69,7 +69,7 @@ if ! [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem ] 
 fi
 #	Check if ${TLSUSER}-user-priv-key.pem file on system
 if [ -e ${TLSUSER}-user-priv-key.pem ] ; then
-	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	${TLSUSER}-user-priv-key.pem already exists,\n\trenaming existing keys so new keys can be created."   1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	${TLSUSER}-user-priv-key.pem already exists,\n\trenaming existing keys so new keys can be created.\n"   1>&2
 	mv ${TLSUSER}-user-priv-key.pem ${TLSUSER}-user-priv-key.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
 	mv ${TLSUSER}-user-cert.pem ${TLSUSER}-user-cert.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
 fi
@@ -77,16 +77,18 @@ fi
 echo    "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Creating private key for user ${TLSUSER}."	1>&2
 openssl genrsa -out ${TLSUSER}-user-priv-key.pem 2048
 #	Generate a Certificate Signing Request (CSR)
-echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Generate a Certificate Signing\n\tRequest (CSR) for user ${TLSUSER}."	1>&2
+echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Generate a Certificate Signing\n\tRequest (CSR) for user ${TLSUSER}."	1>&2
 openssl req -subj '/subjectAltName=client' -new -key ${TLSUSER}-user-priv-key.pem -out ${TLSUSER}-user.csr
 #	Create and sign a ${NUMBERDAYS} day certificate
-echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Create and sign a ${NUMBERDAYS} day\n\tcertificate for user ${TLSUSER}."	1>&2
+echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Create and sign a ${NUMBERDAYS} day\n\tcertificate for user ${TLSUSER}."	1>&2
 openssl x509 -req -days ${NUMBERDAYS} -sha256 -in ${TLSUSER}-user.csr -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out ${TLSUSER}-user-cert.pem || { echo -e "\n${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	Wrong pass phrase for .private/ca-priv-key.pem: " ; exit 1; }
 #	Removing certificate signing requests (CSR)
-echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Removing certificate signing\n\trequests (CSR) and set file permissions for ${TLSUSER} key pairs."	1>&2
+echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Removing certificate signing\n\trequests (CSR) and set file permissions for ${TLSUSER} key pairs."	1>&2
 #
 rm ${TLSUSER}-user.csr
 chmod 0400 ${TLSUSER}-user-priv-key.pem
 chmod 0444 ${TLSUSER}-user-cert.pem
+#
+echo -e "\nUse script ${BOLD}copy-user-2-remote-host-tls.sh${NORMAL} to update remote host."
 echo -e "\n${0} ${LINENO} [INFO]: Done."
 ###
