@@ -114,7 +114,7 @@ if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	echo -e "\texport DOCKER_HOST=tcp://\`hostname -f\`:2376"
 	echo -e "\texport DOCKER_TLS_VERIFY=1"
 #
-	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Done."
+	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Done."
 	exit 0
 else
 	display_help
