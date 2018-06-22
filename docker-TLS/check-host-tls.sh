@@ -53,7 +53,7 @@ NORMAL=$(tput sgr0)
 if ! [ $(id -u) = 0 ] ; then
 	display_help
 	echo "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:   Use sudo ${0}"	1>&2
-	echo -e "\n>>   SCRIPT MUST BE RUN AS ROOT <<"	1>&2
+	echo -e "\n>>   ${BOLD}SCRIPT MUST BE RUN AS ROOT${NORMAL} <<"	1>&2
 	exit 1
 fi
 #	Check for ${CERTDIR} directory
