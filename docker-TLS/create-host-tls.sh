@@ -83,13 +83,13 @@ if [ -e ${FQDN}-priv-key.pem ] ; then
 	mv ${FQDN}-cert.pem ${FQDN}-cert.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
 fi
 #	Creating private key for host ${FQDN}
-echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Creating private key for host\n\t${FQDN}."	1>&2
+echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Creating private key for host\n\t${FQDN}."	1>&2
 openssl genrsa -out ${FQDN}-priv-key.pem 2048
 #	Create CSR for host ${FQDN}
-echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Generate a Certificate Signing Request\n\t(CSR) for host ${FQDN}."	1>&2
+echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Generate a Certificate Signing Request\n\t(CSR) for host ${FQDN}."	1>&2
 openssl req -sha256 -new -key ${FQDN}-priv-key.pem -subj "/CN=${FQDN}/subjectAltName=${FQDN}" -out ${FQDN}.csr
 #	Create and sign certificate for host ${FQDN}
-echo -e "${0} ${LINENO} [INFO]:	Create and sign a ${NUMBERDAYS} day\n\tcertificate for host ${FQDN}."	1>&2
+echo -e "\n${0} ${LINENO} [INFO]:	Create and sign a ${NUMBERDAYS} day\n\tcertificate for host ${FQDN}."	1>&2
 openssl x509 -req -days ${NUMBERDAYS} -sha256 -in ${FQDN}.csr -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out ${FQDN}-cert.pem -extensions v3_req -extfile /usr/lib/ssl/openssl.cnf || { echo "${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:       Wrong pass phrase for .private/ca-priv-key.pem: " ; exit 1; }
 openssl rsa -in ${FQDN}-priv-key.pem -out ${FQDN}-priv-key.pem
 echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Removing certificate signing requests\n\t(CSR) and set file permissions for host ${FQDN} key pairs."	1>&2
