@@ -137,11 +137,11 @@ if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	echo    "If dockerd is already using TLS certifications then:"
 	echo -e "\tUbuntu 16.04 (systemd) sudo systemctl restart docker"
 	echo -e "\tUbuntu 14.04 (systemd) sudo service docker restart"
-	echo -e "${0} ${LINENO} [INFO]:	Done."
+	echo -e "\n${0} ${LINENO} [INFO]:	Done."
 	exit 0
 else
 	display_help
-	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	${REMOTEHOST} not responding on port ${SSHPORT}.\n"	1>&2
+	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	${REMOTEHOST} not responding on port ${SSHPORT}.\n"	1>&2
 	exit 1
 fi
 ###
