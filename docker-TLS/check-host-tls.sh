@@ -78,6 +78,8 @@ openssl x509 -in ${CERTDIR}cert.pem -noout -issuer
 #	Verify that dockerd daemon certificate was issued by the CA.
 echo -e "\nVerify that dockerd daemon certificate was issued by the CA."
 openssl verify -verbose -CAfile ${CERTDIR}ca.pem ${CERTDIR}cert.pem
+#
+echo -e "\nVerify and correct file permissions."
 #	Verify and correct file permissions for ${CERTDIR}ca.pem
 if [ $(stat -Lc %a ${CERTDIR}ca.pem) != 444 ]; then
 	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:        File permissions for ${CERTDIR}ca.pem\n\tare not 444.  Correcting $(stat -Lc %a ${CERTDIR}ca.pem) to 0444 file permissions" 1>&2
@@ -98,6 +100,8 @@ if [ $(stat -Lc %a ${CERTDIR}) != 700 ]; then
 	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:        Directory permissions for ${CERTDIR}\n\tare not 700.  Correcting $(stat -Lc %a ${CERTDIR}) to 700 directory permissions"        1>&2
 	chmod 700 ${CERTDIR}
 fi
+#
+echo -e "\nUse script create-host-tls.sh to update host TLS if host TLS certification has expired."
 #
 #	May want to create a version of this script that automates this process for SRE tools,
 #	but keep this script for users to run manually,
