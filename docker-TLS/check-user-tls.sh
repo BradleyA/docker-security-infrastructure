@@ -95,7 +95,7 @@ echo -e "${BOLD}WARNING:${NORMAL}  -> If ONLY ONE line of output is returned the
 echo    "Verify that user certificate was issued by the CA."
 openssl verify -verbose -CAfile ${USERHOME}${TLSUSER}/.docker/ca.pem ${USERHOME}${TLSUSER}/.docker/cert.pem  || { echo -e "${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	User certificate for ${TLSUSER} on ${LOCALHOSTNAME} was NOT issued by CA." ; exit 1; }
 #	Verify and correct file permissions for ${USERHOME}${TLSUSER}/.docker/ca.pem
-echo    "Verify and correct file permissions for ${USERHOME}${TLSUSER}/.docker"
+echo -e "\nVerify and correct file permissions for ${USERHOME}${TLSUSER}/.docker"
 if [ $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker/ca.pem) != 444 ]; then
 	echo -e "${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	File permissions for ${USERHOME}${TLSUSER}/.docker/ca.pem\n\tare not 444.  Correcting $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker/ca.pem) to 0444 file permissions"	1>&2
 	chmod 0444 ${USERHOME}${TLSUSER}/.docker/ca.pem
@@ -115,6 +115,8 @@ if [ $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker) != 700 ]; then
 	echo -e "${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	Directory permissions for ${USERHOME}${TLSUSER}/.docker\n\tare not 700.  Correcting $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker) to 700 directory permissions"	1>&2
 	chmod 700 ${USERHOME}${TLSUSER}/.docker
 fi
+#
+echo -e "\nUse script ${BOLD}create-user-tls.sh${NORMAL} to update user TLS if user TLS certificate has expired."
 echo -e "\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Done.\n"	1>&2
 #
 #	May want to create a version of this script that automates this process for SRE tools,
