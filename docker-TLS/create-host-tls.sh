@@ -78,7 +78,7 @@ if [ -z ${FQDN} ] ; then
 fi
 #	Check if ${FQDN}-priv-key.pem file exists
 if [ -e ${FQDN}-priv-key.pem ] ; then
-	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:        ${FQDN}-priv-key.pem already\n\texists, renaming existing keys so new keys can be created."   1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARNING${NORMAL}]:        ${FQDN}-priv-key.pem already\n\texists, renaming existing keys so new keys can be created."   1>&2
 	mv ${FQDN}-priv-key.pem ${FQDN}-priv-key.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
 	mv ${FQDN}-cert.pem ${FQDN}-cert.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
 fi
