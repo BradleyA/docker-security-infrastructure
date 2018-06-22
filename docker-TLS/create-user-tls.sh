@@ -88,5 +88,5 @@ echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Removing certificate si
 rm ${TLSUSER}-user.csr
 chmod 0400 ${TLSUSER}-user-priv-key.pem
 chmod 0444 ${TLSUSER}-user-cert.pem
-echo -e "${0} ${LINENO} [INFO]: Done."
+echo -e "\n${0} ${LINENO} [INFO]: Done."
 ###
