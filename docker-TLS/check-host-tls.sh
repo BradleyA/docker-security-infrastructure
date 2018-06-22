@@ -101,7 +101,7 @@ if [ $(stat -Lc %a ${CERTDIR}) != 700 ]; then
 	chmod 700 ${CERTDIR}
 fi
 #
-echo -e "\nUse script create-host-tls.sh to update host TLS if host TLS certification has expired."
+echo -e "\nUse script create-host-tls.sh to update host TLS if host TLS certificate has expired."
 #
 #	May want to create a version of this script that automates this process for SRE tools,
 #	but keep this script for users to run manually,
