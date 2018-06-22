@@ -11,7 +11,7 @@
 #
 display_help() {
 echo -e "\n${0} - Check public, private keys, and CA for host"
-echo    "   UNDER DEVELOPMENT to add REMOTEHOST.  Currently works for local host only."
+echo    "   UNDER DEVELOPMENT (issue #1) to add REMOTEHOST.  Currently works for local host only."
 echo -e "\nUSAGE\n   sudo ${0} "
 echo    "   ${0} [--help | -help | help | -h | h | -? | ?] [--version | -v]"
 echo -e "\nDESCRIPTION\nThis script has to be run as root to check host public, private keys, and CA"
