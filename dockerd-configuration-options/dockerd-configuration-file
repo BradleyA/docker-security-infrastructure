@@ -1,8 +1,6 @@
 ###	Custom_dockerd_Configuration_File
-#	dockerd-configuration-file	3.8.304	2018-02-19_20:26:27_CST uadmin six-rpi3b.cptx86.com 3.7-13-g5018397 
-#	   dockerd-configuration-options change _ to - in XOS 
-#	dockerd-configuration-file	3.7.290	2018-02-18_23:07:16_CST uadmin six-rpi3b.cptx86.com 3.6-23-gccdac10 
-#	   New release, ready for production 
+#	dockerd-configuration-file  3.29.366  2018-06-23_14:19:13_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.28-24-g96ea7aa  
+#	   modify comment line 
 #
 #	DO NOT REMOVE OR CHANGE FIRST LINE ###     Custom_dockerd_Configuration_File
 #
@@ -11,7 +9,7 @@
 #       After modifying this file, edit /etc/docker/dockerd-configuration-file
 #       Run sudo /etc/docker/setup-dockerd.sh
 #	   To move your changes into
-#	   /etc/systemd/system/docker.service.d/10-override.conf file (systemd)
+#	   /etc/systemd/system/docker.service.d/10-override.conf file (Ubuntu 16.04, systemd)
 #	   and /etc/default/docker file (Ubuntu 14.04, Upstart).
 #
 #####	Do any local configuration here
