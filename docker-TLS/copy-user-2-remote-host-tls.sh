@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	copy-user-2-remote-host-tls.sh  3.31.368  2018-06-23_18:24:57_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.30  
+# 	   update comment to add line at the beginning of file 
 # 	copy-user-2-remote-host-tls.sh	3.29.361	2018-06-22_11:36:41_CDT uadmin two.cptx86.com 3.28-19-ga977649 
 # 	   format output to help user 
 #
@@ -108,7 +110,7 @@ if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	echo -e "\nTo set environment variables permanently, add them to the user's"
 	echo -e "\t.bashrc.  These environment variables will be set each time the user"
 	echo -e "\tlogs into the computer system.  Edit your .bashrc file (or the"
-	echo -e "\tcorrect shell if different) and append the following two lines."
+	echo -e "\tcorrect shell if different) and prepend the following two lines."
 	echo -e "\texport DOCKER_HOST=tcp://\`hostname -f\`:2376"
 	echo -e "\texport DOCKER_TLS_VERIFY=1"
 #
