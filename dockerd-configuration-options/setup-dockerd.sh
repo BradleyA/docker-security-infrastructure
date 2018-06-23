@@ -1,10 +1,6 @@
 #!/bin/bash
-# 	setup-dockerd.sh  3.25.338  2018-05-08_10:34:15_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.24  
-# 	   cleanup command help messages 
-# 	dockerd-configuration-options/setup-dockerd.sh  3.15.318  2018-02-28_21:41:27_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.14-2-g9866315  
-# 	   ready for production 
-# 	../dockerd-configuration-options/setup-dockerd.sh  3.14.315  2018-02-27_21:01:40_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.13  
-# 	   added BOLD and NORMAL with little testing 
+# 	setup-dockerd.sh  3.30.367  2018-06-23_17:52:30_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.29  
+# 	   added mv uninstall-dockerd-scripts.sh to /etc/docker 
 #
 #	set -v
 #	set -x
@@ -72,6 +68,7 @@ elif [ ! -f ${WORK_DIRECTORY}setup-dockerd.sh ] ; then
 	mv setup-dockerd.sh			${WORK_DIRECTORY}
 	mv start-dockerd-with-systemd.begin	${WORK_DIRECTORY}
 	mv start-dockerd-with-systemd.end	${WORK_DIRECTORY}
+	mv uninstall-dockerd-scripts.sh		${WORK_DIRECTORY}
 	chown root.root				${WORK_DIRECTORY}*
 	chmod go-xw				${WORK_DIRECTORY}*
 fi
