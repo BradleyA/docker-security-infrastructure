@@ -6,17 +6,26 @@ Goal is to use one dockerd configuration file with dockerd flags for both Ubuntu
 
 Running sudo ./setup-dockerd.sh will move files into /etc/docker and create or update the /etc/systemd/system/docker.service.d/10-override.conf file (Ubuntu 16.04, systemd) and the /etc/default/docker (Ubuntu 14.04, Upstart).  To change the docker daemon flags, sudo edit /etc/docker/dockerd-configuration-file and run sudo /etc/docker/setup-dockerd.sh.  Docker daemon flag changes can be distributed to any Ubuntu cluster that use systemd or upstart by copying /etc/docker/dockerd-configuration-file to each system that is setup like this and running sudo /etc/docker/setup-dockerd.sh on each system.
 
-This has not been tested for other Linux OS's but should work.  Let me know if you use it on other Linus OS's.
+This has not been tested for other Linux OS's.  Let me know if you use it on other Linus OS's.
 
-##### WARNING: These instructions are incomplete. Consider them as notes quickly drafted on a napkin rather than proper documentation!
 ## Install
 To install, change to a location you want to download these files. Use git to pull or clone these files into a directory. If you do not have git then enter; "sudo apt-get install git". On the github repository page use the "HTTPS clone URL" with the 'git clone' command.
 
+    mkdir temp
+    cd temp
     git clone https://github.com/BradleyA/docker-scripts
     cd docker-scripts/dockerd-configuration-options
     sudo ./setup-dockerd.sh
-    cd ../..
-    rm -rf ./docker-scripts
+    cd ../../..
+    rm -rf ./temp/docker-scripts
+    
+#### Note: The default in this dockerd configuration (/etc/docker/dockerd-configuration-file) requires docker TLS.  Here are the scripts to help you setup [docker-TLS](https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS).
+
+Edit dockerd-configuration-file, change the [dockerd flags](https://docs.docker.com/engine/reference/commandline/dockerd/) to the flags your dockerd environment requires.  This file, dockerd-configuration-file, is an example.  It is what I am currently using.  You will want to remove --data-root=/usr/local/docker flag if you are using the default location (/var/lib/docker) or change it to your root of Docker.  You will want to change the address of the local DNS server (--dns 192.168.1.202) to your DNS server address.  If you do not have [TLS CA certificates](https://docs.docker.com/engine/security/https/) setup or in a different location or using different names then you will want to remove or change those --tls flags.  If you have not used --userns-remap=default before you WILL want to remove this flag until you read more about this security feature.
+
+    edit dockerd-configuration-file
+
+After editing the /etc/docker/dockerd-configuration-file with your dockerd flags, run sudo /etc/docker/setup-dockerd.sh.  It will move all the required files including setup-dockerd.sh into the /etc/docker and /etc/systemd/system/ directories.  The each time you want to make a change to your dockerd flags use sudo edit /etc/docker/dockerd-configuration-file and then sudo /etc/docker/setup-dockerd.sh.  
     
 If you are using upstart, run the following for dockerd to read /etc/default/docker.
     
@@ -27,16 +36,6 @@ If you are using systemd, run the following to enable two docker services on eac
     sudo systemctl enable dockerd-configuration-file.service
     sudo systemctl enable docker
     sudo systemctl restart docker
-
-#### Note: The default in this dockerd configuration (/etc/docker/dockerd-configuration-file) requires docker TLS.  Here are the scripts to help you setup [docker-TLS](https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS).  See the steps below:
-
-Edit dockerd-configuration-file, change the [dockerd flags](https://docs.docker.com/engine/reference/commandline/dockerd/) to the flags your dockerd environment requires.  This file, dockerd-configuration-file, is an example.  It is what I am currently using.  You will want to remove --data-root=/usr/local/docker flag if you are using the default location (/var/lib/docker) or change it to your root of Docker.  You will want to change the address of the local DNS server (--dns 192.168.1.202) to your DNS server address.  If you do not have [TLS CA certificates](https://docs.docker.com/engine/security/https/) setup or in a different location or using different names then you will want to remove or change those --tls flags.  If you have not used --userns-remap=default before you WILL want to remove this flag until you read more about this security feature.
-
-    edit dockerd-configuration-file
-
-After editing the dockerd-configuration-file with your dockerd flags, run sudo /etc/docker/setup-dockerd.sh.  It will move all the required files including setup-dockerd.sh into the /etc/docker and /etc/systemd/system/ directories.  The next time you want to make a change to your dockerd flags use sudo edit /etc/docker/dockerd-configuration-file and then sudo /etc/docker/setup-dockerd.sh.  
-    
-    sudo ./setup-dockerd.sh
 
 #### Download files:
     
