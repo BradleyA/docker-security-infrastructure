@@ -26,16 +26,26 @@ Edit dockerd-configuration-file, change the [dockerd flags](https://docs.docker.
     edit dockerd-configuration-file
 
 After editing the /etc/docker/dockerd-configuration-file with your dockerd flags, run sudo /etc/docker/setup-dockerd.sh.  It will move all the required files including setup-dockerd.sh into the /etc/docker and /etc/systemd/system/ directories.  The each time you want to make a change to your dockerd flags use sudo edit /etc/docker/dockerd-configuration-file and then sudo /etc/docker/setup-dockerd.sh.  
-    
-If you are using upstart, run the following for dockerd to read /etc/default/docker.
-    
-    sudo service docker restart
 
 If you are using systemd, run the following to enable two docker services on each boot and restart dockerd.
     
     sudo systemctl enable dockerd-configuration-file.service
     sudo systemctl enable docker
     sudo systemctl restart docker
+
+To verfy that systemd started dockerd with no incidents, enter the following:
+
+    systemctl status docker.service
+    
+    journalctl -xe
+
+If you are using upstart, run the following for dockerd to read /etc/default/docker.
+    
+    sudo service docker restart
+
+To verfy that upstart started dockerd with no incidents, enter the following:
+
+    sudo cat /var/log/upstart/docker.log
 
 #### Download files:
     
