@@ -17,7 +17,7 @@ To install, change to a location you want to download these files. Use git to pu
     cd docker-scripts/dockerd-configuration-options
     sudo ./setup-dockerd.sh
     cd ../../..
-    rm -rf ./temp/docker-scripts
+    rm -rf ./temp
     
 #### Note: The default in this dockerd configuration (/etc/docker/dockerd-configuration-file) requires docker TLS.  Here are the scripts to help you setup [docker-TLS](https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS).
 
