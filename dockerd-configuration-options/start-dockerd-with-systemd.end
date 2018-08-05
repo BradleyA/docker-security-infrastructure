@@ -1,4 +1,6 @@
 ###	
+#	dockerd-configuration-options/start-dockerd-with-systemd.end  3.32.370  2018-08-05_11:49:59_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.31-1-g513fe7d  
+#	   re-marking this file with later version of markit to support check-markit 
 #	start-dockerd-with-systemd.end	3.7.290	2018-02-18_23:07:16_CST uadmin six-rpi3b.cptx86.com 3.6-23-gccdac10 
 #	   New release, ready for production 
 #
@@ -6,7 +8,7 @@
 #
 #	Any changes to dockerd-configuration-file will be added to the override
 #	file during the next boot or when ${START_SYSTEMD_SCRIPT} is run.
-#
+###
 DROP_IN_DIRECTORY="/etc/systemd/system/docker.service.d"
 OVERRIDE_FILE="10-override"
 WORK_DIRECTORY="/etc/docker/"

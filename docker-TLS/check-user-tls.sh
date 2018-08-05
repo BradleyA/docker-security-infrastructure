@@ -1,10 +1,10 @@
 #!/bin/bash
-# 	check-user-tls.sh	3.29.361	2018-06-22_11:36:41_CDT uadmin two.cptx86.com 3.28-19-ga977649 
-# 	   format output to help user 
+# 	docker-TLS/check-user-tls.sh  3.32.370  2018-08-05_11:49:59_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.31-1-g513fe7d  
+# 	   re-marking this file with later version of markit to support check-markit 
 #
 #	set -x
 #	set -v
-#
+###
 display_help() {
 echo -e "\n${0} - Check public, private keys, and CA for a user"
 echo -e "\nUSAGE\n   ${0} <user-name> <home-directoty>"

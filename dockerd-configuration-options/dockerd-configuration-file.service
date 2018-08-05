@@ -1,7 +1,9 @@
 #
+#	dockerd-configuration-options/dockerd-configuration-file.service  3.32.370  2018-08-05_11:49:59_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.31-1-g513fe7d  
+#	   re-marking this file with later version of markit to support check-markit 
 #	dockerd-configuration-file.service	3.7.290	2018-02-18_23:07:16_CST uadmin six-rpi3b.cptx86.com 3.6-23-gccdac10 
 #	   New release, ready for production 
-#
+###
 [Unit]
 Description=dockerd-configuration-file.service
 Documentation=https://github.com/BradleyA/docker-scripts/blob/master/dockerd-configuration-options/README.md
