@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	check-user-tls.sh  3.34.373  2018-08-05_23:18:30_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.33  
-# 	   improve output of script #13 
-# 	docker-TLS/check-user-tls.sh  3.32.370  2018-08-05_11:49:59_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.31-1-g513fe7d  
-# 	   re-marking this file with later version of markit to support check-markit 
+# 	check-user-tls.sh  3.35.374  2018-08-05_23:21:09_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.34  
+# 	   improve output of script close #13 
 #
 #	set -x
 #	set -v
