@@ -1,10 +1,15 @@
 #!/bin/bash
+# 	check-host-tls.sh  3.33.372  2018-08-05_22:59:17_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.32-1-g54c2434  
+# 	   improve output  of script #13 
 # 	docker-TLS/check-host-tls.sh  3.32.370  2018-08-05_11:49:59_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.31-1-g513fe7d  
 # 	   re-marking this file with later version of markit to support check-markit 
 #
 #	set -x
 #	set -v
 ###
+DEBUG=0                 # 0 = debug off, 1 = debug on
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
 display_help() {
 echo -e "\n${0} - Check public, private keys, and CA for host"
 echo    "   UNDER DEVELOPMENT (issue #1) to add REMOTEHOST.  Currently works for local host only."
@@ -34,11 +39,10 @@ if [ "$1" == "--version" ] || [ "$1" == "-v" ] || [ "$1" == "version" ] ; then
         exit 0
 fi
 ### 
-#	REMOTEHOST=${1:-`hostname -f`}
+#	REMOTEHOST=${1:-`hostname -f`}	# #1
 REMOTEHOST=`hostname -f`
 CERTDIR=${1:-/etc/docker/certs.d/daemon/}
-BOLD=$(tput bold)
-NORMAL=$(tput sgr0)
+# >>>	REMOTEHOST: #1
 # >>>	REMOTEHOST: check if ${REMOTEHOST} -eq ${HOSTS} if true check for root on local host
 # >>>	REMOTEHOST:    if NOT EQUAL because no need for local hosts root  <<<
 # >>>	REMOTEHOST:  NOTE: scp & ssh does not work as root 	<<<<<<<<
@@ -58,22 +62,22 @@ if [ ! -d ${CERTDIR} ] ; then
 	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	${CERTDIR} does not exist"   1>&2
 	exit 1
 fi
-echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Checking ${REMOTEHOST} TLS\n\tcertifications and directory permissions."   1>&2
+echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Checking\n\t${BOLD}${REMOTEHOST}${NORMAL} TLS certifications and directory permissions."   1>&2
 #	View dockerd daemon certificate expiration date of ca.pem file
-echo -e "\nView dockerd daemon certificate expiration date of ca.pem file."
-openssl x509 -in ${CERTDIR}ca.pem -noout -enddate
+TEMP=`openssl x509 -in ${CERTDIR}ca.pem -noout -enddate`
+echo -e "\nView dockerd daemon certificate expiration date of ca.pem file:\n\t${BOLD}${TEMP}${NORMAL}"
 #	View dockerd daemon certificate expiration date of cert.pem file
-echo -e "\nView dockerd daemon certificate expiration date of cert.pem file"
-openssl x509 -in ${CERTDIR}cert.pem -noout -enddate
+TEMP=`openssl x509 -in ${CERTDIR}cert.pem -noout -enddate`
+echo -e "\nView dockerd daemon certificate expiration date of cert.pem file:\n\t${BOLD}${TEMP}${NORMAL}"
 #	View dockerd daemon certificate issuer data of the ca.pem file
-echo -e "\nView dockerd daemon certificate issuer data of the ca.pem file"
-openssl x509 -in ${CERTDIR}ca.pem -noout -issuer
+TEMP=`openssl x509 -in ${CERTDIR}ca.pem -noout -issuer`
+echo -e "\nView dockerd daemon certificate issuer data of the ca.pem file:\n\t${BOLD}${TEMP}${NORMAL}"
 #	View dockerd daemon certificate issuer data of the cert.pem file
-echo -e "\nView dockerd daemon certificate issuer data of the cert.pem file"
-openssl x509 -in ${CERTDIR}cert.pem -noout -issuer
+TEMP=`openssl x509 -in ${CERTDIR}cert.pem -noout -issuer`
+echo -e "\nView dockerd daemon certificate issuer data of the cert.pem file:\n\t${BOLD}${TEMP}${NORMAL}"
 #	Verify that dockerd daemon certificate was issued by the CA.
-echo -e "\nVerify that dockerd daemon certificate was issued by the CA."
-openssl verify -verbose -CAfile ${CERTDIR}ca.pem ${CERTDIR}cert.pem
+TEMP=`openssl verify -verbose -CAfile ${CERTDIR}ca.pem ${CERTDIR}cert.pem`
+echo -e "\nVerify that dockerd daemon certificate was issued by the CA:\n\t${BOLD}${TEMP}${NORMAL}"
 #
 echo -e "\nVerify and correct file permissions."
 #	Verify and correct file permissions for ${CERTDIR}ca.pem
@@ -97,7 +101,7 @@ if [ $(stat -Lc %a ${CERTDIR}) != 700 ]; then
 	chmod 700 ${CERTDIR}
 fi
 #
-echo -e "\nUse script ${BOLD}create-host-tls.sh${NORMAL} to update host TLS if host TLS certificate has expired."
+echo -e "\nUse script ${BOLD}create-host-tls.sh${NORMAL} to update host TLS if host TLS certificate\n\thas expired."
 echo -e "\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Done.\n"	1>&2
 #
 #	May want to create a version of this script that automates this process for SRE tools,
