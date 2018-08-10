@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	check-user-ssh.sh  3.41.382  2018-08-10_12:03:45_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.40  
+# 	   update display_help #14 
 # 	check-user-ssh.sh  3.40.381  2018-08-10_11:04:18_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.39  
 # 	   Check if .ssh directory is owned by ${SSHUSER} close #14 
 ###
@@ -11,24 +13,25 @@ NORMAL=$(tput sgr0)
 ###
 display_help() {
 echo -e "\n${NORMAL}${0} - Check user RSA ssh file permissions"
-echo -e "\nUSAGE\n   ${0} <user-name> <home-directoty>"
-echo    "   ${0} [--help | -help | help | -h | h | -? | ?] [--version | -v]"
-echo -e "\nDESCRIPTION\nUsers can make sure that the file and directory permissions are"
-echo    "correct and corrected if needed.  Administrators can check other users ssh"
-echo    "keys by using: sudo ${0} <SSH-USER>.  Currently not"
-echo    "supporting id_dsa.pub."
-echo -e "\nTo create a new ssh key; ssh-keygen -t rsa"
+echo -e "\nUSAGE\n   ${0} [<user-name> <home-directoty>]"
+echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo    "   ${0} [--version | -version | -v]"
+echo -e "\nDESCRIPTION\nThis script allows users to make sure that the ssh files and directory"
+echo    "permissions are correct.  If they are not correct then this script will"
+echo    "correct the permissions.  Administrators can check other users ssh keys by"
+echo    "using: sudo ${0} <SSH-USER>."
+echo -e "\nTo create a new ssh key:\n\n   ${BOLD}ssh-keygen -t rsa${NORMAL}\n"
 echo    "Enter the following command to test if public and private key match:"
-echo    "diff -qs <(ssh-keygen -yf ~/.ssh/id_rsa) <(cut -d ' ' -f 1,2 ~/.ssh/id_rsa.pub)"
+echo -e "\n   ${BOLD}diff -qs <(ssh-keygen -yf ~/.ssh/id_rsa) <(cut -d ' ' -f 1,2 ~/.ssh/id_rsa.pub)${NORMAL}"
 echo -e "\nOPTIONS"
-echo    "   SSH-USER   user, default is user running script"
-echo    "   USER-HOME  location of user home directory, default /home/"
+echo    "   SSHUSER   user, default is user running script"
+echo    "   USERHOME  location of user home directory, default /home/"
 echo    "      Many sites have different home directories locations (/u/north-office/)"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/ssh"
-echo -e "\nEXAMPLES\n   User sam can check their ssh\n\t${0}"
-echo -e "   User sam checks their ssh in a non-default home directory\n\t${0} sam /u/north-office/"
-echo -e "   Administrator checks user bob ssh\n\tsudo ${0} bob"
-echo -e "   Administrator checks user sally ssh in a different home directory\n\tsudo ${0} sally /u/north-office/"
+echo -e "\nEXAMPLES\n   ${0}\n\n   User checks their ssh file permissions"
+echo -e "\n   ${0} sam /u/north-office/\n\n   User sam checks their ssh file permissions in a non-default home directory"
+echo -e "\n   sudo ${0} bob\n\n   Administrator checks user bob ssh file permissions"
+echo -e "\n   sudo ${0} sally /u/home-office/\n\n   Administrator checks user sally ssh file permissions in a different home\n   directory"
 if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
         echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARNING${NORMAL}]:     Your language, ${LANG}, is not supported.\n\tWould you like to help?\n" 1>&2
 fi
@@ -37,14 +40,15 @@ if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" =
 	display_help
 	exit 0
 fi
-if [ "$1" == "--version" ] || [ "$1" == "-v" ] || [ "$1" == "version" ] ; then
+if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
         head -2 ${0} | awk {'print$2"\t"$3'}
         exit 0
 fi
 ###
 SSHUSER=${1:-${USER}}
 USERHOME=${2:-/home/}
-LOCALHOSTNAME=`hostname -f`
+#
+if [ "${DEBUG}" == "1" ] ; then echo -e "> DEBUG ${LINENO}  SSHUSER >${SSHUSER}< USERHOME >${USERHOME}<" 1>&2 ; fi
 #	Root is required to check other users or user can check their own certs
 if ! [ $(id -u) = 0 -o ${USER} = ${SSHUSER} ] ; then
 	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:  Use sudo ${0}  ${SSHUSER}"	1>&2
@@ -143,7 +147,8 @@ fi
 #
 echo -e "\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:  Done.\n"	1>&2
 ###
-#	May want to create a version of this script that automates this process for SRE tools,
-#		but keep this script for users to run manually,
-#	open ticket and remove this comment
+# >>>	#??
+# >>>		May want to create a version of this script that automates this process for SRE tools,
+# >>>		but keep this script for users to run manually,
+# >>>		open ticket and remove this comment
 ###
