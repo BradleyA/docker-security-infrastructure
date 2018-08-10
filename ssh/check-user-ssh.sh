@@ -1,18 +1,8 @@
 #!/bin/bash
+# 	check-user-ssh.sh  3.39.380  2018-08-10_10:22:12_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.38-2-g303b4d6  
+# 	   Check if .ssh directory exists and is owned by the effective user id #14 
 # 	check-user-ssh.sh  3.38.377  2018-08-10_08:45:35_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.37  
 # 	   output formating changes, add check for matched user keys #14 
-# 	check-user-ssh.sh  3.37.376  2018-08-09_23:38:48_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.36  
-# 	   correct output 
-# 	check-user-ssh.sh  3.36.375  2018-08-09_23:29:45_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.35  
-# 	   added LANG, cleanup output, add .ssh/config, continue testing 
-# 	check-user-ssh.sh  3.20.327  2018-03-05_13:41:10_CST  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.19-1-g31ed959  
-# 	   changes to display help 
-# 	check-user-ssh.sh  3.19.325  2018-03-05_13:21:09_CST  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.18  
-# 	   skip known_hosts & authorized_keys tests if files are missing, remove matching code because passphrase prompt 
-# 	check-user-ssh.sh  3.18.324  2018-03-05_11:29:32_CST  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.17  
-# 	   cleanup display_help, changed TLSUSER to SSHUSER, debug 
-# 	check-user-ssh.sh  3.17.323  2018-03-04_13:42:20_CST  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.16  
-# 	   completed debug process, ready for production 
 ###
 #	set -x
 #	set -v
@@ -68,10 +58,10 @@ if [ ! -d ${USERHOME}${SSHUSER} ] ; then
 	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:  ${SSHUSER} does not have a home directory\n\ton this system or ${SSHUSER} home directory is not ${USERHOME}${SSHUSER}"	1>&2
 	exit 1
 fi
-#	Check if user has .ssh directory
-if [ ! -d ${USERHOME}${SSHUSER}/.ssh ] ; then 
-	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:  ${SSHUSER} does not have a .ssh directory"	1>&2
-	echo -e "\n\tTo create an ssh key enter: ${BOLD}ssh-keygen -t rsa${NORMAL}"
+#	Check if .ssh directory exists and is owned by the effective user id
+if [ ! -O ${USERHOME}${SSHUSER}/.ssh ] ; then 
+	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:  ${SSHUSER} does not have a .ssh directory or\ndoes not own the .ssh directory"	1>&2
+	echo -e "\n\tTo create an ssh key enter: ${BOLD}ssh-keygen -t rsa${NORMAL}\n"
 	exit 1
 fi
 #	Check if user has .ssh/id_rsa file
@@ -118,9 +108,9 @@ if [ -e ${USERHOME}${SSHUSER}/.ssh/authorized_keys ] ; then
 		chmod 600 ${USERHOME}${SSHUSER}/.ssh/authorized_keys
 	fi
 #	List of authorized hosts in ${USERHOME}${SSHUSER}/.ssh/authorized_keys
-	echo -e "\nList of ${BOLD}authorized hosts${NORMAL} in ${USERHOME}${SSHUSER}/.ssh/authorized_keys:\n"
+	echo -e "\nList of ${BOLD}authorized hosts${NORMAL} in ${USERHOME}${SSHUSER}/.ssh/authorized_keys:\n${BOLD}"
 	cut -d ' ' -f 3 ${USERHOME}${SSHUSER}/.ssh/authorized_keys | sort
-	echo -e "\nTo remove a host from ${USERHOME}${SSHUSER}/.ssh/authorized_keys file:\n\n\t${BOLD}REMOVE_HOST='<user_name>@<host_name>'\n\tgrep -v \$REMOVE_HOST /home/uadmin/.ssh/authorized_keys > /home/uadmin/.ssh/authorized_keys.new\n\tmv /home/uadmin/.ssh/authorized_keys.new /home/uadmin/.ssh/authorized_keys${NORMAL}"
+	echo -e "\n${NORMAL}To remove a host from ${USERHOME}${SSHUSER}/.ssh/authorized_keys file:\n\n\t${BOLD}REMOVE_HOST='<user_name>@<host_name>'\n\tgrep -v \$REMOVE_HOST /home/uadmin/.ssh/authorized_keys > /home/uadmin/.ssh/authorized_keys.new\n\tmv /home/uadmin/.ssh/authorized_keys.new /home/uadmin/.ssh/authorized_keys${NORMAL}"
 else
         echo -e "\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:  User does not have a .ssh/authorized_keys file."        1>&2
 fi
@@ -134,14 +124,17 @@ if [ -e ${USERHOME}${SSHUSER}/.ssh/config ] ; then
 else
         echo -e "\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:  User does not have a .ssh/config file."        1>&2
 fi
-# >>>	Need to test if running as root for another user may not work with the following command
-# >>>	
+
+#	Check if user owns .ssh files
+echo -e "\nCheck if all files in ~/.ssh directory are owned by ${USER}.\nIf files are not owned by ${USER} then list them below:\n${BOLD}"        1>&2
+find ~/.ssh ! -user $USER -exec ls -l {} \;
+echo   "${NORMAL}"
 #	Check if user private key and user public key are a matched set
 if ! [ $(id -u) = 0 ] ; then
-	echo -e "\nCheck if ${SSHUSER} private key and public key are a\nmatched set (identical) or not a matched set (differ):\n"
+	echo -e "Check if ${SSHUSER} private key and public key are a\nmatched set (identical) or not a matched set (differ):\n"
 	diff -qs <(ssh-keygen -y -f ${USERHOME}${SSHUSER}/.ssh/id_rsa) <(cut -d ' ' -f 1,2 ${USERHOME}${SSHUSER}/.ssh/id_rsa.pub)
 else
-	echo -e "\nRoot is unable to check if ${SSHUSER} private key and public key are a\nmatched set (identical) or not a matched set (differ).  Only a user will be\nable to check for matched set or not matched set."
+	echo -e "Root is unable to check if ${SSHUSER} private key and public key are a\nmatched set (identical) or not a matched set (differ).  Only a user will be\nable to check for matched set or not matched set."
 fi
 #
 echo -e "\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:  Done.\n"	1>&2
