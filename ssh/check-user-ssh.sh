@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	check-user-ssh.sh  3.37.376  2018-08-09_23:38:48_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.36  
+# 	   correct output 
 # 	check-user-ssh.sh  3.36.375  2018-08-09_23:29:45_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.35  
 # 	   added LANG, cleanup output, add .ssh/config, continue testing 
 # 	check-user-ssh.sh  3.20.327  2018-03-05_13:41:10_CST  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.19-1-g31ed959  
@@ -116,7 +118,7 @@ if [ -e ${USERHOME}${SSHUSER}/.ssh/authorized_keys ] ; then
 #	List of authorized hosts in ${USERHOME}${SSHUSER}/.ssh/authorized_keys
 	echo -e "\nList of ${BOLD}authorized hosts${NORMAL} in ${USERHOME}${SSHUSER}/.ssh/authorized_keys:\n"
 	cut -d ' ' -f 3 ${USERHOME}${SSHUSER}/.ssh/authorized_keys | sort
-	echo -e "\nTo remove a host from ${USERHOME}${SSHUSER}/.ssh/authorized_keys file:\n\n\t${BOLD}REMOVE_HOST='<host_name>'\n\tgrep -v \$REMOVE_HOST /home/uadmin/.ssh/authorized_keys > /home/uadmin/.ssh/authorized_keys.new\n\tmv /home/uadmin/.ssh/authorized_keys.new /home/uadmin/.ssh/authorized_keys${NORMAL}"
+	echo -e "\nTo remove a host from ${USERHOME}${SSHUSER}/.ssh/authorized_keys file:\n\n\t${BOLD}REMOVE_HOST='<user_name>@<host_name>'\n\tgrep -v \$REMOVE_HOST /home/uadmin/.ssh/authorized_keys > /home/uadmin/.ssh/authorized_keys.new\n\tmv /home/uadmin/.ssh/authorized_keys.new /home/uadmin/.ssh/authorized_keys${NORMAL}"
 else
         echo -e "\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:  User does not have a .ssh/authorized_keys file."        1>&2
 fi
@@ -133,8 +135,10 @@ fi
 # >>>	Need to test if running as root for another user may not work with the following command
 # >>>	
 #	Check if user private key and user public key are a matched set
-echo -e "\nCheck if ${SSHUSER} private key and public key are a identical or differ:\n"
-diff -qs <(ssh-keygen -y -f ${USERHOME}${SSHUSER}/.ssh/id_rsa) <(cut -d ' ' -f 1,2 ${USERHOME}${SSHUSER}/.ssh/id_rsa.pub)
+if ! [ $(id -u) = 0 ] ; then
+	echo -e "\nCheck if ${SSHUSER} private key and public key are identical or differ:\n"
+	diff -qs <(ssh-keygen -y -f ${USERHOME}${SSHUSER}/.ssh/id_rsa) <(cut -d ' ' -f 1,2 ${USERHOME}${SSHUSER}/.ssh/id_rsa.pub)
+fi
 #
 echo -e "\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:  Done.\n"	1>&2
 #
