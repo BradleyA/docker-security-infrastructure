@@ -70,9 +70,9 @@ To debug SSH login use the -vvv for verbose mode to help resolve this incident.
     
 To remove a host from ~/.ssh/authorized_keys file:
 
-	REMOVE_HOST='<user_name>@<host_name>'
-	grep -v $REMOVE_HOST /home/uadmin/.ssh/authorized_keys > /home/uadmin/.ssh/authorized_keys.new
-	mv /home/uadmin/.ssh/authorized_keys.new /home/uadmin/.ssh/authorized_keys
+    REMOVE_HOST='<user_name>@<host_name>'
+    grep -v $REMOVE_HOST /home/uadmin/.ssh/authorized_keys > /home/uadmin/.ssh/authorized_keys.new
+    mv /home/uadmin/.ssh/authorized_keys.new /home/uadmin/.ssh/authorized_keys
 
 ### System OS script tested
  * Ubuntu 14.04.3 LTS
