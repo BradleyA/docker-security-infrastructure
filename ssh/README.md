@@ -23,7 +23,7 @@ Check user RSA ssh file permissions
 
     ./check-user-ssh.sh
     
-### Usage
+### Output
     Verify and correct file and directory permissions for /home/uadmin/.ssh
     
     List of authorized hosts in /home/uadmin/.ssh/authorized_keys:
@@ -52,7 +52,7 @@ Check user RSA ssh file permissions
     
     ./check-user-ssh.sh 148 [INFO]:  Done.
 
-
+### ssh Hints
 To create a new ssh key;
 
     ssh-keygen -t rsa
@@ -70,8 +70,6 @@ To remove a host from ~/.ssh/authorized_keys file:
 	REMOVE_HOST='<user_name>@<host_name>'
 	grep -v $REMOVE_HOST /home/uadmin/.ssh/authorized_keys > /home/uadmin/.ssh/authorized_keys.new
 	mv /home/uadmin/.ssh/authorized_keys.new /home/uadmin/.ssh/authorized_keys
-
-
 
 ### System OS script tested
  * Ubuntu 14.04.3 LTS
