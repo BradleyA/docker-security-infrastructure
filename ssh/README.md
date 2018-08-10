@@ -21,7 +21,36 @@ To install, change to the location you want to download the scripts. Use git to 
 ### Usage
 Check user RSA ssh file permissions
 
+    ./check-user-ssh.sh
+    
+### Usage
+    Verify and correct file and directory permissions for /home/uadmin/.ssh
+    
+    List of authorized hosts in /home/uadmin/.ssh/authorized_keys:
+    
+    uadmin@four-rpi3b
+    uadmin@one-rpi3b
+    uadmin@six-rpi3b
+    uadmin@three-rpi3b
+    uadmin@two
+    uadmin@two-rpi3b
+    uthree@three
+    
+    To remove a host from /home/uadmin/.ssh/authorized_keys file:
 
+	REMOVE_HOST='<user_name>@<host_name>'
+	grep -v $REMOVE_HOST /home/uadmin/.ssh/authorized_keys > /home/uadmin/.ssh/authorized_keys.new
+	mv /home/uadmin/.ssh/authorized_keys.new /home/uadmin/.ssh/authorized_keys
+    
+    Check if all files in /home/uadmin/.ssh directory are owned
+    by uadmin.  If files are not owned by uadmin then list them below:
+    
+    Check if uadmin private key and public key are a
+    matched set (identical) or not a matched set (differ):
+    
+    Files /dev/fd/63 and /dev/fd/62 are identical
+    
+    ./check-user-ssh.sh 148 [INFO]:  Done.
 
 
 To create a new ssh key;
