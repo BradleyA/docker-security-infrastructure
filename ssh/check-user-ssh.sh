@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	check-user-ssh.sh  3.38.377  2018-08-10_08:45:35_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.37  
+# 	   output formating changes, add check for matched user keys #14 
 # 	check-user-ssh.sh  3.37.376  2018-08-09_23:38:48_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.36  
 # 	   correct output 
 # 	check-user-ssh.sh  3.36.375  2018-08-09_23:29:45_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.35  
@@ -20,7 +22,7 @@ BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 ###
 display_help() {
-echo -e "\n${0} - Check user RSA ssh file permissions"
+echo -e "\n${NORMAL}${0} - Check user RSA ssh file permissions"
 echo -e "\nUSAGE\n   ${0} <user-name> <home-directoty>"
 echo    "   ${0} [--help | -help | help | -h | h | -? | ?] [--version | -v]"
 echo -e "\nDESCRIPTION\nUsers can make sure that the file and directory permissions are"
@@ -83,7 +85,7 @@ if [ ! -e ${USERHOME}${SSHUSER}/.ssh/id_rsa.pub ] ; then
 	exit 1
 fi
 #
-echo -e "\nVerify and correct file and directory permissions for ${USERHOME}${SSHUSER}/.ssh"
+echo -e "\n${NORMAL}Verify and correct file and directory permissions for ${USERHOME}${SSHUSER}/.ssh"
 if [ $(stat -Lc %a ${USERHOME}${SSHUSER}/.ssh) != 700 ]; then
 	echo -e "\n${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:  Directory permissions for ${USERHOME}${SSHUSER}/.ssh\n\tare not 700.  Correcting $(stat -Lc %a ${USERHOME}${SSHUSER}/.ssh) to 0700 directory permissions"	1>&2
 	chmod 0700 ${USERHOME}${SSHUSER}/.ssh
@@ -136,8 +138,10 @@ fi
 # >>>	
 #	Check if user private key and user public key are a matched set
 if ! [ $(id -u) = 0 ] ; then
-	echo -e "\nCheck if ${SSHUSER} private key and public key are identical or differ:\n"
+	echo -e "\nCheck if ${SSHUSER} private key and public key are a\nmatched set (identical) or not a matched set (differ):\n"
 	diff -qs <(ssh-keygen -y -f ${USERHOME}${SSHUSER}/.ssh/id_rsa) <(cut -d ' ' -f 1,2 ${USERHOME}${SSHUSER}/.ssh/id_rsa.pub)
+else
+	echo -e "\nRoot is unable to check if ${SSHUSER} private key and public key are a\nmatched set (identical) or not a matched set (differ).  Only a user will be\nable to check for matched set or not matched set."
 fi
 #
 echo -e "\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:  Done.\n"	1>&2
