@@ -1,8 +1,8 @@
 ## ssh
-
+### Description
 Check user RSA ssh file permissions
 
-This script allows users to make sure that the ssh files and directory permissions are correct if not to correct the permissions.  Administrators can check other users ssh keys by using: sudo /usr/local/bin/check-user-ssh.sh <SSH-USER>.  Currently not supporting id_dsa.pub.
+This script allows users to make sure that the ssh files and directory permissions are correct.  If they are not correct then this script will correct the permissions.  Administrators can check other users ssh keys by using: sudo /usr/local/bin/check-user-ssh.sh <SSH-USER>.  Currently not supporting id_dsa.pub.
 
     drwx------  2 uadmin uadmin 4096 Mar  5 13:55 .
     drwxr-xr-x 15 uadmin uadmin 4096 Mar 10 19:22 ..
@@ -11,6 +11,18 @@ This script allows users to make sure that the ssh files and directory permissio
     -rw-------  1 uadmin uadmin 1675 Oct  7 20:37 id_rsa
     -rw-r--r--  1 uadmin uadmin  398 Oct  7 20:37 id_rsa.pub
     -rw-------  1 uadmin uadmin 3420 Jul 27 19:16 known_hosts
+
+### Clone
+To install, change to the location you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have git then enter; "sudo apt-get install git". On the github page of this script use the "HTTPS clone URL" with the 'git clone' command.
+
+    git clone https://github.com/BradleyA/docker-scripts
+    cd docker-scripts/ssh
+
+### Usage
+Check user RSA ssh file permissions
+
+
+
 
 To create a new ssh key;
 
@@ -30,11 +42,7 @@ To remove a host from ~/.ssh/authorized_keys file:
 	grep -v $REMOVE_HOST /home/uadmin/.ssh/authorized_keys > /home/uadmin/.ssh/authorized_keys.new
 	mv /home/uadmin/.ssh/authorized_keys.new /home/uadmin/.ssh/authorized_keys
 
-### Clone
-To install, change to the location you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have git then enter; "sudo apt-get install git". On the github page of this script use the "HTTPS clone URL" with the 'git clone' command.
 
-    git clone https://github.com/BradleyA/docker-scripts
-    cd docker-scripts/ssh
 
 ### System OS script tested
  * Ubuntu 14.04.3 LTS
