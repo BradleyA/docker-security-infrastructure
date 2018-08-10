@@ -17,6 +17,9 @@ To install, change to the location you want to download the scripts. Use git to 
 
     git clone https://github.com/BradleyA/docker-scripts
     cd docker-scripts/ssh
+    cp ./check-user-ssh.sh  /usr/local/bin
+    cd ../..
+    rm -rf docker-scripts
 
 ### Usage
 Check user, uadmin, RSA ssh file permissions
