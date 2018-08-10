@@ -19,7 +19,7 @@ To install, change to the location you want to download the scripts. Use git to 
     cd docker-scripts/ssh
 
 ### Usage
-Check user RSA ssh file permissions
+Check user, uadmin, RSA ssh file permissions
 
     ./check-user-ssh.sh
     
