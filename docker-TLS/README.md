@@ -26,7 +26,7 @@ To clone, change to the directory you want to download the scripts.  Use git to 
     mkdir -p /usr/local/bin
     mv c* /usr/local/bin
     cd ../..
-    rm -rf docker-scripts/docker-TLS
+    rm -rf docker-scripts
 
 ## Install
 To install, change to the directory you want to download these scripts. 
