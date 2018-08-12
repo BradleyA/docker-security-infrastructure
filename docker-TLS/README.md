@@ -22,6 +22,11 @@ To clone, change to the directory you want to download the scripts.  Use git to 
     
     git clone https://github.com/BradleyA/docker-scripts
     cd docker-scripts/docker-TLS
+    
+    mkdir -p /usr/local/bin
+    mv c* /usr/local/bin
+    cd ../..
+    rm -rf docker-scripts/docker-TLS
 
 ## Install
 To install, change to the directory you want to download these scripts. 
