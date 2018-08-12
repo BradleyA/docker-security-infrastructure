@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	setup-dockerd.sh  3.43.392  2018-08-12_12:32:51_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.42  
+# 	   added note about skipping install and configurating daemon chnages 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
 # 	   sync to standard script design changes 
 # 	setup-dockerd.sh  3.30.367  2018-06-23_17:52:30_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.29  
@@ -73,6 +75,8 @@ elif [ ! -f ${WORK_DIRECTORY}setup-dockerd.sh ] ; then
 	mv uninstall-dockerd-scripts.sh		${WORK_DIRECTORY}
 	chown root.root				${WORK_DIRECTORY}*
 	chmod go-xw				${WORK_DIRECTORY}*
+else
+	echo "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Skipping installation because ${WORK_DIRECTORY}setup-dockerd.sh is already installed.  Updating Docker daemon with changes in ${WORK_DIRECTORY}dockerd-configuration-file."	1>&2
 fi
 #
 ###	Configure dockerd (Upstart and SysVinit configuration file) on Ubuntu 14.04
