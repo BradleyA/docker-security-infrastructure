@@ -1,13 +1,10 @@
 #!/bin/bash
-# 	check-user-ssh.sh  3.41.382  2018-08-10_12:03:45_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.40  
-# 	   update display_help #14 
-# 	check-user-ssh.sh  3.40.381  2018-08-10_11:04:18_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.39  
-# 	   Check if .ssh directory is owned by ${SSHUSER} close #14 
-###
-#	set -x
-#	set -v
+# 	ssh/check-user-ssh.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
+# 	   sync to standard script design changes 
 ###
 DEBUG=0                 # 0 = debug off, 1 = debug on
+#	set -x
+#	set -v
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 ###

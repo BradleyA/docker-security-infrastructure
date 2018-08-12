@@ -1,19 +1,21 @@
 #!/bin/bash
+# 	dockerd-configuration-options/uninstall-dockerd-scripts.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
+# 	   sync to standard script design changes 
 # 	uninstall-dockerd-scripts.sh  3.28.341  2018-05-08_16:23:59_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.27  
 # 	   add instruction to remove this script when complete 
-# 	uninstall-dockerd-scripts.sh  3.27.340  2018-05-08_10:54:15_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.26  
-# 	   testing complete, additional testing maybe needed, ready for use 
-# 	uninstall-dockerd-scripts.sh  3.25.338  2018-05-08_10:34:15_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.24  
-# 	   cleanup command help messages 
-#
+###
+DEBUG=0                 # 0 = debug off, 1 = debug on
 #	set -v
 #	set -x
-#
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
+###
 display_help() {
-echo -e "\n${0} - uninstall scripts that support dockerd on Systemd and Upstart"
+echo -e "\n${NORMAL}${0} - uninstall scripts that support dockerd on Systemd and Upstart"
 echo -e "\nUSAGE\n   sudo ${0} "
-echo    "   sudo ${0} [OPTIONS]"
-echo    "   sudo ${0} [--help | -help | help | -h | h | -? | ?] [--version | -v]"
+echo    "   sudo ${0} [<WORK_DIRECTORY>] [<UPSTART_SYSVINIT_DIRECTORY>}"
+echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION\nThis script has to be run as root to remove scripts and files from /etc/docker"
 echo    "and /etc/systemd/system."
 echo -e "\nOPTIONS"
@@ -22,17 +24,19 @@ echo    "                                default is /etc/docker/"
 echo    "   UPSTART_SYSVINIT_DIRECTORY   Ubuntu 14.04 (Upstart) directory,"
 echo    "                                default is /etc/default/"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options"
-echo -e "\nEXAMPLES\n   To remove scripts and files using defulat directories, run"
-echo -e "\tsudo ${0}\n"
+echo -e "\nEXAMPLES\n   sudo ${0}\n\nTo remove scripts and files using defulat directories\n"
+echo -e "   sudo ${0} /mnt/etc/docker/ /mnt/etc/default/\n"
 echo -e "   To use non-default directories for WORK_DIRECTORY (/mnt/etc/docker/) and"
-echo    "   UPSTART_SYSVINIT_DIRECTORY (/mnt/etc/default/), run"
-echo -e "\tsudo ${0} /mnt/etc/docker/ /mnt/etc/default/\n"
+echo -e "   UPSTART_SYSVINIT_DIRECTORY (/mnt/etc/default/)\n"
+if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
+        echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARNING${NORMAL}]:     Your language, ${LANG}, is not supported.\n\tWould you like to help?\n" 1>&2
+fi
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
 	exit 0
 fi
-if [ "$1" == "--version" ] || [ "$1" == "-v" ] || [ "$1" == "version" ] ; then
+if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
         head -2 ${0} | awk {'print$2"\t"$3'}
         exit 0
 fi
@@ -40,8 +44,7 @@ fi
 WORK_DIRECTORY=${1:-/etc/docker/}
 UPSTART_SYSVINIT_DIRECTORY=${2:-/etc/default/}
 CONFIGURATION_STRING=${3:-Custom_dockerd_Configuration_File}
-BOLD=$(tput bold)
-NORMAL=$(tput sgr0)
+if [ "${DEBUG}" == "1" ] ; then echo -e "> DEBUG ${LINENO}  WORK_DIRECTORY >${WORK_DIRECTORY} UPSTART_SYSVINIT_DIRECTORY >${UPSTART_SYSVINIT_DIRECTORY}< CONFIGURATION_STRING >${CONFIGURATION_STRING}<" 1>&2 ; fi
 #
 echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Begin uninstalling scripts and supporting files.\n"	1>&2
 #	Must be root to run this script
@@ -89,4 +92,6 @@ systemctl daemon-reload
 #
 echo    "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Run '${BOLD}sudo systemctl restart docker${NORMAL}'"	1>&2
 echo    "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:        Run '${BOLD}rm ${0}${NORMAL}'"  1>&2
+#
+echo -e "${NORMAL}\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Done.\n"	1>&2
 ###

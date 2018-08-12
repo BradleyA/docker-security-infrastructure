@@ -1,16 +1,22 @@
 #!/bin/bash
+# 	docker-TLS/create-site-private-public-tls.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
+# 	   sync to standard script design changes 
 # 	docker-TLS/create-site-private-public-tls.sh  3.15.318  2018-02-28_21:41:27_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.14-2-g9866315  
 # 	   ready for production 
 # 	create-site-private-public-tls.sh  3.14.315  2018-02-27_21:01:40_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.13  
 # 	   added BOLD and NORMAL with little testing 
-#
+###
+DEBUG=0                 # 0 = debug off, 1 = debug on
 #	set -x
 #	set -v
-#
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
+###
 display_help() {
-echo -e "\n${0} - Create site private and CA keys"
-echo -e "\nUSAGE\n   ${0} <#-of-days> <home-directory> <administrator>"
-echo    "   ${0} [--help | -help | help | -h | h | -? | ?] [--version | -v]"
+echo -e "\n${NORMAL}${0} - Create site private and CA keys"
+echo -e "\nUSAGE\n   ${0} [<NUMBERDAYS>] [<USERHOME>] [<ADMTLSUSER>]"
+echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION\nAn administration user can run this script to create site private and CA"
 echo    "keys.  Run this script first on your host that will be creating all your TLS"
 echo    "keys for your site.  It creates the working directories"
@@ -19,15 +25,17 @@ echo    "for your site private and CA keys.  If you later choose to use a differ
 echo    "host to continue creating your user and host TLS keys, cp the"
 echo    "${HOME}/.docker/docker-ca and ${HOME}/.docker/docker-ca/.private"
 echo    "to the new host and run create-new-openssl.cnf-tls.sh scipt."
-echo -e "\nOPTIONS\n "
+echo -e "\nOPTIONS"
 echo    "   NUMBERDAYS   number of days site CA is valid, default 730 days (two years)"
 echo    "   USERHOME     location of admin home directory, default is /home/"
 echo    "                Many sites have different home directories (/u/north-office/)"
 echo    "   ADMTLSUSER   administration user creating TLS accounts, default is user"
 echo    "                running script"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
-echo -e "\nEXAMPLES\n   Create site private and public keys for one year in /u/north-office/ uadmin 
-${0} 365 /u/north-office/ uadmin\n"
+echo -e "\nEXAMPLES\n   ${0} 365 /u/north-office/ uadmin\n\n   Create site private and public keys for one year in /u/north-office/ uadmin\n"
+if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
+        echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARNING${NORMAL}]:     Your language, ${LANG}, is not supported.\n\tWould you like to help?\n" 1>&2
+fi
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
@@ -41,8 +49,7 @@ fi
 NUMBERDAYS=${1:-730}
 USERHOME=${2:-/home/}
 ADMTLSUSER=${3:-${USER}}
-BOLD=$(tput bold)
-NORMAL=$(tput sgr0)
+if [ "${DEBUG}" == "1" ] ; then echo -e "> DEBUG ${LINENO}  NUMBERDAYS >${NUMBERDAYS}< USERHOME >${USERHOME}< ADMTLSUSER >${ADMTLSUSER}<" 1>&2 ; fi
 #	Check if admin user has home directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER} ] ; then
 	display_help

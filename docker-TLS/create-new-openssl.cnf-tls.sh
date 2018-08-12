@@ -1,34 +1,40 @@
 #!/bin/bash
+# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
+# 	   sync to standard script design changes 
 # 	docker-TLS/create-new-openssl.cnf-tls.sh  3.15.318  2018-02-28_21:41:27_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.14-2-g9866315  
 # 	   ready for production 
-# 	create-new-openssl.cnf-tls.sh  3.14.315  2018-02-27_21:01:40_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.13  
-# 	   added BOLD and NORMAL with little testing 
-#
+###
+DEBUG=0                 # 0 = debug off, 1 = debug on
 #	set -x
 #	set -v
-#
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
+###
 display_help() {
-echo -e "\n${0} - Modify /etc/ssl/openssl.conf file"
+echo -e "\n${NORMAL}${0} - Modify /etc/ssl/openssl.conf file"
 echo -e "\nUSAGE\n   sudo ${0}"
-echo    "   ${0} [--help | -help | help | -h | h | -? | ?] [--version | -v]"
+echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION\nThis script makes a change to openssl.cnf file which is required for"
 echo    "create-user-tls.sh and create-host-tls.sh scripts.  It must be run as root."
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
-echo -e "\nnEXAMPLES\n   sudo ${0}\n"
+echo -e "\nEXAMPLES\n   sudo ${0}\n"
+if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
+        echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARNING${NORMAL}]:     Your language, ${LANG}, is not supported.\n\tWould you like to help?\n" 1>&2
+fi
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
 	exit 0
 fi
-if [ "$1" == "--version" ] || [ "$1" == "-v" ] || [ "$1" == "version" ] ; then
+if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
         head -2 ${0} | awk {'print$2"\t"$3'}
         exit 0
 fi
 ###		
 BACKUPFILE=/etc/ssl/openssl.cnf-`date +%Y-%m-%d_%H:%M:%S_%Z`
 ORIGINALFILE=/etc/ssl/openssl.cnf
-BOLD=$(tput bold)
-NORMAL=$(tput sgr0)
+if [ "${DEBUG}" == "1" ] ; then echo -e "> DEBUG ${LINENO}  BACKUPFILE >${BACKUPFILE} ORIGINALFILE >${ORIGINALFILE}<" 1>&2 ; fi
 #       Must be root to run this script
 if ! [ $(id -u) = 0 ] ; then
 	display_help
@@ -49,4 +55,5 @@ if ! grep -Fxq 'extendedKeyUsage = clientAuth,serverAuth' ${ORIGINALFILE} ; then
 else
 	echo -e "\n${0} ${LINENO} [ERROR]:	${ORIGINALFILE} file has previously been modified.\n"	1>&2
 fi
+echo -e "${NORMAL}\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Done.\n"	1>&2
 ###

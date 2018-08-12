@@ -1,14 +1,18 @@
 #!/bin/bash
-# 	docker-TLS/create-user-tls.sh  3.32.370  2018-08-05_11:49:59_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.31-1-g513fe7d  
-# 	   re-marking this file with later version of markit to support check-markit 
-#
+# 	docker-TLS/create-user-tls.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
+# 	   sync to standard script design changes 
+###
+DEBUG=0                 # 0 = debug off, 1 = debug on
 #	set -x
 #	set -v
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
 ###
 display_help() {
-echo -e "\n${0} - Create user public and private key and CA"
-echo -e "\nUSAGE\n   ${0} <TLS-user> <#-of-days> <home-directory> <administrator>"
-echo    "   ${0} [--help | -help | help | -h | h | -? | ?] [--version | -v]"
+echo -e "\n${NORMAL}${0} - Create user public and private key and CA"
+echo -e "\nUSAGE\n   ${0} [<TLSUSER>] [<NUMBERDAYS>] [<USERHOME>] [<ADMTLSUSER>]"
+echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION\nRun this script any time a user requires a new Docker public and private"
 echo    "TLS key."
 echo -e "\nOPTIONS "
@@ -19,13 +23,16 @@ echo    "                Many sites have different home directories (/u/north-of
 echo    "   ADMTLSUSER   administration user creating TLS accounts, default is user"
 echo    "                running script"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
-echo -e "\nEXAMPLES\n   Create TLS keys for user bob for 30 days in /u/north-office/ uadmin\n\t${0} bob 30 /u/north-office/ uadmin\n"
+echo -e "\nEXAMPLES\n   ${0} bob 30 /u/north-office/ uadmin\n\n   Create TLS keys for user bob for 30 days in /u/north-office/ uadmin"
+if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
+        echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARNING${NORMAL}]:     Your language, ${LANG}, is not supported.\n\tWould you like to help?\n" 1>&2
+fi
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
 	exit 0
 fi
-if [ "$1" == "--version" ] || [ "$1" == "-v" ] || [ "$1" == "version" ] ; then
+if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
         head -2 ${0} | awk {'print$2"\t"$3'}
         exit 0
 fi
@@ -34,8 +41,7 @@ TLSUSER=${1:-${USER}}
 NUMBERDAYS=${2:-90}
 USERHOME=${3:-/home/}
 ADMTLSUSER=${4:-${USER}}
-BOLD=$(tput bold)
-NORMAL=$(tput sgr0)
+if [ "${DEBUG}" == "1" ] ; then echo -e "> DEBUG ${LINENO}  TLSUSER >${TLSUSER}< NUMBERDAYS >${NUMBERDAYS}< USERHOME >${USERHOME}< ADMTLSUSER >${ADMTLSUSER}<" 1>&2 ; fi
 #	Check if admin user has home directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER} ] ; then
 	display_help
@@ -88,5 +94,5 @@ chmod 0400 ${TLSUSER}-user-priv-key.pem
 chmod 0444 ${TLSUSER}-user-cert.pem
 #
 echo -e "\nUse script ${BOLD}copy-user-2-remote-host-tls.sh${NORMAL} to update remote host."
-echo -e "\n${0} ${LINENO} [INFO]: Done."
+echo -e "${NORMAL}\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Done.\n"	1>&2
 ###

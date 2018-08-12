@@ -1,15 +1,21 @@
 #!/bin/bash
+# 	dockerd-configuration-options/setup-dockerd.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
+# 	   sync to standard script design changes 
 # 	setup-dockerd.sh  3.30.367  2018-06-23_17:52:30_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.29  
 # 	   added mv uninstall-dockerd-scripts.sh to /etc/docker 
-#
+###
+DEBUG=0                 # 0 = debug off, 1 = debug on
 #	set -v
 #	set -x
-#
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
+###
 display_help() {
-echo -e "\n${0} - setup system to support dockerd on Systemd and Upstart."
+echo -e "\n${NORMAL}${0} - setup system to support dockerd on Systemd and Upstart."
 echo -e "\nUSAGE\n   sudo ${0} "
-echo    "   sudo ${0} [OPTIONS]"
-echo    "   sudo ${0} [--help | -help | help | -h | h | -? | ?] [--version | -v]"
+echo    "   sudo ${0} [<WORK_DIRECTORY>] [<UPSTART_SYSVINIT_DIRECTORY>]"
+echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION\nThis script has to be run as root to move files into /etc/docker and create"
 echo    "or update the /etc/systemd/system/docker.service.d/10-override.conf"
 echo    "file (Ubuntu 16.04, systemd) and the /etc/default/docker (Ubuntu"
@@ -27,17 +33,14 @@ echo    "                                default is /etc/default/"
 #	echo    "   CONFIGURATION_STRING   >> no use case currently, future development <<<"
 #	echo    "                          default is Custom_dockerd_Configuration_File"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options"
-echo -e "\nEXAMPLES\n   After editing /etc/docker/dockerd-configuration-file, run"
-echo -e "\tsudo ${0}\n"
-echo -e "   To use non-default directory for WORK_DIRECTORY (/mnt/etc/docker/) and"
-echo    "   UPSTART_SYSVINIT_DIRECTORY (/mnt/etc/default/), run"
-echo -e "\tsudo ${0} /mnt/etc/docker/ /mnt/etc/default/\n"
+echo -e "\nEXAMPLES\n   sudo ${0}\n"
+echo -e "   sudo ${0} /mnt/etc/docker/ /mnt/etc/default/\n"
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
 	exit 0
 fi
-if [ "$1" == "--version" ] || [ "$1" == "-v" ] || [ "$1" == "version" ] ; then
+if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
         head -2 ${0} | awk {'print$2"\t"$3'}
         exit 0
 fi
@@ -45,8 +48,7 @@ fi
 WORK_DIRECTORY=${1:-/etc/docker/}
 UPSTART_SYSVINIT_DIRECTORY=${2:-/etc/default/}
 CONFIGURATION_STRING=${3:-Custom_dockerd_Configuration_File}
-BOLD=$(tput bold)
-NORMAL=$(tput sgr0)
+if [ "${DEBUG}" == "1" ] ; then echo -e "> DEBUG ${LINENO}  WORK_DIRECTORY >${WORK_DIRECTORY}< UPSTART_SYSVINIT_DIRECTORY >${UPSTART_SYSVINIT_DIRECTORY}< CONFIGURATION_STRING >${CONFIGURATION_STRING}<" 1>&2 ; fi
 #
 echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Changes made to\n\t${WORK_DIRECTORY}dockerd-configuration-file will be added to Upstart and\n\tSystemd configuration files for dockerd.\n"	1>&2
 #	Must be root to run this script
@@ -119,4 +121,6 @@ systemctl daemon-reload
 echo -e "${NORMAL}\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	If you are using systemd, Run\n\t'${BOLD}sudo systemctl enable dockerd-configuration-file.service${NORMAL}'\n\tto start on boot."	1>&2
 echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Run '${BOLD}sudo systemctl enable docker${NORMAL}'\n\tto start on boot."	1>&2
 echo    "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Run '${BOLD}sudo systemctl restart docker${NORMAL}'"	1>&2
+#
+echo -e "${NORMAL}\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Done.\n"	1>&2
 ###

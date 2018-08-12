@@ -1,36 +1,41 @@
 #!/bin/bash
+# 	docker-TLS/check-user-tls.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
+# 	   sync to standard script design changes 
 # 	check-user-tls.sh  3.35.374  2018-08-05_23:21:09_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.34  
 # 	   improve output of script close #13 
-#
-#	set -x
-#	set -v
 ###
 DEBUG=0                 # 0 = debug off, 1 = debug on
+#	set -x
+#	set -v
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
 display_help() {
-echo -e "\n${0} - Check public, private keys, and CA for a user"
-echo -e "\nUSAGE\n   ${0} <user-name> <home-directoty>"
-echo    "   ${0} [--help | -help | help | -h | h | -? | ?] [--version | -v]"
+echo -e "\n${NORMAL}${0} - Check public, private keys, and CA for a user"
+echo -e "\nUSAGE\n   ${0} [<user-name>] [<home-directoty>]"
+echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION\nUsers can check their public, private keys, and CA in /home or other"
 echo    "non-default home directories.  The file and directory permissions are also"
 echo    "checked.  Administrators can check other users certificates by using"
-echo    "sudo ${0} <TLS-user>."
+echo    "   sudo ${0} <user-name>."
 echo -e "\nOPTIONS"
 echo    "   TLSUSER   user, default is user running script"
 echo    "   USERHOME  location of user home directory, default /home/"
-echo    "      Many sites have different home directories locations (/u/north-office/)"
+echo    "      Many sites have different home directory locations (/u/north-office/)"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
-echo -e "\nEXAMPLES\n   User sam can check their certificates\n\t${0}"
-echo -e "   User sam checks their certificates in a non-default home directory\n\t${0} sam /u/north-office/"
-echo -e "   Administrator checks user bob certificates\n\tsudo ${0} bob"
-echo -e "   Administrator checks user sam certificates in a different home directory\n\tsudo ${0} sam /u/north-office/"
+echo -e "\nEXAMPLES\n   ${0}\n\n   User can check their certificates"
+echo -e "\n   ${0} sam /u/north-office/\n\n   User sam checks their certificates in a non-default home directory"
+echo -e "\n   sudo ${0} bob\n\n   Administrator checks user bob certificates"
+echo -e "\n   sudo ${0} sam /u/north-office/\n\n   Administrator checks user sam certificates in a different home directory"
+if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
+        echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARNING${NORMAL}]:     Your language, ${LANG}, is not supported.\n\tWould you like to help?\n" 1>&2
+fi
 }
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
 	display_help
 	exit 0
 fi
-if [ "$1" == "--version" ] || [ "$1" == "-v" ] || [ "$1" == "version" ] ; then
+if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
         head -2 ${0} | awk {'print$2"\t"$3'}
         exit 0
 fi
@@ -38,6 +43,7 @@ fi
 TLSUSER=${1:-${USER}}
 USERHOME=${2:-/home/}
 LOCALHOSTNAME=`hostname -f`
+if [ "${DEBUG}" == "1" ] ; then echo -e "> DEBUG ${LINENO} TLSUSER >${TLSUSER}< USERHOME >${USERHOME}< LOCALHOSTNAME >${LOCALHOSTNAME}<" 1>&2 ; fi
 #	Root is required to check other users or user can check their own certs
 if ! [ $(id -u) = 0 -o ${USER} = ${TLSUSER} ] ; then
 	display_help
@@ -89,7 +95,7 @@ echo -e "\nVerify that user public key in your certificate matches the public po
 (cd ${USERHOME}${TLSUSER}/.docker ; openssl x509 -noout -modulus -in cert.pem | openssl md5 ; openssl rsa -noout -modulus -in key.pem | openssl md5) | uniq
 echo -e "${BOLD}WARNING:${NORMAL}  -> If ONLY ONE line of output is returned then the public key\n\tmatches the public portion of your private key.\n"
 #	Verify that user certificate was issued by the CA.
-echo -e "Verify that user certificate was issued by the CA:${BOLD}"
+echo -e "Verify that user certificate was issued by the CA:${BOLD}\n"
 openssl verify -verbose -CAfile ${USERHOME}${TLSUSER}/.docker/ca.pem ${USERHOME}${TLSUSER}/.docker/cert.pem  || { echo -e "${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	User certificate for ${TLSUSER} on ${LOCALHOSTNAME} was NOT issued by CA." ; exit 1; }
 #	Verify and correct file permissions for ${USERHOME}${TLSUSER}/.docker/ca.pem
 echo -e "\n${NORMAL}Verify and correct file permissions for ${USERHOME}${TLSUSER}/.docker"
