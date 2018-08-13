@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	check-user-ssh.sh  3.44.396  2018-08-12_20:50:13_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.43-3-gbbb68b6  
+# 	   correct REMOVE_HOST help for the system running the command so cut and paste will work 
 # 	ssh/check-user-ssh.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
 # 	   sync to standard script design changes 
 ###
@@ -115,7 +117,7 @@ if [ -e ${USERHOME}${SSHUSER}/.ssh/authorized_keys ] ; then
 #	List of authorized hosts in ${USERHOME}${SSHUSER}/.ssh/authorized_keys
 	echo -e "\nList of ${BOLD}authorized hosts${NORMAL} in ${USERHOME}${SSHUSER}/.ssh/authorized_keys:\n${BOLD}"
 	cut -d ' ' -f 3 ${USERHOME}${SSHUSER}/.ssh/authorized_keys | sort
-	echo -e "\n${NORMAL}To remove a host from ${USERHOME}${SSHUSER}/.ssh/authorized_keys file:\n\n\t${BOLD}REMOVE_HOST='<user_name>@<host_name>'\n\tgrep -v \$REMOVE_HOST /home/uadmin/.ssh/authorized_keys > /home/uadmin/.ssh/authorized_keys.new\n\tmv /home/uadmin/.ssh/authorized_keys.new /home/uadmin/.ssh/authorized_keys${NORMAL}"
+	echo -e "\n${NORMAL}To remove a host from ${USERHOME}${SSHUSER}/.ssh/authorized_keys file:\n\n\t${BOLD}REMOVE_HOST='<user_name>@<host_name>'\n\tgrep -v \$REMOVE_HOST ${USERHOME}${SSHUSER}/.ssh/authorized_keys > ${USERHOME}${SSHUSER}/.ssh/authorized_keys.new\n\tmv ${USERHOME}${SSHUSER}/.ssh/authorized_keys.new ${USERHOME}${SSHUSER}/.ssh/authorized_keys${NORMAL}"
 else
         echo -e "\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:  User does not have a .ssh/authorized_keys file."        1>&2
 fi
