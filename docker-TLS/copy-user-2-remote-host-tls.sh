@@ -85,7 +85,7 @@ if [ -z ${REMOTEHOST} ] ; then
 	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	Remote host is required.\n"	1>&2
 	exit 1
 fi
-#	Check if ${REMOTEHOST} is available on port ${SSHPORT}
+#	Check if ${REMOTEHOST} is available on port ${SSHPORT}  # >>> try if $(ssh ${NODE} exit >/dev/null) ; then
 if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	${ADMTLSUSER} may receive password and\n\tpassphrase prompt from ${REMOTEHOST}. Running\n\tssh-copy-id ${ADMTLSUSER}@${REMOTEHOST} may stop the prompts."
 	ssh -tp ${SSHPORT} ${ADMTLSUSER}@${REMOTEHOST} " cd ~${TLSUSER} " || { echo "${0} ${LINENO} [ERROR]:	${TLSUSER} does not have home directory on ${REMOTEHOST}" ; exit 1; }
