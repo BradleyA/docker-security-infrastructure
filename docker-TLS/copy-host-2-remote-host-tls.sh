@@ -85,7 +85,8 @@ if ! [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/${REMOTEHOST}-priv-key.pem 
 	echo -e "\tRunning create-host-tls.sh will create public and private keys."
 	exit 1
 fi
-#	Check if ${REMOTEHOST} is available on port ${SSHPORT}
+#	Check if ${REMOTEHOST} is available on port ${SSHPORT} # >>> try if $(ssh ${NODE} exit >/dev/null) ; then:w
+
 if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	${ADMTLSUSER} may receive password and\n\tpassphrase prompts from ${REMOTEHOST}. Running ssh-copy-id\n\t${ADMTLSUSER}@${REMOTEHOST} may stop the prompts.\n"
 #	Check if /etc/docker directory on ${REMOTEHOST}
