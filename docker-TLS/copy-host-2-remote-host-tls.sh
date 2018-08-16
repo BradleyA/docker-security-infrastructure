@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	copy-host-2-remote-host-tls.sh  3.45.399  2018-08-16_17:25:51_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.44-2-g99631bc  
+# 	   completed changes for remove nc -z and SSHPORT #15 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
 # 	   sync to standard script design changes 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.32.370  2018-08-05_11:49:59_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.31-1-g513fe7d  
@@ -12,7 +14,7 @@ NORMAL=$(tput sgr0)
 ###
 display_help() {
 echo -e "\n${NORMAL}${0} - Copy public, private keys and CA to remote host."
-echo -e "\nUSAGE\n   ${0} <remote-host> [<home-directory>] [<administrator>] [<ssh-port>]"
+echo -e "\nUSAGE\n   ${0} <remote-host> [<home-directory>] [<administrator>]"
 echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION\nAn administration user can run this script to copy host TLS public, private"
@@ -27,7 +29,6 @@ echo    "      Many sites have different home directories (/u/north-office/)"
 echo    "   ADMTLSUSER   site administrator account creating TLS keys,"
 echo    "      default is user running script.  Site administrator will have accounts"
 echo    "      on all systems in cluster."
-echo    "   SSHPORT      SSH server port, default is port 22"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
 echo -e "\nEXAMPLES\n   ${0} two.cptx86.com\n\n   Administrator user copies TLS keys and CA to remote host, two.cptx86.com,"
 echo    "   using default home directory, /home/, default administrator, user running"
@@ -50,7 +51,6 @@ fi
 REMOTEHOST=$1
 USERHOME=${2:-/home/}
 ADMTLSUSER=${3:-${USER}}
-SSHPORT=${4:-22}
 if [ "${DEBUG}" == "1" ] ; then echo -e "> DEBUG ${LINENO}  REMOTEHOST >${REMOTEHOST}< USERHOME >${USERHOME}< ADMTLSUSER >${ADMTLSUSER}<" 1>&2 ; fi
 #	Check if admin user has home directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER} ] ; then
@@ -85,26 +85,25 @@ if ! [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/${REMOTEHOST}-priv-key.pem 
 	echo -e "\tRunning create-host-tls.sh will create public and private keys."
 	exit 1
 fi
-#	Check if ${REMOTEHOST} is available on port ${SSHPORT} # >>> try if $(ssh ${NODE} exit >/dev/null) ; then:w
-
-if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
+#	Check if ${REMOTEHOST} is available on ssh port
+if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	${ADMTLSUSER} may receive password and\n\tpassphrase prompts from ${REMOTEHOST}. Running ssh-copy-id\n\t${ADMTLSUSER}@${REMOTEHOST} may stop the prompts.\n"
 #	Check if /etc/docker directory on ${REMOTEHOST}
-	if ! $(ssh -tp ${SSHPORT} ${ADMTLSUSER}@${REMOTEHOST} "test -d /etc/docker") ; then
+	if ! $(ssh -t ${ADMTLSUSER}@${REMOTEHOST} "test -d /etc/docker") ; then
 		display_help
 		echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	/etc/docker directory missing,"	1>&2
 		echo -e "\tis docker installed on ${REMOTEHOST}."	1>&2
 		exit 1
 	fi
 #	Check if /etc/docker/certs.d directory exists on remote system
-	if $(ssh -tp ${SSHPORT} ${ADMTLSUSER}@${REMOTEHOST} "test -d /etc/docker/certs.d" ) ; then
+	if $(ssh -t ${ADMTLSUSER}@${REMOTEHOST} "test -d /etc/docker/certs.d" ) ; then
 #	Check if /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem file exists on remote system
-		if $(ssh -tp ${SSHPORT} ${ADMTLSUSER}@${REMOTEHOST} "test -e /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem" ) ; then
+		if $(ssh -t ${ADMTLSUSER}@${REMOTEHOST} "test -e /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem" ) ; then
 			echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	/etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem\n\talready exists, renaming existing keys so new keys can be created."	1>&2
-			ssh -tp ${SSHPORT} ${ADMTLSUSER}@${REMOTEHOST} "sudo mv /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem`date +%Y-%m-%d_%H:%M:%S_%Z`"
-			ssh -tp ${SSHPORT} ${ADMTLSUSER}@${REMOTEHOST} "sudo mv /etc/docker/certs.d/daemon/${REMOTEHOST}-cert.pem /etc/docker/certs.d/daemon/${REMOTEHOST}-cert.pem`date +%Y-%m-%d_%H:%M:%S_%Z`"
-			ssh -tp ${SSHPORT} ${ADMTLSUSER}@${REMOTEHOST} "sudo mv /etc/docker/certs.d/daemon/ca.pem /etc/docker/certs.d/daemon/ca.pem`date +%Y-%m-%d_%H:%M:%S_%Z`"
-			ssh -tp ${SSHPORT} ${ADMTLSUSER}@${REMOTEHOST} "sudo rm /etc/docker/certs.d/daemon/{cert,key}.pem"
+			ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mv /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem`date +%Y-%m-%d_%H:%M:%S_%Z`"
+			ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mv /etc/docker/certs.d/daemon/${REMOTEHOST}-cert.pem /etc/docker/certs.d/daemon/${REMOTEHOST}-cert.pem`date +%Y-%m-%d_%H:%M:%S_%Z`"
+			ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mv /etc/docker/certs.d/daemon/ca.pem /etc/docker/certs.d/daemon/ca.pem`date +%Y-%m-%d_%H:%M:%S_%Z`"
+			ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo rm /etc/docker/certs.d/daemon/{cert,key}.pem"
 		fi
 	fi
 #	Create certification tar file and install it to ${REMOTEHOST}
@@ -120,13 +119,12 @@ if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	cd ../../../..
 	tar -cf ./${REMOTEHOST}${TIMESTAMP}.tar ./etc/docker/certs.d/daemon
 	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]: Transfer TLS keys to\n\t${REMOTEHOST}.\n"
-	scp -pP ${SSHPORT} ./${REMOTEHOST}${TIMESTAMP}.tar ${ADMTLSUSER}@${REMOTEHOST}:/tmp
+	scp -p ./${REMOTEHOST}${TIMESTAMP}.tar ${ADMTLSUSER}@${REMOTEHOST}:/tmp
 #	Create remote directory /etc/docker/certs.d/daemon
 #	This directory was selected to place dockerd TLS certifications because
 #	docker registry stores it's TLS certifications in /etc/docker/certs.d.
 	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Create dockerd certification\n\tdirectory on ${REMOTEHOST}\n"
-#	ssh -tp ${SSHPORT} ${ADMTLSUSER}@${REMOTEHOST} "sudo mkdir -p /etc/docker/certs.d/daemon ; sudo chmod -R 0700 /etc/docker/certs.d"
-	ssh -tp ${SSHPORT} ${ADMTLSUSER}@${REMOTEHOST} "sudo mkdir -p /etc/docker/certs.d/daemon ; sudo chmod -R 0700 /etc/docker/certs.d ; cd / ; sudo tar -xf /tmp/${REMOTEHOST}${TIMESTAMP}.tar ; rm /tmp/${REMOTEHOST}${TIMESTAMP}.tar ; sudo chown -R root.root /etc/docker/certs.d"
+	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mkdir -p /etc/docker/certs.d/daemon ; sudo chmod -R 0700 /etc/docker/certs.d ; cd / ; sudo tar -xf /tmp/${REMOTEHOST}${TIMESTAMP}.tar ; rm /tmp/${REMOTEHOST}${TIMESTAMP}.tar ; sudo chown -R root.root /etc/docker/certs.d"
 #	Remove ${TLSUSER}/.docker and tar file from ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
 	cd ..
 	rm -rf ${REMOTEHOST}
@@ -146,7 +144,7 @@ if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
 	exit 0
 else
 	display_help
-	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	${REMOTEHOST} not responding on port ${SSHPORT}.\n"	1>&2
+	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	${REMOTEHOST} not responding on ssh port.\n"	1>&2
 	exit 1
 fi
 ###
