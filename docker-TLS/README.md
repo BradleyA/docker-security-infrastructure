@@ -193,9 +193,11 @@ An administration user can run this script to copy user public, private TLS keys
     ./copy-user-2-remote-host-tls.sh 109 [INFO]:	Done.
 
 ## Usage
-An administration user can run this script to copy host public, private TLS keys, and CA to a remote host.
+A user with administration authority (uadmin) uses this script to copy host TLS CA, public, and private keys from /home/uadmin/.docker/docker-ca directory on this system to /etc/docker/certs.d directory on a remote system.
+The administration user may receive password and/or passphrase prompts from a remote systen; running the following may stop the prompts in your cluster.
+   ssh-copy-id <admin-user>@x.x.x.x
 
-    ./copy-host-2-remote-host-tls.sh <remote-host>
+    ./copy-host-2-remote-host-tls.sh one-rpi3b.cptx86.com
 
 ## Output
 
