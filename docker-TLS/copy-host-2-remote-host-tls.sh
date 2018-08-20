@@ -1,10 +1,6 @@
 #!/bin/bash
-# 	copy-host-2-remote-host-tls.sh  formating changes copy-host-2-remote-host-tls.sh #15.410  2018-08-20_15:43:43_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.53  
-# 	   formating output copy-host-2-remote-host-tls.sh #15 
-# 	copy-host-2-remote-host-tls.sh  3.53.409  2018-08-20_15:39:04_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.52  
-# 	   remove working directory copy-host-2-remote-host-tls.sh #15 
-# 	copy-host-2-remote-host-tls.sh  3.45.399  2018-08-16_17:25:51_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.44-2-g99631bc  
-# 	   completed changes for remove nc -z and SSHPORT #15 
+# 	copy-host-2-remote-host-tls.sh  3.54.411  2018-08-20_16:07:46_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.53-1-g6d60f7b  
+# 	   completed changes for remove nc -z and SSHPORT #15 copy-host-2-remote-host-tls.sh 
 ###
 DEBUG=0                 # 0 = debug off, 1 = debug on
 #	set -x
