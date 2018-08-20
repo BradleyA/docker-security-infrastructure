@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	copy-host-2-remote-host-tls.sh  3.49.405  2018-08-20_13:33:56_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.48  
-# 	   cleanup and testing for #15 
+# 	copy-host-2-remote-host-tls.sh  3.50.406  2018-08-20_13:35:21_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.49  
+# 	   testing for copy-host-2-remote-host-tls.sh #15 
 # 	copy-host-2-remote-host-tls.sh  3.45.399  2018-08-16_17:25:51_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.44-2-g99631bc  
 # 	   completed changes for remove nc -z and SSHPORT #15 
 ###
