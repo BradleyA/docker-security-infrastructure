@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	copy-host-2-remote-host-tls.sh  formating changes copy-host-2-remote-host-tls.sh #15.410  2018-08-20_15:43:43_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.53  
+# 	   formating output copy-host-2-remote-host-tls.sh #15 
 # 	copy-host-2-remote-host-tls.sh  3.53.409  2018-08-20_15:39:04_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.52  
 # 	   remove working directory copy-host-2-remote-host-tls.sh #15 
 # 	copy-host-2-remote-host-tls.sh  3.45.399  2018-08-16_17:25:51_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.44-2-g99631bc  
@@ -126,7 +128,7 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 #	Create remote directory /etc/docker/certs.d/daemon
 #	This directory was selected to place dockerd TLS certifications because
 #	docker registry stores it's TLS certifications in /etc/docker/certs.d.
-	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\tCopying dockerd certification to ${REMOTEHOST}\n"
+	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\tCopying dockerd certification to ${REMOTEHOST}\n\tRoot access required.\n"
 	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "cd /etc ; sudo tar -pxf /tmp/${REMOTEHOST}-${TIMESTAMP}.tar ; sudo chmod 0700 /etc/docker ; sudo chmod 0700 /etc/docker/certs.d ; sudo chown -R root.root ./docker ; rm /tmp/${REMOTEHOST}-${TIMESTAMP}.tar"
 	cd ..
 #	Remove working directory ~/.docker/docker-ca/${REMOTEHOST}
