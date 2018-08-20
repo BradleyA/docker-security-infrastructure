@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	copy-host-2-remote-host-tls.sh  3.46.400  2018-08-19_21:51:59_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.45  
+# 	   still working on these changes 
 # 	copy-host-2-remote-host-tls.sh  3.45.399  2018-08-16_17:25:51_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.44-2-g99631bc  
 # 	   completed changes for remove nc -z and SSHPORT #15 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
@@ -11,29 +13,32 @@ DEBUG=0                 # 0 = debug off, 1 = debug on
 #	set -v
 BOLD=$(tput bold)
 NORMAL=$(tput sgr0)
+REMOTEHOST=$1
+USERHOME=${2:-/home}
+USERHOME=${USERHOME}"/"
+ADMTLSUSER=${3:-${USER}} # design for futrue use
 ###
 display_help() {
-echo -e "\n${NORMAL}${0} - Copy public, private keys and CA to remote host."
-echo -e "\nUSAGE\n   ${0} <remote-host> [<home-directory>] [<administrator>]"
+echo -e "\n${NORMAL}${0} - Copy public, private keys and CA to remote host"
+echo -e "\nUSAGE\n   ${0} <remote-host> [<home-directory>]"
 echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
 echo    "   ${0} [--version | -version | -v]"
-echo -e "\nDESCRIPTION\nAn administration user can run this script to copy host TLS public, private"
-echo    "keys, and CA to a remote host.  The administration user may receive password"
-echo    "and passphrase prompts from a remote host; running"
+echo -e "\nDESCRIPTION\nA user with administration authority uses this script to"
+echo    "copy host TLS CA, public, and private keys from"
+echo    "${USERHOME}${ADMTLSUSER}/.docker/docker-ca directory on this system to"
+echo    "/etc/docker/certs.d directory on a remote system."
+echo -e "\nThe administration user may receive password and/or passphrase prompts from a"
+echo    "remote systen; running the following may stop the prompts in your cluster."
 echo    "   ssh-copy-id <admin-user>@x.x.x.x"
-echo    "may stop the prompts in your cluster."
 echo -e "\nOPTIONS"
 echo    "   REMOTEHOST   remote host to copy certificates to"
-echo    "   USERHOME     location of admin user directory, default is /home/"
+echo    "   USERHOME     location of administration user directory, default is /home/"
 echo    "      Many sites have different home directories (/u/north-office/)"
-echo    "   ADMTLSUSER   site administrator account creating TLS keys,"
-echo    "      default is user running script.  Site administrator will have accounts"
-echo    "      on all systems in cluster."
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
-echo -e "\nEXAMPLES\n   ${0} two.cptx86.com\n\n   Administrator user copies TLS keys and CA to remote host, two.cptx86.com,"
-echo    "   using default home directory, /home/, default administrator, user running"
+echo -e "\nEXAMPLES\n   ${0} two.cptx86.com\n\n   Administration user copies TLS keys and CA to remote host, two.cptx86.com,"
+echo    "   using default home directory, /home/, default administration user running"
 echo -e "   script.\n"
-echo -e "   ${0} two.cptx86.com /u/north-office/ uadmin\n\n   Administrator user copies TLS keys and CA to remote host, two.cptx86.com,"
+echo -e "   ${0} two.cptx86.com /u/north-office/ uadmin\n\n   Administration user copies TLS keys and CA to remote host, two.cptx86.com,"
 echo    "   using local home directory, /u/north-office/, administrator account, uadmin."
 if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
         echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARNING${NORMAL}]:     Your language, ${LANG}, is not supported.\n\tWould you like to help?\n" 1>&2
@@ -48,9 +53,6 @@ if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] ||
         exit 0
 fi
 ###		
-REMOTEHOST=$1
-USERHOME=${2:-/home/}
-ADMTLSUSER=${3:-${USER}}
 if [ "${DEBUG}" == "1" ] ; then echo -e "> DEBUG ${LINENO}  REMOTEHOST >${REMOTEHOST}< USERHOME >${USERHOME}< ADMTLSUSER >${ADMTLSUSER}<" 1>&2 ; fi
 #	Check if admin user has home directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER} ] ; then
@@ -87,47 +89,61 @@ if ! [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/${REMOTEHOST}-priv-key.pem 
 fi
 #	Check if ${REMOTEHOST} is available on ssh port
 if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
-	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	${ADMTLSUSER} may receive password and\n\tpassphrase prompts from ${REMOTEHOST}. Running ssh-copy-id\n\t${ADMTLSUSER}@${REMOTEHOST} may stop the prompts.\n"
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n${ADMTLSUSER} may receive password and passphrase prompts from ${REMOTEHOST}.\nRunning ssh-copy-id ${ADMTLSUSER}@${REMOTEHOST} may stop the prompts.\n"
 #	Check if /etc/docker directory on ${REMOTEHOST}
 	if ! $(ssh -t ${ADMTLSUSER}@${REMOTEHOST} "test -d /etc/docker") ; then
-		display_help
 		echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	/etc/docker directory missing,"	1>&2
 		echo -e "\tis docker installed on ${REMOTEHOST}."	1>&2
 		exit 1
 	fi
-#	Check if /etc/docker/certs.d directory exists on remote system
-	if $(ssh -t ${ADMTLSUSER}@${REMOTEHOST} "test -d /etc/docker/certs.d" ) ; then
+#	Create working directory ~/.docker/docker-ca/${REMOTEHOST}
+	mkdir -p ${REMOTEHOST}
+	cd ${REMOTEHOST}
+#	Backup ${REMOTEHOST}/etc/docker/certs.d
+	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Backup ${REMOTEHOST}:/etc/docker/certs.d to `pwd`\n"	1>&2
+	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mkdir -p /etc/docker/certs.d/daemon ; cd /etc ; sudo tar -pcf /tmp/${REMOTEHOST}${TIMESTAMP}.bak.tar ./docker/certs.d/daemon"
+	scp -p ${ADMTLSUSER}@${REMOTEHOST}:/tmp/${REMOTEHOST}${TIMESTAMP}.bak.tar .
+	tar -pxf ${REMOTEHOST}${TIMESTAMP}.bak.tar
 #	Check if /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem file exists on remote system
-		if $(ssh -t ${ADMTLSUSER}@${REMOTEHOST} "test -e /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem" ) ; then
-			echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	/etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem\n\talready exists, renaming existing keys so new keys can be created."	1>&2
-			ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mv /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem`date +%Y-%m-%d_%H:%M:%S_%Z`"
-			ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mv /etc/docker/certs.d/daemon/${REMOTEHOST}-cert.pem /etc/docker/certs.d/daemon/${REMOTEHOST}-cert.pem`date +%Y-%m-%d_%H:%M:%S_%Z`"
-			ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mv /etc/docker/certs.d/daemon/ca.pem /etc/docker/certs.d/daemon/ca.pem`date +%Y-%m-%d_%H:%M:%S_%Z`"
-			ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo rm /etc/docker/certs.d/daemon/{cert,key}.pem"
-		fi
+	if [ -e ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem ] ; then
+		echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARN${NORMAL}]:	/etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem\n\talready exists, renaming existing keys so new keys can be created."	1>&2
+		mv ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
+		mv ./docker/certs.d/daemon/${REMOTEHOST}-cert.pem ./docker/certs.d/daemon/${REMOTEHOST}-cert.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
+		mv ./docker/certs.d/daemon/ca.pem ./docker/certs.d/daemon/ca.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
+		rm ./docker/certs.d/daemon/{cert,key}.pem
 	fi
 #	Create certification tar file and install it to ${REMOTEHOST}
-	mkdir -p ${REMOTEHOST}/etc/docker/certs.d/daemon
-	chmod 700 ${REMOTEHOST}/etc/docker/certs.d/daemon
-	cp -p ${REMOTEHOST}-priv-key.pem ${REMOTEHOST}/etc/docker/certs.d/daemon
-	cp -p ${REMOTEHOST}-cert.pem ${REMOTEHOST}/etc/docker/certs.d/daemon
-	cp -p ca.pem ${REMOTEHOST}/etc/docker/certs.d/daemon
+	chmod 0700 ./docker/certs.d/daemon
+	cp -p ../../../${REMOTEHOST}-priv-key.pem daemon
+	cp -p ../../../${REMOTEHOST}-cert.pem daemon
+	cp -p ../../../ca.pem daemon
 	TIMESTAMP=`date +%Y-%m-%d-%H-%M-%S-%Z`
-	cd ${REMOTEHOST}/etc/docker/certs.d/daemon
+	cd docker/certs.d/daemon
 	ln -s ${REMOTEHOST}-priv-key.pem key.pem
 	ln -s ${REMOTEHOST}-cert.pem cert.pem
-	cd ../../../..
-	tar -cf ./${REMOTEHOST}${TIMESTAMP}.tar ./etc/docker/certs.d/daemon
+	cd ..
+#############33
+
+need to complete changes /docker/certs.d/daemon
+
+#############
+	tar -pcf ./${REMOTEHOST}${TIMESTAMP}.tar ./daemon
 	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]: Transfer TLS keys to\n\t${REMOTEHOST}.\n"
 	scp -p ./${REMOTEHOST}${TIMESTAMP}.tar ${ADMTLSUSER}@${REMOTEHOST}:/tmp
 #	Create remote directory /etc/docker/certs.d/daemon
 #	This directory was selected to place dockerd TLS certifications because
 #	docker registry stores it's TLS certifications in /etc/docker/certs.d.
 	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Create dockerd certification\n\tdirectory on ${REMOTEHOST}\n"
-	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mkdir -p /etc/docker/certs.d/daemon ; sudo chmod -R 0700 /etc/docker/certs.d ; cd / ; sudo tar -xf /tmp/${REMOTEHOST}${TIMESTAMP}.tar ; rm /tmp/${REMOTEHOST}${TIMESTAMP}.tar ; sudo chown -R root.root /etc/docker/certs.d"
+	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo chmod 0700 /etc/docker ; sudo chmod 0700 /etc/docker/certs.d ; sudo cd /etc/docker/certs.d ; sudo tar -xpf /tmp/${REMOTEHOST}${TIMESTAMP}.tar ; sudo chown -R root.root /etc/docker/certs.d"
+##################
+#	remove tar files on remote system from /tmp
+###################
 #	Remove ${TLSUSER}/.docker and tar file from ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
 	cd ..
-	rm -rf ${REMOTEHOST}
+exit
+##################
+#	rm -rf ${REMOTEHOST}
+##################
 #       Display instructions about certification environment variables
 	echo -e "\n\nAdd TLS flags to dockerd so it will know to use TLS certifications (--tlsverify,"
 	echo    "--tlscacert, --tlscert, --tlskey).  Scripts that will help with setup and"
@@ -138,8 +154,8 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	echo -e "\t(systemd) and Ubuntu 14.04 (Upstart).\n"
 #
 	echo    "If dockerd is already using TLS certifications then:"
-	echo -e "\tUbuntu 16.04 (Systemd) sudo systemctl restart docker"
-	echo -e "\tUbuntu 14.04 (Upstart) sudo service docker restart"
+	echo -e "\tUbuntu 16.04 (Systemd) ${BOLD}sudo systemctl restart docker${NORMAL}"
+	echo -e "\tUbuntu 14.04 (Upstart) ${BOLD}sudo service docker restart${NORMAL}"
 	echo -e "\n${0} ${LINENO} [INFO]:	Done."
 	exit 0
 else
