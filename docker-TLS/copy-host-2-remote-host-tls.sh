@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	copy-host-2-remote-host-tls.sh  3.51.407  2018-08-20_13:53:30_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.50  
+# 	   force remove of temp tar file, correct formating of help messages for copy-host-2-remote-host-tls.sh #15 
 # 	copy-host-2-remote-host-tls.sh  3.50.406  2018-08-20_13:35:21_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.49  
 # 	   testing for copy-host-2-remote-host-tls.sh #15 
 # 	copy-host-2-remote-host-tls.sh  3.45.399  2018-08-16_17:25:51_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.44-2-g99631bc  
@@ -85,7 +87,7 @@ if ! [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/${REMOTEHOST}-priv-key.pem 
 fi
 #	Check if ${REMOTEHOST} is available on ssh port
 if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
-	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n${ADMTLSUSER} may receive password and passphrase prompts from ${REMOTEHOST}.\nRunning ssh-copy-id ${ADMTLSUSER}@${REMOTEHOST} may stop the prompts.\n"
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\t${ADMTLSUSER} may receive password and passphrase prompts from ${REMOTEHOST}.\n\tRunning ${BOLD}ssh-copy-id ${ADMTLSUSER}@${REMOTEHOST}${NORMAL} may stop some of the prompts.\n"
 #	Check if /etc/docker directory on ${REMOTEHOST}
 	if ! $(ssh -t ${ADMTLSUSER}@${REMOTEHOST} "test -d /etc/docker") ; then
 		echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	/etc/docker directory missing,"	1>&2
@@ -97,14 +99,14 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	mkdir -p ${REMOTEHOST}
 	cd ${REMOTEHOST}
 #	Backup ${REMOTEHOST}/etc/docker/certs.d
-	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\tBackup ${REMOTEHOST}:/etc/docker/certs.d to `pwd`\n"	1>&2
+	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\tBackup ${REMOTEHOST}:/etc/docker/certs.d to\n\t\t`pwd`\n"	1>&2
 	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mkdir -p /etc/docker/certs.d/daemon ; cd /etc ; sudo tar -pcf /tmp/${REMOTEHOST}-${TIMESTAMP}.tar ./docker/certs.d/daemon ; sudo chown ${ADMTLSUSER}.${ADMTLSUSER} /tmp/${REMOTEHOST}-${TIMESTAMP}.tar ; chmod 0400 /tmp/${REMOTEHOST}-${TIMESTAMP}.tar"
 	scp -p ${ADMTLSUSER}@${REMOTEHOST}:/tmp/${REMOTEHOST}-${TIMESTAMP}.tar .
-	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "rm /tmp/${REMOTEHOST}-${TIMESTAMP}.tar"
+	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "rm -f /tmp/${REMOTEHOST}-${TIMESTAMP}.tar"
 	tar -pxf ${REMOTEHOST}-${TIMESTAMP}.tar
 #	Check if /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem file exists on remote system
 	if [ -e ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem ] ; then
-		echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARN${NORMAL}]:\n\t/etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem\n\talready exists, renaming existing keys so new keys can be installed."	1>&2
+		echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARN${NORMAL}]:\n\t/etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem\n\talready exists, ${BOLD}renaming existing keys${NORMAL} so new keys can be installed."	1>&2
 		mv ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem-${TIMESTAMP}
 		mv ./docker/certs.d/daemon/${REMOTEHOST}-cert.pem ./docker/certs.d/daemon/${REMOTEHOST}-cert.pem-${TIMESTAMP}
 		mv ./docker/certs.d/daemon/ca.pem ./docker/certs.d/daemon/ca.pem-${TIMESTAMP}
@@ -126,7 +128,7 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 #	Create remote directory /etc/docker/certs.d/daemon
 #	This directory was selected to place dockerd TLS certifications because
 #	docker registry stores it's TLS certifications in /etc/docker/certs.d.
-	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\tCopy dockerd certification to ${REMOTEHOST}\n"
+	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\tCopying dockerd certification to ${REMOTEHOST}\n"
 	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "cd /etc ; sudo tar -pxf /tmp/${REMOTEHOST}-${TIMESTAMP}.tar ; sudo chmod 0700 /etc/docker ; sudo chmod 0700 /etc/docker/certs.d ; sudo chown -R root.root ./docker ; rm /tmp/${REMOTEHOST}-${TIMESTAMP}.tar"
 	cd ..
 
@@ -144,7 +146,7 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	echo -e "\tconfiguration of dockerd on systems running Ubuntu 16.04"
 	echo -e "\t(systemd) and Ubuntu 14.04 (Upstart).\n"
 #
-	echo    "If dockerd is already using TLS certifications then:"
+	echo    "If dockerd is already using TLS certifications then entering one of the\nfollowing will restart dockerd with the new certifications."
 	echo -e "\tUbuntu 16.04 (Systemd) ${BOLD}sudo systemctl restart docker${NORMAL}"
 	echo -e "\tUbuntu 14.04 (Upstart) ${BOLD}sudo service docker restart${NORMAL}"
 	echo -e "\n${0} ${LINENO} [INFO]:	Done."
