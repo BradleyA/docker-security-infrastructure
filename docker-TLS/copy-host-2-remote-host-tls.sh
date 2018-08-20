@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	copy-host-2-remote-host-tls.sh  3.47.403  2018-08-20_12:49:34_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.46-2-g5bcf51e  
+# 	   pull keys from remote host 
 # 	copy-host-2-remote-host-tls.sh  3.46.400  2018-08-19_21:51:59_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.45  
 # 	   still working on these changes 
 # 	copy-host-2-remote-host-tls.sh  3.45.399  2018-08-16_17:25:51_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.44-2-g99631bc  
@@ -100,13 +102,16 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	mkdir -p ${REMOTEHOST}
 	cd ${REMOTEHOST}
 #	Backup ${REMOTEHOST}/etc/docker/certs.d
-	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Backup ${REMOTEHOST}:/etc/docker/certs.d to `pwd`\n"	1>&2
-	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mkdir -p /etc/docker/certs.d/daemon ; cd /etc ; sudo tar -pcf /tmp/${REMOTEHOST}${TIMESTAMP}.bak.tar ./docker/certs.d/daemon"
+	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\tBackup ${REMOTEHOST}:/etc/docker/certs.d to `pwd`\n"	1>&2
+	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mkdir -p /etc/docker/certs.d/daemon ; cd /etc ; sudo tar -pcf /tmp/${REMOTEHOST}${TIMESTAMP}.bak.tar ./docker/certs.d/daemon ; sudo chown ${ADMTLSUSER}.${ADMTLSUSER} /tmp/${REMOTEHOST}${TIMESTAMP}.bak.tar ; chmod 0400 /tmp/${REMOTEHOST}${TIMESTAMP}.bak.tar"
 	scp -p ${ADMTLSUSER}@${REMOTEHOST}:/tmp/${REMOTEHOST}${TIMESTAMP}.bak.tar .
+# >>>
+#	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "rm /tmp/${REMOTEHOST}${TIMESTAMP}.bak.tar"
+# >>>	
 	tar -pxf ${REMOTEHOST}${TIMESTAMP}.bak.tar
 #	Check if /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem file exists on remote system
 	if [ -e ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem ] ; then
-		echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARN${NORMAL}]:	/etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem\n\talready exists, renaming existing keys so new keys can be created."	1>&2
+		echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARN${NORMAL}]:\n\t/etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem\n\talready exists, renaming existing keys so new keys can be created."	1>&2
 		mv ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
 		mv ./docker/certs.d/daemon/${REMOTEHOST}-cert.pem ./docker/certs.d/daemon/${REMOTEHOST}-cert.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
 		mv ./docker/certs.d/daemon/ca.pem ./docker/certs.d/daemon/ca.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
@@ -114,19 +119,17 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	fi
 #	Create certification tar file and install it to ${REMOTEHOST}
 	chmod 0700 ./docker/certs.d/daemon
-	cp -p ../../../${REMOTEHOST}-priv-key.pem daemon
-	cp -p ../../../${REMOTEHOST}-cert.pem daemon
-	cp -p ../../../ca.pem daemon
-	TIMESTAMP=`date +%Y-%m-%d-%H-%M-%S-%Z`
-	cd docker/certs.d/daemon
+	cp -p ../${REMOTEHOST}-priv-key.pem ./docker/certs.d/daemon
+	cp -p ../${REMOTEHOST}-cert.pem ./docker/certs.d/daemon
+	cp -p ../ca.pem ./docker/certs.d/daemon
+	cd ./docker/certs.d/daemon
 	ln -s ${REMOTEHOST}-priv-key.pem key.pem
 	ln -s ${REMOTEHOST}-cert.pem cert.pem
-	cd ..
-#############33
-
-need to complete changes /docker/certs.d/daemon
-
+	cd ../../..
+	TIMESTAMP=`date +%Y-%m-%d-%H-%M-%S-%Z`
 #############
+pwd
+exit
 	tar -pcf ./${REMOTEHOST}${TIMESTAMP}.tar ./daemon
 	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]: Transfer TLS keys to\n\t${REMOTEHOST}.\n"
 	scp -p ./${REMOTEHOST}${TIMESTAMP}.tar ${ADMTLSUSER}@${REMOTEHOST}:/tmp
