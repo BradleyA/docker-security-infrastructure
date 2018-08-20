@@ -1,16 +1,8 @@
 #!/bin/bash
-# 	copy-host-2-remote-host-tls.sh  3.48.404  2018-08-20_13:18:49_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.47  
-# 	   modify date stamp 
-# 	copy-host-2-remote-host-tls.sh  3.47.403  2018-08-20_12:49:34_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.46-2-g5bcf51e  
-# 	   pull keys from remote host 
-# 	copy-host-2-remote-host-tls.sh  3.46.400  2018-08-19_21:51:59_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.45  
-# 	   still working on these changes 
+# 	copy-host-2-remote-host-tls.sh  3.49.405  2018-08-20_13:33:56_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.48  
+# 	   cleanup and testing for #15 
 # 	copy-host-2-remote-host-tls.sh  3.45.399  2018-08-16_17:25:51_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.44-2-g99631bc  
 # 	   completed changes for remove nc -z and SSHPORT #15 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
-# 	   sync to standard script design changes 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.32.370  2018-08-05_11:49:59_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.31-1-g513fe7d  
-# 	   re-marking this file with later version of markit to support check-markit 
 ###
 DEBUG=0                 # 0 = debug off, 1 = debug on
 #	set -x
@@ -106,16 +98,16 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	cd ${REMOTEHOST}
 #	Backup ${REMOTEHOST}/etc/docker/certs.d
 	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\tBackup ${REMOTEHOST}:/etc/docker/certs.d to `pwd`\n"	1>&2
-	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mkdir -p /etc/docker/certs.d/daemon ; cd /etc ; sudo tar -pcf /tmp/${REMOTEHOST}${TIMESTAMP}.tar ./docker/certs.d/daemon ; sudo chown ${ADMTLSUSER}.${ADMTLSUSER} /tmp/${REMOTEHOST}${TIMESTAMP}.tar ; chmod 0400 /tmp/${REMOTEHOST}${TIMESTAMP}.tar"
-	scp -p ${ADMTLSUSER}@${REMOTEHOST}:/tmp/${REMOTEHOST}${TIMESTAMP}.tar .
-	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "rm /tmp/${REMOTEHOST}${TIMESTAMP}.tar"
-	tar -pxf ${REMOTEHOST}${TIMESTAMP}.tar
+	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mkdir -p /etc/docker/certs.d/daemon ; cd /etc ; sudo tar -pcf /tmp/${REMOTEHOST}-${TIMESTAMP}.tar ./docker/certs.d/daemon ; sudo chown ${ADMTLSUSER}.${ADMTLSUSER} /tmp/${REMOTEHOST}-${TIMESTAMP}.tar ; chmod 0400 /tmp/${REMOTEHOST}-${TIMESTAMP}.tar"
+	scp -p ${ADMTLSUSER}@${REMOTEHOST}:/tmp/${REMOTEHOST}-${TIMESTAMP}.tar .
+	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "rm /tmp/${REMOTEHOST}-${TIMESTAMP}.tar"
+	tar -pxf ${REMOTEHOST}-${TIMESTAMP}.tar
 #	Check if /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem file exists on remote system
 	if [ -e ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem ] ; then
 		echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARN${NORMAL}]:\n\t/etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem\n\talready exists, renaming existing keys so new keys can be installed."	1>&2
-		mv ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
-		mv ./docker/certs.d/daemon/${REMOTEHOST}-cert.pem ./docker/certs.d/daemon/${REMOTEHOST}-cert.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
-		mv ./docker/certs.d/daemon/ca.pem ./docker/certs.d/daemon/ca.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
+		mv ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem-${TIMESTAMP}
+		mv ./docker/certs.d/daemon/${REMOTEHOST}-cert.pem ./docker/certs.d/daemon/${REMOTEHOST}-cert.pem-${TIMESTAMP}
+		mv ./docker/certs.d/daemon/ca.pem ./docker/certs.d/daemon/ca.pem-${TIMESTAMP}
 		rm ./docker/certs.d/daemon/{cert,key}.pem
 	fi
 #	Create certification tar file and install it to ${REMOTEHOST}
@@ -128,24 +120,21 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	ln -s ${REMOTEHOST}-cert.pem cert.pem
 	cd ../../..
 	TIMESTAMP=`date +%Y-%m-%d-%H-%M-%S-%Z`
-	tar -pcf ./${REMOTEHOST}${TIMESTAMP}.tar ./docker/certs.d/daemon
-	chmod 0600 ./${REMOTEHOST}${TIMESTAMP}.tar
-	scp -p ./${REMOTEHOST}${TIMESTAMP}.tar ${ADMTLSUSER}@${REMOTEHOST}:/tmp
+	tar -pcf ./${REMOTEHOST}-${TIMESTAMP}.tar ./docker/certs.d/daemon
+	chmod 0600 ./${REMOTEHOST}-${TIMESTAMP}.tar
+	scp -p ./${REMOTEHOST}-${TIMESTAMP}.tar ${ADMTLSUSER}@${REMOTEHOST}:/tmp
 #	Create remote directory /etc/docker/certs.d/daemon
 #	This directory was selected to place dockerd TLS certifications because
 #	docker registry stores it's TLS certifications in /etc/docker/certs.d.
 	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\tCopy dockerd certification to ${REMOTEHOST}\n"
-	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "cd /etc ; sudo tar -pxf /tmp/${REMOTEHOST}${TIMESTAMP}.tar ; sudo chmod 0700 /etc/docker ; sudo chmod 0700 /etc/docker/certs.d ; sudo chown -R root.root ./docker"
-#	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "rm /tmp/${REMOTEHOST}${TIMESTAMP}.bak.tar"
-##################
-#	remove tar files on remote system from /tmp
-###################
-#	Remove ${TLSUSER}/.docker and tar file from ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
+	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "cd /etc ; sudo tar -pxf /tmp/${REMOTEHOST}-${TIMESTAMP}.tar ; sudo chmod 0700 /etc/docker ; sudo chmod 0700 /etc/docker/certs.d ; sudo chown -R root.root ./docker ; rm /tmp/${REMOTEHOST}-${TIMESTAMP}.tar"
 	cd ..
-exit
+
 ##################
+# >>>	Remove ${TLSUSER}/.docker and tar file from ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
 #	rm -rf ${REMOTEHOST}
 ##################
+
 #       Display instructions about certification environment variables
 	echo -e "\n\nAdd TLS flags to dockerd so it will know to use TLS certifications (--tlsverify,"
 	echo    "--tlscacert, --tlscert, --tlskey).  Scripts that will help with setup and"
