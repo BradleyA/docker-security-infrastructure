@@ -1,12 +1,10 @@
 #!/bin/bash
+# 	copy-user-2-remote-host-tls.sh  3.57.414  2018-08-20_22:22:38_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.56  
+# 	   complete testing for copy-user-2-remote-host-tls.sh close #15 
 # 	copy-user-2-remote-host-tls.sh  3.56.413  2018-08-20_20:03:07_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.55  
 # 	   remove SSHPORT, format output copy-user-2-remote-host-tls.sh #15 
 # 	copy-user-2-remote-host-tls.sh  3.55.412  2018-08-20_19:39:17_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.54  
 # 	   replaced nc -z in copy-user-2-remote-host-tls.sh #15 
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
-# 	   sync to standard script design changes 
-# 	copy-user-2-remote-host-tls.sh	3.29.361	2018-06-22_11:36:41_CDT uadmin two.cptx86.com 3.28-19-ga977649 
-# 	   format output to help user 
 ###
 DEBUG=0                 # 0 = debug off, 1 = debug on
 #	set -x
@@ -91,10 +89,11 @@ fi
 if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\t${ADMTLSUSER} user may receive password and passphrase prompt from ${REMOTEHOST}.\n\tRunning ${BOLD}ssh-copy-id ${ADMTLSUSER}@${REMOTEHOST}${NORMAL} may stop some of the prompts.\n"
 	ssh -t ${ADMTLSUSER}@${REMOTEHOST} " cd ~${TLSUSER} " || { echo -e "\n${0} ${LINENO} [ERROR]:\n\t${TLSUSER} user does not have home directory on ${REMOTEHOST}\n" ; exit 1; }
-	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\tCreate directory, change file permissions, and copy TLS keys to ${TLSUSER}@${REMOTEHOST}.\n"
+	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\tCreate directory, change file permissions, and copy TLS keys to ${TLSUSER}@${REMOTEHOST}.\n"
 	cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
 	mkdir -p ${TLSUSER}/.docker
-	chmod 700 ${TLSUSER}/.docker
+	chmod 0755 ${TLSUSER}
+	chmod 0700 ${TLSUSER}/.docker
 	cp -p ca.pem ${TLSUSER}/.docker
 	cp -p ${TLSUSER}-user-cert.pem ${TLSUSER}/.docker
 	cp -p ${TLSUSER}-user-priv-key.pem ${TLSUSER}/.docker
@@ -103,16 +102,16 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	ln -s ${TLSUSER}-user-cert.pem cert.pem
 	ln -s ${TLSUSER}-user-priv-key.pem key.pem
 	cd ..
-	tar -pcf ./${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar .docker
+	tar -pcf ./${TLSUSER}-${REMOTEHOST}-${TIMESTAMP}.tar .docker
 	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\tTransfer TLS keys to ${TLSUSER}@${REMOTEHOST}.\n"
-	scp -p ./${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ${ADMTLSUSER}@${REMOTEHOST}:/tmp
+	scp -p ./${TLSUSER}-${REMOTEHOST}-${TIMESTAMP}.tar ${ADMTLSUSER}@${REMOTEHOST}:/tmp
 #	Check if ${TLSUSER} == ${ADMTLSUSER} because sudo is not required for user copying their certs
 	if [ ${TLSUSER} == ${ADMTLSUSER} ] ; then
-		ssh -t ${ADMTLSUSER}@${REMOTEHOST} " cd ~${TLSUSER} ; tar -xf /tmp/${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ; rm /tmp/${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ; chown -R ${TLSUSER}.${TLSUSER} .docker "
+		ssh -t ${ADMTLSUSER}@${REMOTEHOST} " cd ~${TLSUSER} ; tar -xf /tmp/${TLSUSER}-${REMOTEHOST}-${TIMESTAMP}.tar ; rm /tmp/${TLSUSER}-${REMOTEHOST}-${TIMESTAMP}.tar ; chown -R ${TLSUSER}.${TLSUSER} .docker "
 	else
-		ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo cd ~${TLSUSER} ; sudo tar -pxf /tmp/${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ; sudo rm /tmp/${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ; sudo chown -R ${TLSUSER}.${TLSUSER} .docker "
+		echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\t${ADMTLSUSER} sudo password is required to install other user, ${TLSUSER}, certs on host, ${REMOTEHOST}.\n"
+		ssh -t ${ADMTLSUSER}@${REMOTEHOST} "cd ~${TLSUSER}/.. ; sudo tar -pxf /tmp/${TLSUSER}-${REMOTEHOST}-${TIMESTAMP}.tar -C ${TLSUSER} ; sudo rm /tmp/${TLSUSER}-${REMOTEHOST}-${TIMESTAMP}.tar ; sudo chown -R ${TLSUSER}.${TLSUSER} ${TLSUSER}/.docker "
 	fi
-#	Remove ${TLSUSER}/.docker and tar file from ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
 	cd ..
 	rm -rf ${TLSUSER}
 #	Display instructions about cert environment variables
