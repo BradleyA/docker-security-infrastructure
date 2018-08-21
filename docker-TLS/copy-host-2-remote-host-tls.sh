@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	copy-host-2-remote-host-tls.sh  3.55.412  2018-08-20_19:39:17_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.54  
+# 	   replaced nc -z in copy-user-2-remote-host-tls.sh #15 
 # 	copy-host-2-remote-host-tls.sh  3.54.411  2018-08-20_16:07:46_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.53-1-g6d60f7b  
 # 	   completed changes for remove nc -z and SSHPORT #15 copy-host-2-remote-host-tls.sh 
 ###
@@ -151,4 +153,4 @@ fi
 ###
 #       May want to create a version of this script that automates this process for SRE tools,
 #       but keep this script for users to run manually,
-#       open ticket and remove this comment
+#       open ticket and remove this comment 

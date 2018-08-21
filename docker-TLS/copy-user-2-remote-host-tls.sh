@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	copy-user-2-remote-host-tls.sh  3.55.412  2018-08-20_19:39:17_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.54  
+# 	   replaced nc -z in copy-user-2-remote-host-tls.sh #15 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
 # 	   sync to standard script design changes 
 # 	copy-user-2-remote-host-tls.sh	3.29.361	2018-06-22_11:36:41_CDT uadmin two.cptx86.com 3.28-19-ga977649 
@@ -12,7 +14,7 @@ NORMAL=$(tput sgr0)
 ###
 display_help() {
 echo -e "\n${NORMAL}${0} - Copy user TLS public, private keys and CA to remote host."
-echo -e "\nUSAGE\n   ${0} <REMOTEHOST> [<TLSUSER>] [<USERHOME>] [<ADMTLSUSER>] [SSHPORT]"
+echo -e "\nUSAGE\n   ${0} <REMOTEHOST> [<TLSUSER>] [<USERHOME>] [<ADMTLSUSER>]"
 echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION\nAn administration user can run this script to copy TLSUSER public, private"
@@ -85,9 +87,9 @@ if [ -z ${REMOTEHOST} ] ; then
 	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	Remote host is required.\n"	1>&2
 	exit 1
 fi
-#	Check if ${REMOTEHOST} is available on port ${SSHPORT}  # >>> try if $(ssh ${NODE} exit >/dev/null) ; then
-if $(nc -z  ${REMOTEHOST} ${SSHPORT} >/dev/null) ; then
-	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	${ADMTLSUSER} may receive password and\n\tpassphrase prompt from ${REMOTEHOST}. Running\n\tssh-copy-id ${ADMTLSUSER}@${REMOTEHOST} may stop the prompts."
+#	Check if ${REMOTEHOST} is available on ssh port
+if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
+	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\t${ADMTLSUSER} user may receive password and passphrase prompt from ${REMOTEHOST}.\n\tRunning ${BOLD}ssh-copy-id ${ADMTLSUSER}@${REMOTEHOST}${NORMAL} may stop some of the prompts.\n"
 	ssh -tp ${SSHPORT} ${ADMTLSUSER}@${REMOTEHOST} " cd ~${TLSUSER} " || { echo "${0} ${LINENO} [ERROR]:	${TLSUSER} does not have home directory on ${REMOTEHOST}" ; exit 1; }
 	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Create directory, change\n\tfile permissions, and copy TLS keys to ${TLSUSER}@${REMOTEHOST}."
 	cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
