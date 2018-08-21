@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	copy-user-2-remote-host-tls.sh  3.56.413  2018-08-20_20:03:07_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.55  
+# 	   remove SSHPORT, format output copy-user-2-remote-host-tls.sh #15 
 # 	copy-user-2-remote-host-tls.sh  3.55.412  2018-08-20_19:39:17_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.54  
 # 	   replaced nc -z in copy-user-2-remote-host-tls.sh #15 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
@@ -28,12 +30,11 @@ echo    "                Many sites have different home directories (/u/north-of
 echo    "   ADMTLSUSER   site administrator account creating TLS keys, default is user"
 echo    "                running script"
 echo    "                site administrator will have accounts on all systems"
-echo    "   SSHPORT      SSH server port, default is port 22"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
-echo -e "\nEXAMPLES\n   ${0} two.cptx86.com bob /u/north-office/ uadmin 12323\n"
+echo -e "\nEXAMPLES\n   ${0} two.cptx86.com bob /u/north-office/ uadmin\n"
 echo    "   Administrator copies TLS keys and CA to remote host, two.cptx86.com, for"
 echo    "   user bob, using local home directory, /u/north-office/, administrator user,"
-echo    "   uadmin, on port 12323."
+echo    "   uadmin."
 if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
         echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARNING${NORMAL}]:     Your language, ${LANG}, is not supported.\n\tWould you like to help?\n" 1>&2
 fi
@@ -51,8 +52,7 @@ REMOTEHOST=$1
 TLSUSER=${2:-${USER}}
 USERHOME=${3:-/home/}
 ADMTLSUSER=${4:-${USER}}
-SSHPORT=${5:-22}
-if [ "${DEBUG}" == "1" ] ; then echo -e "> DEBUG ${LINENO}  REMOTEHOST >${REMOTEHOST}< TLSUSER >${TLSUSER}< USERHOME >${USERHOME}< ADMTLSUSER >${ADMTLSUSER}< SSHPORT >${SSHPORT}<" 1>&2 ; fi
+if [ "${DEBUG}" == "1" ] ; then echo -e "> DEBUG ${LINENO}  REMOTEHOST >${REMOTEHOST}< TLSUSER >${TLSUSER}< USERHOME >${USERHOME}< ADMTLSUSER >${ADMTLSUSER}<" 1>&2 ; fi
 #	Check if admin user has home directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER} ] ; then
 	display_help
@@ -90,8 +90,8 @@ fi
 #	Check if ${REMOTEHOST} is available on ssh port
 if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\t${ADMTLSUSER} user may receive password and passphrase prompt from ${REMOTEHOST}.\n\tRunning ${BOLD}ssh-copy-id ${ADMTLSUSER}@${REMOTEHOST}${NORMAL} may stop some of the prompts.\n"
-	ssh -tp ${SSHPORT} ${ADMTLSUSER}@${REMOTEHOST} " cd ~${TLSUSER} " || { echo "${0} ${LINENO} [ERROR]:	${TLSUSER} does not have home directory on ${REMOTEHOST}" ; exit 1; }
-	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Create directory, change\n\tfile permissions, and copy TLS keys to ${TLSUSER}@${REMOTEHOST}."
+	ssh -t ${ADMTLSUSER}@${REMOTEHOST} " cd ~${TLSUSER} " || { echo -e "\n${0} ${LINENO} [ERROR]:\n\t${TLSUSER} user does not have home directory on ${REMOTEHOST}\n" ; exit 1; }
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\tCreate directory, change file permissions, and copy TLS keys to ${TLSUSER}@${REMOTEHOST}.\n"
 	cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
 	mkdir -p ${TLSUSER}/.docker
 	chmod 700 ${TLSUSER}/.docker
@@ -103,14 +103,14 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	ln -s ${TLSUSER}-user-cert.pem cert.pem
 	ln -s ${TLSUSER}-user-priv-key.pem key.pem
 	cd ..
-	tar -cf ./${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar .docker
-	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Transfer TLS keys to ${TLSUSER}@${REMOTEHOST}."
-	scp -pP ${SSHPORT}  ./${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ${ADMTLSUSER}@${REMOTEHOST}:/tmp
+	tar -pcf ./${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar .docker
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\tTransfer TLS keys to ${TLSUSER}@${REMOTEHOST}.\n"
+	scp -p ./${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ${ADMTLSUSER}@${REMOTEHOST}:/tmp
 #	Check if ${TLSUSER} == ${ADMTLSUSER} because sudo is not required for user copying their certs
 	if [ ${TLSUSER} == ${ADMTLSUSER} ] ; then
-		ssh -tp ${SSHPORT} ${ADMTLSUSER}@${REMOTEHOST} " cd ~${TLSUSER} ; tar -xf /tmp/${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ; rm /tmp/${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ; chown -R ${TLSUSER}.${TLSUSER} .docker "
+		ssh -t ${ADMTLSUSER}@${REMOTEHOST} " cd ~${TLSUSER} ; tar -xf /tmp/${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ; rm /tmp/${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ; chown -R ${TLSUSER}.${TLSUSER} .docker "
 	else
-		ssh -tp ${SSHPORT} ${ADMTLSUSER}@${REMOTEHOST} " cd ~${TLSUSER} ; sudo tar -xf /tmp/${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ; rm /tmp/${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ; sudo chown -R ${TLSUSER}.${TLSUSER} .docker "
+		ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo cd ~${TLSUSER} ; sudo tar -pxf /tmp/${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ; sudo rm /tmp/${TLSUSER}${REMOTEHOST}${TIMESTAMP}.tar ; sudo chown -R ${TLSUSER}.${TLSUSER} .docker "
 	fi
 #	Remove ${TLSUSER}/.docker and tar file from ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
 	cd ..
@@ -127,7 +127,7 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	exit 0
 else
 	display_help
-	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	${REMOTEHOST} not responding on port ${SSHPORT}.\n"	1>&2
+	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:\n\t${REMOTEHOST} not responding on ssh port.\n"	1>&2
 	exit 1
 fi
 ###
