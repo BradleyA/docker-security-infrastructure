@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	create-site-private-public-tls.sh  3.58.415  2018-09-01_18:08:57_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.57  
+# 	   change file names to use date format without : or _ close #17 
 # 	docker-TLS/create-site-private-public-tls.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
 # 	   sync to standard script design changes 
 # 	docker-TLS/create-site-private-public-tls.sh  3.15.318  2018-02-28_21:41:27_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.14-2-g9866315  
@@ -65,7 +67,7 @@ cd         ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private
 #	Check if ca-priv-key.pem file exists
 if [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem ] ; then
 	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARN${NORMAL}]:	Site private key\n\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem\n\talready exists, renaming existing site private key."   1>&2
-	mv ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
+	mv ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem`date +%Y-%m-%d-%H-%M-%S-%Z`
 fi
 echo -e "${NORMAL}\n${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Creating private key with passphrase in ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private"	1>&2
 openssl genrsa -aes256 -out ca-priv-key.pem 4096  || { echo -e "\n${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:   Pass phrase does not match." ; exit 1; }
@@ -89,7 +91,7 @@ cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
 #       Check if ca.pem file exists
 if [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/ca.pem ] ; then
         echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARN${NORMAL}]:	Site CA ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/ca.pem\n\talready exists, renaming existing site CA"   1>&2
-	mv ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/ca.pem ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/ca.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
+	mv ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/ca.pem ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/ca.pem`date +%Y-%m-%d-%H-%M-%S-%Z`
 fi
 openssl req -x509 -days ${NUMBERDAYS} -sha256 -new -key .private/ca-priv-key.pem -out ca.pem || { echo -e "\n${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:   Incorrect pass phrase for .private/ca-priv-key.pem." ; exit 1; }
 chmod 0444 ca.pem

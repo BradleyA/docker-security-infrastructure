@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	create-host-tls.sh  3.58.415  2018-09-01_18:08:57_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.57  
+# 	   change file names to use date format without : or _ close #17 
 # 	docker-TLS/create-host-tls.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
 # 	   sync to standard script design changes 
 # 	docker-TLS/create-host-tls.sh  3.32.370  2018-08-05_11:49:59_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.31-1-g513fe7d  
@@ -87,8 +89,8 @@ fi
 #	Check if ${FQDN}-priv-key.pem file exists
 if [ -e ${FQDN}-priv-key.pem ] ; then
 	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARNING${NORMAL}]:        ${FQDN}-priv-key.pem already\n\texists, renaming existing keys so new keys can be created."   1>&2
-	mv ${FQDN}-priv-key.pem ${FQDN}-priv-key.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
-	mv ${FQDN}-cert.pem ${FQDN}-cert.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
+	mv ${FQDN}-priv-key.pem ${FQDN}-priv-key.pem`date +%Y-%m-%d-%H-%M-%S-%Z`
+	mv ${FQDN}-cert.pem ${FQDN}-cert.pem`date +%Y-%m-%d-%H-%M-%S-%Z`
 fi
 #	Creating private key for host ${FQDN}
 echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Creating private key for host\n\t${FQDN}."	1>&2

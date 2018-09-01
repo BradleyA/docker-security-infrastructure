@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	create-user-tls.sh  3.58.415  2018-09-01_18:08:57_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.57  
+# 	   change file names to use date format without : or _ close #17 
 # 	docker-TLS/create-user-tls.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
 # 	   sync to standard script design changes 
 ###
@@ -74,8 +76,8 @@ fi
 #	Check if ${TLSUSER}-user-priv-key.pem file on system
 if [ -e ${TLSUSER}-user-priv-key.pem ] ; then
 	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	${TLSUSER}-user-priv-key.pem already exists,\n\trenaming existing keys so new keys can be created.\n"   1>&2
-	mv ${TLSUSER}-user-priv-key.pem ${TLSUSER}-user-priv-key.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
-	mv ${TLSUSER}-user-cert.pem ${TLSUSER}-user-cert.pem`date +%Y-%m-%d_%H:%M:%S_%Z`
+	mv ${TLSUSER}-user-priv-key.pem ${TLSUSER}-user-priv-key.pem`date +%Y-%m-%d-%H-%M-%S-%Z`
+	mv ${TLSUSER}-user-cert.pem ${TLSUSER}-user-cert.pem`date +%Y-%m-%d-%H-%M-%S-%Z`
 fi
 #	Creating private key for user ${TLSUSER}
 echo    "${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:	Creating private key for user ${TLSUSER}."	1>&2

@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	create-new-openssl.cnf-tls.sh  3.58.415  2018-09-01_18:08:57_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.57  
+# 	   change file names to use date format without : or _ close #17 
 # 	docker-TLS/create-new-openssl.cnf-tls.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
 # 	   sync to standard script design changes 
 # 	docker-TLS/create-new-openssl.cnf-tls.sh  3.15.318  2018-02-28_21:41:27_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.14-2-g9866315  
@@ -32,7 +34,7 @@ if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] ||
         exit 0
 fi
 ###		
-BACKUPFILE=/etc/ssl/openssl.cnf-`date +%Y-%m-%d_%H:%M:%S_%Z`
+BACKUPFILE=/etc/ssl/openssl.cnf-`date +%Y-%m-%d-%H-%M-%S-%Z`
 ORIGINALFILE=/etc/ssl/openssl.cnf
 if [ "${DEBUG}" == "1" ] ; then echo -e "> DEBUG ${LINENO}  BACKUPFILE >${BACKUPFILE} ORIGINALFILE >${ORIGINALFILE}<" 1>&2 ; fi
 #       Must be root to run this script
