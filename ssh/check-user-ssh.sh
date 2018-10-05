@@ -1,12 +1,9 @@
 #!/bin/bash
-# 	check-user-ssh.sh  3.59.416  2018-10-05_11:11:44_CDT  https://github.com/BradleyA/docker-scripts  bradley  zero.cptx86.com 3.58  
-# 	   remove '?' from help 
-# 	check-user-ssh.sh  3.44.396  2018-08-12_20:50:13_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.43-3-gbbb68b6  
-# 	   correct REMOVE_HOST help for the system running the command so cut and paste will work 
-# 	ssh/check-user-ssh.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
-# 	   sync to standard script design changes 
+# 	check-user-ssh.sh  3.60.417  2018-10-05_12:30:13_CDT  https://github.com/BradleyA/docker-scripts  bradley  zero.cptx86.com 3.59  
+# 	   begin Change echo or print DEBUG INFO WARNING ERROR #18 
+#
 ###	check-user-ssh.sh - Check user RSA ssh file permissions
-DEBUG=0                 # 0 = debug off, 1 = debug on
+DEBUG=1                 # 0 = debug off, 1 = debug on
 #	set -x
 #	set -v
 BOLD=$(tput bold)
@@ -29,50 +26,84 @@ echo    "   SSHUSER   user, default is user running script"
 echo    "   USERHOME  location of user home directory, default /home/"
 echo    "      Many sites have different home directories locations (/u/north-office/)"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/ssh"
-echo -e "\nEXAMPLES\n   ${0}\n\n   User checks their ssh file permissions"
-echo -e "\n   ${0} sam /u/north-office/\n\n   User sam checks their ssh file permissions in a non-default home directory"
-echo -e "\n   sudo ${0} bob\n\n   Administrator checks user bob ssh file permissions"
-echo -e "\n   sudo ${0} sally /u/home-office/\n\n   Administrator checks user sally ssh file permissions in a different home\n   directory"
+echo -e "\nEXAMPLES\n   User checks their ssh file permissions\n\n   ${0}"
+echo -e "\n   User sam checks their ssh file permissions in a non-default home directory\n\n   ${0} sam /u/north-office/"
+echo -e "\n   Administrator checks user bob ssh file permissions\n\n   sudo ${0} bob"
+echo -e "\n   Administrator checks user sally ssh file permissions in a different home\n   directory\n\n   sudo ${0} sally /u/home-office/\n"
 if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
-        echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARNING${NORMAL}]:     Your language, ${LANG}, is not supported.\n\tWould you like to help?\n" 1>&2
+        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[WARN]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Your language, ${LANG}, is not supported, Would you like to help translate?" 1>&2
+#       elif [ "${LANG}" == "fr_CA.UTF-8" ] ; then
+#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[WARN]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Display help in ${LANG}" 1>&2
+#       else
+#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[WARN]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Your language, ${LANG}, is not supported.\tWould you like to translate?" 1>&2
 fi
 }
-if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ]  ; then
-	display_help
-	exit 0
-fi
-if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
-        head -2 ${0} | awk {'print$2"\t"$3'}
+
+#       Date and time function
+get_date_stamp() {
+DATE_STAMP=`date +%Y-%m-%d-%H-%M-%S-%Z`
+}
+
+#  Fully qualified domain name FQDN hostname
+LOCALHOST=`hostname -f`
+
+#  Version
+SCRIPT_NAME=`head -2 ${0} | awk {'printf$2'}`
+SCRIPT_VERSION=`head -2 ${0} | awk {'printf$3'}`
+
+#       UID and GID
+USER_ID=`id -u`
+GROUP_ID=`id -g`
+
+#       Default help and version arguments
+if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] ; then
+        display_help
         exit 0
 fi
+if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
+        echo "${SCRIPT_NAME} ${SCRIPT_VERSION}"
+        exit 0
+fi
+
+#       INFO
+get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[INFO]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Begin" 1>&2
+
+#       DEBUG
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[DEBUG]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Name_of_command >${0}< Name_of_arg1 >${1}<" 1>&2 ; fi
+
 ###
 SSHUSER=${1:-${USER}}
 USERHOME=${2:-/home/}
-#
-if [ "${DEBUG}" == "1" ] ; then echo -e "> DEBUG ${LINENO}  SSHUSER >${SSHUSER}< USERHOME >${USERHOME}<" 1>&2 ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[DEBUG]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  SSHUSER >${SSHUSER}< USERHOME >${USERHOME}<" 1>&2 ; fi
+
 #	Root is required to check other users or user can check their own certs
-if ! [ $(id -u) = 0 -o ${USER} = ${SSHUSER} ] ; then
-	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:  Use sudo ${0}  ${SSHUSER}"	1>&2
+if ! [ ${USER_ID} = 0 -o ${USER} = ${SSHUSER} ] ; then
+#	if ! [ $(id -u) = 0 -o ${USER} = ${SSHUSER} ] ; then
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[ERROR]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Use sudo ${0}  ${SSHUSER}" 1>&2
 	echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT TO CHECK <another-user>/.ssh DIRECTORY. <<\n${NORMAL}"	1>&2
 	exit 1
 fi
+
 #	Check if user has home directory on system
 if [ ! -d ${USERHOME}${SSHUSER} ] ; then 
-	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:  ${SSHUSER} does not have a home directory\n\ton this system or ${SSHUSER} home directory is not ${USERHOME}${SSHUSER}"	1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[ERROR]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  ${SSHUSER} does not have a home directory on this system or ${SSHUSER} home directory is not ${USERHOME}${SSHUSER}" 1>&2
 	exit 1
 fi
+
 #	Check if .ssh directory exists
 if [ ! -d ${USERHOME}${SSHUSER}/.ssh ] ; then 
-	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:  ${SSHUSER} does not have a .ssh directory"	1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[ERROR]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  ${SSHUSER} does not have a .ssh directory" 1>&2
 	echo -e "\n\tTo create an ssh key enter: ${BOLD}ssh-keygen -t rsa${NORMAL}\n"
 	exit 1
 fi
+
 #	Check if .ssh directory is owned by ${SSHUSER}
 DIRECTORY_OWNER=`ls -ld ${USERHOME}${SSHUSER}/.ssh | awk '{print $4}'`
 if [ ! "${SSHUSER}" == "${DIRECTORY_OWNER}" ] ; then 
-	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:  ${SSHUSER} does not own ${USERHOME}${SSHUSER}/.ssh directory"	1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[ERROR]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  ${SSHUSER} does not own ${USERHOME}${SSHUSER}/.ssh directory" 1>&2
 	exit 1
 fi
+
 #	Check if user has .ssh/id_rsa file
 if [ ! -e ${USERHOME}${SSHUSER}/.ssh/id_rsa ] ; then 
 	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:  ${SSHUSER} does not have a .ssh/id_rsa file"	1>&2
