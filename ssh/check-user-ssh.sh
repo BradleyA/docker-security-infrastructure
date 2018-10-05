@@ -1,11 +1,13 @@
 #!/bin/bash
+# 	check-user-ssh.sh  3.62.419  2018-10-05_13:46:30_CDT  https://github.com/BradleyA/docker-scripts  bradley  zero.cptx86.com 3.61  
+# 	   turn off DEBUG #18 
 # 	check-user-ssh.sh  3.61.418  2018-10-05_13:41:00_CDT  https://github.com/BradleyA/docker-scripts  bradley  zero.cptx86.com 3.60  
 # 	   Change echo or print DEBUG INFO WARNING ERROR close #18 
 # 	check-user-ssh.sh  3.60.417  2018-10-05_12:30:13_CDT  https://github.com/BradleyA/docker-scripts  bradley  zero.cptx86.com 3.59  
 # 	   begin Change echo or print DEBUG INFO WARNING ERROR #18 
 #
 ###	check-user-ssh.sh - Check user RSA ssh file permissions
-DEBUG=1                 # 0 = debug off, 1 = debug on
+DEBUG=0                 # 0 = debug off, 1 = debug on
 #	set -x
 #	set -v
 BOLD=$(tput bold)
