@@ -1,9 +1,11 @@
 #!/bin/bash
+# 	check-user-ssh.sh  3.59.416  2018-10-05_11:11:44_CDT  https://github.com/BradleyA/docker-scripts  bradley  zero.cptx86.com 3.58  
+# 	   remove '?' from help 
 # 	check-user-ssh.sh  3.44.396  2018-08-12_20:50:13_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.43-3-gbbb68b6  
 # 	   correct REMOVE_HOST help for the system running the command so cut and paste will work 
 # 	ssh/check-user-ssh.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
 # 	   sync to standard script design changes 
-###
+###	check-user-ssh.sh - Check user RSA ssh file permissions
 DEBUG=0                 # 0 = debug off, 1 = debug on
 #	set -x
 #	set -v
@@ -13,7 +15,7 @@ NORMAL=$(tput sgr0)
 display_help() {
 echo -e "\n${NORMAL}${0} - Check user RSA ssh file permissions"
 echo -e "\nUSAGE\n   ${0} [<user-name> <home-directoty>]"
-echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION\nThis script allows users to make sure that the ssh files and directory"
 echo    "permissions are correct.  If they are not correct then this script will"
@@ -35,7 +37,7 @@ if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
         echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARNING${NORMAL}]:     Your language, ${LANG}, is not supported.\n\tWould you like to help?\n" 1>&2
 fi
 }
-if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
+if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ]  ; then
 	display_help
 	exit 0
 fi
