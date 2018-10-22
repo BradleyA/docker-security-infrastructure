@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	ssh/check-user-ssh.sh  3.63.420  2018-10-22T10:27:30.953228-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.62  
+# 	   check-host-tls.sh Change echo or print DEBUG INFO WARNING ERROR close #19 
 # 	check-user-ssh.sh  3.62.419  2018-10-05_13:46:30_CDT  https://github.com/BradleyA/docker-scripts  bradley  zero.cptx86.com 3.61  
 # 	   turn off DEBUG #18 
 # 	check-user-ssh.sh  3.61.418  2018-10-05_13:41:00_CDT  https://github.com/BradleyA/docker-scripts  bradley  zero.cptx86.com 3.60  
@@ -43,9 +45,11 @@ if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
 fi
 }
 
-#       Date and time function
+#       Date and time function ISO 8601
 get_date_stamp() {
-DATE_STAMP=`date +%Y-%m-%d-%H-%M-%S-%Z`
+DATE_STAMP=`date +%Y-%m-%dT%H:%M:%S.%6N%:z`
+TEMP=`date +%Z`
+DATE_STAMP=`echo "${DATE_STAMP} (${TEMP})"`
 }
 
 #  Fully qualified domain name FQDN hostname
