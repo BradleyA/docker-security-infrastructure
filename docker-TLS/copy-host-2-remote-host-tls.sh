@@ -1,23 +1,22 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.65.422  2018-10-22T12:16:00.374555-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.64  
+# 	   copy-host-2-remote-host-tls.sh Change echo or print DEBUG INFO WARNING ERROR close #21 
 # 	copy-host-2-remote-host-tls.sh  3.55.412  2018-08-20_19:39:17_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.54  
 # 	   replaced nc -z in copy-user-2-remote-host-tls.sh #15 
 # 	copy-host-2-remote-host-tls.sh  3.54.411  2018-08-20_16:07:46_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.53-1-g6d60f7b  
 # 	   completed changes for remove nc -z and SSHPORT #15 copy-host-2-remote-host-tls.sh 
-###
+#
+###	copy-host-2-remote-host-tls.sh - Copy public, private keys and CA to remote host
 DEBUG=0                 # 0 = debug off, 1 = debug on
 #	set -x
 #	set -v
-BOLD=$(tput bold)
-NORMAL=$(tput sgr0)
-REMOTEHOST=$1
-USERHOME=${2:-/home}
-USERHOME=${USERHOME}"/"
-ADMTLSUSER=${3:-${USER}} # design for futrue use
+BOLD=$(tput -Txterm bold)
+NORMAL=$(tput -Txterm sgr0)
 ###
 display_help() {
 echo -e "\n${NORMAL}${0} - Copy public, private keys and CA to remote host"
 echo -e "\nUSAGE\n   ${0} <remote-host> [<home-directory>]"
-echo    "   ${0} [--help | -help | help | -h | h | -? | ?]"
+echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION\nA user with administration authority uses this script to"
 echo    "copy host TLS CA, public, and private keys from"
@@ -36,80 +35,131 @@ echo    "   using default home directory, /home/, default administration user ru
 echo -e "   script.\n"
 echo -e "   ${0} two.cptx86.com /u/north-office/ uadmin\n\n   Administration user copies TLS keys and CA to remote host, two.cptx86.com,"
 echo    "   using local home directory, /u/north-office/, administrator account, uadmin."
+#       After displaying help in english check for other languages
 if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
-        echo -e "${NORMAL}${0} ${LINENO} [${BOLD}WARNING${NORMAL}]:     Your language, ${LANG}, is not supported.\n\tWould you like to help?\n" 1>&2
+        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[WARN]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Your language, ${LANG}, is not supported, Would you like to help translate?" 1>&2
+#       elif [ "${LANG}" == "fr_CA.UTF-8" ] ; then
+#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[WARN]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Display help in ${LANG}" 1>&2
+#       else
+#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[WARN]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Your language, ${LANG}, is not supported.\tWould you like to translate?" 1>&2
 fi
 }
-if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] || [ "$1" == "?" ] ; then
-	display_help
-	exit 0
-fi
-if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
-        head -2 ${0} | awk {'print$2"\t"$3'}
+
+#       Date and time function ISO 8601
+get_date_stamp() {
+DATE_STAMP=`date +%Y-%m-%dT%H:%M:%S.%6N%:z`
+TEMP=`date +%Z`
+DATE_STAMP=`echo "${DATE_STAMP} (${TEMP})"`
+}
+
+#       Fully qualified domain name FQDN hostname
+LOCALHOST=`hostname -f`
+
+#       Version
+SCRIPT_NAME=`head -2 ${0} | awk {'printf$2'}`
+SCRIPT_VERSION=`head -2 ${0} | awk {'printf$3'}`
+
+#       Added line because USER is not defined in crobtab jobs
+if ! [ "${USER}" == "${LOGNAME}" ] ; then  USER=${LOGNAME} ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[DEBUG]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  USER  >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
+
+#       UID and GID
+USER_ID=`id -u`
+GROUP_ID=`id -g`
+
+#       Default help and version arguments
+if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] ; then
+        display_help
         exit 0
 fi
-###		
-if [ "${DEBUG}" == "1" ] ; then echo -e "> DEBUG ${LINENO}  REMOTEHOST >${REMOTEHOST}< USERHOME >${USERHOME}< ADMTLSUSER >${ADMTLSUSER}<" 1>&2 ; fi
+if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
+        echo "${SCRIPT_NAME} ${SCRIPT_VERSION}"
+        exit 0
+fi
+
+#       INFO
+get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[INFO]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Begin" 1>&2
+
+#       DEBUG
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[DEBUG]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Name_of_command >${0}< Name_of_arg1 >${1}<" 1>&2 ; fi
+
+###
+REMOTEHOST=$1
+USERHOME=${2:-/home}
+USERHOME=${USERHOME}"/"
+ADMTLSUSER=${3:-${USER}} # design for futrue use
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[DEBUG]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  REMOTEHOST >${REMOTEHOST}< USERHOME >${USERHOME}< ADMTLSUSER >${ADMTLSUSER}<" 1>&2 ; fi
+
 #	Check if admin user has home directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER} ] ; then
 	display_help
-	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:        ${ADMTLSUSER} does not have a home directory\n\ton this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}"	1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[ERROR]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  ${ADMTLSUSER} does not have a home directory on this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}" 1>&2
 	exit 1
 fi
+
 #	Check if ${USERHOME}${ADMTLSUSER}/.docker/docker-ca directory on system
 if [ ! -d ${USERHOME}${ADMTLSUSER}/.docker/docker-ca ] ; then
 	display_help
-	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:   default directory,\n"     1>&2
-	echo -e "\t${BOLD}${USERHOME}${ADMTLSUSER}/.docker/docker-ca${NORMAL}, not on system.\n"  1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[ERROR]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Default directory, ${BOLD}${USERHOME}${ADMTLSUSER}/.docker/docker-ca${NORMAL}, not on system." 1>&2
 	echo -e "\tSee documentation for more information."
 	exit 1
 fi
 cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
+
 #	Prompt for ${REMOTEHOST} if argement not entered
 if [ -z ${REMOTEHOST} ] ; then
 	echo    "Enter remote host where TLS keys are to be copied:"
 	read REMOTEHOST
 fi
+
 #	Check if ${REMOTEHOST} string length is zero
 if [ -z ${REMOTEHOST} ] ; then
 	display_help
-	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	Remote host is required.\n"	1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[ERROR]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Remote host is required." 1>&2
+	echo -e "\tSee documentation for more information."
 	exit 1
 fi
+
 #	Check if ${REMOTEHOST}-priv-key.pem file on system
 if ! [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/${REMOTEHOST}-priv-key.pem ] ; then
 	display_help
-	echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	The ${REMOTEHOST}-priv-key.pem\n\tfile was not found in ${USERHOME}${ADMTLSUSER}/.docker/docker-ca."	1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[ERROR]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  The ${REMOTEHOST}-priv-key.pem file was not found in ${USERHOME}${ADMTLSUSER}/.docker/docker-ca." 1>&2
+	#	Help hint
 	echo -e "\tRunning create-host-tls.sh will create public and private keys."
 	exit 1
 fi
+
 #	Check if ${REMOTEHOST} is available on ssh port
 if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
-	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\t${ADMTLSUSER} user may receive password and passphrase prompts from ${REMOTEHOST}.\n\tRunning ${BOLD}ssh-copy-id ${ADMTLSUSER}@${REMOTEHOST}${NORMAL} may stop some of the prompts.\n"
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[INFO]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  ${ADMTLSUSER} user may receive password and passphrase prompts from ${REMOTEHOST}.  Running ${BOLD}ssh-copy-id ${ADMTLSUSER}@${REMOTEHOST}${NORMAL} may stop some of the prompts." 1>&2
+
 #	Check if /etc/docker directory on ${REMOTEHOST}
 	if ! $(ssh -t ${ADMTLSUSER}@${REMOTEHOST} "test -d /etc/docker") ; then
-		echo -e "${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:	/etc/docker directory missing,"	1>&2
-		echo -e "\tis docker installed on ${REMOTEHOST}."	1>&2
+		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[ERROR]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  /etc/docker directory missing, is docker installed on ${REMOTEHOST}." 1>&2
 		exit 1
 	fi
-	TIMESTAMP=`date +%Y-%m-%d-%H-%M-%S-%Z`
+
 #	Create working directory ~/.docker/docker-ca/${REMOTEHOST}
 	mkdir -p ${REMOTEHOST}
 	cd ${REMOTEHOST}
+
 #	Backup ${REMOTEHOST}/etc/docker/certs.d
-	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\tBacking up ${REMOTEHOST}:/etc/docker/certs.d to\n\t\t`pwd`\n\tRoot access required.\n"	1>&2
-	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mkdir -p /etc/docker/certs.d/daemon ; cd /etc ; sudo tar -pcf /tmp/${REMOTEHOST}-${TIMESTAMP}.tar ./docker/certs.d/daemon ; sudo chown ${ADMTLSUSER}.${ADMTLSUSER} /tmp/${REMOTEHOST}-${TIMESTAMP}.tar ; chmod 0400 /tmp/${REMOTEHOST}-${TIMESTAMP}.tar"
-	scp -p ${ADMTLSUSER}@${REMOTEHOST}:/tmp/${REMOTEHOST}-${TIMESTAMP}.tar .
-	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "rm -f /tmp/${REMOTEHOST}-${TIMESTAMP}.tar"
-	tar -pxf ${REMOTEHOST}-${TIMESTAMP}.tar
+	FILE_DATE_STAMP=`+%Y-%m-%dT%H:%M:%S.%6N%:z`
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[INFO]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Backing up ${REMOTEHOST}:/etc/docker/certs.d to `pwd` Root access required." 1>&2
+	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mkdir -p /etc/docker/certs.d/daemon ; cd /etc ; sudo tar -pcf /tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon ; sudo chown ${ADMTLSUSER}.${ADMTLSUSER} /tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar ; chmod 0400 /tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar"
+	scp -p ${ADMTLSUSER}@${REMOTEHOST}:/tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar .
+	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "rm -f /tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar"
+	tar -pxf ${REMOTEHOST}-${FILE_DATE_STAMP}.tar
+
 #	Check if /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem file exists on remote system
 	if [ -e ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem ] ; then
-		echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}WARN${NORMAL}]:\n\t/etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem\n\talready exists, ${BOLD}renaming existing keys${NORMAL} so new keys can be installed.\n"	1>&2
-		mv ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem-${TIMESTAMP}
-		mv ./docker/certs.d/daemon/${REMOTEHOST}-cert.pem ./docker/certs.d/daemon/${REMOTEHOST}-cert.pem-${TIMESTAMP}
-		mv ./docker/certs.d/daemon/ca.pem ./docker/certs.d/daemon/ca.pem-${TIMESTAMP}
+		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[WARN]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem already exists, ${BOLD}renaming existing keys${NORMAL} so new keys can be installed." 1>&2
+		mv ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem-${FILE_DATE_STAMP}
+		mv ./docker/certs.d/daemon/${REMOTEHOST}-cert.pem ./docker/certs.d/daemon/${REMOTEHOST}-cert.pem-${FILE_DATE_STAMP}
+		mv ./docker/certs.d/daemon/ca.pem ./docker/certs.d/daemon/ca.pem-${FILE_DATE_STAMP}
 		rm ./docker/certs.d/daemon/{cert,key}.pem
 	fi
+
 #	Create certification tar file and install it to ${REMOTEHOST}
 	chmod 0700 ./docker/certs.d/daemon
 	cp -p ../${REMOTEHOST}-priv-key.pem ./docker/certs.d/daemon
@@ -119,18 +169,21 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	ln -s ${REMOTEHOST}-priv-key.pem key.pem
 	ln -s ${REMOTEHOST}-cert.pem cert.pem
 	cd ../../..
-	TIMESTAMP=`date +%Y-%m-%d-%H-%M-%S-%Z`
-	tar -pcf ./${REMOTEHOST}-${TIMESTAMP}.tar ./docker/certs.d/daemon
-	chmod 0600 ./${REMOTEHOST}-${TIMESTAMP}.tar
-	scp -p ./${REMOTEHOST}-${TIMESTAMP}.tar ${ADMTLSUSER}@${REMOTEHOST}:/tmp
+	FILE_DATE_STAMP=`date +%Y-%m-%d-%H-%M-%S-%Z`
+	tar -pcf ./${REMOTEHOST}-${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon
+	chmod 0600 ./${REMOTEHOST}-${FILE_DATE_STAMP}.tar
+	scp -p ./${REMOTEHOST}-${FILE_DATE_STAMP}.tar ${ADMTLSUSER}@${REMOTEHOST}:/tmp
+
 #	Create remote directory /etc/docker/certs.d/daemon
 #	This directory was selected to place dockerd TLS certifications because
 #	docker registry stores it's TLS certifications in /etc/docker/certs.d.
-	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}INFO${NORMAL}]:\n\tCopying dockerd certification to ${REMOTEHOST}\n\tRoot access required.\n"
-	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "cd /etc ; sudo tar -pxf /tmp/${REMOTEHOST}-${TIMESTAMP}.tar ; sudo chmod 0700 /etc/docker ; sudo chmod 0700 /etc/docker/certs.d ; sudo chown -R root.root ./docker ; rm /tmp/${REMOTEHOST}-${TIMESTAMP}.tar"
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[INFO]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Copying dockerd certification to ${REMOTEHOST}  Root access required." 1>&2
+	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "cd /etc ; sudo tar -pxf /tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar ; sudo chmod 0700 /etc/docker ; sudo chmod 0700 /etc/docker/certs.d ; sudo chown -R root.root ./docker ; rm /tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar"
 	cd ..
+
 #	Remove working directory ~/.docker/docker-ca/${REMOTEHOST}
 	rm -rf ${REMOTEHOST}
+
 #       Display instructions about certification environment variables
 	echo -e "\n\nAdd TLS flags to dockerd so it will know to use TLS certifications (--tlsverify,"
 	echo    "--tlscacert, --tlscert, --tlskey).  Scripts that will help with setup and"
@@ -140,17 +193,22 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	echo -e "\tconfiguration of dockerd on systems running Ubuntu 16.04"
 	echo -e "\t(systemd) and Ubuntu 14.04 (Upstart).\n"
 #
-	echo -e "If dockerd is already using TLS certifications then entering one of the\nfollowing will restart dockerd with the new certifications."
+	echo -e "If dockerd is already using TLS certifications then entering one of the\nfollowing will restart dockerd with the new certifications.\n"
 	echo -e "\tUbuntu 16.04 (Systemd) ${BOLD}sudo systemctl restart docker${NORMAL}"
-	echo -e "\tUbuntu 14.04 (Upstart) ${BOLD}sudo service docker restart${NORMAL}"
-	echo -e "\n${0} ${LINENO} [INFO]:	Done."
+	echo -e "\tUbuntu 14.04 (Upstart) ${BOLD}sudo service docker restart${NORMAL}\n"
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[INFO]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Done." 1>&2
 	exit 0
 else
 	display_help
-	echo -e "\n${NORMAL}${0} ${LINENO} [${BOLD}ERROR${NORMAL}]:\n\t${REMOTEHOST} not responding on ssh port.\n"	1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[ERROR]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  ${REMOTEHOST} not responding on ssh port." 1>&2
 	exit 1
 fi
-###
+
 #       May want to create a version of this script that automates this process for SRE tools,
 #       but keep this script for users to run manually,
 #       open ticket and remove this comment 
+
+#
+#
+get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[INFO]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Done." 1>&2
+###
