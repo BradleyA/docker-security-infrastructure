@@ -1,12 +1,8 @@
 #!/bin/bash
+# 	ssh/check-user-ssh.sh  3.74.431  2018-10-22T21:18:56.500555-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.73  
+# 	   Need to retest everything after all the formating changes #30 
 # 	ssh/check-user-ssh.sh  3.63.420  2018-10-22T10:27:30.953228-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.62  
 # 	   check-host-tls.sh Change echo or print DEBUG INFO WARNING ERROR close #19 
-# 	check-user-ssh.sh  3.62.419  2018-10-05_13:46:30_CDT  https://github.com/BradleyA/docker-scripts  bradley  zero.cptx86.com 3.61  
-# 	   turn off DEBUG #18 
-# 	check-user-ssh.sh  3.61.418  2018-10-05_13:41:00_CDT  https://github.com/BradleyA/docker-scripts  bradley  zero.cptx86.com 3.60  
-# 	   Change echo or print DEBUG INFO WARNING ERROR close #18 
-# 	check-user-ssh.sh  3.60.417  2018-10-05_12:30:13_CDT  https://github.com/BradleyA/docker-scripts  bradley  zero.cptx86.com 3.59  
-# 	   begin Change echo or print DEBUG INFO WARNING ERROR #18 
 #
 ###	check-user-ssh.sh - Check user RSA ssh file permissions
 DEBUG=0                 # 0 = debug off, 1 = debug on

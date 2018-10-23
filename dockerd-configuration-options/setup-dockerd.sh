@@ -1,12 +1,8 @@
 #!/bin/bash
+# 	dockerd-configuration-options/setup-dockerd.sh  3.74.431  2018-10-22T21:18:56.335021-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.73  
+# 	   Need to retest everything after all the formating changes #30 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.73.430  2018-10-22T20:56:08.318039-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.72  
 # 	   setup-dockerd.sh Change echo or print DEBUG INFO WARNING ERROR close #27 
-# 	setup-dockerd.sh  3.43.392  2018-08-12_12:32:51_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.42  
-# 	   added note about skipping install and configurating daemon chnages 
-# 	dockerd-configuration-options/setup-dockerd.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
-# 	   sync to standard script design changes 
-# 	setup-dockerd.sh  3.30.367  2018-06-23_17:52:30_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.29  
-# 	   added mv uninstall-dockerd-scripts.sh to /etc/docker 
 #
 ###	setup-dockerd.sh - setup system to support dockerd on Systemd and Upstart
 DEBUG=0                 # 0 = debug off, 1 = debug on

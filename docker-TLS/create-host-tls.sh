@@ -1,14 +1,10 @@
 #!/bin/bash
-# 	docker-TLS/create-host-tls.sh  3.70.427  2018-10-22T14:47:04.047361-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.69  
-# 	   include bash version in DEBUG 
+# 	docker-TLS/create-host-tls.sh  3.74.431  2018-10-22T21:18:56.079225-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.73  
+# 	   Need to retest everything after all the formating changes #30 
 # 	docker-TLS/create-host-tls.sh  3.67.424  2018-10-22T13:39:36.001257-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.66  
 # 	   create-host-tls.sh Change echo or print DEBUG INFO WARNING ERROR closes #23 
 # 	create-host-tls.sh  3.58.415  2018-09-01_18:08:57_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.57  
 # 	   change file names to use date format without : or _ close #17 
-# 	docker-TLS/create-host-tls.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
-# 	   sync to standard script design changes 
-# 	docker-TLS/create-host-tls.sh  3.32.370  2018-08-05_11:49:59_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.31-1-g513fe7d  
-# 	   re-marking this file with later version of markit to support check-markit 
 #
 ###	create-host-tls.sh - Create host public, private keys and CA
 DEBUG=0                 # 0 = debug off, 1 = debug on

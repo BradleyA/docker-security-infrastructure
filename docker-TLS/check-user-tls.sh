@@ -1,10 +1,8 @@
 #!/bin/bash
-# 	docker-TLS/check-user-tls.sh  3.70.427  2018-10-22T14:47:03.794826-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.69  
-# 	   include bash version in DEBUG 
+# 	docker-TLS/check-user-tls.sh  3.74.431  2018-10-22T21:18:55.831184-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.73  
+# 	   Need to retest everything after all the formating changes #30 
 # 	docker-TLS/check-user-tls.sh  3.64.421  2018-10-22T11:29:01.659220-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.63  
 # 	   check-user-tls.sh Change echo or print DEBUG INFO WARNING ERROR close #20 
-# 	check-user-tls.sh  3.35.374  2018-08-05_23:21:09_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.34  
-# 	   improve output of script close #13 
 #
 ###	check-user-tls.sh - Check public, private keys, and CA for a user
 DEBUG=0                 # 0 = debug off, 1 = debug on

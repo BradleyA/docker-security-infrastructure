@@ -1,14 +1,10 @@
 #!/bin/bash
-# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.70.427  2018-10-22T14:47:04.130484-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.69  
-# 	   include bash version in DEBUG 
+# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.74.431  2018-10-22T21:18:56.161102-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.73  
+# 	   Need to retest everything after all the formating changes #30 
 # 	docker-TLS/create-new-openssl.cnf-tls.sh  3.68.425  2018-10-22T13:54:47.815321-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.67  
 # 	   create-new-openssl.cnf-tls.sh Change echo or print DEBUG INFO WARNING ERROR closes #24 
 # 	create-new-openssl.cnf-tls.sh  3.58.415  2018-09-01_18:08:57_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.57  
 # 	   change file names to use date format without : or _ close #17 
-# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
-# 	   sync to standard script design changes 
-# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.15.318  2018-02-28_21:41:27_CST  https://github.com/BradleyA/docker-scripts  uadmin  four-rpi3b.cptx86.com 3.14-2-g9866315  
-# 	   ready for production 
 #
 ###	create-new-openssl.cnf-tls.sh - Modify /etc/ssl/openssl.conf file
 DEBUG=0                 # 0 = debug off, 1 = debug on

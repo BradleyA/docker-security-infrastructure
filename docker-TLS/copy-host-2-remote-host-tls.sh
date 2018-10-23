@@ -1,12 +1,8 @@
 #!/bin/bash
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.70.427  2018-10-22T14:47:03.876996-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.69  
-# 	   include bash version in DEBUG 
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.74.431  2018-10-22T21:18:55.913000-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.73  
+# 	   Need to retest everything after all the formating changes #30 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.65.422  2018-10-22T12:16:00.374555-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.64  
 # 	   copy-host-2-remote-host-tls.sh Change echo or print DEBUG INFO WARNING ERROR close #21 
-# 	copy-host-2-remote-host-tls.sh  3.55.412  2018-08-20_19:39:17_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.54  
-# 	   replaced nc -z in copy-user-2-remote-host-tls.sh #15 
-# 	copy-host-2-remote-host-tls.sh  3.54.411  2018-08-20_16:07:46_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.53-1-g6d60f7b  
-# 	   completed changes for remove nc -z and SSHPORT #15 copy-host-2-remote-host-tls.sh 
 #
 ###	copy-host-2-remote-host-tls.sh - Copy public, private keys and CA to remote host
 DEBUG=0                 # 0 = debug off, 1 = debug on

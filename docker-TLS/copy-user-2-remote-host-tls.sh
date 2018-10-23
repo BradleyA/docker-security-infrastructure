@@ -1,14 +1,8 @@
 #!/bin/bash
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.70.427  2018-10-22T14:47:03.961836-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.69  
-# 	   include bash version in DEBUG 
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.74.431  2018-10-22T21:18:55.996497-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.73  
+# 	   Need to retest everything after all the formating changes #30 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.66.423  2018-10-22T12:46:04.384520-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.65  
 # 	   copy-user-2-remote-host-tls.sh Change echo or print DEBUG INFO WARNING ERROR clsoe #22 
-# 	copy-user-2-remote-host-tls.sh  3.57.414  2018-08-20_22:22:38_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.56  
-# 	   complete testing for copy-user-2-remote-host-tls.sh close #15 
-# 	copy-user-2-remote-host-tls.sh  3.56.413  2018-08-20_20:03:07_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.55  
-# 	   remove SSHPORT, format output copy-user-2-remote-host-tls.sh #15 
-# 	copy-user-2-remote-host-tls.sh  3.55.412  2018-08-20_19:39:17_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.54  
-# 	   replaced nc -z in copy-user-2-remote-host-tls.sh #15 
 #
 ###	copy-user-2-remote-host-tls.sh - Copy user TLS public, private keys and CA to remote host
 DEBUG=0                 # 0 = debug off, 1 = debug on

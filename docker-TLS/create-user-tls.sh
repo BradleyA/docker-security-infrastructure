@@ -1,10 +1,10 @@
 #!/bin/bash
+# 	docker-TLS/create-user-tls.sh  3.74.431  2018-10-22T21:18:56.242939-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.73  
+# 	   Need to retest everything after all the formating changes #30 
 # 	docker-TLS/create-user-tls.sh  3.69.426  2018-10-22T14:41:49.478389-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.68  
 # 	   create-user-tls.sh Change echo or print DEBUG INFO WARNING ERROR closes #26 
 # 	create-user-tls.sh  3.58.415  2018-09-01_18:08:57_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.57  
 # 	   change file names to use date format without : or _ close #17 
-# 	docker-TLS/create-user-tls.sh  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
-# 	   sync to standard script design changes 
 #
 ###	create-user-tls.sh - Create user public and private key and CA
 DEBUG=0                 # 0 = debug off, 1 = debug on
