@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-site-private-public-tls.sh  3.76.433  2018-11-11T10:23:58.536245-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.75  
+# 	   move UID and GID function up a few link to allow DEBUG statement to use it 
 # 	docker-TLS/create-site-private-public-tls.sh  3.71.428  2018-10-22T16:07:53.990192-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.70  
 # 	   create-site-private-public-tls.sh Change echo or print DEBUG INFO WARNING ERROR closes #25 
 #
@@ -54,13 +56,13 @@ LOCALHOST=`hostname -f`
 SCRIPT_NAME=`head -2 ${0} | awk {'printf$2'}`
 SCRIPT_VERSION=`head -2 ${0} | awk {'printf$3'}`
 
-#       Added line because USER is not defined in crobtab jobs
-if ! [ "${USER}" == "${LOGNAME}" ] ; then  USER=${LOGNAME} ; fi
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[DEBUG]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  USER  >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
-
 #       UID and GID
 USER_ID=`id -u`
 GROUP_ID=`id -g`
+
+#       Added line because USER is not defined in crobtab jobs
+if ! [ "${USER}" == "${LOGNAME}" ] ; then  USER=${LOGNAME} ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[DEBUG]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  USER  >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
 
 #       Default help and version arguments
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] ; then
