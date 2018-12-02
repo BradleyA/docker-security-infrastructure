@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-host-tls.sh  3.77.434  2018-12-02T09:43:33.084417-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  one-rpi3b.cptx86.com 3.76  
+# 	   correct missing comment on line 143 
 # 	docker-TLS/check-host-tls.sh  3.76.433  2018-11-11T10:23:58.062366-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.75  
 # 	   move UID and GID function up a few link to allow DEBUG statement to use it 
 # 	docker-TLS/check-host-tls.sh  3.74.431  2018-10-22T21:18:55.685514-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.73  
@@ -146,7 +148,7 @@ if [ $(stat -Lc %a ${CERTDIR}) != 700 ]; then
 	chmod 700 ${CERTDIR}
 fi
 
-	Help hint
+#	Help hint
 echo -e "\nUse script ${BOLD}create-host-tls.sh${NORMAL} to update host TLS if host TLS certificate has expired."
  
 #	May want to create a version of this script that automates this process for SRE tools,
