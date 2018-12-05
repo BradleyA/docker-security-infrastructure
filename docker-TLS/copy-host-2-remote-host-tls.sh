@@ -1,6 +1,8 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.82.439  2018-12-04T22:18:25.323363-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.81  
+# 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.80.437  2018-12-02T12:43:17.704245-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.79  
-# 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more #30 
+# 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
 #
 ### copy-host-2-remote-host-tls.sh - Copy public, private keys and CA to remote host
 #       Order of precedence: environment variable, default code
@@ -148,8 +150,8 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	cd ${REMOTEHOST}
 
 #	Backup ${REMOTEHOST}/etc/docker/certs.d
-	FILE_DATE_STAMP=`+%Y-%m-%dT%H:%M:%S.%6N%:z`
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Backing up ${REMOTEHOST}:/etc/docker/certs.d to `pwd` Root access required." 1>&2
+	FILE_DATE_STAMP=$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Backing up ${REMOTEHOST}:/etc/docker/certs.d to $(pwd) Root access required." 1>&2
 	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mkdir -p /etc/docker/certs.d/daemon ; cd /etc ; sudo tar -pcf /tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon ; sudo chown ${ADMTLSUSER}.${ADMTLSUSER} /tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar ; chmod 0400 /tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar"
 	scp -p ${ADMTLSUSER}@${REMOTEHOST}:/tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar .
 	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "rm -f /tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar"
@@ -173,7 +175,7 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	ln -s ${REMOTEHOST}-priv-key.pem key.pem
 	ln -s ${REMOTEHOST}-cert.pem cert.pem
 	cd ../../..
-	FILE_DATE_STAMP=`date +%Y-%m-%d-%H-%M-%S-%Z`
+	FILE_DATE_STAMP=$(date +%Y-%m-%d-%H-%M-%S-%Z)
 	tar -pcf ./${REMOTEHOST}-${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon
 	chmod 0600 ./${REMOTEHOST}-${FILE_DATE_STAMP}.tar
 	scp -p ./${REMOTEHOST}-${FILE_DATE_STAMP}.tar ${ADMTLSUSER}@${REMOTEHOST}:/tmp
