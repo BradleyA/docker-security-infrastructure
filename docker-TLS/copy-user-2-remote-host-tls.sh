@@ -1,5 +1,5 @@
 #!/bin/bash
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.83.440  2018-12-04T22:47:26.260004-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.82  
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.89.446  2018-12-05T16:33:01.884441-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.88  
 # 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
 #
 ### copy-user-2-remote-host-tls.sh - Copy user TLS public, private keys and CA to remote host
@@ -170,7 +170,7 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	echo -e "\t.bashrc.  These environment variables will be set each time the user"
 	echo -e "\tlogs into the computer system.  Edit your .bashrc file (or the"
 	echo -e "\tcorrect shell if different) and prepend the following two lines."
-	echo -e "\texport DOCKER_HOST=tcp://\`hostname -f\`:2376"
+	echo -e "\texport DOCKER_HOST=tcp://$(hostname -f):2376"
 	echo -e "\texport DOCKER_TLS_VERIFY=1"
 #
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
