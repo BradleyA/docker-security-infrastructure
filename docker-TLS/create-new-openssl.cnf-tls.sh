@@ -1,12 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.76.433  2018-11-11T10:23:58.453500-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.75  
-# 	   move UID and GID function up a few link to allow DEBUG statement to use it 
-# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.74.431  2018-10-22T21:18:56.161102-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.73  
-# 	   Need to retest everything after all the formating changes #30 
-# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.68.425  2018-10-22T13:54:47.815321-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.67  
-# 	   create-new-openssl.cnf-tls.sh Change echo or print DEBUG INFO WARNING ERROR closes #24 
-# 	create-new-openssl.cnf-tls.sh  3.58.415  2018-09-01_18:08:57_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.57  
-# 	   change file names to use date format without : or _ close #17 
+# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.84.441  2018-12-04T23:09:31.544641-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.83  
+# 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
 #
 ###	create-new-openssl.cnf-tls.sh - Modify /etc/ssl/openssl.conf file
 DEBUG=0                 # 0 = debug off, 1 = debug on
