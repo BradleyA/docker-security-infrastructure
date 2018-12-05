@@ -1,11 +1,10 @@
 #!/bin/bash
-# 	dockerd-configuration-options/setup-dockerd.sh  3.74.431  2018-10-22T21:18:56.335021-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.73  
-# 	   Need to retest everything after all the formating changes #30 
-# 	dockerd-configuration-options/setup-dockerd.sh  3.73.430  2018-10-22T20:56:08.318039-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.72  
-# 	   setup-dockerd.sh Change echo or print DEBUG INFO WARNING ERROR close #27 
+# 	dockerd-configuration-options/setup-dockerd.sh  3.91.448  2018-12-05T17:17:07.230717-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.90  
+# 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
 #
-###	setup-dockerd.sh - setup system to support dockerd on Systemd and Upstart
-DEBUG=0                 # 0 = debug off, 1 = debug on
+### setup-dockerd.sh - setup system to support dockerd on Systemd and Upstart
+#       Order of precedence: environment variable, default code
+if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -v
 #	set -x
 BOLD=$(tput -Txterm bold)
@@ -26,6 +25,13 @@ echo    "/etc/docker/setup-dockerd.sh. Docker daemon flag changes can be"
 echo    "distributed to any Ubuntu cluster that use systemd or upstart by"
 echo    "copying /etc/docker/dockerd-configuration-file to each system and"
 echo    "running sudo /etc/docker/setup-dockerd.sh on each system."
+echo -e "\nEnvironment Variables"
+echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
+echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
+echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
+echo    "environment variable.  You are on your own defining environment variables if"
+echo    "you are using other shells."
+echo    "   DEBUG       (default '0')"
 echo -e "\nOPTIONS"
 echo    "   WORK_DIRECTORY               working directory,"
 echo    "                                default is /etc/docker/"
@@ -38,39 +44,39 @@ echo -e "\nEXAMPLES\n   sudo ${0}\n"
 echo -e "   sudo ${0} /mnt/etc/docker/ /mnt/etc/default/\n"
 #       After displaying help in english check for other languages
 if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
-        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[WARN]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Your language, ${LANG}, is not supported, Would you like to help translate?" 1>&2
+        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  ${LANG}, is not supported, Would you like to help translate?" 1>&2
 #       elif [ "${LANG}" == "fr_CA.UTF-8" ] ; then
-#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[WARN]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Display help in ${LANG}" 1>&2
+#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Display help in ${LANG}" 1>&2
 #       else
-#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[WARN]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Your language, ${LANG}, is not supported.\tWould you like to translate?" 1>&2
+#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate?" 1>&2
 fi
 }
 
 #       Date and time function ISO 8601
 get_date_stamp() {
-DATE_STAMP=`date +%Y-%m-%dT%H:%M:%S.%6N%:z`
-TEMP=`date +%Z`
-DATE_STAMP=`echo "${DATE_STAMP} (${TEMP})"`
+DATE_STAMP=$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
+TEMP=$(date +%Z)
+DATE_STAMP="${DATE_STAMP} (${TEMP})"
 }
 
 #       Fully qualified domain name FQDN hostname
-LOCALHOST=`hostname -f`
+LOCALHOST=$(hostname -f)
 
 #       Version
-SCRIPT_NAME=`head -2 ${0} | awk {'printf$2'}`
-SCRIPT_VERSION=`head -2 ${0} | awk {'printf$3'}`
+SCRIPT_NAME=$(head -2 "${0}" | awk {'printf $2'})
+SCRIPT_VERSION=$(head -2 "${0}" | awk {'printf $3'})
+
+#       UID and GID
+USER_ID=$(id -u)
+GROUP_ID=$(id -g)
 
 #       Added line because USER is not defined in crobtab jobs
 if ! [ "${USER}" == "${LOGNAME}" ] ; then  USER=${LOGNAME} ; fi
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[DEBUG]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  USER  >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
-
-#       UID and GID
-USER_ID=`id -u`
-GROUP_ID=`id -g`
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
 
 #       Default help and version arguments
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] ; then
-        display_help
+        display_help | more
         exit 0
 fi
 if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
@@ -79,27 +85,27 @@ if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] ||
 fi
 
 #       INFO
-get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[INFO]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Begin" 1>&2
+get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Started..." 1>&2
 
 #       DEBUG
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[DEBUG]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Name_of_command >${0}< Name_of_arg1 >${1}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Name_of_command >${0}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
 
 ###
 WORK_DIRECTORY=${1:-/etc/docker/}
 UPSTART_SYSVINIT_DIRECTORY=${2:-/etc/default/}
 CONFIGURATION_STRING=${3:-Custom_dockerd_Configuration_File}
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[DEBUG]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  WORK_DIRECTORY >${WORK_DIRECTORY}< UPSTART_SYSVINIT_DIRECTORY >${UPSTART_SYSVINIT_DIRECTORY}< CONFIGURATION_STRING >${CONFIGURATION_STRING}<" 1>&2 ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  WORK_DIRECTORY >${WORK_DIRECTORY}< UPSTART_SYSVINIT_DIRECTORY >${UPSTART_SYSVINIT_DIRECTORY}< CONFIGURATION_STRING >${CONFIGURATION_STRING}<" 1>&2 ; fi
 echo -e "\nChanges made to ${WORK_DIRECTORY}dockerd-configuration-file will be\nadded to Upstart and Systemd configuration files for dockerd.\n" 1>&2
 
 #	Must be root to run this script
 if ! [ $(id -u) = 0 ] ; then
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[ERROR]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Must be root to run this script.  Use ${BOLD}sudo ${0}${NORMAL}" 1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Must be root to run this script.  Use ${BOLD}sudo ${0}${NORMAL}" 1>&2
 	exit 1
 fi
 
 #	Check for ${WORK_DIRECTORY}
 if [ ! -d ${WORK_DIRECTORY} ] ; then
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[ERROR]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Is Docker installed?  Directory ${WORK_DIRECTORY} not found." 1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Is Docker installed?  Directory ${WORK_DIRECTORY} not found." 1>&2
 	exit 1
 elif [ ! -f ${WORK_DIRECTORY}setup-dockerd.sh ] ; then
 	#	Move files into /etc/docker ${WORK_DIRECTORY} if not already moved
@@ -115,7 +121,7 @@ elif [ ! -f ${WORK_DIRECTORY}setup-dockerd.sh ] ; then
 	chown root.root				${WORK_DIRECTORY}*
 	chmod go-xw				${WORK_DIRECTORY}*
 else
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[WARN]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Skipping installation because ${WORK_DIRECTORY}setup-dockerd.sh is already installed.  Updating Docker daemon with changes in ${WORK_DIRECTORY}dockerd-configuration-file." 1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Skipping installation because ${WORK_DIRECTORY}setup-dockerd.sh is already installed.  Updating Docker daemon with changes in ${WORK_DIRECTORY}dockerd-configuration-file." 1>&2
 fi
  
 ###	Configure dockerd (Upstart and SysVinit configuration file) on Ubuntu 14.04
@@ -126,21 +132,21 @@ if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] ; then
 	#	copy ${UPSTART_SYSVINIT_DIRECTORY}docker to ${WORK_DIRECTORY}docker.org
 	cp ${UPSTART_SYSVINIT_DIRECTORY}docker ${WORK_DIRECTORY}docker.org
 	if grep -qF ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org ; then 
-		if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[DEBUG]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Remove previous dockerd configuration." 1>&2 ; fi
+		if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Remove previous dockerd configuration." 1>&2 ; fi
 		#	Locate line number of ${CONFIGURATION_STRING} in ${WORK_DIRECTORY}docker
-		LINE=`grep -n ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org | cut -f1 -d:`
-		LINE=`echo ${LINE} | awk '{print $1 - 1}'`
+		LINE=$(grep -n ${CONFIGURATION_STRING} ${WORK_DIRECTORY}docker.org | cut -f1 -d:)
+		LINE=$(echo ${LINE} | awk '{print $1 - 1}')
 		#	Write line one to ${LINE} number into ${WORK_DIRECTORY}docker
 		head -n +${LINE} ${WORK_DIRECTORY}docker.org > ${WORK_DIRECTORY}docker
 	else
-		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[WARN]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Copy ${WORK_DIRECTORY}docker.org to ${WORK_DIRECTORY}docker without ${CONFIGURATION_STRING} section." 1>&2
+		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Copy ${WORK_DIRECTORY}docker.org to ${WORK_DIRECTORY}docker without ${CONFIGURATION_STRING} section." 1>&2
 		cp ${WORK_DIRECTORY}docker.org ${WORK_DIRECTORY}docker
 	fi
 
 #	Append ${WORK_DIRECTORY}dockerd-configuration-file onto ${WORK_DIRECTORY}docker
-	if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[DEBUG]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Append ${WORK_DIRECTORY}dockerd-configuration-file onto ${WORK_DIRECTORY}docker." 1>&2 ; fi
+	if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Append ${WORK_DIRECTORY}dockerd-configuration-file onto ${WORK_DIRECTORY}docker." 1>&2 ; fi
 	cat ${WORK_DIRECTORY}dockerd-configuration-file >> ${WORK_DIRECTORY}docker
-	if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[DEBUG]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Move ${WORK_DIRECTORY}docker to ${UPSTART_SYSVINIT_DIRECTORY}docker" 1>&2 ; fi
+	if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Move ${WORK_DIRECTORY}docker to ${UPSTART_SYSVINIT_DIRECTORY}docker" 1>&2 ; fi
 	mv ${WORK_DIRECTORY}docker ${UPSTART_SYSVINIT_DIRECTORY}docker
 fi
 echo -e "\tdockerd (Upstart and SysVinit configuration file)\n\tfor Ubuntu 14.04 has been updated." 1>&2
@@ -164,5 +170,5 @@ echo -e "Run '${BOLD}sudo systemctl enable docker${NORMAL}'\n\tto start on boot.
 echo    "Run '${BOLD}sudo systemctl restart docker${NORMAL}'"	1>&2
 
 #
-get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[INFO]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Done." 1>&2
+get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
 ###
