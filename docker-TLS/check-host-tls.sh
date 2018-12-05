@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-host-tls.sh  3.81.438  2018-12-04T21:51:08.020599-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.80  
+# 	   Need to retest everything after all the formating changes #30 
 # 	docker-TLS/check-host-tls.sh  3.79.436  2018-12-02T12:14:36.329038-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.78  
 # 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more #30 
 # 	docker-TLS/check-host-tls.sh  3.78.435  2018-12-02T11:23:25.626905-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.77  
@@ -107,23 +109,23 @@ fi
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Checking ${BOLD}${REMOTEHOST}${NORMAL} TLS certifications and directory permissions." 1>&2
 
 #	View dockerd daemon certificate expiration date of ca.pem file
-TEMP=`openssl x509 -in ${CERTDIR}ca.pem -noout -enddate`
+TEMP=$(openssl x509 -in ${CERTDIR}ca.pem -noout -enddate)
 echo -e "\nView dockerd daemon certificate expiration date of ca.pem file:\n\t${BOLD}${TEMP}${NORMAL}"
 
 #	View dockerd daemon certificate expiration date of cert.pem file
-TEMP=`openssl x509 -in ${CERTDIR}cert.pem -noout -enddate`
+TEMP=$(openssl x509 -in ${CERTDIR}cert.pem -noout -enddate)
 echo -e "\nView dockerd daemon certificate expiration date of cert.pem file:\n\t${BOLD}${TEMP}${NORMAL}"
 
 #	View dockerd daemon certificate issuer data of the ca.pem file
-TEMP=`openssl x509 -in ${CERTDIR}ca.pem -noout -issuer`
+TEMP=$(openssl x509 -in ${CERTDIR}ca.pem -noout -issuer)
 echo -e "\nView dockerd daemon certificate issuer data of the ca.pem file:\n\t${BOLD}${TEMP}${NORMAL}"
 
 #	View dockerd daemon certificate issuer data of the cert.pem file
-TEMP=`openssl x509 -in ${CERTDIR}cert.pem -noout -issuer`
+TEMP=$(openssl x509 -in ${CERTDIR}cert.pem -noout -issuer)
 echo -e "\nView dockerd daemon certificate issuer data of the cert.pem file:\n\t${BOLD}${TEMP}${NORMAL}"
 
 #	Verify that dockerd daemon certificate was issued by the CA.
-TEMP=`openssl verify -verbose -CAfile ${CERTDIR}ca.pem ${CERTDIR}cert.pem`
+TEMP=$(openssl verify -verbose -CAfile ${CERTDIR}ca.pem ${CERTDIR}cert.pem)
 echo -e "\nVerify that dockerd daemon certificate was issued by the CA:\n\t${BOLD}${TEMP}${NORMAL}"
 
 echo -e "\nVerify and correct file permissions."
