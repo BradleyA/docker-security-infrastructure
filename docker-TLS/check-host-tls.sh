@@ -1,10 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-host-tls.sh  3.81.438  2018-12-04T21:51:08.020599-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.80  
-# 	   Need to retest everything after all the formating changes #30 
-# 	docker-TLS/check-host-tls.sh  3.79.436  2018-12-02T12:14:36.329038-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.78  
-# 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more #30 
-# 	docker-TLS/check-host-tls.sh  3.78.435  2018-12-02T11:23:25.626905-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.77  
-# 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements 
+# 	docker-TLS/check-host-tls.sh  3.87.444  2018-12-05T16:16:17.554114-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.86  
+# 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
 #
 ### check-host-tls.sh - Check public, private keys, and CA for host
 #       Order of precedence: environment variable, default code

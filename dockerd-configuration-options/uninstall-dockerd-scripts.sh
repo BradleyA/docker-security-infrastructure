@@ -1,10 +1,8 @@
 #!/bin/bash
-# 	dockerd-configuration-options/uninstall-dockerd-scripts.sh  3.74.431  2018-10-22T21:18:56.417221-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.73  
-# 	   Need to retest everything after all the formating changes #30 
-# 	dockerd-configuration-options/uninstall-dockerd-scripts.sh  3.72.429  2018-10-22T16:30:23.961076-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.71  
-# 	   uninstall-dockerd-scripts.sh Change echo or print DEBUG INFO WARNING ERROR closes #29 
+# 	dockerd-configuration-options/uninstall-dockerd-scripts.sh  3.87.444  2018-12-05T16:16:17.655556-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.86  
+# 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
 #
-###	uninstall-dockerd-scripts.sh - uninstall scripts that support dockerd on Systemd and Upstart
+### uninstall-dockerd-scripts.sh - uninstall scripts that support dockerd on Systemd and Upstart
 DEBUG=0                 # 0 = debug off, 1 = debug on
 #	set -v
 #	set -x
