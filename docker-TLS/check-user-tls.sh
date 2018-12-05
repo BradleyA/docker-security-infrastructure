@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-user-tls.sh  3.79.436  2018-12-02T12:14:36.433518-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.78  
-# 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more #30 
+# 	docker-TLS/check-user-tls.sh  3.88.445  2018-12-05T16:30:20.949894-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.87  
+# 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
 #
 ### check-user-tls.sh - Check public, private keys, and CA for a user
 #       Order of precedence: environment variable, default code
@@ -129,19 +129,19 @@ if [ ! -e ${USERHOME}${TLSUSER}/.docker/key.pem ] ; then
 fi
 
 #	View user certificate expiration date of ca.pem file
-TEMP=`openssl x509 -in  ${USERHOME}${TLSUSER}/.docker/ca.pem -noout -enddate`
+TEMP=$(openssl x509 -in  ${USERHOME}${TLSUSER}/.docker/ca.pem -noout -enddate)
 echo -e "\n${NORMAL}View ${USERHOME}${TLSUSER}/.docker certificate ${BOLD}expiration date of ca.pem ${NORMAL}file:\n\t${BOLD}${TEMP}${NORMAL}"
 
 #	View user certificate expiration date of cert.pem file
-TEMP=`openssl x509 -in ${USERHOME}${TLSUSER}/.docker/cert.pem -noout -enddate`
+TEMP=$(openssl x509 -in ${USERHOME}${TLSUSER}/.docker/cert.pem -noout -enddate)
 echo -e "\nView ${USERHOME}${TLSUSER}/.docker certificate ${BOLD}expiration date of cert.pem ${NORMAL}file:\n\t${BOLD}${TEMP}${NORMAL}"
 
 #	View user certificate issuer data of the ca.pem file.
-TEMP=`openssl x509 -in ${USERHOME}${TLSUSER}/.docker/ca.pem -noout -issuer`
+TEMP=$(openssl x509 -in ${USERHOME}${TLSUSER}/.docker/ca.pem -noout -issuer)
 echo -e "\nView ${USERHOME}${TLSUSER}/.docker certificate ${BOLD}issuer data of the ca.pem ${NORMAL}file:\n\t${BOLD}${TEMP}${NORMAL}"
 
 #	View user certificate issuer data of the cert.pem file.
-TEMP=`openssl x509 -in ${USERHOME}${TLSUSER}/.docker/cert.pem -noout -issuer`
+TEMP=$(openssl x509 -in ${USERHOME}${TLSUSER}/.docker/cert.pem -noout -issuer)
 echo -e "\nView ${USERHOME}${TLSUSER}/.docker certificate ${BOLD}issuer data of the cert.pem ${NORMAL}file:\n\t${BOLD}${TEMP}${NORMAL}"
 
 #	Verify that user public key in your certificate matches the public portion of your private key.
