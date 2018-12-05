@@ -1,7 +1,5 @@
 #!/bin/bash
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.82.439  2018-12-04T22:18:25.323363-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.81  
-# 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.80.437  2018-12-02T12:43:17.704245-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.79  
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.83.440  2018-12-04T22:47:26.165990-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.82  
 # 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
 #
 ### copy-host-2-remote-host-tls.sh - Copy public, private keys and CA to remote host
