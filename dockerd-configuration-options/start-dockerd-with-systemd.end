@@ -1,11 +1,7 @@
 ###	
-#	dockerd-configuration-options/start-dockerd-with-systemd.end  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
-#	   sync to standard script design changes 
-#	dockerd-configuration-options/start-dockerd-with-systemd.end  3.32.370  2018-08-05_11:49:59_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.31-1-g513fe7d  
-#	   re-marking this file with later version of markit to support check-markit 
-###
-#	Configure dockerd (systemd) on Ubuntu 16.04
-#
+#	dockerd-configuration-options/start-dockerd-with-systemd.end  3.93.450  2018-12-06T22:47:25.705885-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.92  
+#	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
+### Configure dockerd (systemd) on Ubuntu 16.04
 #	Any changes to dockerd-configuration-file will be added to the override
 #	file during the next boot or when ${START_SYSTEMD_SCRIPT} is run.
 ###
@@ -28,3 +24,4 @@ WORK_DIRECTORY="/etc/docker/"
 /bin/systemctl daemon-reload
 #
 /bin/echo    "${0} ${LINENO} [INFO]:	Done" 1>&2
+###

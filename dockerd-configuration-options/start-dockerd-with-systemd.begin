@@ -1,11 +1,41 @@
 #!/bin/bash
-#	dockerd-configuration-options/start-dockerd-with-systemd.begin  3.42.391  2018-08-12_10:59:20_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.41-8-g21e9f27  
-#	   sync to standard script design changes 
-#	dockerd-configuration-options/start-dockerd-with-systemd.begin  3.32.370  2018-08-05_11:49:59_CDT  https://github.com/BradleyA/docker-scripts  uadmin  three-rpi3b.cptx86.com 3.31-1-g513fe7d  
-#	   re-marking this file with later version of markit to support check-markit 
-#	start-dockerd-with-systemd.begin	3.7.290	2018-02-18_23:07:16_CST uadmin six-rpi3b.cptx86.com 3.6-23-gccdac10 
-#	   New release, ready for production 
-###
-#	set -v
-#	set -x
+#	dockerd-configuration-options/start-dockerd-with-systemd.begin  3.93.450  2018-12-06T22:47:15.674969-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.92  
+#	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
+#
+### start-dockerd-with-systemd.begin
+#       Order of precedence: environment variable, default code
+if [ "${DEBUG}" == "" ] ; then DEBUG="1" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
+#       set -x
+#       set -v
+BOLD=$(tput -Txterm bold)
+NORMAL=$(tput -Txterm sgr0)
+
+#       Date and time function ISO 8601
+get_date_stamp() {
+DATE_STAMP=$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
+TEMP=$(date +%Z)
+DATE_STAMP="${DATE_STAMP} (${TEMP})"
+}
+
+#       Fully qualified domain name FQDN hostname
+LOCALHOST=$(hostname -f)
+
+#       Version
+SCRIPT_NAME=$(head -2 "${0}" | awk {'printf $2'})
+SCRIPT_VERSION=$(head -2 "${0}" | awk {'printf $3'})
+
+#       UID and GID
+USER_ID=$(id -u)
+GROUP_ID=$(id -g)
+
+#       Added line because USER is not defined in crobtab jobs
+if ! [ "${USER}" == "${LOGNAME}" ] ; then  USER=${LOGNAME} ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
+
+#       INFO
+get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Started..." 1>&2
+
+#       DEBUG
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Name_of_command >${0}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
+
 ###
