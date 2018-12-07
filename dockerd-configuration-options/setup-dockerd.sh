@@ -1,10 +1,12 @@
 #!/bin/bash
+# 	dockerd-configuration-options/setup-dockerd.sh  3.92.449  2018-12-06T22:22:58.131589-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.91  
+# 	   testing with DEBUG=1 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.91.448  2018-12-05T17:17:07.230717-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.90  
 # 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
 #
 ### setup-dockerd.sh - setup system to support dockerd on Systemd and Upstart
 #       Order of precedence: environment variable, default code
-if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
+if [ "${DEBUG}" == "" ] ; then DEBUG="1" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -v
 #	set -x
 BOLD=$(tput -Txterm bold)
