@@ -1,7 +1,5 @@
 ###	
-#	dockerd-configuration-options/start-dockerd-with-systemd.end  3.95.455  2018-12-09T14:54:21.939067-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.94  
-#	   testing 
-#	dockerd-configuration-options/start-dockerd-with-systemd.end  3.94.454  2018-12-09T14:08:08.255403-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.93-3-g75f70c9  
+#	dockerd-configuration-options/start-dockerd-with-systemd.end  3.97.457  2018-12-09T15:21:22.349423-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.96  
 #	   testing 
 #
 ### start-dockerd-with-systemd.end
@@ -13,7 +11,7 @@ DROP_IN_DIRECTORY="/etc/systemd/system/docker.service.d"
 OVERRIDE_FILE="10-override"
 WORK_DIRECTORY="/etc/docker/"
 #	
-get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Creating ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf file."       1>&2
+echo -e "\n\tCreating ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf file."       1>&2
 #	Copy ${WORK_DIRECTORY}${OVERRIDE_FILE}.begin to ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf
 /bin/cp --force ${WORK_DIRECTORY}${OVERRIDE_FILE}.begin ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf
 #	Append the following line with $DOCKER_OPTS onto ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf
@@ -21,7 +19,7 @@ get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_
 #       Create docker.service drop-in directory for override file (${OVERRIDE_FILE}.conf)
 /bin/mkdir -p ${DROP_IN_DIRECTORY}
 #
-get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  ${OVERRIDE_FILE}.conf move to ${DROP_IN_DIRECTORY}." 1>&2
+echo -e "\n\t${OVERRIDE_FILE}.conf move to ${DROP_IN_DIRECTORY}.\n" 1>&2
 #	Move override file into docker.service.d directory
 /bin/mv --force ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf ${DROP_IN_DIRECTORY}
 #	Reload systemd manager configuration so docker.service will use the updated ${DROP_IN_DIRECTORY}${OVERRIDE_FILE}.conf file

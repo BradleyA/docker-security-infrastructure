@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	dockerd-configuration-options/setup-dockerd.sh  3.97.457  2018-12-09T15:21:12.656306-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.96  
+# 	   testing 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.96.456  2018-12-09T15:01:43.377310-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.95  
 # 	   testing 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.94.454  2018-12-09T14:08:01.328266-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.93-3-g75f70c9  
@@ -101,7 +103,7 @@ WORK_DIRECTORY=${1:-/etc/docker/}
 UPSTART_SYSVINIT_DIRECTORY=${2:-/etc/default/}
 CONFIGURATION_STRING=${3:-Custom_dockerd_Configuration_File}
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  WORK_DIRECTORY >${WORK_DIRECTORY}< UPSTART_SYSVINIT_DIRECTORY >${UPSTART_SYSVINIT_DIRECTORY}< CONFIGURATION_STRING >${CONFIGURATION_STRING}<" 1>&2 ; fi
-echo -e "\nChanges made to ${WORK_DIRECTORY}dockerd-configuration-file will be\nadded to Upstart and Systemd configuration files for dockerd.\n" 1>&2
+echo -e "\n\tChanges made to ${WORK_DIRECTORY}dockerd-configuration-file will be\n\tadded to Upstart and Systemd configuration files for dockerd.\n" 1>&2
 
 #	Must be root to run this script
 if ! [ $(id -u) = 0 ] ; then
@@ -115,7 +117,7 @@ if [ ! -d ${WORK_DIRECTORY} ] ; then
 	exit 1
 elif [ ! -f ${WORK_DIRECTORY}setup-dockerd.sh ] ; then
 	#	Move files into /etc/docker ${WORK_DIRECTORY} if not already moved
-	echo "Move files to ${WORK_DIRECTORY}."
+	echo -e "\tMove files to ${WORK_DIRECTORY}\n"
 #		mv 10-override.begin			${WORK_DIRECTORY}
 #		mv dockerd-configuration-file		${WORK_DIRECTORY}
 #		mv dockerd-configuration-file.service	${WORK_DIRECTORY}
@@ -164,12 +166,12 @@ if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] ; then
 	mv ${WORK_DIRECTORY}docker ${UPSTART_SYSVINIT_DIRECTORY}docker
 fi
 echo -e "\tdockerd (Upstart and SysVinit configuration file)\n\tfor Ubuntu 14.04 has been updated." 1>&2
-echo -e "If you are using upstart, Run '${BOLD}sudo service docker restart${NORMAL}'\nfor dockerd to read ${UPSTART_SYSVINIT_DIRECTORY}docker.\n"	1>&2
+echo -e "\n\tIf you are using upstart, \n\tRun '${BOLD}sudo service docker restart${NORMAL}'\n\tfor dockerd to read ${UPSTART_SYSVINIT_DIRECTORY}docker.\n"	1>&2
 
 ###	Configure dockerd (systemd) on Ubuntu 16.04
 #		Any changes to dockerd-configuration-file will be added to ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 START_SYSTEMD_SCRIPT="start-dockerd-with-systemd.sh"
-echo -e "\tUpdate files for dockerd (systemd configuration file)\nton Ubuntu 16.04."	1>&2
+echo -e "\tUpdate files for dockerd (systemd configuration file)\n\ton Ubuntu 16.04."	1>&2
 cat ${WORK_DIRECTORY}start-dockerd-with-systemd.begin > ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 cat ${WORK_DIRECTORY}dockerd-configuration-file >> ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 cat ${WORK_DIRECTORY}start-dockerd-with-systemd.end >> ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
@@ -179,9 +181,9 @@ ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 #	Add /etc/systemd/system/dockerd-configuration-file.service to systemd
 cp ${WORK_DIRECTORY}/dockerd-configuration-file.service /etc/systemd/system/
 systemctl daemon-reload
-echo -e "\tIf you are using systemd, Run\n\t'${BOLD}sudo systemctl enable dockerd-configuration-file.service${NORMAL}'\n\tto start on boot."	1>&2
-echo -e "Run '${BOLD}sudo systemctl enable docker${NORMAL}'\n\tto start on boot."	1>&2
-echo    "Run '${BOLD}sudo systemctl restart docker${NORMAL}'"	1>&2
+echo -e "\n\tIf you are using systemd, Run\n\t'${BOLD}sudo systemctl enable dockerd-configuration-file.service${NORMAL}'\n\tto start on boot."	1>&2
+echo -e "\tRun '${BOLD}sudo systemctl enable docker${NORMAL}'\n\tto start on boot."	1>&2
+echo -e "\tRun '${BOLD}sudo systemctl restart docker${NORMAL}'\n"	1>&2
 
 #
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
