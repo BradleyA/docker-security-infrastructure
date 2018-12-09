@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	dockerd-configuration-options/setup-dockerd.sh  3.96.456  2018-12-09T15:01:43.377310-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.95  
+# 	   testing 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.94.454  2018-12-09T14:08:01.328266-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.93-3-g75f70c9  
 # 	   testing 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.92.449  2018-12-06T22:22:58.131589-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.91  
@@ -138,7 +140,7 @@ fi
  
 ###	Configure dockerd (Upstart and SysVinit configuration file) on Ubuntu 14.04
 #		Any changes to dockerd-configuration-file will be added to ${UPSTART_SYSVINIT_DIRECTORY}docker
-echo -e "\tUpdate files for dockerd (Upstart and SysVinit configuration file)\nfor Ubuntu 14.04."	1>&2
+echo -e "\tUpdate files for dockerd (Upstart and SysVinit configuration file)\n\tfor Ubuntu 14.04."	1>&2
 #	Check for dockerd configuration file
 if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] ; then
 	#	copy ${UPSTART_SYSVINIT_DIRECTORY}docker to ${WORK_DIRECTORY}docker.org
@@ -167,7 +169,7 @@ echo -e "If you are using upstart, Run '${BOLD}sudo service docker restart${NORM
 ###	Configure dockerd (systemd) on Ubuntu 16.04
 #		Any changes to dockerd-configuration-file will be added to ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 START_SYSTEMD_SCRIPT="start-dockerd-with-systemd.sh"
-echo -e "\tUpdate files for dockerd (systemd configuration file)\non Ubuntu 16.04."	1>&2
+echo -e "\tUpdate files for dockerd (systemd configuration file)\nton Ubuntu 16.04."	1>&2
 cat ${WORK_DIRECTORY}start-dockerd-with-systemd.begin > ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 cat ${WORK_DIRECTORY}dockerd-configuration-file >> ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 cat ${WORK_DIRECTORY}start-dockerd-with-systemd.end >> ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
