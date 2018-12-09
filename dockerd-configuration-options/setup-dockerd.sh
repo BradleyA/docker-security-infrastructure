@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	dockerd-configuration-options/setup-dockerd.sh  3.94.454  2018-12-09T14:08:01.328266-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.93-3-g75f70c9  
+# 	   testing 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.92.449  2018-12-06T22:22:58.131589-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.91  
 # 	   testing with DEBUG=1 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.91.448  2018-12-05T17:17:07.230717-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.90  
@@ -112,14 +114,22 @@ if [ ! -d ${WORK_DIRECTORY} ] ; then
 elif [ ! -f ${WORK_DIRECTORY}setup-dockerd.sh ] ; then
 	#	Move files into /etc/docker ${WORK_DIRECTORY} if not already moved
 	echo "Move files to ${WORK_DIRECTORY}."
-	mv 10-override.begin			${WORK_DIRECTORY}
-	mv dockerd-configuration-file		${WORK_DIRECTORY}
-	mv dockerd-configuration-file.service	${WORK_DIRECTORY}
-	mv README.md				${WORK_DIRECTORY}
-	mv setup-dockerd.sh			${WORK_DIRECTORY}
-	mv start-dockerd-with-systemd.begin	${WORK_DIRECTORY}
-	mv start-dockerd-with-systemd.end	${WORK_DIRECTORY}
-	mv uninstall-dockerd-scripts.sh		${WORK_DIRECTORY}
+#		mv 10-override.begin			${WORK_DIRECTORY}
+#		mv dockerd-configuration-file		${WORK_DIRECTORY}
+#		mv dockerd-configuration-file.service	${WORK_DIRECTORY}
+#		mv README.md				${WORK_DIRECTORY}
+#		mv setup-dockerd.sh			${WORK_DIRECTORY}
+#		mv start-dockerd-with-systemd.begin	${WORK_DIRECTORY}
+#		mv start-dockerd-with-systemd.end	${WORK_DIRECTORY}
+#		mv uninstall-dockerd-scripts.sh		${WORK_DIRECTORY}
+	cp 10-override.begin			${WORK_DIRECTORY}
+	cp dockerd-configuration-file		${WORK_DIRECTORY}
+	cp dockerd-configuration-file.service	${WORK_DIRECTORY}
+	cp README.md				${WORK_DIRECTORY}
+	cp setup-dockerd.sh			${WORK_DIRECTORY}
+	cp start-dockerd-with-systemd.begin	${WORK_DIRECTORY}
+	cp start-dockerd-with-systemd.end	${WORK_DIRECTORY}
+	cp uninstall-dockerd-scripts.sh		${WORK_DIRECTORY}
 	chown root.root				${WORK_DIRECTORY}*
 	chmod go-xw				${WORK_DIRECTORY}*
 else

@@ -1,7 +1,9 @@
 ###	
-#	dockerd-configuration-options/start-dockerd-with-systemd.end  3.93.450  2018-12-06T22:47:25.705885-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.92  
-#	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
-### Configure dockerd (systemd) on Ubuntu 16.04
+#	dockerd-configuration-options/start-dockerd-with-systemd.end  3.94.454  2018-12-09T14:08:08.255403-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.93-3-g75f70c9  
+#	   testing 
+#
+### start-dockerd-with-systemd.end
+#	 Configure dockerd (systemd) on Ubuntu 16.04
 #	Any changes to dockerd-configuration-file will be added to the override
 #	file during the next boot or when ${START_SYSTEMD_SCRIPT} is run.
 ###
@@ -9,7 +11,8 @@ DROP_IN_DIRECTORY="/etc/systemd/system/docker.service.d"
 OVERRIDE_FILE="10-override"
 WORK_DIRECTORY="/etc/docker/"
 #	
-/bin/echo -e "${0} ${LINENO} [INFO]:	Creating\n\t${WORK_DIRECTORY}${OVERRIDE_FILE}.conf file."	1>&2
+#	/bin/echo -e "${0} ${LINENO} [INFO]:	Creating\n\t${WORK_DIRECTORY}${OVERRIDE_FILE}.conf file."	1>&2
+get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Creating ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf file."       1>&2
 #	Copy ${WORK_DIRECTORY}${OVERRIDE_FILE}.begin to ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf
 /bin/cp --force ${WORK_DIRECTORY}${OVERRIDE_FILE}.begin ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf
 #	Append the following line with $DOCKER_OPTS onto ${WORK_DIRECTORY}${OVERRIDE_FILE}.conf

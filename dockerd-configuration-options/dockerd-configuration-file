@@ -1,4 +1,6 @@
 ###	Custom_dockerd_Configuration_File
+#	dockerd-configuration-options/dockerd-configuration-file  3.94.454  2018-12-09T14:08:01.183165-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.93-3-g75f70c9  
+#	   testing 
 #	dockerd-configuration-file  3.29.366  2018-06-23_14:19:13_CDT  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.28-24-g96ea7aa  
 #	   modify comment line 
 #
@@ -85,6 +87,6 @@ DOCKER_OPTS="\
         --tlscacert=/etc/docker/certs.d/daemon/ca.pem \
         --tlscert=/etc/docker/certs.d/daemon/`hostname --fqdn`-cert.pem \
         --tlskey=/etc/docker/certs.d/daemon/`hostname --fqdn`-priv-key.pem \
-        --userns-remap=default \
         "
+#        --userns-remap=default \
 ###
