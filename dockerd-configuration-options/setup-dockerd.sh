@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	dockerd-configuration-options/setup-dockerd.sh  3.98.458  2018-12-11T12:19:53.666741-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.97  
+# 	   formating output to help users understand the process 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.97.457  2018-12-09T15:21:12.656306-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.96  
 # 	   testing 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.96.456  2018-12-09T15:01:43.377310-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.95  
@@ -103,21 +105,21 @@ WORK_DIRECTORY=${1:-/etc/docker/}
 UPSTART_SYSVINIT_DIRECTORY=${2:-/etc/default/}
 CONFIGURATION_STRING=${3:-Custom_dockerd_Configuration_File}
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  WORK_DIRECTORY >${WORK_DIRECTORY}< UPSTART_SYSVINIT_DIRECTORY >${UPSTART_SYSVINIT_DIRECTORY}< CONFIGURATION_STRING >${CONFIGURATION_STRING}<" 1>&2 ; fi
-echo -e "\n\tChanges made to ${WORK_DIRECTORY}dockerd-configuration-file will be\n\tadded to Upstart and Systemd configuration files for dockerd.\n" 1>&2
+echo -e "\n\tChanges made to ${WORK_DIRECTORY}dockerd-configuration-file will be\n\tadded to Upstart and Systemd configuration files for dockerd." 1>&2
 
 #	Must be root to run this script
 if ! [ $(id -u) = 0 ] ; then
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Must be root to run this script.  Use ${BOLD}sudo ${0}${NORMAL}" 1>&2
+	get_date_stamp ; echo -e "\n${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Must be root to run this script.  Use ${BOLD}sudo ${0}${NORMAL}" 1>&2
 	exit 1
 fi
 
 #	Check for ${WORK_DIRECTORY}
 if [ ! -d ${WORK_DIRECTORY} ] ; then
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Is Docker installed?  Directory ${WORK_DIRECTORY} not found." 1>&2
+	get_date_stamp ; echo -e "\n${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Is Docker installed?  Directory ${WORK_DIRECTORY} not found." 1>&2
 	exit 1
 elif [ ! -f ${WORK_DIRECTORY}setup-dockerd.sh ] ; then
 	#	Move files into /etc/docker ${WORK_DIRECTORY} if not already moved
-	echo -e "\tMove files to ${WORK_DIRECTORY}\n"
+	echo -e "\n\tMove files to ${WORK_DIRECTORY}\n"
 #		mv 10-override.begin			${WORK_DIRECTORY}
 #		mv dockerd-configuration-file		${WORK_DIRECTORY}
 #		mv dockerd-configuration-file.service	${WORK_DIRECTORY}
@@ -137,7 +139,7 @@ elif [ ! -f ${WORK_DIRECTORY}setup-dockerd.sh ] ; then
 	chown root.root				${WORK_DIRECTORY}*
 	chmod go-xw				${WORK_DIRECTORY}*
 else
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Skipping installation because ${WORK_DIRECTORY}setup-dockerd.sh is already installed.  Updating Docker daemon with changes in ${WORK_DIRECTORY}dockerd-configuration-file." 1>&2
+	get_date_stamp ; echo -e "\n${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Skipping installation because ${WORK_DIRECTORY}setup-dockerd.sh is already installed.  Updating Docker daemon with changes in ${WORK_DIRECTORY}dockerd-configuration-file.\n" 1>&2
 fi
  
 ###	Configure dockerd (Upstart and SysVinit configuration file) on Ubuntu 14.04
@@ -171,7 +173,7 @@ echo -e "\n\tIf you are using upstart, \n\tRun '${BOLD}sudo service docker resta
 ###	Configure dockerd (systemd) on Ubuntu 16.04
 #		Any changes to dockerd-configuration-file will be added to ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 START_SYSTEMD_SCRIPT="start-dockerd-with-systemd.sh"
-echo -e "\tUpdate files for dockerd (systemd configuration file)\n\ton Ubuntu 16.04."	1>&2
+echo -e "\tUpdate files for dockerd (systemd configuration file)\n\ton Ubuntu 16.04.\n"	1>&2
 cat ${WORK_DIRECTORY}start-dockerd-with-systemd.begin > ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 cat ${WORK_DIRECTORY}dockerd-configuration-file >> ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
 cat ${WORK_DIRECTORY}start-dockerd-with-systemd.end >> ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
