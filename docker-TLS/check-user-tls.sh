@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-user-tls.sh  3.100.461  2018-12-11T16:41:44.526959-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.99-1-g32b73bd  
-# 	   check-user-tls add support for environment variable USERHOME #31 testing 
+# 	docker-TLS/check-user-tls.sh  3.101.462  2018-12-11T16:59:27.136029-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.100  
+# 	   check-user-tls add support for environment variable USERHOME close #31 
 #
 ### check-user-tls.sh - Check public, private keys, and CA for a user
 #       Order of precedence: environment variable, default code
@@ -132,31 +132,31 @@ fi
 
 #	View user certificate expiration date of ca.pem file
 TEMP=$(openssl x509 -in  ${USERHOME}${TLSUSER}/.docker/ca.pem -noout -enddate)
-echo -e "\n${NORMAL}View ${USERHOME}${TLSUSER}/.docker certificate ${BOLD}expiration date of ca.pem ${NORMAL}file:\n\t${BOLD}${TEMP}${NORMAL}"
+echo -e "\n\t${NORMAL}View ${USERHOME}${TLSUSER}/.docker certificate ${BOLD}expiration date of ca.pem ${NORMAL}file:\n\t${BOLD}${TEMP}${NORMAL}"
 
 #	View user certificate expiration date of cert.pem file
 TEMP=$(openssl x509 -in ${USERHOME}${TLSUSER}/.docker/cert.pem -noout -enddate)
-echo -e "\nView ${USERHOME}${TLSUSER}/.docker certificate ${BOLD}expiration date of cert.pem ${NORMAL}file:\n\t${BOLD}${TEMP}${NORMAL}"
+echo -e "\n\tView ${USERHOME}${TLSUSER}/.docker certificate ${BOLD}expiration date of cert.pem ${NORMAL}file:\n\t${BOLD}${TEMP}${NORMAL}"
 
 #	View user certificate issuer data of the ca.pem file.
 TEMP=$(openssl x509 -in ${USERHOME}${TLSUSER}/.docker/ca.pem -noout -issuer)
-echo -e "\nView ${USERHOME}${TLSUSER}/.docker certificate ${BOLD}issuer data of the ca.pem ${NORMAL}file:\n\t${BOLD}${TEMP}${NORMAL}"
+echo -e "\n\tView ${USERHOME}${TLSUSER}/.docker certificate ${BOLD}issuer data of the ca.pem ${NORMAL}file:\n\t${BOLD}${TEMP}${NORMAL}"
 
 #	View user certificate issuer data of the cert.pem file.
 TEMP=$(openssl x509 -in ${USERHOME}${TLSUSER}/.docker/cert.pem -noout -issuer)
-echo -e "\nView ${USERHOME}${TLSUSER}/.docker certificate ${BOLD}issuer data of the cert.pem ${NORMAL}file:\n\t${BOLD}${TEMP}${NORMAL}"
+echo -e "\n\tView ${USERHOME}${TLSUSER}/.docker certificate ${BOLD}issuer data of the cert.pem ${NORMAL}file:\n\t${BOLD}${TEMP}${NORMAL}"
 
 #	Verify that user public key in your certificate matches the public portion of your private key.
-echo -e "\nVerify that user public key in your certificate matches the public portion\n\tof your private key."
+echo -e "\n\tVerify that user public key in your certificate matches the public portion\n\tof your private key."
 (cd ${USERHOME}${TLSUSER}/.docker ; openssl x509 -noout -modulus -in cert.pem | openssl md5 ; openssl rsa -noout -modulus -in key.pem | openssl md5) | uniq
-echo -e "${BOLD}WARNING:${NORMAL}  -> If ONLY ONE line of output is returned then the public key\n\tmatches the public portion of your private key.\n"
+echo -e "\t${BOLD}[WARN]${NORMAL}  -> If ONLY ONE line of output is returned then the public key\n\tmatches the public portion of your private key.\n"
 
 #	Verify that user certificate was issued by the CA.
-echo -e "Verify that user certificate was issued by the CA:${BOLD}\n"
+echo -e "\t${NORMAL}Verify that user certificate was issued by the CA:${BOLD}\t"
 openssl verify -verbose -CAfile ${USERHOME}${TLSUSER}/.docker/ca.pem ${USERHOME}${TLSUSER}/.docker/cert.pem  || { get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  User certificate for ${TLSUSER} on ${LOCALHOST} was NOT issued by CA." ; exit 1; }
 
 #	Verify and correct file permissions for ${USERHOME}${TLSUSER}/.docker/ca.pem
-echo -e "\n${NORMAL}Verify and correct file permissions for ${USERHOME}${TLSUSER}/.docker"
+echo -e "\n\t${NORMAL}Verify and correct file permissions for ${USERHOME}${TLSUSER}/.docker"
 if [ $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker/ca.pem) != 444 ]; then
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${USERHOME}${TLSUSER}/.docker/ca.pem are not 444.  Correcting $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker/ca.pem) to 0444 file permissions" 1>&2
 	chmod 0444 ${USERHOME}${TLSUSER}/.docker/ca.pem
@@ -181,7 +181,7 @@ if [ $(stat -Lc %a ${USERHOME}${TLSUSER}/.docker) != 700 ]; then
 fi
 
 #	Help hint
-echo -e "\nUse script ${BOLD}create-user-tls.sh${NORMAL} to update user TLS if user TLS certificate\n\thas expired."
+echo -e "\n\tUse script ${BOLD}create-user-tls.sh${NORMAL} to update user TLS if user TLS certificate\n\thas expired."
  
 #	May want to create a version of this script that automates this process for SRE tools,
 #		but keep this script for users to run manually,
