@@ -1,6 +1,6 @@
 ###	
-#	dockerd-configuration-options/start-dockerd-with-systemd.end  3.97.457  2018-12-09T15:21:22.349423-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.96  
-#	   testing 
+#	dockerd-configuration-options/start-dockerd-with-systemd.end  3.99.459  2018-12-11T12:49:08.046958-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.98  
+#	   start-dockerd-with-systemd.end Change echo or print DEBUG INFO WARNING ERROR close #28 
 #
 ### start-dockerd-with-systemd.end
 #	 Configure dockerd (systemd) on Ubuntu 16.04

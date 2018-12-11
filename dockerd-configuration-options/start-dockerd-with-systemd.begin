@@ -1,10 +1,12 @@
 #!/bin/bash
+#	dockerd-configuration-options/start-dockerd-with-systemd.begin  3.99.459  2018-12-11T12:48:46.767654-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.98  
+#	   start-dockerd-with-systemd.end Change echo or print DEBUG INFO WARNING ERROR close #28 
 #	dockerd-configuration-options/start-dockerd-with-systemd.begin  3.93.450  2018-12-06T22:47:15.674969-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.92  
 #	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
 #
 ### start-dockerd-with-systemd.begin
 #       Order of precedence: environment variable, default code
-if [ "${DEBUG}" == "" ] ; then DEBUG="1" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
+if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #       set -x
 #       set -v
 BOLD=$(tput -Txterm bold)

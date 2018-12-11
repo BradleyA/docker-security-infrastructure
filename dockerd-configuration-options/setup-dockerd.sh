@@ -1,20 +1,12 @@
 #!/bin/bash
+# 	dockerd-configuration-options/setup-dockerd.sh  3.99.459  2018-12-11T12:48:19.732058-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.98  
+# 	   start-dockerd-with-systemd.end Change echo or print DEBUG INFO WARNING ERROR close #28 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.98.458  2018-12-11T12:19:53.666741-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.97  
 # 	   formating output to help users understand the process 
-# 	dockerd-configuration-options/setup-dockerd.sh  3.97.457  2018-12-09T15:21:12.656306-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.96  
-# 	   testing 
-# 	dockerd-configuration-options/setup-dockerd.sh  3.96.456  2018-12-09T15:01:43.377310-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.95  
-# 	   testing 
-# 	dockerd-configuration-options/setup-dockerd.sh  3.94.454  2018-12-09T14:08:01.328266-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.93-3-g75f70c9  
-# 	   testing 
-# 	dockerd-configuration-options/setup-dockerd.sh  3.92.449  2018-12-06T22:22:58.131589-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.91  
-# 	   testing with DEBUG=1 
-# 	dockerd-configuration-options/setup-dockerd.sh  3.91.448  2018-12-05T17:17:07.230717-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.90  
-# 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
 #
 ### setup-dockerd.sh - setup system to support dockerd on Systemd and Upstart
 #       Order of precedence: environment variable, default code
-if [ "${DEBUG}" == "" ] ; then DEBUG="1" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
+if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -v
 #	set -x
 BOLD=$(tput -Txterm bold)
@@ -167,7 +159,7 @@ if [ -f ${UPSTART_SYSVINIT_DIRECTORY}docker ] ; then
 	if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Move ${WORK_DIRECTORY}docker to ${UPSTART_SYSVINIT_DIRECTORY}docker" 1>&2 ; fi
 	mv ${WORK_DIRECTORY}docker ${UPSTART_SYSVINIT_DIRECTORY}docker
 fi
-echo -e "\tdockerd (Upstart and SysVinit configuration file)\n\tfor Ubuntu 14.04 has been updated." 1>&2
+echo -e "\t. . . dockerd for Ubuntu 14.04 has been updated." 1>&2
 echo -e "\n\tIf you are using upstart, \n\tRun '${BOLD}sudo service docker restart${NORMAL}'\n\tfor dockerd to read ${UPSTART_SYSVINIT_DIRECTORY}docker.\n"	1>&2
 
 ###	Configure dockerd (systemd) on Ubuntu 16.04
