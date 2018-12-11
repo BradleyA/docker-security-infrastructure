@@ -1,8 +1,8 @@
 #!/bin/bash
+# 	dockerd-configuration-options/setup-dockerd.sh  3.40.460  2018-12-11T16:19:25.204006-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.99  
+# 	   Need to retest everything after all the formating changes #30 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.99.459  2018-12-11T12:48:19.732058-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.98  
 # 	   start-dockerd-with-systemd.end Change echo or print DEBUG INFO WARNING ERROR close #28 
-# 	dockerd-configuration-options/setup-dockerd.sh  3.98.458  2018-12-11T12:19:53.666741-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.97  
-# 	   formating output to help users understand the process 
 #
 ### setup-dockerd.sh - setup system to support dockerd on Systemd and Upstart
 #       Order of precedence: environment variable, default code
@@ -112,22 +112,14 @@ if [ ! -d ${WORK_DIRECTORY} ] ; then
 elif [ ! -f ${WORK_DIRECTORY}setup-dockerd.sh ] ; then
 	#	Move files into /etc/docker ${WORK_DIRECTORY} if not already moved
 	echo -e "\n\tMove files to ${WORK_DIRECTORY}\n"
-#		mv 10-override.begin			${WORK_DIRECTORY}
-#		mv dockerd-configuration-file		${WORK_DIRECTORY}
-#		mv dockerd-configuration-file.service	${WORK_DIRECTORY}
-#		mv README.md				${WORK_DIRECTORY}
-#		mv setup-dockerd.sh			${WORK_DIRECTORY}
-#		mv start-dockerd-with-systemd.begin	${WORK_DIRECTORY}
-#		mv start-dockerd-with-systemd.end	${WORK_DIRECTORY}
-#		mv uninstall-dockerd-scripts.sh		${WORK_DIRECTORY}
-	cp 10-override.begin			${WORK_DIRECTORY}
-	cp dockerd-configuration-file		${WORK_DIRECTORY}
-	cp dockerd-configuration-file.service	${WORK_DIRECTORY}
-	cp README.md				${WORK_DIRECTORY}
-	cp setup-dockerd.sh			${WORK_DIRECTORY}
-	cp start-dockerd-with-systemd.begin	${WORK_DIRECTORY}
-	cp start-dockerd-with-systemd.end	${WORK_DIRECTORY}
-	cp uninstall-dockerd-scripts.sh		${WORK_DIRECTORY}
+	mv 10-override.begin			${WORK_DIRECTORY}
+	mv dockerd-configuration-file		${WORK_DIRECTORY}
+	mv dockerd-configuration-file.service	${WORK_DIRECTORY}
+	mv README.md				${WORK_DIRECTORY}
+	mv setup-dockerd.sh			${WORK_DIRECTORY}
+	mv start-dockerd-with-systemd.begin	${WORK_DIRECTORY}
+	mv start-dockerd-with-systemd.end	${WORK_DIRECTORY}
+	mv uninstall-dockerd-scripts.sh		${WORK_DIRECTORY}
 	chown root.root				${WORK_DIRECTORY}*
 	chmod go-xw				${WORK_DIRECTORY}*
 else
