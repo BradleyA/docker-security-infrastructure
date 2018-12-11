@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-user-tls.sh  3.88.445  2018-12-05T16:30:20.949894-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.87  
-# 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
+# 	docker-TLS/check-user-tls.sh  3.100.461  2018-12-11T16:41:44.526959-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.99-1-g32b73bd  
+# 	   check-user-tls add support for environment variable USERHOME #31 testing 
 #
 ### check-user-tls.sh - Check public, private keys, and CA for a user
 #       Order of precedence: environment variable, default code
@@ -26,6 +26,7 @@ echo    "command, 'unset DEBUG' to remove the exported information from the DEBU
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
 echo    "   DEBUG       (default '0')"
+echo    "   USERHOME    (default /home/)"
 echo -e "\nOPTIONS"
 echo    "   TLSUSER   user, default is user running script"
 echo    "   USERHOME  location of user home directory, default /home/"
@@ -85,7 +86,8 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 
 ###
 TLSUSER=${1:-${USER}}
-USERHOME=${2:-/home/}
+#       Order of precedence: CLI argument, environment variable, default code
+if [ $# -ge  2 ]  ; then USERHOME=${2} ; elif [ "${USERHOME}" == "" ] ; then USERHOME="/home/" ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  TLSUSER >${TLSUSER}< USERHOME >${USERHOME}<" 1>&2 ; fi
 
 #	Root is required to check other users or user can check their own certs
