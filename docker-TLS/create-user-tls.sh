@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-user-tls.sh  3.86.443  2018-12-04T23:46:57.962075-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.85  
-# 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
+# 	docker-TLS/create-user-tls.sh  3.106.467  2018-12-13T16:42:08.738373-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.105  
+# 	   add support for environment variable USERHOME close #36 
 #
 ### create-user-tls.sh - Create user public and private key and CA
 #       Order of precedence: environment variable, default code
@@ -24,6 +24,7 @@ echo    "command, 'unset DEBUG' to remove the exported information from the DEBU
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
 echo    "   DEBUG       (default '0')"
+echo    "   USERHOME    (default /home/)"
 echo -e "\nOPTIONS "
 echo    "   TLSUSER      user requiring new TLS keys, default is user running script"
 echo    "   NUMBERDAYS   number of days user keys are valid, default 90 days"
@@ -84,7 +85,8 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 ###
 TLSUSER=${1:-${USER}}
 NUMBERDAYS=${2:-90}
-USERHOME=${3:-/home/}
+#       Order of precedence: CLI argument, environment variable, default code
+if [ $# -ge  3 ]  ; then USERHOME=${3} ; elif [ "${USERHOME}" == "" ] ; then USERHOME="/home/" ; fi
 ADMTLSUSER=${4:-${USER}}
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[DEBUG]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  TLSUSER >${TLSUSER}< NUMBERDAYS >${NUMBERDAYS}< USERHOME >${USERHOME}< ADMTLSUSER >${ADMTLSUSER}<" 1>&2 ; fi
 
