@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-site-private-public-tls.sh  3.85.442  2018-12-04T23:33:42.901726-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.84  
-# 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
+# 	docker-TLS/create-site-private-public-tls.sh  3.105.466  2018-12-13T16:39:25.336528-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.104  
+# 	   add support for environment variable USERHOME close #35 
 #
 ### create-site-private-public-tls.sh - Create site private and CA keys
 #       Order of precedence: environment variable, default code
@@ -30,6 +30,7 @@ echo    "command, 'unset DEBUG' to remove the exported information from the DEBU
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
 echo    "   DEBUG       (default '0')"
+echo    "   USERHOME    (default /home/)"
 echo -e "\nOPTIONS"
 echo    "   NUMBERDAYS   number of days site CA is valid, default 730 days (two years)"
 echo    "   USERHOME     location of admin home directory, default is /home/"
@@ -88,7 +89,8 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 
 ###
 NUMBERDAYS=${1:-730}
-USERHOME=${2:-/home/}
+#       Order of precedence: CLI argument, environment variable, default code
+if [ $# -ge  2 ]  ; then USERHOME=${2} ; elif [ "${USERHOME}" == "" ] ; then USERHOME="/home/" ; fi
 ADMTLSUSER=${3:-${USER}}
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  NUMBERDAYS >${NUMBERDAYS}< USERHOME >${USERHOME}< ADMTLSUSER >${ADMTLSUSER}<" 1>&2 ; fi
 
