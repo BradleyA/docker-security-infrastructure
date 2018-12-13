@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.89.446  2018-12-05T16:33:01.884441-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.88  
-# 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.103.464  2018-12-13T16:31:02.942376-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.102  
+# 	   add support for environment variable USERHOME close #33 
 #
 ### copy-user-2-remote-host-tls.sh - Copy user TLS public, private keys and CA to remote host
 #       Order of precedence: environment variable, default code
@@ -24,6 +24,7 @@ echo    "command, 'unset DEBUG' to remove the exported information from the DEBU
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
 echo    "   DEBUG       (default '0')"
+echo    "   USERHOME    (default /home/)"
 echo -e "\nOPTIONS"
 echo    "   REMOTEHOST   name of host to copy certificates to"
 echo    "   TLSUSER      user requiring new TLS keys on remote host, default is user"
@@ -89,7 +90,8 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 ###
 REMOTEHOST=$1
 TLSUSER=${2:-${USER}}
-USERHOME=${3:-/home/}
+#       Order of precedence: CLI argument, environment variable, default code
+if [ $# -ge  3 ]  ; then USERHOME=${3} ; elif [ "${USERHOME}" == "" ] ; then USERHOME="/home/" ; fi
 ADMTLSUSER=${4:-${USER}}
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  REMOTEHOST >${REMOTEHOST}< TLSUSER >${TLSUSER}< USERHOME >${USERHOME}< ADMTLSUSER >${ADMTLSUSER}<" 1>&2 ; fi
 
