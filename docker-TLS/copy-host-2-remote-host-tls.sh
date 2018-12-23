@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.107.468  2018-12-23T10:46:24.998551-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.106  
+# 	   typo 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.102.463  2018-12-13T16:26:15.232216-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.101  
 # 	   copy-host-2-remote-host-tls.sh  add support for environment variable USERHOME close #32 
 #
@@ -137,7 +139,7 @@ fi
 
 #	Check if ${REMOTEHOST} is available on ssh port
 if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${ADMTLSUSER} user may receive password and passphrase prompts from ${REMOTEHOST}.  Running ${BOLD}ssh-copy-id ${ADMTLSUSER}@${REMOTEHOST}${NORMAL} may stop some of the prompts." 1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  ${ADMTLSUSER} user may receive password and passphrase prompts from ${REMOTEHOST}.  Running ${BOLD}ssh-copy-id ${ADMTLSUSER}@${REMOTEHOST}${NORMAL} may stop some of the prompts." 1>&2
 
 #	Check if /etc/docker directory on ${REMOTEHOST}
 	if ! $(ssh -t ${ADMTLSUSER}@${REMOTEHOST} "test -d /etc/docker") ; then
