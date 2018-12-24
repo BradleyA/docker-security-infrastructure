@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.109.470  2018-12-23T23:18:29.737157-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.108  
+# 	   history | tail -45 
 # 	docker-TLS/create-host-tls.sh  3.104.465  2018-12-13T16:34:49.868334-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.103  
 # 	   add support for environment variable USERHOME close #34 
 #
@@ -137,24 +139,28 @@ fi
 
 #	Check if ${FQDN}-priv-key.pem file exists
 if [ -e ${FQDN}-priv-key.pem ] ; then
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  ${FQDN}-priv-key.pem already exists, renaming existing keys so new keys can be created." 1>&2
+	echo -e "\n\t${FQDN}-priv-key.pem already exists,"
+	echo -e "\trenaming existing keys so new keys can be created."
 	mv ${FQDN}-priv-key.pem ${FQDN}-priv-key.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
 	mv ${FQDN}-cert.pem ${FQDN}-cert.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
 fi
 
 #	Creating private key for host ${FQDN}
-get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Creating private key for host ${FQDN}." 1>&2
+echo -e "\n\tCreating private key for host ${FQDN}."
 openssl genrsa -out ${FQDN}-priv-key.pem 2048
 
 #	Create CSR for host ${FQDN}
-get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Generate a Certificate Signing Request (CSR) for host ${FQDN}." 1>&2
+echo -e "\n\tGenerate a Certificate Signing Request (CSR) for"
+echo -e "\thost ${FQDN}."
 openssl req -sha256 -new -key ${FQDN}-priv-key.pem -subj "/CN=${FQDN}/subjectAltName=${FQDN}" -out ${FQDN}.csr
 
 #	Create and sign certificate for host ${FQDN}
-get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Create and sign a ${NUMBERDAYS} day certificate for host ${FQDN}." 1>&2
+echo -e "\n\tCreate and sign a ${NUMBERDAYS} day certificate for host"
+echo -e "\t${FQDN}."
 openssl x509 -req -days ${NUMBERDAYS} -sha256 -in ${FQDN}.csr -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out ${FQDN}-cert.pem -extensions v3_req -extfile /usr/lib/ssl/openssl.cnf || { get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Wrong pass phrase for .private/ca-priv-key.pem: " ; exit 1; }
 openssl rsa -in ${FQDN}-priv-key.pem -out ${FQDN}-priv-key.pem
-get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Removing certificate signing requests (CSR) and set file permissions for host ${FQDN} key pairs." 1>&2
+echo -e "\n\tRemoving certificate signing requests (CSR) and set file permissions"
+echo -e "\tfor host ${FQDN} key pairs."
 rm ${FQDN}.csr
 chmod 0400 ${FQDN}-priv-key.pem
 chmod 0444 ${FQDN}-cert.pem
