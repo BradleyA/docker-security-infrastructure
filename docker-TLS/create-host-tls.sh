@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-host-tls.sh  3.109.470  2018-12-23T23:18:29.737157-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.108  
-# 	   history | tail -45 
-# 	docker-TLS/create-host-tls.sh  3.104.465  2018-12-13T16:34:49.868334-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.103  
-# 	   add support for environment variable USERHOME close #34 
+# 	docker-TLS/create-host-tls.sh  3.110.471  2018-12-23T23:19:37.585130-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.109  
+# 	   format process output for user 
 #
 ### create-host-tls.sh - Create host public, private keys and CA
 #       Order of precedence: environment variable, default code
