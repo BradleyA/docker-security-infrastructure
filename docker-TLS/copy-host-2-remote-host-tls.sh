@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.108.469  2018-12-23T22:54:50.624321-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.107  
+# 	   format process output information of command progress 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.107.468  2018-12-23T10:46:24.998551-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.106  
 # 	   typo 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.102.463  2018-12-13T16:26:15.232216-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.101  
@@ -139,7 +141,10 @@ fi
 
 #	Check if ${REMOTEHOST} is available on ssh port
 if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  ${ADMTLSUSER} user may receive password and passphrase prompts from ${REMOTEHOST}.  Running ${BOLD}ssh-copy-id ${ADMTLSUSER}@${REMOTEHOST}${NORMAL} may stop some of the prompts." 1>&2
+	echo -e "\n\t${ADMTLSUSER} user may receive password and passphrase prompts"
+	echo -e "\tfrom ${REMOTEHOST}.  Running"
+	echo -e "\t${BOLD}ssh-copy-id ${ADMTLSUSER}@${REMOTEHOST}${NORMAL}"
+	echo -e "\tmay stop some of the prompts.\n"
 
 #	Check if /etc/docker directory on ${REMOTEHOST}
 	if ! $(ssh -t ${ADMTLSUSER}@${REMOTEHOST} "test -d /etc/docker") ; then
@@ -152,8 +157,9 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	cd ${REMOTEHOST}
 
 #	Backup ${REMOTEHOST}/etc/docker/certs.d
-	FILE_DATE_STAMP=$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Backing up ${REMOTEHOST}:/etc/docker/certs.d to $(pwd) Root access required." 1>&2
+	FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%6N%z)
+	echo -e "\n\tBacking up ${REMOTEHOST}:/etc/docker/certs.d"
+	echo -e "\tto $(pwd)\n\tRoot access required.\n"
 	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "sudo mkdir -p /etc/docker/certs.d/daemon ; cd /etc ; sudo tar -pcf /tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon ; sudo chown ${ADMTLSUSER}.${ADMTLSUSER} /tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar ; chmod 0400 /tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar"
 	scp -p ${ADMTLSUSER}@${REMOTEHOST}:/tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar .
 	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "rm -f /tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar"
@@ -161,7 +167,8 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 
 #	Check if /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem file exists on remote system
 	if [ -e ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem ] ; then
-		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  /etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem already exists, ${BOLD}renaming existing keys${NORMAL} so new keys can be installed." 1>&2
+		echo -e "\n\t/etc/docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem"
+		echo -e "\talready exists, ${BOLD}renaming existing keys${NORMAL} so new keys can be installed.\n"
 		mv ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem ./docker/certs.d/daemon/${REMOTEHOST}-priv-key.pem-${FILE_DATE_STAMP}
 		mv ./docker/certs.d/daemon/${REMOTEHOST}-cert.pem ./docker/certs.d/daemon/${REMOTEHOST}-cert.pem-${FILE_DATE_STAMP}
 		mv ./docker/certs.d/daemon/ca.pem ./docker/certs.d/daemon/ca.pem-${FILE_DATE_STAMP}
@@ -177,7 +184,7 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	ln -s ${REMOTEHOST}-priv-key.pem key.pem
 	ln -s ${REMOTEHOST}-cert.pem cert.pem
 	cd ../../..
-	FILE_DATE_STAMP=$(date +%Y-%m-%d-%H-%M-%S-%Z)
+	FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%6N%z)
 	tar -pcf ./${REMOTEHOST}-${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon
 	chmod 0600 ./${REMOTEHOST}-${FILE_DATE_STAMP}.tar
 	scp -p ./${REMOTEHOST}-${FILE_DATE_STAMP}.tar ${ADMTLSUSER}@${REMOTEHOST}:/tmp
@@ -185,7 +192,8 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 #	Create remote directory /etc/docker/certs.d/daemon
 #	This directory was selected to place dockerd TLS certifications because
 #	docker registry stores it's TLS certifications in /etc/docker/certs.d.
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Copying dockerd certification to ${REMOTEHOST}  Root access required." 1>&2
+	echo -e "\n\tCopying dockerd certification to ${REMOTEHOST}"
+	echo -e "\tRoot access required.\n"
 	ssh -t ${ADMTLSUSER}@${REMOTEHOST} "cd /etc ; sudo tar -pxf /tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar ; sudo chmod 0700 /etc/docker ; sudo chmod 0700 /etc/docker/certs.d ; sudo chown -R root.root ./docker ; rm /tmp/${REMOTEHOST}-${FILE_DATE_STAMP}.tar"
 	cd ..
 
@@ -193,18 +201,19 @@ if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 	rm -rf ${REMOTEHOST}
 
 #       Display instructions about certification environment variables
-	echo -e "\n\nAdd TLS flags to dockerd so it will know to use TLS certifications (--tlsverify,"
-	echo    "--tlscacert, --tlscert, --tlskey).  Scripts that will help with setup and"
-	echo    "operations of Docker using TLS can be found:"
+	echo -e "\n\tAdd TLS flags to dockerd so it will know to use TLS certifications"
+	echo -e "\t(--tlsverify, --tlscacert, --tlscert, --tlskey).  Scripts that will"
+	echo -e "\thelp with setup and operations of Docker using TLS can be found:"
 	echo    "https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options"
-	echo -e "\tThe dockerd-configuration-options scripts will help with"
-	echo -e "\tconfiguration of dockerd on systems running Ubuntu 16.04"
-	echo -e "\t(systemd) and Ubuntu 14.04 (Upstart).\n"
+	echo -e "\tThe dockerd-configuration-options scripts will help with configuration"
+	echo -e "\tof dockerd on systems running Ubuntu 16.04 (systemd) and Ubuntu 14.04"
+	echo -e "\t(Upstart)."
 #
-	echo -e "If dockerd is already using TLS certifications then entering one of the\nfollowing will restart dockerd with the new certifications.\n"
+	echo -e "\n\tIf dockerd is already using TLS certifications then entering one of the"
+	echo -e "\tfollowing will restart dockerd with the new certifications.\n"
 	echo -e "\tUbuntu 16.04 (Systemd) ${BOLD}sudo systemctl restart docker${NORMAL}"
-	echo -e "\tUbuntu 14.04 (Upstart) ${BOLD}sudo service docker restart${NORMAL}\n"
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[INFO]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Done." 1>&2
+	echo -e "\tUbuntu 14.04 (Upstart) ${BOLD}sudo service docker restart${NORMAL}"
+	get_date_stamp ; echo -e "\n${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
 	exit 0
 else
 	display_help | more
@@ -212,11 +221,10 @@ else
 	exit 1
 fi
 
-#       May want to create a version of this script that automates this process for SRE tools,
-#       but keep this script for users to run manually,
-#       open ticket and remove this comment 
+# >>>	May want to create a version of this script that automates this process for SRE tools,
+# >>>	but keep this script for users to run manually,
+# >>>	open ticket and remove this comment 
 
-#
 #
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
 ###
