@@ -4,6 +4,9 @@ This repository contains shell scripts that check user ssh permissions, setup an
  * [docker-TLS](https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS)
  * [dockerd-configuration-options](https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options)
  * [ssh](https://github.com/BradleyA/docker-scripts/tree/master/ssh)
+ 
+#### If you like this repository, select in the upper-right corner, star, thank you.
+#### To watch future updates in this repository select in the upper-right corner, the "Watch" list, and select Watching.
 
 ### Clone
 
