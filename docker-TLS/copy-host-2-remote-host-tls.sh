@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.111.472  2019-01-20T00:05:37.416544-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
+# 	   production standard 4 Internationalizing display-help close #39 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.108.469  2018-12-23T22:54:50.624321-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.107  
 # 	   format process output information of command progress 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.107.468  2018-12-23T10:46:24.998551-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.106  
@@ -7,6 +9,7 @@
 # 	   copy-host-2-remote-host-tls.sh  add support for environment variable USERHOME close #32 
 #
 ### copy-host-2-remote-host-tls.sh - Copy public, private keys and CA to remote host
+#   production standard 4
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -x
@@ -19,13 +22,23 @@ echo -e "\n${NORMAL}${0} - Copy public, private keys and CA to remote host"
 echo -e "\nUSAGE\n   ${0} <REMOTEHOST> [<USERHOME>]"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
-echo -e "\nDESCRIPTION\nA user with administration authority uses this script to"
+echo -e "\nDESCRIPTION"
+#       Displaying help DESCRIPTION in English en_US.UTF-8
+echo    "A user with administration authority uses this script to"
 echo    "copy host TLS CA, public, and private keys from"
 echo    "${USERHOME}${ADMTLSUSER}/.docker/docker-ca directory on this system to"
 echo    "/etc/docker/certs.d directory on a remote system."
 echo -e "\nThe administration user may receive password and/or passphrase prompts from a"
 echo    "remote systen; running the following may stop the prompts in your cluster."
 echo    "   ssh-copy-id <admin-user>@x.x.x.x"
+#       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
+if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
+        echo -e "\n--> ${LANG}"
+        echo    "<votre aide va ici>" # your help goes here
+        echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
+elif ! [ "${LANG}" == "en_US.UTF-8" ] ; then
+        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+fi
 echo -e "\nEnvironment Variables"
 echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
 echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
@@ -44,14 +57,6 @@ echo    "   using default home directory, /home/, default administration user ru
 echo -e "   script.\n"
 echo -e "   ${0} two.cptx86.com /u/north-office/ uadmin\n\n   Administration user copies TLS keys and CA to remote host, two.cptx86.com,"
 echo    "   using local home directory, /u/north-office/, administrator account, uadmin."
-#       After displaying help in english check for other languages
-if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
-        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  ${LANG}, is not supported, Would you like to help translate?" 1>&2
-#       elif [ "${LANG}" == "fr_CA.UTF-8" ] ; then
-#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Display help in ${LANG}" 1>&2
-#       else
-#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate?" 1>&2
-fi
 }
 
 #       Date and time function ISO 8601

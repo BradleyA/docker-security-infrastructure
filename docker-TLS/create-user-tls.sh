@@ -1,8 +1,11 @@
 #!/bin/bash
+# 	docker-TLS/create-user-tls.sh  3.111.472  2019-01-20T00:05:37.885823-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
+# 	   production standard 4 Internationalizing display-help close #39 
 # 	docker-TLS/create-user-tls.sh  3.106.467  2018-12-13T16:42:08.738373-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.105  
 # 	   add support for environment variable USERHOME close #36 
 #
 ### create-user-tls.sh - Create user public and private key and CA
+#   production standard 4
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -x
@@ -15,8 +18,18 @@ echo -e "\n${NORMAL}${0} - Create user public and private key and CA"
 echo -e "\nUSAGE\n   ${0} [<TLSUSER>] [<NUMBERDAYS>] [<USERHOME>] [<ADMTLSUSER>]"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
-echo -e "\nDESCRIPTION\nRun this script any time a user requires a new Docker public and private"
+echo -e "\nDESCRIPTION"
+#       Displaying help DESCRIPTION in English en_US.UTF-8
+echo    "Run this script any time a user requires a new Docker public and private"
 echo    "TLS key."
+#       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
+if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
+        echo -e "\n--> ${LANG}"
+        echo    "<votre aide va ici>" # your help goes here
+        echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
+elif ! [ "${LANG}" == "en_US.UTF-8" ] ; then
+        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+fi
 echo -e "\nEnvironment Variables"
 echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
 echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
@@ -34,14 +47,6 @@ echo    "   ADMTLSUSER   administration user creating TLS accounts, default is u
 echo    "                running script"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
 echo -e "\nEXAMPLES\n   ${0} bob 30 /u/north-office/ uadmin\n\n   Create TLS keys for user bob for 30 days in /u/north-office/ uadmin"
-#       After displaying help in english check for other languages
-if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
-        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  ${LANG}, is not supported, Would you like to help translate?" 1>&2
-#       elif [ "${LANG}" == "fr_CA.UTF-8" ] ; then
-#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Display help in ${LANG}" 1>&2
-#       else
-#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate?" 1>&2
-fi
 }
 
 #       Date and time function ISO 8601

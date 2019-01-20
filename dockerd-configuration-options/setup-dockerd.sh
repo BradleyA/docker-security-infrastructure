@@ -1,10 +1,11 @@
 #!/bin/bash
-# 	dockerd-configuration-options/setup-dockerd.sh  3.40.460  2018-12-11T16:19:25.204006-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.99  
-# 	   Need to retest everything after all the formating changes #30 
+# 	dockerd-configuration-options/setup-dockerd.sh  3.111.472  2019-01-20T00:05:37.977284-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
+# 	   production standard 4 Internationalizing display-help close #39 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.99.459  2018-12-11T12:48:19.732058-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.98  
 # 	   start-dockerd-with-systemd.end Change echo or print DEBUG INFO WARNING ERROR close #28 
 #
 ### setup-dockerd.sh - setup system to support dockerd on Systemd and Upstart
+#   production standard 4
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -v
@@ -18,7 +19,9 @@ echo -e "\nUSAGE\n   sudo ${0} "
 echo    "   sudo ${0} [<WORK_DIRECTORY>] [<UPSTART_SYSVINIT_DIRECTORY>]"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
-echo -e "\nDESCRIPTION\nThis script has to be run as root to move files into /etc/docker and create"
+echo -e "\nDESCRIPTION"
+#       Displaying help DESCRIPTION in English en_US.UTF-8
+echo    "This script has to be run as root to move files into /etc/docker and create"
 echo    "or update the /etc/systemd/system/docker.service.d/10-override.conf"
 echo    "file (Ubuntu 16.04, systemd) and the /etc/default/docker (Ubuntu"
 echo    "14.04, Upstart). To change the docker daemon flags, sudo edit"
@@ -27,6 +30,14 @@ echo    "/etc/docker/setup-dockerd.sh. Docker daemon flag changes can be"
 echo    "distributed to any Ubuntu cluster that use systemd or upstart by"
 echo    "copying /etc/docker/dockerd-configuration-file to each system and"
 echo    "running sudo /etc/docker/setup-dockerd.sh on each system."
+#       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
+if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
+        echo -e "\n--> ${LANG}"
+        echo    "<votre aide va ici>" # your help goes here
+        echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
+elif ! [ "${LANG}" == "en_US.UTF-8" ] ; then
+        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+fi
 echo -e "\nEnvironment Variables"
 echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
 echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
@@ -44,14 +55,6 @@ echo    "                                default is /etc/default/"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options"
 echo -e "\nEXAMPLES\n   sudo ${0}\n"
 echo -e "   sudo ${0} /mnt/etc/docker/ /mnt/etc/default/\n"
-#       After displaying help in english check for other languages
-if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
-        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  ${LANG}, is not supported, Would you like to help translate?" 1>&2
-#       elif [ "${LANG}" == "fr_CA.UTF-8" ] ; then
-#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Display help in ${LANG}" 1>&2
-#       else
-#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate?" 1>&2
-fi
 }
 
 #       Date and time function ISO 8601

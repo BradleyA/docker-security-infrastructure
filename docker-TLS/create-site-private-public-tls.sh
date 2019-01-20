@@ -1,8 +1,11 @@
 #!/bin/bash
+# 	docker-TLS/create-site-private-public-tls.sh  3.111.472  2019-01-20T00:05:37.797447-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
+# 	   production standard 4 Internationalizing display-help close #39 
 # 	docker-TLS/create-site-private-public-tls.sh  3.105.466  2018-12-13T16:39:25.336528-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.104  
 # 	   add support for environment variable USERHOME close #35 
 #
 ### create-site-private-public-tls.sh - Create site private and CA keys
+#   production standard 4
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -x
@@ -15,7 +18,9 @@ echo -e "\n${NORMAL}${0} - Create site private and CA keys"
 echo -e "\nUSAGE\n   ${0} [<NUMBERDAYS>] [<USERHOME>] [<ADMTLSUSER>]"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
-echo -e "\nDESCRIPTION\nAn administration user can run this script to create site private and CA"
+echo -e "\nDESCRIPTION"
+#       Displaying help DESCRIPTION in English en_US.UTF-8
+echo    "An administration user can run this script to create site private and CA"
 echo    "keys.  Run this script first on your host that will be creating all your TLS"
 echo    "keys for your site.  It creates the working directories"
 echo    "${HOME}/.docker/docker-ca and ${HOME}/.docker/docker-ca/.private"
@@ -23,6 +28,14 @@ echo    "for your site private and CA keys.  If you later choose to use a differ
 echo    "host to continue creating your user and host TLS keys, cp the"
 echo    "${HOME}/.docker/docker-ca and ${HOME}/.docker/docker-ca/.private"
 echo    "to the new host and run create-new-openssl.cnf-tls.sh scipt."
+#       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
+if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
+        echo -e "\n--> ${LANG}"
+        echo    "<votre aide va ici>" # your help goes here
+        echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
+elif ! [ "${LANG}" == "en_US.UTF-8" ] ; then
+        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+fi
 echo -e "\nEnvironment Variables"
 echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
 echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
@@ -39,14 +52,6 @@ echo    "   ADMTLSUSER   administration user creating TLS accounts, default is u
 echo    "                running script"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
 echo -e "\nEXAMPLES\n   ${0} 365 /u/north-office/ uadmin\n\n   Create site private and public keys for one year in /u/north-office/ uadmin\n"
-#       After displaying help in english check for other languages
-if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
-        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  ${LANG}, is not supported, Would you like to help translate?" 1>&2
-#       elif [ "${LANG}" == "fr_CA.UTF-8" ] ; then
-#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Display help in ${LANG}" 1>&2
-#       else
-#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate?" 1>&2
-fi
 }
 
 #       Date and time function ISO 8601

@@ -1,10 +1,13 @@
 #!/bin/bash
+# 	ssh/check-user-ssh.sh  3.111.472  2019-01-20T00:05:38.151542-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
+# 	   production standard 4 Internationalizing display-help close #39 
 # 	ssh/check-user-ssh.sh  3.74.431  2018-10-22T21:18:56.500555-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.73  
 # 	   Need to retest everything after all the formating changes #30 
 # 	ssh/check-user-ssh.sh  3.63.420  2018-10-22T10:27:30.953228-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.62  
 # 	   check-host-tls.sh Change echo or print DEBUG INFO WARNING ERROR close #19 
 #
 ###	check-user-ssh.sh - Check user RSA ssh file permissions
+#   production standard 4
 DEBUG=0                 # 0 = debug off, 1 = debug on
 #	set -x
 #	set -v
@@ -16,13 +19,23 @@ echo -e "\n${NORMAL}${0} - Check user RSA ssh file permissions"
 echo -e "\nUSAGE\n   ${0} [<user-name> <home-directoty>]"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
-echo -e "\nDESCRIPTION\nThis script allows users to make sure that the ssh files and directory"
+echo -e "\nDESCRIPTION"
+#       Displaying help DESCRIPTION in English en_US.UTF-8
+echo    "This script allows users to make sure that the ssh files and directory"
 echo    "permissions are correct.  If they are not correct then this script will"
 echo    "correct the permissions.  Administrators can check other users ssh keys by"
 echo    "using: sudo ${0} <SSH-USER>."
 echo -e "\nTo create a new ssh key:\n\n   ${BOLD}ssh-keygen -t rsa${NORMAL}\n"
 echo    "Enter the following command to test if public and private key match:"
 echo -e "\n   ${BOLD}diff -qs <(ssh-keygen -yf ~/.ssh/id_rsa) <(cut -d ' ' -f 1,2 ~/.ssh/id_rsa.pub)${NORMAL}"
+#       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
+if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
+        echo -e "\n--> ${LANG}"
+        echo    "<votre aide va ici>" # your help goes here
+        echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
+elif ! [ "${LANG}" == "en_US.UTF-8" ] ; then
+        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+fi
 echo -e "\nOPTIONS"
 echo    "   SSHUSER   user, default is user running script"
 echo    "   USERHOME  location of user home directory, default /home/"
@@ -32,13 +45,6 @@ echo -e "\nEXAMPLES\n   User checks their ssh file permissions\n\n   ${0}"
 echo -e "\n   User sam checks their ssh file permissions in a non-default home directory\n\n   ${0} sam /u/north-office/"
 echo -e "\n   Administrator checks user bob ssh file permissions\n\n   sudo ${0} bob"
 echo -e "\n   Administrator checks user sally ssh file permissions in a different home\n   directory\n\n   sudo ${0} sally /u/home-office/\n"
-if ! [ "${LANG}" == "en_US.UTF-8" ] ; then
-        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[WARN]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Your language, ${LANG}, is not supported, Would you like to help translate?" 1>&2
-#       elif [ "${LANG}" == "fr_CA.UTF-8" ] ; then
-#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[WARN]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Display help in ${LANG}" 1>&2
-#       else
-#               get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[WARN]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  Your language, ${LANG}, is not supported.\tWould you like to translate?" 1>&2
-fi
 }
 
 #       Date and time function ISO 8601
