@@ -1,11 +1,16 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.112.481  2019-01-22T16:33:52.690661-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.111-8-g9346bea  
+# 	   production standard 5 include Copyright notice change format on first prompt 
 # 	docker-TLS/create-host-tls.sh  3.111.472  2019-01-20T00:05:37.625390-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
 # 	   production standard 4 Internationalizing display-help close #39 
 # 	docker-TLS/create-host-tls.sh  3.110.471  2018-12-23T23:19:37.585130-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.109  
 # 	   format process output for user 
 #
 ### create-host-tls.sh - Create host public, private keys and CA
-#   production standard 4
+#       Copyright (c) 2019 Bradley Allen
+#       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+###
+#   production standard 5
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -x
@@ -129,7 +134,7 @@ fi
 
 #	Prompt for ${FQDN} if argement not entered
 if [ -z ${FQDN} ] ; then
-	echo -e "Enter fully qualified domain name (FQDN) requiring new TLS keys:"
+	echo -e "\n\t${BOLD}Enter fully qualified domain name (FQDN) requiring new TLS keys:${NORMAL}"
 	read FQDN
 fi
 
