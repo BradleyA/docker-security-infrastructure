@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.113.484  2019-01-22T21:26:49.243453-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.112-2-g66c0b22  
+# 	   change from 365 to 185 default for number of days, output format changes 
 # 	docker-TLS/create-host-tls.sh  3.112.481  2019-01-22T16:33:52.690661-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.111-8-g9346bea  
 # 	   production standard 5 include Copyright notice change format on first prompt 
 # 	docker-TLS/create-host-tls.sh  3.111.472  2019-01-20T00:05:37.625390-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
@@ -45,7 +47,7 @@ echo    "   DEBUG       (default '0')"
 echo    "   USERHOME    (default /home/)"
 echo -e "\nOPTIONS"
 echo    "   FQDN         Fully qualified domain name of host requiring new TLS keys"
-echo    "   NUMBERDAYS   number of days host CA is valid, default 365 days"
+echo    "   NUMBERDAYS   number of days host CA is valid, default 185 days"
 echo    "   USERHOME     location of admin user directory, default is /home/"
 echo    "                sites have different home directories (/u/north-office/)"
 echo    "   ADMTLSUSER   site administrator creating TLS keys, default is user running"
@@ -94,7 +96,7 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 
 ###		
 FQDN=$1
-NUMBERDAYS=${2:-365}
+NUMBERDAYS=${2:-185}
 #       Order of precedence: CLI argument, environment variable, default code
 if [ $# -ge  3 ]  ; then USERHOME=${3} ; elif [ "${USERHOME}" == "" ] ; then USERHOME="/home/" ; fi
 ADMTLSUSER=${4:-${USER}}
@@ -163,12 +165,12 @@ echo -e "\thost ${FQDN}."
 openssl req -sha256 -new -key ${FQDN}-priv-key.pem -subj "/CN=${FQDN}/subjectAltName=${FQDN}" -out ${FQDN}.csr
 
 #	Create and sign certificate for host ${FQDN}
-echo -e "\n\tCreate and sign a ${NUMBERDAYS} day certificate for host"
-echo -e "\t${FQDN}."
+echo -e "\n\tCreate and sign a ${BOLD}${NUMBERDAYS}${NORMAL} day certificate for host"
+echo -e "\t\t${BOLD}${FQDN}${NORMAL}"
 openssl x509 -req -days ${NUMBERDAYS} -sha256 -in ${FQDN}.csr -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out ${FQDN}-cert.pem -extensions v3_req -extfile /usr/lib/ssl/openssl.cnf || { get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Wrong pass phrase for .private/ca-priv-key.pem: " ; exit 1; }
 openssl rsa -in ${FQDN}-priv-key.pem -out ${FQDN}-priv-key.pem
 echo -e "\n\tRemoving certificate signing requests (CSR) and set file permissions"
-echo -e "\tfor host ${FQDN} key pairs."
+echo -e "\tfor host ${BOLD}${FQDN}${NORMAL} key pairs."
 rm ${FQDN}.csr
 chmod 0400 ${FQDN}-priv-key.pem
 chmod 0444 ${FQDN}-cert.pem
