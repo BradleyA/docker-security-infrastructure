@@ -1,10 +1,8 @@
 #!/bin/bash
-# 	docker-TLS/create-host-tls.sh  3.114.485  2019-01-22T21:35:00.304060-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.113  
-# 	   output format change 
+# 	docker-TLS/create-host-tls.sh  3.117.488  2019-01-22T23:09:01.145821-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.116  
+# 	   production standard 5 include Copyright notice 
 # 	docker-TLS/create-host-tls.sh  3.113.484  2019-01-22T21:26:49.243453-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.112-2-g66c0b22  
 # 	   change from 365 to 185 default for number of days, output format changes 
-# 	docker-TLS/create-host-tls.sh  3.112.481  2019-01-22T16:33:52.690661-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.111-8-g9346bea  
-# 	   production standard 5 include Copyright notice change format on first prompt 
 # 	docker-TLS/create-host-tls.sh  3.111.472  2019-01-20T00:05:37.625390-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
 # 	   production standard 4 Internationalizing display-help close #39 
 # 	docker-TLS/create-host-tls.sh  3.110.471  2018-12-23T23:19:37.585130-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.109  

@@ -1,11 +1,14 @@
 #!/bin/bash
-# 	docker-TLS/check-user-tls.sh  3.111.472  2019-01-20T00:05:37.324288-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
-# 	   production standard 4 Internationalizing display-help close #39 
+# 	docker-TLS/check-user-tls.sh  3.117.488  2019-01-22T23:09:00.907307-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.116  
+# 	   production standard 5 include Copyright notice 
 # 	docker-TLS/check-user-tls.sh  3.101.462  2018-12-11T16:59:27.136029-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.100  
 # 	   check-user-tls add support for environment variable USERHOME close #31 
 #
 ### check-user-tls.sh - Check public, private keys, and CA for a user
-#   production standard 4
+#       Copyright (c) 2019 Bradley Allen
+#       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+###
+#   production standard 5
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -x

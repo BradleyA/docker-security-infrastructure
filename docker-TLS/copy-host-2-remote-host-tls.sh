@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.116.487  2019-01-22T23:01:29.866751-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.115  
-# 	   minor update user output information 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.115.486  2019-01-22T22:28:12.311750-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.114  
-# 	   add support for ADMTLSUSER 
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.117.488  2019-01-22T23:09:00.986659-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.116  
+# 	   production standard 5 include Copyright notice 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.111.472  2019-01-20T00:05:37.416544-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
 # 	   production standard 4 Internationalizing display-help close #39 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.108.469  2018-12-23T22:54:50.624321-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.107  

@@ -1,11 +1,16 @@
 #!/bin/bash
+# 	docker-TLS/check-host-tls.sh  3.117.488  2019-01-22T23:09:00.796086-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.116  
+# 	   production standard 5 include Copyright notice 
 # 	docker-TLS/check-host-tls.sh  3.111.472  2019-01-20T00:05:37.241557-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
 # 	   production standard 4 Internationalizing display-help close #39 
 # 	docker-TLS/check-host-tls.sh  3.87.444  2018-12-05T16:16:17.554114-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.86  
 # 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
 #
 ### check-host-tls.sh - Check public, private keys, and CA for host
-#   production standard 4
+#       Copyright (c) 2019 Bradley Allen
+#       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+###
+#   production standard 5
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -x

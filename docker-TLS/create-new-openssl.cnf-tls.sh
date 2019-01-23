@@ -1,11 +1,14 @@
 #!/bin/bash
-# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.111.472  2019-01-20T00:05:37.714567-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
-# 	   production standard 4 Internationalizing display-help close #39 
+# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.117.488  2019-01-22T23:09:01.225426-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.116  
+# 	   production standard 5 include Copyright notice 
 # 	docker-TLS/create-new-openssl.cnf-tls.sh  3.85.442  2018-12-04T23:33:42.816516-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.84  
 # 	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
 #
 ### create-new-openssl.cnf-tls.sh - Modify /etc/ssl/openssl.conf file
-#   production standard 4
+#       Copyright (c) 2019 Bradley Allen
+#       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+###
+#   production standard 5
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 DEBUG=0                 # 0 = debug off, 1 = debug on
