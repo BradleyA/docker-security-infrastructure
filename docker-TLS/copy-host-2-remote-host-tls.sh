@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.115.486  2019-01-22T22:28:12.311750-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.114  
+# 	   add support for ADMTLSUSER 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.111.472  2019-01-20T00:05:37.416544-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
 # 	   production standard 4 Internationalizing display-help close #39 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.108.469  2018-12-23T22:54:50.624321-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.107  
@@ -9,7 +11,10 @@
 # 	   copy-host-2-remote-host-tls.sh  add support for environment variable USERHOME close #32 
 #
 ### copy-host-2-remote-host-tls.sh - Copy public, private keys and CA to remote host
-#   production standard 4
+#       Copyright (c) 2019 Bradley Allen
+#       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+###
+#   production standard 5
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -x
@@ -19,7 +24,7 @@ NORMAL=$(tput -Txterm sgr0)
 ###
 display_help() {
 echo -e "\n${NORMAL}${0} - Copy public, private keys and CA to remote host"
-echo -e "\nUSAGE\n   ${0} <REMOTEHOST> [<USERHOME>]"
+echo -e "\nUSAGE\n   ${0} [<REMOTEHOST>] [<USERHOME>] [<ADMTLSUSER>]"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
@@ -51,6 +56,7 @@ echo -e "\nOPTIONS"
 echo    "   REMOTEHOST   remote host to copy certificates to"
 echo    "   USERHOME     location of administration user directory, default is /home/"
 echo    "      Many sites have different home directories (/u/north-office/)"
+echo    "   ADMTLSUSER   remote SRE user, default is current user"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
 echo -e "\nEXAMPLES\n   ${0} two.cptx86.com\n\n   Administration user copies TLS keys and CA to remote host, two.cptx86.com,"
 echo    "   using default home directory, /home/, default administration user running"
@@ -102,7 +108,7 @@ REMOTEHOST=$1
 #       Order of precedence: CLI argument, environment variable, default code
 if [ $# -ge  2 ]  ; then USERHOME=${2} ; elif [ "${USERHOME}" == "" ] ; then USERHOME="/home/" ; fi
 USERHOME=${USERHOME}"/"
-ADMTLSUSER=${3:-${USER}} # design for futrue use
+ADMTLSUSER=${3:-${USER}}
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  REMOTEHOST >${REMOTEHOST}< USERHOME >${USERHOME}< ADMTLSUSER >${ADMTLSUSER}<" 1>&2 ; fi
 
 #	Check if admin user has home directory on system
@@ -123,7 +129,7 @@ cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
 
 #	Prompt for ${REMOTEHOST} if argement not entered
 if [ -z ${REMOTEHOST} ] ; then
-	echo    "Enter remote host where TLS keys are to be copied:"
+	echo -e "\n\t${BOLD}Enter remote host where TLS keys are to be copied:${NORMAL}"
 	read REMOTEHOST
 fi
 
@@ -145,12 +151,11 @@ if ! [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/${REMOTEHOST}-priv-key.pem 
 fi
 
 #	Check if ${REMOTEHOST} is available on ssh port
-if $(ssh ${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
-	echo -e "\n\t${ADMTLSUSER} user may receive password and passphrase prompts"
-	echo -e "\tfrom ${REMOTEHOST}.  Running"
-	echo -e "\t${BOLD}ssh-copy-id ${ADMTLSUSER}@${REMOTEHOST}${NORMAL}"
-	echo -e "\tmay stop some of the prompts.\n"
-
+echo -e "\n\t${BOLD}${ADMTLSUSER}${NORMAL} user may receive password and passphrase prompts"
+echo -e "\tfrom ${REMOTEHOST}.  Running"
+echo -e "\t${BOLD}ssh-copy-id ${ADMTLSUSER}@${REMOTEHOST}${NORMAL}"
+echo -e "\tmay stop some of the prompts.\n"
+if $(ssh ${ADMTLSUSER}@${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 #	Check if /etc/docker directory on ${REMOTEHOST}
 	if ! $(ssh -t ${ADMTLSUSER}@${REMOTEHOST} "test -d /etc/docker") ; then
 		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  /etc/docker directory missing, is docker installed on ${REMOTEHOST}." 1>&2
