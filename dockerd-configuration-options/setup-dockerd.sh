@@ -1,11 +1,16 @@
 #!/bin/bash
+# 	dockerd-configuration-options/setup-dockerd.sh  3.118.489  2019-01-22T23:14:50.183400-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.117  
+# 	   production standard 4 Internationalizing display-help close #39 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.111.472  2019-01-20T00:05:37.977284-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
 # 	   production standard 4 Internationalizing display-help close #39 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.99.459  2018-12-11T12:48:19.732058-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.98  
 # 	   start-dockerd-with-systemd.end Change echo or print DEBUG INFO WARNING ERROR close #28 
 #
 ### setup-dockerd.sh - setup system to support dockerd on Systemd and Upstart
-#   production standard 4
+#       Copyright (c) 2019 Bradley Allen
+#       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+###
+#   production standard 5
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -v

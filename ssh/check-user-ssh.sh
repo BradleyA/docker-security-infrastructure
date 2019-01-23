@@ -1,5 +1,5 @@
 #!/bin/bash
-# 	ssh/check-user-ssh.sh  3.111.472  2019-01-20T00:05:38.151542-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
+# 	ssh/check-user-ssh.sh  3.118.489  2019-01-22T23:14:50.344208-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.117  
 # 	   production standard 4 Internationalizing display-help close #39 
 # 	ssh/check-user-ssh.sh  3.74.431  2018-10-22T21:18:56.500555-05:00 (CDT)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.73  
 # 	   Need to retest everything after all the formating changes #30 
@@ -7,7 +7,10 @@
 # 	   check-host-tls.sh Change echo or print DEBUG INFO WARNING ERROR close #19 
 #
 ###	check-user-ssh.sh - Check user RSA ssh file permissions
-#   production standard 4
+#       Copyright (c) 2019 Bradley Allen
+#       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+###
+#   production standard 5
 DEBUG=0                 # 0 = debug off, 1 = debug on
 #	set -x
 #	set -v
