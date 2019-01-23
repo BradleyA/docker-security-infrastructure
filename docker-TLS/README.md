@@ -34,7 +34,7 @@ To install, change to the directory you want to download these scripts.
     curl -L https://api.github.com/repos/BradleyA/docker-scripts/tarball | tar -xzf - --wildcards */c* ; mv BradleyA-docker-scripts*/docker-TLS/c* . ; rm -rf BradleyA-docker-scripts-*/
 
 ## Usage
-Run this script first on your host to create your site private and public TLS keys.  To change the default number of days (730 days = 2 years) enter a number of days as the parameter (example: create-site-private-public-tls 365 ).
+Run this script first on your host to create your site private and public TLS keys.  To change the default number of days (730 days = 2 years) enter a number of days as the parameter (example: create-site-private-public-tls 185 ).
 
     create-site-private-public-tls.sh <#days>
 
