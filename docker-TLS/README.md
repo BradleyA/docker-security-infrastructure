@@ -34,7 +34,7 @@ To install, change to the directory you want to download these scripts.
     curl -L https://api.github.com/repos/BradleyA/docker-scripts/tarball | tar -xzf - --wildcards */c* ; mv BradleyA-docker-scripts*/docker-TLS/c* . ; rm -rf BradleyA-docker-scripts-*/
 
 ## Usage
-Run this script first on your host to create your site private and public TLS keys.  To change the default number of days (730 days = 2 years) enter a number of days as the parameter (example: create-site-private-public-tls 185 ).
+Run this script first on your host to create your site private and public TLS keys.  To change the default number of days (730 days = 2 years) enter a number of days as the parameter (example: create-site-private-public-tls 365 ).
 
     create-site-private-public-tls.sh <#days>
 
@@ -136,7 +136,7 @@ Run this script for each host that requires a new Docker public and private TLS 
     ./create-host-tls.sh <FQDN> <#days>
 
 ## Output
-    $ ./create-host-tls.sh two.cptx86.com 365
+    $ ./create-host-tls.sh two.cptx86.com 185
     ./create-host-tls.sh 82 [INFO]:	Creating private key for host
 	two.cptx86.com.
 	Generating RSA private key, 2048 bit long modulus
@@ -145,7 +145,7 @@ Run this script for each host that requires a new Docker public and private TLS 
 	e is 65537 (0x10001)
 	./create-host-tls.sh 85 [INFO]:	Generate a Certificate Signing Request
 	(CSR) for host two.cptx86.com.
-	./create-host-tls.sh 88 [INFO]:	Create and sign a 365 day
+	./create-host-tls.sh 88 [INFO]:	Create and sign a 185 day
 	certificate for host two.cptx86.com.
 	Signature ok
 	subject=/CN=two.cptx86.com/subjectAltName=two.cptx86.com
