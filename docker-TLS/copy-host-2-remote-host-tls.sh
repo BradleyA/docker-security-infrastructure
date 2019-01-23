@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.116.487  2019-01-22T23:01:29.866751-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.115  
+# 	   minor update user output information 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.115.486  2019-01-22T22:28:12.311750-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.114  
 # 	   add support for ADMTLSUSER 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.111.472  2019-01-20T00:05:37.416544-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
@@ -56,7 +58,7 @@ echo -e "\nOPTIONS"
 echo    "   REMOTEHOST   remote host to copy certificates to"
 echo    "   USERHOME     location of administration user directory, default is /home/"
 echo    "      Many sites have different home directories (/u/north-office/)"
-echo    "   ADMTLSUSER   remote SRE user, default is current user"
+echo    "   ADMTLSUSER   remote and local SRE user, default is current user"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
 echo -e "\nEXAMPLES\n   ${0} two.cptx86.com\n\n   Administration user copies TLS keys and CA to remote host, two.cptx86.com,"
 echo    "   using default home directory, /home/, default administration user running"
@@ -221,8 +223,8 @@ if $(ssh ${ADMTLSUSER}@${REMOTEHOST} 'exit' >/dev/null 2>&1 ) ; then
 #
 	echo -e "\n\tIf dockerd is already using TLS certifications then entering one of the"
 	echo -e "\tfollowing will restart dockerd with the new certifications.\n"
-	echo -e "\tUbuntu 16.04 (Systemd) ${BOLD}sudo systemctl restart docker${NORMAL}"
-	echo -e "\tUbuntu 14.04 (Upstart) ${BOLD}sudo service docker restart${NORMAL}"
+	echo -e "\tUbuntu 16.04 (Systemd) ${BOLD}ssh -t ${REMOTEHOST} 'sudo systemctl restart docker'${NORMAL}"
+	echo -e "\tUbuntu 14.04 (Upstart) ${BOLD}ssh -t ${REMOTEHOST} 'sudo service docker restart'${NORMAL}"
 	get_date_stamp ; echo -e "\n${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
 	exit 0
 else
