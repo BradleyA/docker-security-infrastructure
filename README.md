@@ -15,11 +15,11 @@ To install, change to the location you want to download the scripts. Use git to 
     git clone https://github.com/BradleyA/docker-security-infrastructure-scripts.git
     cd docker-scripts
  
-### System OS script tested
+#### System OS script tested
  * Ubuntu 14.04.3 LTS
  * Ubuntu 16.04.3 LTS (armv7l)
 
-### Design Principles
+#### Design Principles
  * Have a simple setup process and a minimal learning curve
  * Be usable as non-root - [some of these scripts require root]
  * Be easy to install and configure
