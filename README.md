@@ -13,7 +13,7 @@ This repository contains shell scripts that check user ssh permissions, setup an
 To install, change to the location you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have git then enter; "sudo apt-get install git". On the github repository page of this script use the "Clone with HTTPS" URL with the 'git clone' command.
 
     git clone https://github.com/BradleyA/docker-security-infrastructure-scripts.git
-    cd docker-scripts
+    cd docker-security-infrastructure-scripts
  
 #### System OS script tested
  * Ubuntu 14.04.3 LTS
