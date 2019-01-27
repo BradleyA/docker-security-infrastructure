@@ -1,9 +1,9 @@
-## docker-scripts
+## docker-security-infrastructure-scripts
 This repository contains shell scripts that check user ssh permissions, setup and manage both TLS and dockerd on Ubuntu 14.04 (upstart) and Ubuntu 16.04 (systemd).
 
- * [docker-TLS](https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS)
- * [dockerd-configuration-options](https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options)
- * [ssh](https://github.com/BradleyA/docker-scripts/tree/master/ssh)
+ * [docker-TLS](https://github.com/BradleyA/docker-security-infrastructure-scripts/tree/master/docker-TLS)
+ * [dockerd-configuration-options](https://github.com/BradleyA/docker-security-infrastructure-scripts/tree/master/dockerd-configuration-options)
+ * [ssh](https://github.com/BradleyA/docker-security-infrastructure-scripts/tree/master/ssh)
  
 #### If you like this repository, select in the upper-right corner,  STAR,  thank you.
 #### To watch future updates in this repository select in the upper-right corner, the "Watch" list, and select Watching.
