@@ -23,7 +23,9 @@ To clone, change to the directory you want to download the scripts.  Use git to 
     git clone https://github.com/BradleyA/docker-security-infrastructure-scripts
     cd docker-security-infrastructure-scripts/docker-TLS
     
-    mkdir -p /usr/local/bin
+    sudo mkdir -p /usr/local/bin
+    sudo chown $USER:$(id -g) /usr/local/bin
+    chmod 0775 /usr/local/bin
     mv c* /usr/local/bin
     cd ../..
     rm -rf docker-security-infrastructure-scripts
@@ -292,7 +294,7 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
 ## Install Scripts
 To install the scripts, change to the directory you have write permission (examples: ~/bin, /usr/local/bin) 
 
-    curl -L https://api.github.com/repos/BradleyA/docker-security-infrastructure-scripts/tarball | tar -xzf - --wildcards */c* ; mv BradleyA-docker-security-infrastructure-scripts*/docker-TLS/c* . ; rm -rf BradleyA-docker-security-infrastructure-scripts-*/
+    curl -L https://api.github.com/repos/BradleyA/docker-security-infrastructure-scripts/tarball | tar -xzf - --wildcards */c* && mv BradleyA-docker-security-infrastructure-scripts*/docker-TLS/c* . && rm -rf BradleyA-docker-security-infrastructure-scripts-*/
 
 ### System OS script tested
  * Ubuntu 14.04.4 LTS
