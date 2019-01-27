@@ -1,4 +1,5 @@
 # docker-TLS
+
 These bash scripts will create, copy, and check TLS public keys, private keys, and self-signed certificates for the docker user, daemon, and docker swarm.  After many reinstalls of OS's and Docker, I got tried of entering the cryptic command line text required to setup Docker to use TLS.  Each example I found on-line was different than the last example.
 
 create-site-private-public-tls.sh - Run this script first on your host that will be creating all your TLS keys.  It creates the site private and CA keys that all other TLS keys at your site will be using.  It creates the working directories  $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private for your site public and private keys.  If you later choose to use a different host to continue creating your user and host TLS keys; copy the files in $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private to the new host then run create-new-openssl.cnf-tls.sh scipt on the new host.
@@ -289,12 +290,12 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
     Verify that dockerd daemon certificate was issued by the CA.
     /etc/docker/certs.d/daemon/cert.pem: OK
 
-## Install Scripts
+#### Install Scripts
 To install the scripts, change to the directory you have write permission (examples: ~/bin, /usr/local/bin) 
 
     curl -L https://api.github.com/repos/BradleyA/docker-security-infrastructure-scripts/tarball | tar -xzf - --wildcards */c* && mv BradleyA-docker-security-infrastructure-scripts*/docker-TLS/c* . && rm -rf BradleyA-docker-security-infrastructure-scripts-*/
 
-### System OS script tested
+#### System OS script tested
  * Ubuntu 14.04.4 LTS
  * Ubuntu 16.04.3 LTS (armv7l)
 
@@ -306,7 +307,7 @@ To install the scripts, change to the directory you have write permission (examp
 ## License
 MIT License
 
-Copyright (c) 2019  Bradley Allen
+Copyright (c) 2019  [Bradley Allen <img src="https://static.licdn.com/scds/common/u/img/webpromo/btn_viewmy_160x25.png" style="max-width:100%;" >](https://www.linkedin.com/in/bradleyhallen)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
