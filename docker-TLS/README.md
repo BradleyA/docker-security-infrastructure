@@ -17,7 +17,7 @@ copy-user-2-remote-host-tls.sh - An administration user can run this script to c
 
 copy-host-2-remote-host-tls.sh - An administration user can run this script to copy host public, private TLS keys, and CA to a remote host.
 
-## Clone
+## Install
 To clone, change to the directory you want to download the scripts.  Use git to clone these scripts into your directory.  If you do not have git then enter; "sudo apt-get install git".  On the github page of this script use the "HTTPS clone URL" with the 'git clone' command. 
     
     git clone https://github.com/BradleyA/docker-security-infrastructure-scripts
@@ -28,10 +28,6 @@ To clone, change to the directory you want to download the scripts.  Use git to 
     cd ../..
     rm -rf docker-security-infrastructure-scripts
 
-## Install
-To install, change to the directory you want to download these scripts. 
-
-    curl -L https://api.github.com/repos/BradleyA/docker-security-infrastructure-scripts/tarball | tar -xzf - --wildcards */c* ; mv BradleyA-docker-security-infrastructure-scripts*/docker-TLS/c* . ; rm -rf BradleyA-docker-security-infrastructure-scripts-*/
 
 ## Usage
 Run this script first on your host to create your site private and public TLS keys.  To change the default number of days (730 days = 2 years) enter a number of days as the parameter (example: create-site-private-public-tls 365 ).
@@ -292,6 +288,11 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
     
     Verify that dockerd daemon certificate was issued by the CA.
     /etc/docker/certs.d/daemon/cert.pem: OK
+
+## Install Scripts
+To install the scripts, change to the directory you have write permission (examples: ~/bin, /usr/local/bin) 
+
+    curl -L https://api.github.com/repos/BradleyA/docker-security-infrastructure-scripts/tarball | tar -xzf - --wildcards */c* ; mv BradleyA-docker-security-infrastructure-scripts*/docker-TLS/c* . ; rm -rf BradleyA-docker-security-infrastructure-scripts-*/
 
 ### System OS script tested
  * Ubuntu 14.04.4 LTS
