@@ -1,6 +1,7 @@
 # ssh
 
 ## Description
+
 Check user RSA ssh file permissions
 
 This script allows users to make sure that the ssh files and directory permissions are correct.  If they are not correct then this script will correct the permissions.  Administrators can check other users ssh keys by using: sudo /usr/local/bin/check-user-ssh.sh <SSH-USER>.  Currently not supporting id_dsa.pub.
@@ -14,22 +15,27 @@ This script allows users to make sure that the ssh files and directory permissio
     -rw-------  1 uadmin uadmin 3420 Jul 27 19:16 known_hosts
 
 ## Install
+
 To install, change to the location you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have git then enter; "sudo apt-get install git". On the github page of this script use the "HTTPS clone URL" with the 'git clone' command.
 
     git clone https://github.com/BradleyA/docker-security-infrastructure-scripts
     cd docker-security-infrastructure-scripts/ssh
     
-    mkdir -p /usr/local/bin
-    mv ./check-user-ssh.sh  /usr/local/bin
+    sudo mkdir -p /usr/local/bin
+    sudo chown $USER:$(id -g) /usr/local/bin
+    chmod 0775 /usr/local/bin
+    mv c* /usr/local/bin
     cd ../..
     rm -rf docker-security-infrastructure-scripts
 
 ## Usage
+
 Check user, uadmin, RSA ssh file permissions
 
     ./check-user-ssh.sh
     
 ## Output
+
     Verify and correct file and directory permissions for /home/uadmin/.ssh
     
     List of authorized hosts in /home/uadmin/.ssh/authorized_keys:
@@ -59,6 +65,7 @@ Check user, uadmin, RSA ssh file permissions
     ./check-user-ssh.sh 148 [INFO]:  Done.
 
 ## ssh Hints
+
 To create a new ssh key;
 
     ssh-keygen -t rsa
@@ -78,15 +85,18 @@ To remove a host from ~/.ssh/authorized_keys file:
     mv /home/uadmin/.ssh/authorized_keys.new /home/uadmin/.ssh/authorized_keys
 
 #### System OS script tested
+
  * Ubuntu 14.04.3 LTS
  * Ubuntu 16.04.3 LTS (armv7l)
 
 #### Design Principles
+
  * Have a simple setup process and a minimal learning curve
  * Be usable as non-root
  * Be easy to install and configure
 
 ## License
+
 MIT License
 
 Copyright (c) 2019  Bradley Allen
