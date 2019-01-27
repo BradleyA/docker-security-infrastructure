@@ -30,7 +30,6 @@ To clone, change to the directory you want to download the scripts.  Use git to 
     cd ../..
     rm -rf docker-security-infrastructure-scripts
 
-
 ## Usage
 Run this script first on your host to create your site private and public TLS keys.  To change the default number of days (730 days = 2 years) enter a number of days as the parameter (example: create-site-private-public-tls 365 ).
 
@@ -153,7 +152,6 @@ Run this script for each host that requires a new Docker public and private TLS 
 	./create-host-tls.sh 91 [INFO]:	Removing certificate signing requests
 	(CSR) and set file permissions for host two.cptx86.com key pairs.
 	./create-host-tls.sh 95 [INFO]:	Done.
-
 
 ## Usage
 An administration user can run this script to copy user public, private TLS keys, and CA to a remote host.
