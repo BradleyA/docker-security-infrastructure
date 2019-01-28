@@ -8,9 +8,7 @@ This repository contains shell scripts that check user ssh permissions, setup an
  * [Docker Bench for Security](https://github.com/docker/docker-bench-security)
  * [NOT SURE ABOUT THIS YET](https://github.com/mviereck/x11docker)
  
- 
 #### If you like this repository, select in the upper-right corner,  STAR,  thank you.
-#### To watch future updates in this repository select in the upper-right corner, the "Watch" list, and select Watching.
 
 ## Install
 
@@ -18,6 +16,8 @@ To install, change to the location you want to download the scripts. Use git to 
 
     git clone https://github.com/BradleyA/docker-security-infrastructure-scripts.git
     cd docker-security-infrastructure-scripts
+
+#### To watch future updates in this repository select in the upper-right corner, the "Watch" list, and select Watching.
  
 #### System OS script tested
  * Ubuntu 14.04.3 LTS
