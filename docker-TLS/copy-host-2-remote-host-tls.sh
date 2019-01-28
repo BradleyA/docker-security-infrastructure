@@ -1,5 +1,5 @@
 #!/bin/bash
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.120.520  2019-01-27T20:11:08.752591-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.119-29-gdf7e5e3  
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.121.521  2019-01-27T20:31:21.077507-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.120  
 # 	   minor display_help change 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.117.488  2019-01-22T23:09:00.986659-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.116  
 # 	   production standard 5 include Copyright notice 
@@ -34,7 +34,8 @@ echo -e "\nDESCRIPTION"
 echo    "A user with administration authority uses this script to"
 echo    "copy host TLS CA, public, and private keys from"
 echo    "/home/${ADMTLSUSER}/.docker/docker-ca directory on this system to"
-echo    "/etc/docker/certs.d directory on a remote system."
+echo    "/etc/docker/certs.d directory on a remote system.  To copy to the"
+echo    "local system, enter the local hostname for the <REMOTEHOST>." 
 echo -e "\nThe administration user may receive password and/or passphrase prompts from a"
 echo    "remote systen; running the following may stop the prompts in your cluster."
 echo    "   ssh-copy-id <admin-user>@x.x.x.x"
@@ -57,7 +58,7 @@ echo    "   USERHOME    (default /home/)"
 echo -e "\nOPTIONS"
 echo    "   REMOTEHOST   remote host to copy certificates to"
 echo    "   USERHOME     location of administration user directory, default is /home/"
-echo    "      Many sites have different home directories (/u/north-office/)"
+echo    "                Many sites have different home directories (/u/north-office/)"
 echo    "   ADMTLSUSER   remote and local SRE user, default is current user"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
 echo -e "\nEXAMPLES\n   ${0} two.cptx86.com\n\n   Administration user copies TLS keys and CA to remote host, two.cptx86.com,"
