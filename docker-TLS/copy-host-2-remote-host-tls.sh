@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.120.520  2019-01-27T20:11:08.752591-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.119-29-gdf7e5e3  
+# 	   minor display_help change 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.117.488  2019-01-22T23:09:00.986659-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.116  
 # 	   production standard 5 include Copyright notice 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.111.472  2019-01-20T00:05:37.416544-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
@@ -31,7 +33,7 @@ echo -e "\nDESCRIPTION"
 #       Displaying help DESCRIPTION in English en_US.UTF-8
 echo    "A user with administration authority uses this script to"
 echo    "copy host TLS CA, public, and private keys from"
-echo    "${USERHOME}${ADMTLSUSER}/.docker/docker-ca directory on this system to"
+echo    "/home/${ADMTLSUSER}/.docker/docker-ca directory on this system to"
 echo    "/etc/docker/certs.d directory on a remote system."
 echo -e "\nThe administration user may receive password and/or passphrase prompts from a"
 echo    "remote systen; running the following may stop the prompts in your cluster."
