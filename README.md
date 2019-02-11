@@ -6,7 +6,6 @@ This repository contains shell scripts that check user ssh permissions, setup an
  * [ssh](https://github.com/BradleyA/docker-security-infrastructure-scripts/tree/master/ssh)
   ##### Docker security links
  * [Docker Bench for Security](https://github.com/docker/docker-bench-security)
- * [git-secrets](https://github.com/awslabs/git-secrets)
  * [NOT SURE ABOUT THIS YET](https://github.com/mviereck/x11docker)
  
 #### If you like this repository, select in the upper-right corner,  STAR,  thank you.
