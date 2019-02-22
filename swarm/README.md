@@ -1,3 +1,3 @@
 
 ## NOT TESTED YET
-## OLD script from old cluters 2016
+## OLD script from old clusters 2016
