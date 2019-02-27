@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.127.539  2019-02-27T17:28:09.546104-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.126  
+# 	   continue writing 
 # 	docker-TLS/create-registry-tls.sh  3.126.538  2019-02-27T15:56:02.308540-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.125  
 # 	   continue wrting 
 # 	docker-TLS/create-registry-tls.sh  3.125.537  2019-02-27T14:51:06.266955-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.124-6-ge4d1ab2  
@@ -102,20 +104,17 @@ if [ ! -d ${HOME} ] ; then
 fi
 
 #       Check if site directory on system
-if [ ! -d ${HOME}/.docker/docker-ca/ ] ; then
-	mkdir ${HOME}/.docker/docker-ca/
+if [ ! -d ${HOME}/.docker/docker-registry-certs-${REGISTRY_PORT} ] ; then
+	mkdir -p ${HOME}/.docker/docker-registry-certs-${REGISTRY_PORT}
 fi
-cd ${HOME}/.docker/docker-ca/
+cd ${HOME}/.docker/docker-registry-certs-${REGISTRY_PORT}
 
-
-
-
-#	Check if ${FQDN}-priv-key.pem file exists
-if [ -e ${FQDN}-priv-key.pem ] ; then
-	echo -e "\n\t${FQDN}-priv-key.pem already exists,"
+#	Check if domain.crt & domain.key
+if [ -e domain.crt ] ; then
+	echo -e "\n\tdomain.crt already exists,"
 	echo -e "\trenaming existing keys so new keys can be created."
-	mv ${FQDN}-priv-key.pem ${FQDN}-priv-key.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
-	mv ${FQDN}-cert.pem ${FQDN}-cert.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
+	mv domain.crt domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)
+	mv domain.key domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z)
 fi
 
 #	Creating private key for host ${FQDN}
