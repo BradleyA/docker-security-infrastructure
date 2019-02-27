@@ -295,6 +295,13 @@ To install the scripts, change to the directory you have write permission (examp
 
     curl -L https://api.github.com/repos/BradleyA/docker-security-infrastructure-scripts/tarball | tar -xzf - --wildcards */c* && mv BradleyA-docker-security-infrastructure-scripts*/docker-TLS/c* . && rm -rf BradleyA-docker-security-infrastructure-scripts-*/
 
+#### To watch future updates in this repository select in the upper-right corner, the "Watch" list, and select Watching.
+
+#### Author
+[<img id="twitter" src="../images/twitter.png" width="50" a="twitter.com/bradleyaustintx/">
+](https://twitter.com/bradleyaustintx/)   [<img id="github" src="../images/github.png" width="50" a="https://github.com/BradleyA/">
+](https://github.com/BradleyA/)    [<img src="../images/linkedin.png" style="max-width:100%;" >](https://www.linkedin.com/in/bradleyhallen)
+
 #### System OS script tested
  * Ubuntu 14.04.4 LTS
  * Ubuntu 16.04.3 LTS (armv7l)
