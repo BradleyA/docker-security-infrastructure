@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.126.538  2019-02-27T15:56:02.308540-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.125  
+# 	   continue wrting 
 # 	docker-TLS/create-registry-tls.sh  3.125.537  2019-02-27T14:51:06.266955-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.124-6-ge4d1ab2  
 # 	   begin writing create-registry-tls.sh 
 #
@@ -37,10 +39,12 @@ echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  U
 echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
-echo    "   DEBUG       (default '0')"
+echo    "   DEBUG           (default '0')"
+echo    "   REGISTRY_HOST   Registry host (default 'local host')"
+echo    "   REGISTRY_PORT   Registry port number (default '5000')"
 echo -e "\nOPTIONS"
-echo    "   REGISTRY_HOST   Registry host"
-echo    "   REGISTRY_PORT   Registry port number"
+echo    "   REGISTRY_HOST   Registry host (default 'local host')"
+echo    "   REGISTRY_PORT   Registry port number (default '5000')"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure"
 echo -e "\nEXAMPLES\n   ${0} two.cptx86.com 17313\n"
 }
@@ -84,57 +88,27 @@ get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Name_of_command >${0}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
 
 ###		
-REGISTRY_HOST=$1
-REGISTRY_PORT=${2:-5000}
 #       Order of precedence: CLI argument, environment variable, default code
-if [ $# -ge  3 ]  ; then USERHOME=${3} ; elif [ "${USERHOME}" == "" ] ; then USERHOME="/home/" ; fi
-ADMTLSUSER=${4:-${USER}}
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  FQDN >${FQDN}< NUMBERDAYS >${NUMBERDAYS}< USERHOME >${USERHOME}< ADMTLSUSER  >${ADMTLSUSER}<" 1>&2 ; fi
+if [ $# -ge  1 ]  ; then REGISTRY_HOST=${1} ; elif [ "${REGISTRY_HOST}" == "" ] ; then REGISTRY_HOST=${LOCALHOST} ; fi
+#       Order of precedence: CLI argument, environment variable, default code
+if [ $# -ge  2 ]  ; then REGISTRY_PORT=${2} ; elif [ "${REGISTRY_PORT}" == "" ] ; then REGISTRY_PORT="5000" ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_PORT >${REGISTRY_PORT}<" 1>&2 ; fi
 
-#	Check if admin user has home directory on system
-if [ ! -d ${USERHOME}${ADMTLSUSER} ] ; then
+#	Check if user has home directory on system
+if [ ! -d ${HOME} ] ; then
 	display_help | more
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${ADMTLSUSER} does not have a home directory on this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}" 1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${USER} does not have a home directory on this system or ${USER} home directory is not ${HOME}" 1>&2
 	exit 1
 fi
 
-#       Check if site CA directory on system
-if [ ! -d ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private ] ; then
-	display_help | more
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Default directory, ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private, not on system." 1>&2
-	#	Help hint
-	echo -e "\n\tRunning create-site-private-public-tls.sh will create directories"
-	echo -e "\tand site private and public keys.  Then run sudo"
-	echo -e "\tcreate-new-openssl.cnf-tls.sh to modify openssl.cnf file.  Then run"
-	echo -e "\tcreate-host-tls.sh or create-user-tls.sh as many times as you want."
-	exit 1
+#       Check if site directory on system
+if [ ! -d ${HOME}/.docker/docker-ca/ ] ; then
+	mkdir ${HOME}/.docker/docker-ca/
 fi
-cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
+cd ${HOME}/.docker/docker-ca/
 
-#       Check if ca-priv-key.pem file on system
-if ! [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem ] ; then
-	display_help | more
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Site private key ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem is not in this location." 1>&2
-	#	Help hint
-	echo -e "\n\tEither move it from your site secure location to"
-	echo -e "\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/"
-	echo -e "\tOr run create-site-private-public-tls.sh and sudo"
-	echo -e "\tcreate-new-openssl.cnf-tls.sh to create a new one."
-	exit 1
-fi
 
-#	Prompt for ${FQDN} if argement not entered
-if [ -z ${FQDN} ] ; then
-	echo -e "\n\t${BOLD}Enter fully qualified domain name (FQDN) requiring new TLS keys:${NORMAL}"
-	read FQDN
-fi
 
-#	Check if ${FQDN} string length is zero
-if [ -z ${FQDN} ] ; then
-	display_help | more
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  A Fully Qualified Domain Name (FQDN) is required to create new host TLS keys." 1>&2
-	exit 1
-fi
 
 #	Check if ${FQDN}-priv-key.pem file exists
 if [ -e ${FQDN}-priv-key.pem ] ; then
