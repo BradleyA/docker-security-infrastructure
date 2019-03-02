@@ -1,11 +1,8 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.127.539  2019-02-27T17:28:09.546104-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.126  
-# 	   continue writing 
-# 	docker-TLS/create-registry-tls.sh  3.126.538  2019-02-27T15:56:02.308540-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.125  
-# 	   continue wrting 
+# 	docker-TLS/create-registry-tls.sh  3.128.540  2019-03-01T22:05:11.932955-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.127  
+# 	   update from design 
 # 	docker-TLS/create-registry-tls.sh  3.125.537  2019-02-27T14:51:06.266955-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.124-6-ge4d1ab2  
 # 	   begin writing create-registry-tls.sh 
-#
 ### create-registry-tls.sh - Create TLS for Private Registry V2
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
@@ -105,9 +102,10 @@ fi
 
 #       Check if site directory on system
 if [ ! -d ${HOME}/.docker/docker-registry-certs-${REGISTRY_PORT} ] ; then
-	mkdir -p ${HOME}/.docker/docker-registry-certs-${REGISTRY_PORT}
+	mkdir -p ${HOME}/.docker/registry-certs-${REGISTRY_PORT}
+	chmod 700 ${HOME}/.docker/registry-certs-${REGISTRY_PORT}
 fi
-cd ${HOME}/.docker/docker-registry-certs-${REGISTRY_PORT}
+cd ${HOME}/.docker/registry-certs-${REGISTRY_PORT}
 
 #	Check if domain.crt & domain.key
 if [ -e domain.crt ] ; then
@@ -117,15 +115,7 @@ if [ -e domain.crt ] ; then
 	mv domain.key domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z)
 fi
 
-#	Creating private key for host ${FQDN}
-echo -e "\n\tCreating private key for host ${BOLD}${FQDN}${NORMAL}"
-openssl genrsa -out ${FQDN}-priv-key.pem 2048
-
-#	Create CSR for host ${FQDN}
-echo -e "\n\tGenerate a Certificate Signing Request (CSR) for"
-echo -e "\thost ${BOLD}${FQDN}${NORMAL}"
-openssl req -sha256 -new -key ${FQDN}-priv-key.pem -subj "/CN=${FQDN}/subjectAltName=${FQDN}" -out ${FQDN}.csr
-
+### >>>	Need to finished from here on 
 #	Create and sign certificate for host ${FQDN}
 echo -e "\n\tCreate and sign a ${BOLD}${NUMBERDAYS}${NORMAL} day certificate for host"
 echo -e "\t\t${BOLD}${FQDN}${NORMAL}"
