@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.131.543  2019-03-01T22:54:36.503984-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.130  
+# 	   add create-registry-tls.sh 
 # 	docker-TLS/create-registry-tls.sh  3.129.541  2019-03-01T22:09:50.402126-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.128  
 # 	   need to open issue to create docker-TLS/create-registry-tls.sh 
 # 	docker-TLS/create-registry-tls.sh  3.128.540  2019-03-01T22:05:11.932955-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.127  
@@ -120,6 +122,50 @@ if [ -e domain.crt ] ; then
 	mv domain.crt domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)
 	mv domain.key domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z)
 fi
+
+### >>>
+REGISTRY_HOST=two.cptx86.com
+REGISTRY_PORT=17313
+mkdir -p $HOME/.docker/registry-certs-$REGISTRY_PORT
+chmod 0700 $HOME/.docker/registry-certs-$REGISTRY_PORT
+cd $HOME/.docker/registry-certs-$REGISTRY_PORT
+pwd
+
+openssl req \
+  -newkey rsa:4096 -nodes -sha256 -keyout certs/domain.key \
+  -x509 -days 365 -out certs/domain.crt
+
+sudo mkdir -p /etc/docker/certs.d/$REGISTRY_HOST:$REGISTRY_PORT
+sudo chmod 700 /etc/docker/certs.d/$REGISTRY_HOST:$REGISTRY_PORT
+sudo cp $HOME/.docker/registry-certs-$REGISTRY_PORT/domain.crt /etc/docker/certs.d/$REGISTRY_HOST:$REGISTRY_PORT/ca.crt
+sudo service docker restart
+
+### >>>	to get it to run -->
+
+sudo mkdir -p /usr/local/docker-registry-$REGISTRY_PORT/registry-certs
+sudo chmod 755 /usr/local/docker-registry-$REGISTRY_PORT/registry-certs
+sudo cp $HOME/.docker/registry-certs-$REGISTRY_PORT/* /usr/local/docker-registry-$REGISTRY_PORT/registry-certs
+
+
+sudo mkdir -p /usr/local/docker-registry-$REGISTRY_PORT/docker/registry
+sudo chmod 777 /usr/local/docker-registry-$REGISTRY_PORT/docker/registry
+
+
+docker container run --detach \
+--name private-registry-$REGISTRY_PORT \
+--restart=always \
+--publish $REGISTRY_PORT:5000 \
+--volume /usr/local/docker-registry-$REGISTRY_PORT:/var/lib/registry \
+--env REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/var/lib/registry \
+--volume /usr/local/docker-registry-$REGISTRY_PORT/registry-certs:/certs \
+--env REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt \
+--env REGISTRY_HTTP_TLS_KEY=/certs/domain.key \
+registry:2
+
+#	docker-credential-secretservice: error while loading shared libraries: libsecret-1.so.0: cannot open shared object file: No such file or directory
+#	docker: Error response from daemon: Conflict. The container name "/private-registry-17315" is already in use by container "4885d3c390c557efb6b50b5c4dc44901d13bedc41a0098967c238285f46531fc". You have to remove (or rename) that container to be able to reuse that name.
+#	See 'docker run --help'.
+
 
 ### >>>	Need to finished from here on 
 #	Create and sign certificate for host ${FQDN}
