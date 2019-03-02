@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.129.541  2019-03-01T22:09:50.402126-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.128  
+# 	   need to open issue to create docker-TLS/create-registry-tls.sh 
 # 	docker-TLS/create-registry-tls.sh  3.128.540  2019-03-01T22:05:11.932955-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.127  
 # 	   update from design 
 # 	docker-TLS/create-registry-tls.sh  3.125.537  2019-02-27T14:51:06.266955-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.124-6-ge4d1ab2  
@@ -7,6 +9,10 @@
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ###
+
+exit
+
+
 #   production standard 5
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
@@ -117,13 +123,13 @@ fi
 
 ### >>>	Need to finished from here on 
 #	Create and sign certificate for host ${FQDN}
-echo -e "\n\tCreate and sign a ${BOLD}${NUMBERDAYS}${NORMAL} day certificate for host"
-echo -e "\t\t${BOLD}${FQDN}${NORMAL}"
-openssl x509 -req -days ${NUMBERDAYS} -sha256 -in ${FQDN}.csr -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out ${FQDN}-cert.pem -extensions v3_req -extfile /usr/lib/ssl/openssl.cnf || { get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Wrong pass phrase for .private/ca-priv-key.pem: " ; exit 1; }
-openssl rsa -in ${FQDN}-priv-key.pem -out ${FQDN}-priv-key.pem
-echo -e "\n\tRemoving certificate signing requests (CSR) and set file permissions"
-echo -e "\tfor host ${BOLD}${FQDN}${NORMAL} key pairs."
-rm ${FQDN}.csr
+#	echo -e "\n\tCreate and sign a ${BOLD}${NUMBERDAYS}${NORMAL} day certificate for host"
+#	echo -e "\t\t${BOLD}${FQDN}${NORMAL}"
+#	openssl x509 -req -days ${NUMBERDAYS} -sha256 -in ${FQDN}.csr -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out ${FQDN}-cert.pem -extensions v3_req -extfile /usr/lib/ssl/openssl.cnf || { get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Wrong pass phrase for .private/ca-priv-key.pem: " ; exit 1; }
+#	openssl rsa -in ${FQDN}-priv-key.pem -out ${FQDN}-priv-key.pem
+#	echo -e "\n\tRemoving certificate signing requests (CSR) and set file permissions"
+#	echo -e "\tfor host ${BOLD}${FQDN}${NORMAL} key pairs."
+#	rm ${FQDN}.csr
 chmod 0400 ${FQDN}-priv-key.pem
 chmod 0444 ${FQDN}-cert.pem
 
