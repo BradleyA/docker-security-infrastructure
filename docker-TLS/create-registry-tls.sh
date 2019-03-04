@@ -1,19 +1,12 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.131.543  2019-03-01T22:54:36.503984-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.130  
-# 	   add create-registry-tls.sh 
-# 	docker-TLS/create-registry-tls.sh  3.129.541  2019-03-01T22:09:50.402126-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.128  
-# 	   need to open issue to create docker-TLS/create-registry-tls.sh 
-# 	docker-TLS/create-registry-tls.sh  3.128.540  2019-03-01T22:05:11.932955-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.127  
-# 	   update from design 
-# 	docker-TLS/create-registry-tls.sh  3.125.537  2019-02-27T14:51:06.266955-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.124-6-ge4d1ab2  
-# 	   begin writing create-registry-tls.sh 
+# 	docker-TLS/create-registry-tls.sh  3.132.544  2019-03-04T15:06:48.281280-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.131  
+# 	   finally ready to begin testing 
 ### create-registry-tls.sh - Create TLS for Private Registry V2
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ###
 
-exit
-
+echo "	>>>	In development	<<<"
 
 #   production standard 5
 #       Order of precedence: environment variable, default code
@@ -25,13 +18,18 @@ NORMAL=$(tput -Txterm sgr0)
 ###
 display_help() {
 echo -e "\n{NORMAL}${0} - Create TLS for Private Registry V2"
-echo -e "\nUSAGE\n   ${0} <REGISTRY_HOST> <REGISTRY_PORT>" 
+echo -e "\nUSAGE\n   ${0} [<REGISTRY_PORT>]" 
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
 #       Displaying help DESCRIPTION in English en_US.UTF-8
-echo    "An administration user can run this script to create . . . "
-echo    "${HOME}/.docker/docker-ca/registry-certs-????."
+echo    "An administration user can run this script to create private registry"
+echo    "certificates on any host in the directory;"
+echo    "\${HOME}/.docker/registry-certs-<REGISTRY_PORT>.  The <REGISTRY_PORT> number"
+echo    "is not required when creating private registry certificates.  It is used"
+echo    "when creating a directry to store the certificates.  I use the <REGISTRY_PORT>"
+echo    "number to keep track of multiple certificates for multiple private registries"
+echo    "using different <REGISTRY_PORT> numbers."
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
         echo -e "\n--> ${LANG}"
@@ -47,13 +45,12 @@ echo    "command, 'unset DEBUG' to remove the exported information from the DEBU
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
 echo    "   DEBUG           (default '0')"
-echo    "   REGISTRY_HOST   Registry host (default 'local host')"
 echo    "   REGISTRY_PORT   Registry port number (default '5000')"
 echo -e "\nOPTIONS"
-echo    "   REGISTRY_HOST   Registry host (default 'local host')"
 echo    "   REGISTRY_PORT   Registry port number (default '5000')"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure"
-echo -e "\nEXAMPLES\n   ${0} two.cptx86.com 17313\n"
+echo -e "\nEXAMPLES\n   ${0} 17313\n"
+echo    "   Create new certificates with 17313 port number reference"
 }
 
 #       Date and time function ISO 8601
@@ -96,10 +93,8 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 
 ###		
 #       Order of precedence: CLI argument, environment variable, default code
-if [ $# -ge  1 ]  ; then REGISTRY_HOST=${1} ; elif [ "${REGISTRY_HOST}" == "" ] ; then REGISTRY_HOST=${LOCALHOST} ; fi
-#       Order of precedence: CLI argument, environment variable, default code
 if [ $# -ge  2 ]  ; then REGISTRY_PORT=${2} ; elif [ "${REGISTRY_PORT}" == "" ] ; then REGISTRY_PORT="5000" ; fi
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_PORT >${REGISTRY_PORT}<" 1>&2 ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_PORT >${REGISTRY_PORT}<" 1>&2 ; fi
 
 #	Check if user has home directory on system
 if [ ! -d ${HOME} ] ; then
@@ -113,9 +108,11 @@ if [ ! -d ${HOME}/.docker/docker-registry-certs-${REGISTRY_PORT} ] ; then
 	mkdir -p ${HOME}/.docker/registry-certs-${REGISTRY_PORT}
 	chmod 700 ${HOME}/.docker/registry-certs-${REGISTRY_PORT}
 fi
+
+#	Change into working directory
 cd ${HOME}/.docker/registry-certs-${REGISTRY_PORT}
 
-#	Check if domain.crt & domain.key
+#	Check if domain.crt & domain.key already exist
 if [ -e domain.crt ] ; then
 	echo -e "\n\tdomain.crt already exists,"
 	echo -e "\trenaming existing keys so new keys can be created."
@@ -123,61 +120,9 @@ if [ -e domain.crt ] ; then
 	mv domain.key domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z)
 fi
 
-### >>>
-REGISTRY_HOST=two.cptx86.com
-REGISTRY_PORT=17313
-mkdir -p $HOME/.docker/registry-certs-$REGISTRY_PORT
-chmod 0700 $HOME/.docker/registry-certs-$REGISTRY_PORT
-cd $HOME/.docker/registry-certs-$REGISTRY_PORT
-pwd
-
-openssl req \
-  -newkey rsa:4096 -nodes -sha256 -keyout certs/domain.key \
-  -x509 -days 365 -out certs/domain.crt
-
-sudo mkdir -p /etc/docker/certs.d/$REGISTRY_HOST:$REGISTRY_PORT
-sudo chmod 700 /etc/docker/certs.d/$REGISTRY_HOST:$REGISTRY_PORT
-sudo cp $HOME/.docker/registry-certs-$REGISTRY_PORT/domain.crt /etc/docker/certs.d/$REGISTRY_HOST:$REGISTRY_PORT/ca.crt
-sudo service docker restart
-
-### >>>	to get it to run -->
-
-sudo mkdir -p /usr/local/docker-registry-$REGISTRY_PORT/registry-certs
-sudo chmod 755 /usr/local/docker-registry-$REGISTRY_PORT/registry-certs
-sudo cp $HOME/.docker/registry-certs-$REGISTRY_PORT/* /usr/local/docker-registry-$REGISTRY_PORT/registry-certs
-
-
-sudo mkdir -p /usr/local/docker-registry-$REGISTRY_PORT/docker/registry
-sudo chmod 777 /usr/local/docker-registry-$REGISTRY_PORT/docker/registry
-
-
-docker container run --detach \
---name private-registry-$REGISTRY_PORT \
---restart=always \
---publish $REGISTRY_PORT:5000 \
---volume /usr/local/docker-registry-$REGISTRY_PORT:/var/lib/registry \
---env REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/var/lib/registry \
---volume /usr/local/docker-registry-$REGISTRY_PORT/registry-certs:/certs \
---env REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt \
---env REGISTRY_HTTP_TLS_KEY=/certs/domain.key \
-registry:2
-
-#	docker-credential-secretservice: error while loading shared libraries: libsecret-1.so.0: cannot open shared object file: No such file or directory
-#	docker: Error response from daemon: Conflict. The container name "/private-registry-17315" is already in use by container "4885d3c390c557efb6b50b5c4dc44901d13bedc41a0098967c238285f46531fc". You have to remove (or rename) that container to be able to reuse that name.
-#	See 'docker run --help'.
-
-
-### >>>	Need to finished from here on 
-#	Create and sign certificate for host ${FQDN}
-#	echo -e "\n\tCreate and sign a ${BOLD}${NUMBERDAYS}${NORMAL} day certificate for host"
-#	echo -e "\t\t${BOLD}${FQDN}${NORMAL}"
-#	openssl x509 -req -days ${NUMBERDAYS} -sha256 -in ${FQDN}.csr -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out ${FQDN}-cert.pem -extensions v3_req -extfile /usr/lib/ssl/openssl.cnf || { get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Wrong pass phrase for .private/ca-priv-key.pem: " ; exit 1; }
-#	openssl rsa -in ${FQDN}-priv-key.pem -out ${FQDN}-priv-key.pem
-#	echo -e "\n\tRemoving certificate signing requests (CSR) and set file permissions"
-#	echo -e "\tfor host ${BOLD}${FQDN}${NORMAL} key pairs."
-#	rm ${FQDN}.csr
-chmod 0400 ${FQDN}-priv-key.pem
-chmod 0444 ${FQDN}-cert.pem
+#	Create Self-Signed Certificate Keys
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Create Self-Signed Certificate Keys" 1>&2 ; fi
+openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days 365 -out domain.crt
 
 #
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
