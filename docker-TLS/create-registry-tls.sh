@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.133.545  2019-03-04T23:00:35.446909-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.132  
+# 	   updates during testing 
 # 	docker-TLS/create-registry-tls.sh  3.132.544  2019-03-04T15:06:48.281280-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.131  
 # 	   finally ready to begin testing 
 ### create-registry-tls.sh - Create TLS for Private Registry V2
@@ -6,7 +8,7 @@
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ###
 
-echo "	>>>	In development	<<<"
+echo "	>>>	In test	<<<"
 
 #   production standard 5
 #       Order of precedence: environment variable, default code
@@ -18,18 +20,28 @@ NORMAL=$(tput -Txterm sgr0)
 ###
 display_help() {
 echo -e "\n{NORMAL}${0} - Create TLS for Private Registry V2"
-echo -e "\nUSAGE\n   ${0} [<REGISTRY_PORT>]" 
+echo -e "\nUSAGE\n   ${0} [<REGISTRY_HOST>] [<REGISTRY_PORT>]" 
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
 #       Displaying help DESCRIPTION in English en_US.UTF-8
 echo    "An administration user can run this script to create private registry"
 echo    "certificates on any host in the directory;"
-echo    "\${HOME}/.docker/registry-certs-<REGISTRY_PORT>.  The <REGISTRY_PORT> number"
-echo    "is not required when creating private registry certificates.  It is used"
-echo    "when creating a directry to store the certificates.  I use the <REGISTRY_PORT>"
-echo    "number to keep track of multiple certificates for multiple private registries"
-echo    "using different <REGISTRY_PORT> numbers."
+echo    "\${HOME}/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>.  The"
+echo    "<REGISTRY_PORT> number is not required when creating private registry"
+echo    "certificates.  I use the <REGISTRY_PORT> number to keep track of"
+echo    "multiple certificates for multiple private registries on the same"
+echo    "host.  The <REGISTRY_PORT> number is required when copying the"
+echo    "ca.crt to /etc/docker/certs.d/ on each host."
+echo -e "\nThe following illustrates a configuration with custom certificates:"
+echo    "    /etc/docker/certs.d/                   <-- Certificate directory"
+echo    "    └── <REGISTRY_HOST>:<REGISTRY_PORT>    <-- Hostname:port"
+echo    "       ├── client.cert                     <-- Client certificate"
+echo    "       ├── client.key                      <-- Client key"
+echo    "       └── ca.crt                          <-- Certificate authority"
+echo    "                                               that signed the"
+echo    "                                               registry certificate"
+
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
         echo -e "\n--> ${LANG}"
@@ -45,8 +57,10 @@ echo    "command, 'unset DEBUG' to remove the exported information from the DEBU
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
 echo    "   DEBUG           (default '0')"
+echo    "   REGISTRY_HOST   Registry host (default 'local host')"
 echo    "   REGISTRY_PORT   Registry port number (default '5000')"
 echo -e "\nOPTIONS"
+echo    "   REGISTRY_HOST   Registry host (default 'local host')"
 echo    "   REGISTRY_PORT   Registry port number (default '5000')"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure"
 echo -e "\nEXAMPLES\n   ${0} 17313\n"
@@ -93,8 +107,10 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 
 ###		
 #       Order of precedence: CLI argument, environment variable, default code
+if [ $# -ge  1 ]  ; then REGISTRY_HOST=${1} ; elif [ "${REGISTRY_HOST}" == "" ] ; then REGISTRY_HOST=${LOCALHOST} ; fi
+#       Order of precedence: CLI argument, environment variable, default code
 if [ $# -ge  2 ]  ; then REGISTRY_PORT=${2} ; elif [ "${REGISTRY_PORT}" == "" ] ; then REGISTRY_PORT="5000" ; fi
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_PORT >${REGISTRY_PORT}<" 1>&2 ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_PORT >${REGISTRY_PORT}<" 1>&2 ; fi
 
 #	Check if user has home directory on system
 if [ ! -d ${HOME} ] ; then
@@ -104,25 +120,24 @@ if [ ! -d ${HOME} ] ; then
 fi
 
 #       Check if site directory on system
-if [ ! -d ${HOME}/.docker/docker-registry-certs-${REGISTRY_PORT} ] ; then
-	mkdir -p ${HOME}/.docker/registry-certs-${REGISTRY_PORT}
-	chmod 700 ${HOME}/.docker/registry-certs-${REGISTRY_PORT}
+if [ ! -d ${HOME}/.docker/docker-registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT} ] ; then
+	mkdir -p ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}
+	chmod 700 ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}
 fi
 
 #	Change into working directory
-cd ${HOME}/.docker/registry-certs-${REGISTRY_PORT}
+cd ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}
 
 #	Check if domain.crt & domain.key already exist
 if [ -e domain.crt ] ; then
-	echo -e "\n\tdomain.crt already exists,"
-	echo -e "\trenaming existing keys so new keys can be created."
+	echo -e "\n\tdomain.crt already exists, renaming existing keys so new keys can be created.\n"
 	mv domain.crt domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)
 	mv domain.key domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z)
 fi
 
 #	Create Self-Signed Certificate Keys
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Create Self-Signed Certificate Keys" 1>&2 ; fi
-openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days 365 -out domain.crt
+openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days 365 -out domain.crt -subj '/CN=${REGISTRY_HOST}'
 
 #
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
