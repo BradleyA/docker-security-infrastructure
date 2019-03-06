@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.137.549  2019-03-05T22:26:50.950055-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.136  
+# 	   remove -subj '/CN=${REGISTRY_HOST}' because recieving error during docker push Get https://two.cptx86.com:17313/v2/: x509: certificate is valid for ${REGISTRY_HOST}, not two.cptx86.com 
 # 	docker-TLS/create-registry-tls.sh  3.136.548  2019-03-05T22:04:52.576742-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.135  
 # 	   change output formating of pwd information 
 # 	docker-TLS/create-registry-tls.sh  3.135.547  2019-03-05T22:01:16.542329-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.134  
@@ -141,7 +143,7 @@ fi
 
 #	Create Self-Signed Certificate Keys
 echo -e "\n\t${BOLD}Create Self-Signed Certificate Keys in $(pwd) ${NORMAL}\n" 
-openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days 365 -out domain.crt -subj '/CN=${REGISTRY_HOST}'
+openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days 365 -out domain.crt
 
 #
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
