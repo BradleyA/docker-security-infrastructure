@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.133.545  2019-03-04T23:00:35.446909-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.132  
-# 	   updates during testing 
+# 	docker-TLS/create-registry-tls.sh  3.134.546  2019-03-05T21:52:47.018544-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.133  
+# 	   updated display_help 
 # 	docker-TLS/create-registry-tls.sh  3.132.544  2019-03-04T15:06:48.281280-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.131  
 # 	   finally ready to begin testing 
 ### create-registry-tls.sh - Create TLS for Private Registry V2
@@ -29,10 +29,10 @@ echo    "An administration user can run this script to create private registry"
 echo    "certificates on any host in the directory;"
 echo    "\${HOME}/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>.  The"
 echo    "<REGISTRY_PORT> number is not required when creating private registry"
-echo    "certificates.  I use the <REGISTRY_PORT> number to keep track of"
-echo    "multiple certificates for multiple private registries on the same"
-echo    "host.  The <REGISTRY_PORT> number is required when copying the"
-echo    "ca.crt to /etc/docker/certs.d/ on each host."
+echo    "certificates.  I use the <REGISTRY_PORT> number to keep track of multiple"
+echo    "certificates for multiple private registries on the same host.  The"
+echo    "<REGISTRY_HOST> and <REGISTRY_PORT> number is required when copying the ca.crt"
+echo    "into /etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/ directory on each host."
 echo -e "\nThe following illustrates a configuration with custom certificates:"
 echo    "    /etc/docker/certs.d/                   <-- Certificate directory"
 echo    "    └── <REGISTRY_HOST>:<REGISTRY_PORT>    <-- Hostname:port"
