@@ -1,21 +1,10 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.137.549  2019-03-05T22:26:50.950055-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.136  
-# 	   remove -subj '/CN=${REGISTRY_HOST}' because recieving error during docker push Get https://two.cptx86.com:17313/v2/: x509: certificate is valid for ${REGISTRY_HOST}, not two.cptx86.com 
-# 	docker-TLS/create-registry-tls.sh  3.136.548  2019-03-05T22:04:52.576742-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.135  
-# 	   change output formating of pwd information 
-# 	docker-TLS/create-registry-tls.sh  3.135.547  2019-03-05T22:01:16.542329-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.134  
-# 	   change DEBUG to INFO to display location of certs 
-# 	docker-TLS/create-registry-tls.sh  3.134.546  2019-03-05T21:52:47.018544-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.133  
-# 	   updated display_help 
-# 	docker-TLS/create-registry-tls.sh  3.132.544  2019-03-04T15:06:48.281280-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.131  
-# 	   finally ready to begin testing 
+# 	docker-TLS/create-registry-tls.sh  3.138.550  2019-03-05T23:42:35.153098-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.137  
+# 	   complete, ready for more testing with copy-registry-tls.sh 
 ### create-registry-tls.sh - Create TLS for Private Registry V2
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ###
-
-echo "	>>>	In test	<<<"
-
 #   production standard 5
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
@@ -31,23 +20,23 @@ echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
 #       Displaying help DESCRIPTION in English en_US.UTF-8
-echo    "An administration user can run this script to create private registry"
-echo    "certificates on any host in the directory;"
-echo    "\${HOME}/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>.  The"
+echo    "An administration user can run this script to create Docker private registry"
+echo    "certificates on any host in the directory; \${HOME}/.docker/.  It will create"
+echo    "a working directory, registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>.  The"
 echo    "<REGISTRY_PORT> number is not required when creating private registry"
 echo    "certificates.  I use the <REGISTRY_PORT> number to keep track of multiple"
 echo    "certificates for multiple private registries on the same host.  The"
-echo    "<REGISTRY_HOST> and <REGISTRY_PORT> number is required when copying the ca.crt"
-echo    "into /etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/ directory on each host."
-echo -e "\nThe following illustrates a configuration with custom certificates:"
-echo    "    /etc/docker/certs.d/                   <-- Certificate directory"
-echo    "    └── <REGISTRY_HOST>:<REGISTRY_PORT>    <-- Hostname:port"
-echo    "       ├── client.cert                     <-- Client certificate"
-echo    "       ├── client.key                      <-- Client key"
-echo    "       └── ca.crt                          <-- Certificate authority"
-echo    "                                               that signed the"
-echo    "                                               registry certificate"
-
+echo    "<REGISTRY_HOST> and <REGISTRY_PORT> number is required when copying the"
+echo    "ca.crt into the /etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/"
+echo    "directory on each host using the private registry."
+echo -e "\nConfiguration"
+echo    "   /usr/local/"
+echo    "   └── docker-registry-<REGISTRY_PORT>/certs/ <-- Certificate directory"
+echo    "      ├── domain.crt                          <-- registry certificate"
+echo    "      └── domain.key                          <-- registry key"
+echo    "   /etc/docker/certs.d/"
+echo    "   └── <REGISTRY_HOST>:<REGISTRY_PORT>/       <-- Certificate directory"
+echo    "      └── ca.crt                              <-- Certificate authority"
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
         echo -e "\n--> ${LANG}"
