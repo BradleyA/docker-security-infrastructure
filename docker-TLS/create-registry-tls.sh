@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.139.551  2019-03-06T16:05:05.341325-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.138  
+# 	   set file permission for certs 
 # 	docker-TLS/create-registry-tls.sh  3.138.550  2019-03-05T23:42:35.153098-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.137  
 # 	   complete, ready for more testing with copy-registry-tls.sh 
 ### create-registry-tls.sh - Create TLS for Private Registry V2
@@ -115,7 +117,7 @@ if [ ! -d ${HOME} ] ; then
 fi
 
 #       Check if site directory on system
-if [ ! -d ${HOME}/.docker/docker-registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT} ] ; then
+if [ ! -d ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT} ] ; then
 	mkdir -p ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}
 	chmod 700 ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}
 fi
@@ -123,16 +125,29 @@ fi
 #	Change into working directory
 cd ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}
 
-#	Check if domain.crt & domain.key already exist
+#	Check if domain.crt already exist
 if [ -e domain.crt ] ; then
-	echo -e "\n\tdomain.crt already exists, renaming existing keys so new keys can be created.\n"
+	echo -e "\n\t${BOLD}domain.crt${NORMAL} already exists, renaming existing keys so new keys can be created.\n"
 	mv domain.crt domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)
+fi
+
+#	Check if domain.key already exist
+if [ -e domain.key ] ; then
+	echo -e "\n\t${BOLD}domain.key${NORMAL} already exists, renaming existing keys so new keys can be created.\n"
 	mv domain.key domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z)
+fi
+
+#	Check if ca.crt already exist
+if [ -e ca.crt ] ; then
+	echo -e "\n\t${BOLD}ca.crt${NORMAL} already exists, renaming existing keys so new keys can be created.\n"
+	mv ca.crt ca.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)
 fi
 
 #	Create Self-Signed Certificate Keys
 echo -e "\n\t${BOLD}Create Self-Signed Certificate Keys in $(pwd) ${NORMAL}\n" 
 openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days 365 -out domain.crt
+cp domain.crt ca.crt
+chmod 0400 ca.crt domain.crt domain.key 
 
 #
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
