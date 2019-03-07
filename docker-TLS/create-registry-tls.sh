@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.139.551  2019-03-06T16:05:05.341325-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.138  
-# 	   set file permission for certs 
-# 	docker-TLS/create-registry-tls.sh  3.138.550  2019-03-05T23:42:35.153098-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.137  
-# 	   complete, ready for more testing with copy-registry-tls.sh 
+# 	docker-TLS/create-registry-tls.sh  3.140.554  2019-03-06T21:47:09.116165-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.139-2-g0b9e3c1  
+# 	   create docker-TLS/create-registry-tls.sh #41 
 ### create-registry-tls.sh - Create TLS for Private Registry V2
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
