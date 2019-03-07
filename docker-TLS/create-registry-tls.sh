@@ -1,5 +1,5 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.140.554  2019-03-06T21:47:09.116165-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.139-2-g0b9e3c1  
+# 	docker-TLS/create-registry-tls.sh  3.141.555  2019-03-06T22:48:11.601352-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.140  
 # 	   create docker-TLS/create-registry-tls.sh #41 
 ### create-registry-tls.sh - Create TLS for Private Registry V2
 #       Copyright (c) 2019 Bradley Allen
@@ -15,7 +15,7 @@ NORMAL=$(tput -Txterm sgr0)
 ###
 display_help() {
 echo -e "\n{NORMAL}${0} - Create TLS for Private Registry V2"
-echo -e "\nUSAGE\n   ${0} [<REGISTRY_HOST>] [<REGISTRY_PORT>]" 
+echo -e "\nUSAGE\n   ${0} [<REGISTRY_HOST> <REGISTRY_PORT>]" 
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
@@ -29,14 +29,6 @@ echo    "certificates for multiple private registries on the same host.  The"
 echo    "<REGISTRY_HOST> and <REGISTRY_PORT> number is required when copying the"
 echo    "ca.crt into the /etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/"
 echo    "directory on each host using the private registry."
-echo -e "\nConfiguration"
-echo    "   /usr/local/"
-echo    "   └── docker-registry-<REGISTRY_PORT>/certs/ <-- Certificate directory"
-echo    "      ├── domain.crt                          <-- registry certificate"
-echo    "      └── domain.key                          <-- registry key"
-echo    "   /etc/docker/certs.d/"
-echo    "   └── <REGISTRY_HOST>:<REGISTRY_PORT>/       <-- Certificate directory"
-echo    "      └── ca.crt                              <-- Certificate authority"
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
         echo -e "\n--> ${LANG}"
@@ -45,7 +37,17 @@ if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG
 elif ! [ "${LANG}" == "en_US.UTF-8" ] ; then
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
-echo -e "\nEnvironment Variables"
+echo -e "\nCONFIGURATION"
+echo    "   /usr/local/                                          <-- Absolute path"
+echo    "   └── docker-registry-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Container mount"
+echo    "      └── certs/                                        <-- Certificate directory"
+echo    "         ├── domain.crt                                 <-- Registry certificate"
+echo    "         └── domain.key                                 <-- Registry key"
+echo    "      └── docker/                                       <-- Storage directory"
+echo    "   /etc/docker/certs.d/"
+echo    "   └── <REGISTRY_HOST>:<REGISTRY_PORT>/                 <-- Host registry cert"
+echo    "      └── ca.crt                                        <-- Registry certificate"
+echo -e "\nENVIRONMENT VARIABLES"
 echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
 echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
 echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
