@@ -1,12 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.145.559  2019-03-08T19:57:24.303638-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.144  
-# 	   completed re-write to remove REGISTRY_HOST variable input 
-# 	docker-TLS/create-registry-tls.sh  3.144.558  2019-03-08T19:28:44.864942-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.143  
-# 	   snap shot before re-write to not use ${REGISTRY_HOST} 
-# 	docker-TLS/create-registry-tls.sh  3.143.557  2019-03-08T18:44:08.491589-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.142  
-# 	   create docker-TLS/create-registry-tls.sh update ARCHITECTURE TREE 
-# 	docker-TLS/create-registry-tls.sh  3.141.555  2019-03-06T22:48:11.601352-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.140  
-# 	   create docker-TLS/create-registry-tls.sh #41 
+# 	docker-TLS/create-registry-tls.sh  3.146.560  2019-03-08T20:25:28.725237-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.145  
+# 	   create docker-TLS/create-registry-tls.sh close #41 
 ### create-registry-tls.sh - Create TLS for Private Registry V2
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
@@ -118,7 +112,6 @@ if [ ! -d ${HOME}/.docker ] ; then
 	chmod 700 ${HOME}/.docker
 fi
 
-
 #	Create tmp working directory
 mkdir ${HOME}/.docker/tmp-create-registry-tls.sh
 cd ${HOME}/.docker/tmp-create-registry-tls.sh
@@ -127,16 +120,7 @@ cd ${HOME}/.docker/tmp-create-registry-tls.sh
 echo -e "\n\t${BOLD}Create Self-Signed Certificate Keys in $(pwd) ${NORMAL}\n" 
 openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days 365 -out domain.crt
 
-# >>>	This is a bug if
-#	  the environment variable REGISTRY_HOST is not set to the registry host
-#		and the host running this script is not the registry host this
-#		then the directory will not match the host entered when creating the certs
-#	if true then cert does not match ${REGISTRY_HOST} remove domain.{crt,key}
-#		display  ERROR  message theat either REGISTRY_HOST environment variable or command option ${REGISTRY_HOST} must be set
-#	Another option is require either REGISTRY_HOST environment variable or command option ${REGISTRY_HOST} 
-#		and do NOT use local host
-# >>>
-
+#	Set REGISTRY_HOST variable to host entered during the creation of certificates
 REGISTRY_HOST=$(openssl x509 -in domain.crt -noout -issuer | cut -d \/ -f 7 | cut -d \= -f 2)
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_HOST >${REGISTRY_HOST}<" 1>&2 ; fi
 
@@ -148,6 +132,7 @@ fi
 
 #	Change into registry cert directory
 cd ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}
+echo -e "\n\t${BOLD}Move Self-Signed Certificate Keys into $(pwd) ${NORMAL}\n" 
 
 #	Check if domain.crt already exist
 if [ -e domain.crt ] ; then
@@ -172,7 +157,6 @@ cp -p ../tmp-create-registry-tls.sh/domain.{crt,key} .
 cp -p domain.crt ca.crt
 chmod 0400 ca.crt domain.crt domain.key 
 rm -rf ../tmp-create-registry-tls.sh
-
 
 #
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
