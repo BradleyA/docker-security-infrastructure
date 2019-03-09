@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-registry-tls.sh  3.143.557  2019-03-08T18:44:08.359006-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.142  
-# 	   create docker-TLS/create-registry-tls.sh update ARCHITECTURE TREE 
+# 	docker-TLS/copy-registry-tls.sh  3.148.561  2019-03-08T21:25:13.027810-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.146  
+# 	   begin creating copy-registry . . . 
 # 	docker-TLS/copy-registry-tls.sh  3.142.556  2019-03-06T23:19:58.300034-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.141  
 # 	   create docker-TLS/copy-registry-tls.sh #43 
 ### copy-registry-tls.sh - Copy TLS for Private Registry V2
@@ -9,7 +9,7 @@
 ###
 
 echo -e "\n\nIn development\n\n"
-
+exit
 
 #   production standard 5
 #       Order of precedence: environment variable, default code
@@ -21,22 +21,24 @@ NORMAL=$(tput -Txterm sgr0)
 ###
 display_help() {
 echo -e "\n{NORMAL}${0} - Copy TLS for Private Registry V2"
-echo -e "\nUSAGE\n   ${0} [<REGISTRY_HOST> <REGISTRY_PORT> <ABSOLUTE_PATH>]" 
+echo -e "\nUSAGE\n   ${0} " 
+echo -e "\nUSAGE\n   ${0} [<REGISTRY_HOST>]" 
+echo -e "\nUSAGE\n   ${0}  <REGISTRY_HOST> [<REGISTRY_PORT>]" 
+echo -e "\nUSAGE\n   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT> [<CLUSTER>]" 
+echo -e "\nUSAGE\n   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER>  [<DATA_DIR>]" 
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
 #       Displaying help DESCRIPTION in English en_US.UTF-8
-echo    "An administration user can run this script to copy . . . "
-
 echo    "An administration user can run this script to copy Docker private registry"
-echo    "certificates."
+echo    "certificates.  "
 
-echo    "The <REGISTRY_PORT> number is not required when creating private registry"
-echo    "certificates.  I use the <REGISTRY_PORT> number to keep track of multiple"
-echo    "certificates for multiple private registries on the same host.  The"
-echo    "<REGISTRY_HOST> and <REGISTRY_PORT> number is required when copying the"
-echo    "ca.crt into the /etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/"
-echo    "directory on each host using the private registry."
+# >>>
+echo    "The /<DATA_DIR>/<CLUSTER>/SYSTEMS file"
+echo    "is used by"
+echo    "Linux-admin/cluster-command/cluster-command.sh, markit/find-code.sh,"
+echo    "pi-display/create-message/create-display-message.sh, and other scripts."
+# >>>
 
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
@@ -46,28 +48,28 @@ if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG
 elif ! [ "${LANG}" == "en_US.UTF-8" ] ; then
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
-echo -e "\nCONFIGURATION"
-echo    "   /usr/local/                                           <-- <ABSOLUTE_PATH>"
-echo    "    └── docker-registry-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Container mount"
-echo    "      └── certs/                                         <-- Cert directory"
-echo    "        ├── domain.crt                                   <-- Registry cert"
-echo    "        └── domain.key                                   <-- Registry key"
-echo    "      └── docker/                                        <-- Registry storage"
-echo -e "                                                             directory\n"
-echo    "   \$HOME/.docker/                                       <-- Docker client cert"
-echo    "                                                            directory"
-echo    "    ├── docker-ca                                       <-- Working directory"
-echo    "                                                            to create certs"
-echo    "    └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"
-echo    "                                                            to create registory"
-echo -e "                                                            certs\n"
-echo    "   /etc/docker/certs.d/                   <-- Host docker cert directory"
-echo    "    ├── daemon                            <-- Daemon cert directory"
-echo    "      ├── ca.pem                          <-- tlscacert"
-echo    "      ├── cert.pem                        <-- tlscert"
-echo    "      └── key.pem                         <-- tlskey"
-echo    "    └── <REGISTRY_HOST>:<REGISTRY_PORT>/  <-- Registry cert directory"
-echo    "      └── ca.crt                          <-- Registry cert"
+echo -e "\nSTORAGE & CERTIFICATION ARCHITECTURE TREE"
+echo    "/usr/local/data/                            <-- <DATA_DIR>"
+echo    "   <CLUSTER>/                               <-- <CLUSTER>"
+echo    "   ├── SYSTEMS                              <-- List of hosts in cluster"
+echo    "   └── docker-registry/                     <-- Docker registry directory"
+echo    "       ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry container mount"
+echo    "       │   │── certs/                       <-- Registry cert directory"
+echo    "       │   │   ├── domain.crt               <-- Registry cert"
+echo    "       │   │   └── domain.key               <-- Registry key"
+echo    "       │   └── docker/                      <-- Registry storage directory"
+echo -e "       └── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry container mount\n"
+echo    "~<USER-1>/.docker/                          <-- User docker cert directory"
+echo    "   └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"
+echo    "       │                                        to create registory certs"
+echo    "       ├── ca.crt                           <-- Daemon trust registry cert"
+echo    "       ├── domain.crt                       <-- Registry cert"
+echo -e "       └── domain.key                       <-- Registry key\n"
+echo    "/etc/docker/certs.d/                        <-- Host docker cert directory"
+echo    "   ├── <REGISTRY_HOST>:<REGISTRY_PORT>/     <-- Registry cert directory"
+echo    "   │   └── ca.crt                           <-- Daemon trust registry cert"
+echo    "   └── <REGISTRY_HOST>:<REGISTRY_PORT>/     <-- Registry cert directory"
+echo    "       └── ca.crt                           <-- Daemon trust registry cert"
 echo -e "\nENVIRONMENT VARIABLES"
 echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
 echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
@@ -77,12 +79,13 @@ echo    "you are using other shells."
 echo    "   DEBUG           (default '0')"
 echo    "   REGISTRY_HOST   Registry host (default 'local host')"
 echo    "   REGISTRY_PORT   Registry port number (default '5000')"
-echo    "   REGISTRY_PORT   Registry port number (default '5000')"
-echo    "   ABSOLUTE_PATH   Absolute path (default '/usr/local/')"
+echo    "   CLUSTER         (default us-tx-cluster-1/)"
+echo    "   DATA_DIR        (default /usr/local/data/)"
 echo -e "\nOPTIONS"
 echo    "   REGISTRY_HOST   Registry host (default 'local host')"
 echo    "   REGISTRY_PORT   Registry port number (default '5000')"
-echo    "   ABSOLUTE_PATH   Absolute path (default '/usr/local/')"
+echo    "   CLUSTER         (default us-tx-cluster-1/)"
+echo    "   DATA_DIR        (default /usr/local/data/)"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure"
 echo -e "\nEXAMPLES\n   ${0} two.cptx86.com 17313\n"
 }
@@ -137,11 +140,15 @@ fi
 #       Order of precedence: CLI argument, environment variable, default code
 if [ $# -ge  1 ]  ; then REGISTRY_HOST=${1} ; elif [ "${REGISTRY_HOST}" == "" ] ; then REGISTRY_HOST=${LOCALHOST} ; fi
 if [ $# -ge  2 ]  ; then REGISTRY_PORT=${2} ; elif [ "${REGISTRY_PORT}" == "" ] ; then REGISTRY_PORT="5000" ; fi
-if [ $# -ge  3 ]  ; then ABSOLUTE_PATH=${3} ; elif [ "${ABSOLUTE_PATH}" == "" ] ; then ABSOLUTE_PATH="/usr/local/" ; fi
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_PORT >${REGISTRY_PORT}< ABSOLUTE_PATH >${ABSOLUTE_PATH}<" 1>&2 ; fi
+if [ $# -ge  3 ]  ; then CLUSTER=${3} ; elif [ "${CLUSTER}" == "" ] ; then CLUSTER="us-tx-cluster-1" ; fi
+if [ $# -ge  4 ]  ; then DATA_DIR=${4} ; elif [ "${DATA_DIR}" == "" ] ; then DATA_DIR="/usr/local/" ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_PORT >${REGISTRY_PORT}< CLUSTER >${CLUSTER}< DATA_DIR >${DATA_DIR}<" 1>&2 ; fi
+
 
 # >>>	need to change this to work on remote host that is running private registry
 echo -e "\n\n\n >>>	need to change this script to work on remote host that is running private registry\n\n"
+# >>>
+
 
 #	Check if user has home directory on system
 if [ ! -d ${HOME} ] ; then
@@ -177,6 +184,12 @@ if ! [ -e ca.crt ] ; then
 	echo -e "\n\t${BOLD}ca.crt not found in $(pwd)${NORMAL}"
 	exit 1
 fi
+
+# >>>	CHeck if localhost = registry host
+
+# >>>	If NOT echo incident / connecting to remote host ${REGISTRY_HOST} test ERROR else cp files to ${REGISTRY_HOST}
+
+# >>>	x
 
 #	Create /etc/docker/certs.d/$REGISTRY_HOST:$REGISTRY_PORT
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Create /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}" 1>&2 ; fi
