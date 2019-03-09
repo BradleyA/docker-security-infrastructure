@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.143.557  2019-03-08T18:44:08.491589-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.142  
+# 	   create docker-TLS/create-registry-tls.sh update ARCHITECTURE TREE 
 # 	docker-TLS/create-registry-tls.sh  3.141.555  2019-03-06T22:48:11.601352-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.140  
 # 	   create docker-TLS/create-registry-tls.sh #41 
 ### create-registry-tls.sh - Create TLS for Private Registry V2
@@ -21,7 +23,7 @@ echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
 #       Displaying help DESCRIPTION in English en_US.UTF-8
 echo    "An administration user can run this script to create Docker private registry"
-echo    "certificates on any host in the directory; \${HOME}/.docker/.  It will create"
+echo    "certificates on any host in the directory; ~/.docker/.  It will create"
 echo    "a working directory, registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>.  The"
 echo    "<REGISTRY_PORT> number is not required when creating private registry"
 echo    "certificates.  I use the <REGISTRY_PORT> number to keep track of multiple"
@@ -37,16 +39,13 @@ if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG
 elif ! [ "${LANG}" == "en_US.UTF-8" ] ; then
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
-echo -e "\nCONFIGURATION"
-echo    "   /usr/local/                                          <-- Absolute path"
-echo    "   └── docker-registry-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Container mount"
-echo    "      └── certs/                                        <-- Certificate directory"
-echo    "         ├── domain.crt                                 <-- Registry certificate"
-echo    "         └── domain.key                                 <-- Registry key"
-echo    "      └── docker/                                       <-- Storage directory"
-echo    "   /etc/docker/certs.d/"
-echo    "   └── <REGISTRY_HOST>:<REGISTRY_PORT>/                 <-- Host registry cert"
-echo    "      └── ca.crt                                        <-- Registry certificate"
+echo -e "\nCERTIFICATION ARCHITECTURE TREE"
+echo    "~<USER-1>/.docker/                          <-- User docker cert directory"
+echo    "   └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"
+echo    "       │                                        to create registory certs"
+echo    "       ├── ca.crt                           <-- Daemon trust registry cert"
+echo    "       ├── domain.crt                       <-- Registry cert"
+echo    "       └── domain.key                       <-- Registry key"
 echo -e "\nENVIRONMENT VARIABLES"
 echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
 echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
