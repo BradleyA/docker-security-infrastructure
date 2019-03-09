@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.144.558  2019-03-08T19:28:44.864942-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.143  
+# 	   snap shot before re-write to not use ${REGISTRY_HOST} 
 # 	docker-TLS/create-registry-tls.sh  3.143.557  2019-03-08T18:44:08.491589-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.142  
 # 	   create docker-TLS/create-registry-tls.sh update ARCHITECTURE TREE 
 # 	docker-TLS/create-registry-tls.sh  3.141.555  2019-03-06T22:48:11.601352-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.140  
@@ -145,8 +147,20 @@ fi
 #	Create Self-Signed Certificate Keys
 echo -e "\n\t${BOLD}Create Self-Signed Certificate Keys in $(pwd) ${NORMAL}\n" 
 openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days 365 -out domain.crt
+
+# >>>	This is a bug if
+#	  the environment variable REGISTRY_HOST is not set to the registry host
+#		and the host running this script is not the registry host this
+#		then the directory will not match the host entered when creating the certs
+#	if true then cert does not match ${REGISTRY_HOST} remove domain.{crt,key}
+#		display  ERROR  message theat either REGISTRY_HOST environment variable or command option ${REGISTRY_HOST} must be set
+#	Another option is require either REGISTRY_HOST environment variable or command option ${REGISTRY_HOST} 
+#		and do NOT use local host
+# >>>
+
 cp domain.crt ca.crt
 chmod 0400 ca.crt domain.crt domain.key 
+
 
 #
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
