@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.145.559  2019-03-08T19:57:24.303638-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.144  
+# 	   completed re-write to remove REGISTRY_HOST variable input 
 # 	docker-TLS/create-registry-tls.sh  3.144.558  2019-03-08T19:28:44.864942-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.143  
 # 	   snap shot before re-write to not use ${REGISTRY_HOST} 
 # 	docker-TLS/create-registry-tls.sh  3.143.557  2019-03-08T18:44:08.491589-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.142  
@@ -19,7 +21,7 @@ NORMAL=$(tput -Txterm sgr0)
 ###
 display_help() {
 echo -e "\n{NORMAL}${0} - Create TLS for Private Registry V2"
-echo -e "\nUSAGE\n   ${0} [<REGISTRY_HOST> <REGISTRY_PORT>]" 
+echo -e "\nUSAGE\n   ${0} [<REGISTRY_PORT>]" 
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
@@ -29,10 +31,7 @@ echo    "certificates on any host in the directory; ~/.docker/.  It will create"
 echo    "a working directory, registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>.  The"
 echo    "<REGISTRY_PORT> number is not required when creating private registry"
 echo    "certificates.  I use the <REGISTRY_PORT> number to keep track of multiple"
-echo    "certificates for multiple private registries on the same host.  The"
-echo    "<REGISTRY_HOST> and <REGISTRY_PORT> number is required when copying the"
-echo    "ca.crt into the /etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/"
-echo    "directory on each host using the private registry."
+echo    "certificates for multiple private registries on the same host."
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
         echo -e "\n--> ${LANG}"
@@ -55,10 +54,8 @@ echo    "command, 'unset DEBUG' to remove the exported information from the DEBU
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
 echo    "   DEBUG           (default '0')"
-echo    "   REGISTRY_HOST   Registry host (default 'local host')"
 echo    "   REGISTRY_PORT   Registry port number (default '5000')"
 echo -e "\nOPTIONS"
-echo    "   REGISTRY_HOST   Registry host (default 'local host')"
 echo    "   REGISTRY_PORT   Registry port number (default '5000')"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure"
 echo -e "\nEXAMPLES\n   ${0} 17313\n"
@@ -105,10 +102,8 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 
 ###		
 #       Order of precedence: CLI argument, environment variable, default code
-if [ $# -ge  1 ]  ; then REGISTRY_HOST=${1} ; elif [ "${REGISTRY_HOST}" == "" ] ; then REGISTRY_HOST=${LOCALHOST} ; fi
-#       Order of precedence: CLI argument, environment variable, default code
-if [ $# -ge  2 ]  ; then REGISTRY_PORT=${2} ; elif [ "${REGISTRY_PORT}" == "" ] ; then REGISTRY_PORT="5000" ; fi
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_PORT >${REGISTRY_PORT}<" 1>&2 ; fi
+if [ $# -ge  1 ]  ; then REGISTRY_PORT=${1} ; elif [ "${REGISTRY_PORT}" == "" ] ; then REGISTRY_PORT="5000" ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_PORT >${REGISTRY_PORT}<" 1>&2 ; fi
 
 #	Check if user has home directory on system
 if [ ! -d ${HOME} ] ; then
@@ -117,13 +112,41 @@ if [ ! -d ${HOME} ] ; then
 	exit 1
 fi
 
+#       Check if .docker directory in $HOME
+if [ ! -d ${HOME}/.docker ] ; then
+	mkdir -p ${HOME}/.docker
+	chmod 700 ${HOME}/.docker
+fi
+
+
+#	Create tmp working directory
+mkdir ${HOME}/.docker/tmp-create-registry-tls.sh
+cd ${HOME}/.docker/tmp-create-registry-tls.sh
+
+#	Create Self-Signed Certificate Keys
+echo -e "\n\t${BOLD}Create Self-Signed Certificate Keys in $(pwd) ${NORMAL}\n" 
+openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days 365 -out domain.crt
+
+# >>>	This is a bug if
+#	  the environment variable REGISTRY_HOST is not set to the registry host
+#		and the host running this script is not the registry host this
+#		then the directory will not match the host entered when creating the certs
+#	if true then cert does not match ${REGISTRY_HOST} remove domain.{crt,key}
+#		display  ERROR  message theat either REGISTRY_HOST environment variable or command option ${REGISTRY_HOST} must be set
+#	Another option is require either REGISTRY_HOST environment variable or command option ${REGISTRY_HOST} 
+#		and do NOT use local host
+# >>>
+
+REGISTRY_HOST=$(openssl x509 -in domain.crt -noout -issuer | cut -d \/ -f 7 | cut -d \= -f 2)
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_HOST >${REGISTRY_HOST}<" 1>&2 ; fi
+
 #       Check if site directory on system
 if [ ! -d ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT} ] ; then
 	mkdir -p ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}
 	chmod 700 ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}
 fi
 
-#	Change into working directory
+#	Change into registry cert directory
 cd ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}
 
 #	Check if domain.crt already exist
@@ -145,21 +168,10 @@ if [ -e ca.crt ] ; then
 fi
 
 #	Create Self-Signed Certificate Keys
-echo -e "\n\t${BOLD}Create Self-Signed Certificate Keys in $(pwd) ${NORMAL}\n" 
-openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days 365 -out domain.crt
-
-# >>>	This is a bug if
-#	  the environment variable REGISTRY_HOST is not set to the registry host
-#		and the host running this script is not the registry host this
-#		then the directory will not match the host entered when creating the certs
-#	if true then cert does not match ${REGISTRY_HOST} remove domain.{crt,key}
-#		display  ERROR  message theat either REGISTRY_HOST environment variable or command option ${REGISTRY_HOST} must be set
-#	Another option is require either REGISTRY_HOST environment variable or command option ${REGISTRY_HOST} 
-#		and do NOT use local host
-# >>>
-
-cp domain.crt ca.crt
+cp -p ../tmp-create-registry-tls.sh/domain.{crt,key} .
+cp -p domain.crt ca.crt
 chmod 0400 ca.crt domain.crt domain.key 
+rm -rf ../tmp-create-registry-tls.sh
 
 
 #
