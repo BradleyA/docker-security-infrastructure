@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.146.560  2019-03-08T20:25:28.725237-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.145  
-# 	   create docker-TLS/create-registry-tls.sh close #41 
+# 	docker-TLS/create-registry-tls.sh  3.149.562  2019-03-09T08:08:07.812490-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.148  
+# 	   type create docker-TLS/create-registry-tls.sh close #41 
 ### create-registry-tls.sh - Create TLS for Private Registry V2
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
@@ -40,7 +40,7 @@ echo    "   └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Workin
 echo    "       │                                        to create registory certs"
 echo    "       ├── ca.crt                           <-- Daemon trust registry cert"
 echo    "       ├── domain.crt                       <-- Registry cert"
-echo    "       └── domain.key                       <-- Registry key"
+echo    "       └── domain.key                       <-- Registry private key"
 echo -e "\nENVIRONMENT VARIABLES"
 echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
 echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
@@ -121,7 +121,7 @@ echo -e "\n\t${BOLD}Create Self-Signed Certificate Keys in $(pwd) ${NORMAL}\n"
 openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days 365 -out domain.crt
 
 #	Set REGISTRY_HOST variable to host entered during the creation of certificates
-REGISTRY_HOST=$(openssl x509 -in domain.crt -noout -issuer | cut -d \/ -f 7 | cut -d \= -f 2)
+REGISTRY_HOST=$(openssl x509 -in domain.crt -noout -issuer | cut -d '/' -f 7 | cut -d '=' -f 2)
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_HOST >${REGISTRY_HOST}<" 1>&2 ; fi
 
 #       Check if site directory on system
