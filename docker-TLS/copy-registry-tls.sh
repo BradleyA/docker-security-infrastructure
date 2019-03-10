@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-registry-tls.sh  3.151.564  2019-03-09T20:06:59.582760-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.150  
+# 	   update to display_help 
 # 	docker-TLS/copy-registry-tls.sh  3.148.561  2019-03-08T21:25:13.027810-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.146  
 # 	   begin creating copy-registry . . . 
 # 	docker-TLS/copy-registry-tls.sh  3.142.556  2019-03-06T23:19:58.300034-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.141  
@@ -87,7 +89,7 @@ echo    "   REGISTRY_PORT   Registry port number (default '5000')"
 echo    "   CLUSTER         (default us-tx-cluster-1/)"
 echo    "   DATA_DIR        (default /usr/local/data/)"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure"
-echo -e "\nEXAMPLES\n   ${0} two.cptx86.com 17313\n"
+echo -e "\nEXAMPLES\n   ${BOLD}sudo ${0} two.cptx86.com 17313${NORMAL}\n"
 }
 
 #       Date and time function ISO 8601

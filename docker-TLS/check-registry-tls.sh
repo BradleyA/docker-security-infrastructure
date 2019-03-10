@@ -1,7 +1,9 @@
 #!/bin/bash
+# 	docker-TLS/check-registry-tls.sh  3.151.564  2019-03-09T20:06:59.495406-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.150  
+# 	   update to display_help 
 # 	docker-TLS/check-registry-tls.sh  3.150.563  2019-03-09T08:26:16.534422-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.149  
 # 	   begin writing create docker-TLS/check-registry-tls.sh #42 
-### check-registry-tls.sh -
+### check-registry-tls.sh - Check certifications for private registry
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 
@@ -20,7 +22,7 @@ BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ###
 display_help() {
-echo -e "\n${NORMAL}${0} - brief description"
+echo -e "\n${NORMAL}${0} - Check certifications for private registry"
 echo -e "\nUSAGE\n   ${0} [XX | YY | ZZ]"
 echo    "   ${0} [--file <PATH>/<FILE_NAME> | -f <PATH>/<FILE_NAME>]"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
@@ -69,7 +71,7 @@ echo    "   XX       xxx xxxxxxx xxx"
 echo    "   YY       xxx xxxxx xxx "
 echo    "   zz       xx xxxxxxx xx"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/   <<URL to online repository README>>"
-echo -e "\nEXAMPLES\n   ${BOLD}${0} <<code example goes here>>${NORMAL}\n\n   <<your code examples description goes here>>\n"
+echo -e "\nEXAMPLES\n   ${BOLD}sudo ${0} <<code example goes here>>${NORMAL}\n\n   <<your code examples description goes here>>\n"
 }
 
 #       Date and time function ISO 8601
