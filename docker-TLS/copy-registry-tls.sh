@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-registry-tls.sh  3.152.565  2019-03-10T20:32:40.475512-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.151  
+# 	   more work 
 # 	docker-TLS/copy-registry-tls.sh  3.151.564  2019-03-09T20:06:59.582760-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.150  
 # 	   update to display_help 
 # 	docker-TLS/copy-registry-tls.sh  3.148.561  2019-03-08T21:25:13.027810-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.146  
@@ -24,10 +26,10 @@ NORMAL=$(tput -Txterm sgr0)
 display_help() {
 echo -e "\n{NORMAL}${0} - Copy TLS for Private Registry V2"
 echo -e "\nUSAGE\n   ${0} " 
-echo -e "\nUSAGE\n   ${0} [<REGISTRY_HOST>]" 
-echo -e "\nUSAGE\n   ${0}  <REGISTRY_HOST> [<REGISTRY_PORT>]" 
-echo -e "\nUSAGE\n   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT> [<CLUSTER>]" 
-echo -e "\nUSAGE\n   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER>  [<DATA_DIR>]" 
+echo -e "   ${0} [<REGISTRY_HOST>]" 
+echo -e "   ${0}  <REGISTRY_HOST> [<REGISTRY_PORT>]" 
+echo -e "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT> [<CLUSTER>]" 
+echo -e "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER>  [<DATA_DIR>]" 
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
@@ -88,7 +90,7 @@ echo    "   REGISTRY_HOST   Registry host (default 'local host')"
 echo    "   REGISTRY_PORT   Registry port number (default '5000')"
 echo    "   CLUSTER         (default us-tx-cluster-1/)"
 echo    "   DATA_DIR        (default /usr/local/data/)"
-echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure"
+echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
 echo -e "\nEXAMPLES\n   ${BOLD}sudo ${0} two.cptx86.com 17313${NORMAL}\n"
 }
 
@@ -142,8 +144,8 @@ fi
 #       Order of precedence: CLI argument, environment variable, default code
 if [ $# -ge  1 ]  ; then REGISTRY_HOST=${1} ; elif [ "${REGISTRY_HOST}" == "" ] ; then REGISTRY_HOST=${LOCALHOST} ; fi
 if [ $# -ge  2 ]  ; then REGISTRY_PORT=${2} ; elif [ "${REGISTRY_PORT}" == "" ] ; then REGISTRY_PORT="5000" ; fi
-if [ $# -ge  3 ]  ; then CLUSTER=${3} ; elif [ "${CLUSTER}" == "" ] ; then CLUSTER="us-tx-cluster-1" ; fi
-if [ $# -ge  4 ]  ; then DATA_DIR=${4} ; elif [ "${DATA_DIR}" == "" ] ; then DATA_DIR="/usr/local/" ; fi
+if [ $# -ge  3 ]  ; then CLUSTER=${3} ; elif [ "${CLUSTER}" == "" ] ; then CLUSTER="us-tx-cluster-1/" ; fi
+if [ $# -ge  4 ]  ; then DATA_DIR=${4} ; elif [ "${DATA_DIR}" == "" ] ; then DATA_DIR="/usr/local/data/" ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_PORT >${REGISTRY_PORT}< CLUSTER >${CLUSTER}< DATA_DIR >${DATA_DIR}<" 1>&2 ; fi
 
 
