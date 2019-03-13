@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-registry-tls.sh  3.153.566  2019-03-12T22:53:21.934335-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.152  
+# 	   ruff out design 
 # 	docker-TLS/check-registry-tls.sh  3.152.565  2019-03-10T20:32:40.379938-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.151  
 # 	   more work 
 # 	docker-TLS/check-registry-tls.sh  3.151.564  2019-03-09T20:06:59.495406-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.150  
@@ -13,7 +15,6 @@
 echo "In development		In developmen		In developmentt		In development		In development"
 echo "		In development		In developmen		In developmentt		In development		In development"
 # 
-
 
 ###
 #   production standard 5
@@ -237,6 +238,12 @@ fi
         #	chmod 700 ${CERTDIR}
 #	fi
 
+
+#	#	Verify that user public key in your certificate matches the public portion of your private key.
+#	echo -e "\n\tVerify that user public key in your certificate matches the public portion\n\tof your private key."
+#	(cd ${USERHOME}${TLSUSER}/.docker ; openssl x509 -noout -modulus -in cert.pem | openssl md5 ; openssl rsa -noout -modulus -in key.pem | openssl md5) | uniq
+#	echo -e "\t${BOLD}[WARN]${NORMAL}  -> If ONLY ONE line of output is returned then the public key\n\tmatches the public portion of your private key.\n"
+#	
 
 #
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2

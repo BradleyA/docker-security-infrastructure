@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-registry-tls.sh  3.152.565  2019-03-10T20:32:40.475512-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.151  
-# 	   more work 
-# 	docker-TLS/copy-registry-tls.sh  3.151.564  2019-03-09T20:06:59.582760-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.150  
-# 	   update to display_help 
+# 	docker-TLS/copy-registry-tls.sh  3.153.566  2019-03-12T22:53:22.099122-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.152  
+# 	   ruff out design 
 # 	docker-TLS/copy-registry-tls.sh  3.148.561  2019-03-08T21:25:13.027810-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.146  
 # 	   begin creating copy-registry . . . 
 # 	docker-TLS/copy-registry-tls.sh  3.142.556  2019-03-06T23:19:58.300034-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.141  
@@ -43,6 +41,7 @@ echo    "is used by"
 echo    "Linux-admin/cluster-command/cluster-command.sh, markit/find-code.sh,"
 echo    "pi-display/create-message/create-display-message.sh, and other scripts."
 # >>>
+# >>>	Check if localhost = registry host
 
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
@@ -161,7 +160,7 @@ if [ ! -d ${HOME} ] ; then
 	exit 1
 fi
 
-#       Check if docker registry cert  directory on system
+#       Check if docker registry cert directory on system
 if [ ! -d ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT} ] ; then
 	display_help | more
 	echo -e "\n\t${BOLD}${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}${NORMAL}"
@@ -189,12 +188,6 @@ if ! [ -e ca.crt ] ; then
 	exit 1
 fi
 
-# >>>	CHeck if localhost = registry host
-
-# >>>	If NOT echo incident / connecting to remote host ${REGISTRY_HOST} test ERROR else cp files to ${REGISTRY_HOST}
-
-# >>>	x
-
 #	Create /etc/docker/certs.d/$REGISTRY_HOST:$REGISTRY_PORT
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Create /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}" 1>&2 ; fi
 sudo mkdir -p /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}
@@ -207,41 +200,45 @@ if [ -e /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt ] ; then
 fi
 
 #       For each Docker daemon to trust the Docker private registry certificate
-#       Copy domain.crt file to /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt on every Docker host.
+#       Copy ca.crt file to /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt on every Docker host.
 #       Restart Docker not required
-sudo cp ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/domain.crt /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt
-echo -e "\n\tCopy ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/domain.crt"
+sudo cp ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/ca.crt /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt
+echo -e "\n\tCopy ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/ca.crt"
 echo    "to /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt"
-echo    "for each host requiring access to private registry
-sudo cp ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/domain.crt /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt
+echo    "for each host requiring access to private registry"
 
-sudo mkdir -p  /usr/local/docker-registry-${REGISTRY_HOST}-${REGISTRY_PORT}/certs
-sudo chmod 700 /usr/local/docker-registry-${REGISTRY_HOST}-${REGISTRY_PORT}/certs
+# >>>	Check if localhost = registry host
 
-echo    ">>>	not sure how to find the UID and GID from namespace UID . . .  maybe get it from /usr/local/docker/#####.#####   <<<"
-#	sudo chown -R #####:##### /usr/local/docker-registry-$REGISTRY_PORT
+# >>>	If NOT echo incident / connecting to remote host ${REGISTRY_HOST} test ERROR else cp files to ${REGISTRY_HOST}
+
+# >>>	x
+
+sudo mkdir -p  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs
+sudo chmod 700 ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs
+
+echo    ">>>	not sure how to find the UID and GID from namespace UID . . .  maybe get it from ${DATA_DIR}/${CLUSTER}/docker/#####.#####   <<<"
+#	sudo chown -R #####:##### ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-$REGISTRY_PORT
 
 #       Check if domain.crt already exist
-if [ -e /usr/local/docker-registry-${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ] ; then
+if [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ] ; then
         echo -e "\n\t${BOLD}domain.crt${NORMAL} already exists, renaming existing keys so new keys can be copied.\n"
-        mv /usr/local/docker-registry-${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt /usr/local/docker-registry-${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)
+        mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)
 fi
 
 #       Check if domain.key already exist
-if [ -e /usr/local/docker-registry-${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ] ; then
+if [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ] ; then
         echo -e "\n\t${BOLD}domain.key${NORMAL} already exists, renaming existing keys so new keys can be copied.\n"
-        mv /usr/local/docker-registry-${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key /usr/local/docker-registry-${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z)
+        mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z)
 fi
 
-sudo cp $HOME/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/domain.{crt,key} /usr/local/docker-registry-${REGISTRY_HOST}-${REGISTRY_PORT}/certs
+sudo cp $HOME/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/domain.{crt,key} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs
 
-#	I do not feel these two lines are need if the file owner is correct ??????  need to test before removing ????
-#	sudo mkdir -p /usr/local/docker-registry-$REGISTRY_PORT/docker/registry
-#	sudo chmod 777 /usr/local/docker-registry-$REGISTRY_PORT/docker/registry
-#		   755
+#	I do not feel these two lines are needed if the file owner is correct ??????  need to test before removing ????
+#	sudo mkdir -p ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/docker/registry
+#	sudo chmod 755 ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/docker/registry
 
 # >>>	 got this one to start with out any errors on port 5000 and 443
-#		$ docker container run --detach --disable-content-trust --name private-registry-$REGISTRY_PORT --publish $REGISTRY_PORT:443 --volume /usr/local/docker-registry-$REGISTRY_PORT:/var/lib/registry  --env REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/var/lib/registry --volume /usr/local/docker-registry-$REGISTRY_PORT/certs:/certs  --env REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt --env REGISTRY_HTTP_TLS_KEY=/certs/domain.key registry:2
+#		$ docker container run --detach --disable-content-trust --name private-registry-$REGISTRY_PORT --publish $REGISTRY_PORT:443 --volume ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}:/var/lib/registry  --env REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/var/lib/registry --volume ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs:/certs  --env REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt --env REGISTRY_HTTP_TLS_KEY=/certs/domain.key registry:2
 
 #
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
