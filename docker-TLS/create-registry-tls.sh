@@ -1,6 +1,12 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.154.568  2019-03-16T18:24:55.317000-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.153-1-g5181030  
+# 	   mark in development 
 # 	docker-TLS/create-registry-tls.sh  3.149.562  2019-03-09T08:08:07.812490-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.148  
 # 	   type create docker-TLS/create-registry-tls.sh close #41 
+#
+echo "In development            In developmen           In developmentt         In development          In development"
+echo "          In development          In developmen           In developmentt         In development          In development"
+# 
 ### create-registry-tls.sh - Create TLS for Private Registry V2
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.

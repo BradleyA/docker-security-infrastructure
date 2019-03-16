@@ -1,18 +1,20 @@
 #!/bin/bash
+# 	docker-TLS/copy-registry-tls.sh  3.154.568  2019-03-16T18:24:55.069565-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.153-1-g5181030  
+# 	   mark in development 
 # 	docker-TLS/copy-registry-tls.sh  3.153.566  2019-03-12T22:53:22.099122-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.152  
 # 	   ruff out design 
 # 	docker-TLS/copy-registry-tls.sh  3.148.561  2019-03-08T21:25:13.027810-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.146  
 # 	   begin creating copy-registry . . . 
 # 	docker-TLS/copy-registry-tls.sh  3.142.556  2019-03-06T23:19:58.300034-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.141  
 # 	   create docker-TLS/copy-registry-tls.sh #43 
+#
+echo "In development            In developmen           In developmentt         In development          In development"
+echo "          In development          In developmen           In developmentt         In development          In development"
+# 
 ### copy-registry-tls.sh - Copy TLS for Private Registry V2
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ###
-
-echo -e "\n\nIn development\n\n"
-exit
-
 #   production standard 5
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
