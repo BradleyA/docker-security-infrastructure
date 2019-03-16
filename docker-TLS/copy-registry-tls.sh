@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-registry-tls.sh  3.155.569  2019-03-16T18:37:31.974815-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.154  
+# 	   more default code 
 # 	docker-TLS/copy-registry-tls.sh  3.154.568  2019-03-16T18:24:55.069565-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.153-1-g5181030  
 # 	   mark in development 
 # 	docker-TLS/copy-registry-tls.sh  3.153.566  2019-03-12T22:53:22.099122-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.152  
@@ -151,7 +153,7 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 
 
 # >>>	need to change this to work on remote host that is running private registry
-echo -e "\n\n\n >>>	need to change this script to work on remote host that is running private registry\n\n"
+echo -e "\n\n\n >>>	need to change this script to work on remote hosts in SYSTEMS file that is running private registry\n\n"
 # >>>
 
 
@@ -189,6 +191,11 @@ if ! [ -e ca.crt ] ; then
 	echo -e "\n\t${BOLD}ca.crt not found in $(pwd)${NORMAL}"
 	exit 1
 fi
+
+# >>>	Do not assume the LOCALHOST is $REGISTRY_HOST
+# >>>	IS LOCALHOST = $REGISTRY_HOST then 
+
+# >>>	elso login to $REGISTRY_HOST
 
 #	Create /etc/docker/certs.d/$REGISTRY_HOST:$REGISTRY_PORT
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Create /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}" 1>&2 ; fi
