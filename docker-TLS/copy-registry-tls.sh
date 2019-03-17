@@ -1,10 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-registry-tls.sh  3.155.569  2019-03-16T18:37:31.974815-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.154  
-# 	   more default code 
-# 	docker-TLS/copy-registry-tls.sh  3.154.568  2019-03-16T18:24:55.069565-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.153-1-g5181030  
-# 	   mark in development 
-# 	docker-TLS/copy-registry-tls.sh  3.153.566  2019-03-12T22:53:22.099122-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.152  
-# 	   ruff out design 
+# 	docker-TLS/copy-registry-tls.sh  3.156.570  2019-03-17T15:13:16.751395-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.155  
+# 	   more coding in display_help 
 # 	docker-TLS/copy-registry-tls.sh  3.148.561  2019-03-08T21:25:13.027810-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.146  
 # 	   begin creating copy-registry . . . 
 # 	docker-TLS/copy-registry-tls.sh  3.142.556  2019-03-06T23:19:58.300034-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.141  
@@ -12,12 +8,11 @@
 #
 echo "In development            In developmen           In developmentt         In development          In development"
 echo "          In development          In developmen           In developmentt         In development          In development"
-# 
+#   production standard 5
 ### copy-registry-tls.sh - Copy TLS for Private Registry V2
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ###
-#   production standard 5
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -x
@@ -26,27 +21,36 @@ BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ###
 display_help() {
-echo -e "\n{NORMAL}${0} - Copy TLS for Private Registry V2"
-echo -e "\nUSAGE\n   ${0} " 
-echo -e "   ${0} [<REGISTRY_HOST>]" 
-echo -e "   ${0}  <REGISTRY_HOST> [<REGISTRY_PORT>]" 
-echo -e "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT> [<CLUSTER>]" 
-echo -e "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER>  [<DATA_DIR>]" 
+echo -e "\n{NORMAL}${0} - Copy certs for Private Registry V2"
+echo -e "\nUSAGE\n   ${0} [<REGISTRY_HOST>]" 
+echo    "   ${0}  <REGISTRY_HOST> [<REGISTRY_PORT>]" 
+echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT> [<CLUSTER>]" 
+echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER>  [<DATA_DIR>]" 
+echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER>   <DATA_DIR>  [<SYSTEMS_FILE>]" 
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
 #       Displaying help DESCRIPTION in English en_US.UTF-8
-echo    "An administration user can run this script to copy Docker private registry"
-echo    "certificates.  "
-
-# >>>
-echo    "The /<DATA_DIR>/<CLUSTER>/SYSTEMS file"
-echo    "is used by"
-echo    "Linux-admin/cluster-command/cluster-command.sh, markit/find-code.sh,"
-echo    "pi-display/create-message/create-display-message.sh, and other scripts."
-# >>>
-# >>>	Check if localhost = registry host
-
+echo    "A user with administration authority uses this script to copy Docker private"
+echo    "registry certificates from "
+echo    "~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT> directory on this"
+echo    "system to the <REGISTRY_HOST> and systems in <SYSTEMS_FILE>.  The certificates |"
+echo    "(domain.{crt,key}) for the <REGISTRY_HOST> are coped to it into the following"
+echo    "<DATA_DIR>/<CLUSTER>/docker-registry/<REGISTRY_HOST>-<REGISTRY_PORT>/certs/."
+echo    "The daemon registry domain cert (ca.crt) is copied to the <REGISTRY_HOST> and"
+echo    "all the systems found in <SYSTEMS_FILE> in the following"
+echo    "/etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/." 
+echo -e "\nThe administration user may receive password and/or passphrase prompts from a"
+echo    "remote systen; running the following may stop the prompts in your cluster."
+echo    "   ssh-copy-id <admin-user>@x.x.x.x"
+echo -e "\nThe <DATA_DIR>/<CLUSTER>/<SYSTEMS_FILE> includes one FQDN or IP address per"
+echo    "line for all hosts in the cluster.  Lines in <SYSTEMS_FILE> that begin with a"
+echo    "'#' are comments.  The <SYSTEMS_FILE> is used by markit/find-code.sh,"
+echo    "Linux-admin/cluster-command/cluster-command.sh," 
+echo    "pi-display/create-message/create-display-message.sh, and other scripts.  A"
+echo    "different <SYSTEMS_FILE> can be entered on the command line or environment"
+echo    "variable."
+#   production standard 4
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
         echo -e "\n--> ${LANG}"
@@ -55,6 +59,23 @@ if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG
 elif ! [ "${LANG}" == "en_US.UTF-8" ] ; then
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
+echo -e "\nENVIRONMENT VARIABLES"
+echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
+echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
+echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
+echo    "environment variable.  You are on your own defining environment variables if"
+echo    "you are using other shells."
+echo    "   DEBUG           (default '0')"
+echo    "   REGISTRY_HOST   Registry host (default 'local host')"
+echo    "   REGISTRY_PORT   Registry port number (default '5000')"
+echo    "   CLUSTER         (default us-tx-cluster-1/)"
+echo    "   DATA_DIR        (default /usr/local/data/)"
+echo -e "\nOPTIONS"
+echo    "   REGISTRY_HOST   Registry host (default 'local host')"
+echo    "   REGISTRY_PORT   Registry port number (default '5000')"
+echo    "   CLUSTER         (default us-tx-cluster-1/)"
+echo    "   DATA_DIR        (default /usr/local/data/)"
+#   production standard 6
 echo -e "\nSTORAGE & CERTIFICATION ARCHITECTURE TREE"
 echo    "/usr/local/data/                            <-- <DATA_DIR>"
 echo    "   <CLUSTER>/                               <-- <CLUSTER>"
@@ -77,22 +98,6 @@ echo    "   ├── <REGISTRY_HOST>:<REGISTRY_PORT>/     <-- Registry cert dir
 echo    "   │   └── ca.crt                           <-- Daemon trust registry cert"
 echo    "   └── <REGISTRY_HOST>:<REGISTRY_PORT>/     <-- Registry cert directory"
 echo    "       └── ca.crt                           <-- Daemon trust registry cert"
-echo -e "\nENVIRONMENT VARIABLES"
-echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
-echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
-echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
-echo    "environment variable.  You are on your own defining environment variables if"
-echo    "you are using other shells."
-echo    "   DEBUG           (default '0')"
-echo    "   REGISTRY_HOST   Registry host (default 'local host')"
-echo    "   REGISTRY_PORT   Registry port number (default '5000')"
-echo    "   CLUSTER         (default us-tx-cluster-1/)"
-echo    "   DATA_DIR        (default /usr/local/data/)"
-echo -e "\nOPTIONS"
-echo    "   REGISTRY_HOST   Registry host (default 'local host')"
-echo    "   REGISTRY_PORT   Registry port number (default '5000')"
-echo    "   CLUSTER         (default us-tx-cluster-1/)"
-echo    "   DATA_DIR        (default /usr/local/data/)"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
 echo -e "\nEXAMPLES\n   ${BOLD}sudo ${0} two.cptx86.com 17313${NORMAL}\n"
 }
@@ -135,7 +140,7 @@ get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_
 #       DEBUG
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Name_of_command >${0}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
 
-###		
+###		>>>   not sure need to be root  just sudo -i;exit or  need to think more about this
 #       Root is required to copy certs
 if ! [ $(id -u) = 0 ] ; then
         display_help | more
@@ -156,6 +161,7 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 echo -e "\n\n\n >>>	need to change this script to work on remote hosts in SYSTEMS file that is running private registry\n\n"
 # >>>
 
+# >>>	Check if localhost = registry host
 
 #	Check if user has home directory on system
 if [ ! -d ${HOME} ] ; then
