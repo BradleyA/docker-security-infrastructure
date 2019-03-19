@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.157.571  2019-03-18T22:52:09.244647-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.156  
+# 	   update tree 
 # 	docker-TLS/create-registry-tls.sh  3.154.568  2019-03-16T18:24:55.317000-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.153-1-g5181030  
 # 	   mark in development 
 # 	docker-TLS/create-registry-tls.sh  3.149.562  2019-03-09T08:08:07.812490-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.148  
@@ -7,11 +9,11 @@
 echo "In development            In developmen           In developmentt         In development          In development"
 echo "          In development          In developmen           In developmentt         In development          In development"
 # 
+#   production standard 5
 ### create-registry-tls.sh - Create TLS for Private Registry V2
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ###
-#   production standard 5
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -x
@@ -32,6 +34,7 @@ echo    "a working directory, registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>.  T
 echo    "<REGISTRY_PORT> number is not required when creating private registry"
 echo    "certificates.  I use the <REGISTRY_PORT> number to keep track of multiple"
 echo    "certificates for multiple private registries on the same host."
+#   production standard 4
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
         echo -e "\n--> ${LANG}"
@@ -40,13 +43,6 @@ if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG
 elif ! [ "${LANG}" == "en_US.UTF-8" ] ; then
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
-echo -e "\nCERTIFICATION ARCHITECTURE TREE"
-echo    "~<USER-1>/.docker/                          <-- User docker cert directory"
-echo    "   └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"
-echo    "       │                                        to create registory certs"
-echo    "       ├── ca.crt                           <-- Daemon trust registry cert"
-echo    "       ├── domain.crt                       <-- Registry cert"
-echo    "       └── domain.key                       <-- Registry private key"
 echo -e "\nENVIRONMENT VARIABLES"
 echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
 echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
@@ -57,6 +53,14 @@ echo    "   DEBUG           (default '0')"
 echo    "   REGISTRY_PORT   Registry port number (default '5000')"
 echo -e "\nOPTIONS"
 echo    "   REGISTRY_PORT   Registry port number (default '5000')"
+#   production standard 6
+echo -e "\nCERTIFICATION ARCHITECTURE TREE"
+echo    "~<USER-1>/.docker/                          <-- User docker cert directory"
+echo    "   └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"
+echo    "       │                                        to create registory certs"
+echo    "       ├── ca.crt                           <-- Daemon trust registry cert"
+echo    "       ├── domain.crt                       <-- Registry cert"
+echo    "       └── domain.key                       <-- Registry private key"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure"
 echo -e "\nEXAMPLES\n   ${0} 17313\n"
 echo    "   Create new certificates with 17313 port number reference"
@@ -119,8 +123,8 @@ if [ ! -d ${HOME}/.docker ] ; then
 fi
 
 #	Create tmp working directory
-mkdir ${HOME}/.docker/tmp-create-registry-tls.sh
-cd ${HOME}/.docker/tmp-create-registry-tls.sh
+mkdir ${HOME}/.docker/tmp-${0}
+cd ${HOME}/.docker/tmp-${0}
 
 #	Create Self-Signed Certificate Keys
 echo -e "\n\t${BOLD}Create Self-Signed Certificate Keys in $(pwd) ${NORMAL}\n" 
@@ -158,11 +162,11 @@ if [ -e ca.crt ] ; then
 	mv ca.crt ca.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)
 fi
 
-#	Create Self-Signed Certificate Keys
-cp -p ../tmp-create-registry-tls.sh/domain.{crt,key} .
+#	Copy Self-Signed Certificate Keys
+cp -p ../tmp-${0}/domain.{crt,key} .
 cp -p domain.crt ca.crt
 chmod 0400 ca.crt domain.crt domain.key 
-rm -rf ../tmp-create-registry-tls.sh
+rm -rf ../tmp-${0}
 
 #
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
