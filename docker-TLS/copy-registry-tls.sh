@@ -1,10 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-registry-tls.sh  3.158.572  2019-03-27T21:20:25.894136-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.157  
-# 	   update display_help 
-# 	docker-TLS/copy-registry-tls.sh  3.156.570  2019-03-17T15:13:16.751395-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.155  
-# 	   more coding in display_help 
-# 	docker-TLS/copy-registry-tls.sh  3.148.561  2019-03-08T21:25:13.027810-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.146  
-# 	   begin creating copy-registry . . . 
+# 	docker-TLS/copy-registry-tls.sh  3.159.573  2019-03-27T21:34:28.527120-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.158  
+# 	   docker-TLS/create-registry-tls.sh update tree #41 
 # 	docker-TLS/copy-registry-tls.sh  3.142.556  2019-03-06T23:19:58.300034-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.141  
 # 	   create docker-TLS/copy-registry-tls.sh #43 
 #

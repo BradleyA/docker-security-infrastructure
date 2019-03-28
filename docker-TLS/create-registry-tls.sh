@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.157.571  2019-03-18T22:52:09.244647-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.156  
-# 	   update tree 
-# 	docker-TLS/create-registry-tls.sh  3.154.568  2019-03-16T18:24:55.317000-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.153-1-g5181030  
-# 	   mark in development 
+# 	docker-TLS/create-registry-tls.sh  3.159.573  2019-03-27T21:34:28.744051-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.158  
+# 	   docker-TLS/create-registry-tls.sh update tree #41 
 # 	docker-TLS/create-registry-tls.sh  3.149.562  2019-03-09T08:08:07.812490-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.148  
 # 	   type create docker-TLS/create-registry-tls.sh close #41 
 #
@@ -55,12 +53,12 @@ echo -e "\nOPTIONS"
 echo    "   REGISTRY_PORT   Registry port number (default '5000')"
 #   production standard 6
 echo -e "\nCERTIFICATION ARCHITECTURE TREE"
-echo    "~<USER-1>/.docker/                          <-- User docker cert directory"
-echo    "   └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"
-echo    "       │                                        to create registory certs"
-echo    "       ├── ca.crt                           <-- Daemon trust registry cert"
-echo    "       ├── domain.crt                       <-- Registry cert"
-echo    "       └── domain.key                       <-- Registry private key"
+echo    "~<USER-1>/.docker/                        <-- User docker cert directory"
+echo    "   └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory to"
+echo    "       │                                      create registory certs"
+echo    "       ├── ca.crt                         <-- Daemon registry domain cert"
+echo    "       ├── domain.crt                     <-- Registry cert"
+echo    "       └── domain.key                     <-- Registry private key"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure"
 echo -e "\nEXAMPLES\n   ${0} 17313\n"
 echo    "   Create new certificates with 17313 port number reference"
