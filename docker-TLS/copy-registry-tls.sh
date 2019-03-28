@@ -1,27 +1,25 @@
 #!/bin/bash
-# 	docker-TLS/copy-registry-tls.sh  3.160.574  2019-03-27T23:15:55.879226-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.159  
-# 	   change out tree add code for tar file 
-# 	docker-TLS/copy-registry-tls.sh  3.159.573  2019-03-27T21:34:28.527120-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.158  
-# 	   docker-TLS/create-registry-tls.sh update tree #41 
+# 	docker-TLS/copy-registry-tls.sh  3.161.575  2019-03-28T09:40:11.241101-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.160  
+# 	   minor formating changes 
 # 	docker-TLS/copy-registry-tls.sh  3.142.556  2019-03-06T23:19:58.300034-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.141  
 # 	   create docker-TLS/copy-registry-tls.sh #43 
 #
 echo "In development            In developmen           In developmentt         In development          In development"
 echo "          In development          In developmen           In developmentt         In development          In development"
-#   production standard 5
 ### copy-registry-tls.sh - Copy TLS for Private Registry V2
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+#   production standard 5
 ###
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
-#	set -x
-#	set -v
+#       set -x
+#       set -v
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ###
 display_help() {
-echo -e "\n{NORMAL}${0} - Copy certs for Private Registry V2"
+echo -e "\n${NORMAL}${0} - Copy certs for Private Registry V2"
 echo -e "\nUSAGE\n   ${0} [<REGISTRY_HOST>]" 
 echo    "   ${0}  <REGISTRY_HOST> [<REGISTRY_PORT>]" 
 echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT> [<CLUSTER>]" 

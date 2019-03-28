@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-registry-tls.sh  3.161.575  2019-03-28T09:40:11.141719-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.160  
+# 	   minor formating changes 
 # 	docker-TLS/check-registry-tls.sh  3.153.566  2019-03-12T22:53:21.934335-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.152  
 # 	   ruff out design 
 # 	docker-TLS/check-registry-tls.sh  3.152.565  2019-03-10T20:32:40.379938-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.151  
@@ -7,17 +9,15 @@
 # 	   update to display_help 
 # 	docker-TLS/check-registry-tls.sh  3.150.563  2019-03-09T08:26:16.534422-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.149  
 # 	   begin writing create docker-TLS/check-registry-tls.sh #42 
-### check-registry-tls.sh - Check certifications for private registry
-#       Copyright (c) 2019 Bradley Allen
-#       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-
 #
 echo "In development		In developmen		In developmentt		In development		In development"
 echo "		In development		In developmen		In developmentt		In development		In development"
 # 
-
-###
+### check-registry-tls.sh - Check certifications for private registry
 #   production standard 5
+#       Copyright (c) 2019 Bradley Allen
+#       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+###
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #       set -x

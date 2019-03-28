@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.161.575  2019-03-28T09:40:11.338136-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.160  
+# 	   minor formating changes 
 # 	docker-TLS/create-registry-tls.sh  3.159.573  2019-03-27T21:34:28.744051-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.158  
 # 	   docker-TLS/create-registry-tls.sh update tree #41 
 # 	docker-TLS/create-registry-tls.sh  3.149.562  2019-03-09T08:08:07.812490-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.148  
@@ -7,8 +9,8 @@
 echo "In development            In developmen           In developmentt         In development          In development"
 echo "          In development          In developmen           In developmentt         In development          In development"
 # 
-#   production standard 5
 ### create-registry-tls.sh - Create TLS for Private Registry V2
+#   production standard 5
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ###
@@ -20,7 +22,7 @@ BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ###
 display_help() {
-echo -e "\n{NORMAL}${0} - Create TLS for Private Registry V2"
+echo -e "\n${NORMAL}${0} - Create TLS for Private Registry V2"
 echo -e "\nUSAGE\n   ${0} [<REGISTRY_PORT>]" 
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
