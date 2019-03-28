@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-registry-tls.sh  3.158.572  2019-03-27T21:20:25.894136-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.157  
+# 	   update display_help 
 # 	docker-TLS/copy-registry-tls.sh  3.156.570  2019-03-17T15:13:16.751395-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.155  
 # 	   more coding in display_help 
 # 	docker-TLS/copy-registry-tls.sh  3.148.561  2019-03-08T21:25:13.027810-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.146  
@@ -29,13 +31,13 @@ echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER>  [<DATA_DIR>]"
 echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER>   <DATA_DIR>  [<SYSTEMS_FILE>]" 
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
-echo -e "\nDESCRIPTION"
 #       Displaying help DESCRIPTION in English en_US.UTF-8
+echo -e "\nDESCRIPTION"
 echo    "A user with administration authority uses this script to copy Docker private"
 echo    "registry certificates from "
 echo    "~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT> directory on this"
-echo    "system to the <REGISTRY_HOST> and systems in <SYSTEMS_FILE>.  The certificates |"
-echo    "(domain.{crt,key}) for the <REGISTRY_HOST> are coped to it into the following"
+echo    "system to the <REGISTRY_HOST> and systems in <SYSTEMS_FILE>.  The certificates"
+echo    "(domain.{crt,key}) for the <REGISTRY_HOST> are coped to it, into the following"
 echo    "<DATA_DIR>/<CLUSTER>/docker-registry/<REGISTRY_HOST>-<REGISTRY_PORT>/certs/."
 echo    "The daemon registry domain cert (ca.crt) is copied to the <REGISTRY_HOST> and"
 echo    "all the systems found in <SYSTEMS_FILE> in the following"
@@ -46,7 +48,7 @@ echo    "   ssh-copy-id <admin-user>@x.x.x.x"
 echo -e "\nThe <DATA_DIR>/<CLUSTER>/<SYSTEMS_FILE> includes one FQDN or IP address per"
 echo    "line for all hosts in the cluster.  Lines in <SYSTEMS_FILE> that begin with a"
 echo    "'#' are comments.  The <SYSTEMS_FILE> is used by markit/find-code.sh,"
-echo    "Linux-admin/cluster-command/cluster-command.sh," 
+echo    "Linux-admin/cluster-command/cluster-command.sh, docker-TLS/copy-registry-tls.sh," 
 echo    "pi-display/create-message/create-display-message.sh, and other scripts.  A"
 echo    "different <SYSTEMS_FILE> can be entered on the command line or environment"
 echo    "variable."
