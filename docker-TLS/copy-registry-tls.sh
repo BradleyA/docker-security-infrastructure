@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-registry-tls.sh  3.160.574  2019-03-27T23:15:55.879226-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.159  
+# 	   change out tree add code for tar file 
 # 	docker-TLS/copy-registry-tls.sh  3.159.573  2019-03-27T21:34:28.527120-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.158  
 # 	   docker-TLS/create-registry-tls.sh update tree #41 
 # 	docker-TLS/copy-registry-tls.sh  3.142.556  2019-03-06T23:19:58.300034-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.141  
@@ -75,27 +77,34 @@ echo    "   CLUSTER         (default us-tx-cluster-1/)"
 echo    "   DATA_DIR        (default /usr/local/data/)"
 #   production standard 6
 echo -e "\nSTORAGE & CERTIFICATION ARCHITECTURE TREE"
-echo    "/usr/local/data/                            <-- <DATA_DIR>"
-echo    "   <CLUSTER>/                               <-- <CLUSTER>"
-echo    "   ├── SYSTEMS                              <-- List of hosts in cluster"
-echo    "   └── docker-registry/                     <-- Docker registry directory"
-echo    "       ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry container mount"
-echo    "       │   │── certs/                       <-- Registry cert directory"
-echo    "       │   │   ├── domain.crt               <-- Registry cert"
-echo    "       │   │   └── domain.key               <-- Registry key"
-echo    "       │   └── docker/                      <-- Registry storage directory"
-echo -e "       └── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry container mount\n"
-echo    "~<USER-1>/.docker/                          <-- User docker cert directory"
-echo    "   └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"
-echo    "       │                                        to create registory certs"
-echo    "       ├── ca.crt                           <-- Daemon trust registry cert"
-echo    "       ├── domain.crt                       <-- Registry cert"
-echo -e "       └── domain.key                       <-- Registry key\n"
-echo    "/etc/docker/certs.d/                        <-- Host docker cert directory"
-echo    "   ├── <REGISTRY_HOST>:<REGISTRY_PORT>/     <-- Registry cert directory"
-echo    "   │   └── ca.crt                           <-- Daemon trust registry cert"
-echo    "   └── <REGISTRY_HOST>:<REGISTRY_PORT>/     <-- Registry cert directory"
-echo    "       └── ca.crt                           <-- Daemon trust registry cert"
+echo    "/usr/local/data/                          <-- <DATA_DIR>"
+echo    "   <CLUSTER>/                             <-- <CLUSTER>"
+echo    "   ├── SYSTEMS                            <-- List of hosts in cluster"
+echo    "   ├── docker-registry/                   <-- Docker registry directory"
+echo    "   │   ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry container mount"
+echo    "   │   │   ├── certs/                     <-- Registry cert directory"
+echo    "   │   │   │   ├── domain.crt             <-- Registry cert"
+echo    "   │   │   │   └── domain.key             <-- Registry private key"
+echo    "   │   │   └── docker/                    <-- Registry storage directory"
+echo    "   │   └── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry container mount"
+echo    "   <STANDALONE>/                          <-- <STANDALONE> Architecture tree"
+echo    "                                              is the same as <CLUSTER> TREE but"
+echo -e "                                              the systems are not in a cluster\n"
+echo    "~<USER-1>/.docker/                        <-- user docker cert directory"
+echo    "   ├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory to"
+echo    "   │   │                                      create registory certs"
+echo    "   │   ├── ca.crt                         <-- Daemon registry domain cert"
+echo    "   │   ├── domain.crt                     <-- Registry cert"
+echo    "   │   └── domain.key                     <-- Registry private key"
+echo    "   └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory to"
+echo -e "                                              create registory certs\n"
+echo    "/etc/ "
+echo    "   docker/ "
+echo    "   └── certs.d/                           <-- Host docker cert directory"
+echo    "       ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ <-- Registry cert directory"
+echo    "       │   └── ca.crt                     <-- Daemon registry domain cert"
+echo    "       └── <REGISTRY_HOST>:<REGISTRY_PORT>/ <-- Registry cert directory"
+echo    "           └── ca.crt                     <-- Daemon registry domain cert"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
 echo -e "\nEXAMPLES\n   ${BOLD}sudo ${0} two.cptx86.com 17313${NORMAL}\n"
 }
@@ -154,13 +163,6 @@ if [ $# -ge  3 ]  ; then CLUSTER=${3} ; elif [ "${CLUSTER}" == "" ] ; then CLUST
 if [ $# -ge  4 ]  ; then DATA_DIR=${4} ; elif [ "${DATA_DIR}" == "" ] ; then DATA_DIR="/usr/local/data/" ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_PORT >${REGISTRY_PORT}< CLUSTER >${CLUSTER}< DATA_DIR >${DATA_DIR}<" 1>&2 ; fi
 
-
-# >>>	need to change this to work on remote host that is running private registry
-echo -e "\n\n\n >>>	need to change this script to work on remote hosts in SYSTEMS file that is running private registry\n\n"
-# >>>
-
-# >>>	Check if localhost = registry host
-
 #	Check if user has home directory on system
 if [ ! -d ${HOME} ] ; then
 	display_help | more
@@ -196,10 +198,31 @@ if ! [ -e ca.crt ] ; then
 	exit 1
 fi
 
+# >>>	need to change this to work on remote host that is running private registry
+echo -e "\n\n\n >>>	need to change this script to work on remote hosts in SYSTEMS file that is running private registry\n\n"
+# >>>
+
+# >>>	Check if localhost = registry host
+
 # >>>	Do not assume the LOCALHOST is $REGISTRY_HOST
 # >>>	IS LOCALHOST = $REGISTRY_HOST then 
 
 # >>>	elso login to $REGISTRY_HOST
+
+#	Create tar file to copy $REGISTRY_HOST:$REGISTRY_PORT/ca.crt to remote hosts
+mkdir -p          ./${REGISTRY_HOST}:${REGISTRY_PORT}
+chmod 700         ./${REGISTRY_HOST}:${REGISTRY_PORT}
+cp -p ./ca.crt    ./${REGISTRY_HOST}:${REGISTRY_PORT}
+tar -cf ./tmp.tar ./${REGISTRY_HOST}:${REGISTRY_PORT}
+chmod 600 ./tmp.tar
+
+
+#	copy tmp.tar to remote host /tmp directory
+#	sudo tar -xf /tmp/tmp.tar --owner=root --group=root --directory /etc/docker/certs.d ; sudo rm -f /tmp/tmp.tar
+#	Remove localhost tmp.tar after SYSTEMS loop is complete
+#	rm -rf            ./${REGISTRY_HOST}:${REGISTRY_PORT} ./tmp.tar
+
+exit
 
 #	Create /etc/docker/certs.d/$REGISTRY_HOST:$REGISTRY_PORT
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Create /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}" 1>&2 ; fi
