@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-registry-tls.sh  3.163.577  2019-04-01T13:34:12.416520-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.162  
-# 	   ruff cut before testing 
-# 	docker-TLS/copy-registry-tls.sh  3.162.576  2019-03-29T22:24:23.595703-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.161  
-# 	   ruff draft 
+# 	docker-TLS/copy-registry-tls.sh  3.164.578  2019-04-01T15:28:41.882467-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.163  
+# 	   ready for local testing 
 # 	docker-TLS/copy-registry-tls.sh  3.142.556  2019-03-06T23:19:58.300034-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.141  
 # 	   create docker-TLS/copy-registry-tls.sh #43 
 #
@@ -304,28 +302,14 @@ else
 #	Copy files to ${LOCALHOST} for ${REGISTRY_HOST}
 	cp -p ./domain.{crt,key} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs
 
-#	Get directory 
-#	if [ -d ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/docker ] ; then
-#		FILE_UID=$(ls -l "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/docker" | awk '{print $3}')
-
-#	sudo ls /usr/local/data/us-tx-cluster-1/docker | grep -E '^[0-9]+\.[0-9]+'
-
-#
+#	Change directory and file permissions if dockerd using --userns-remap=default
 	if [ $(ps -ef | grep remap | wc -l) == 2 ] ; then
 #		Currently when using --userns-remap=default with dockerd the UID and GID are the same as ID
-#		At this time it is challenging to parse the file /etc/subuid for the UID and /etc/subgid for the GID
 		DOCKREMAP=$(grep dockremap /etc/subuid | cut -d ':' -f 2)
-		chown -R ${DOCKREMAP}:${DOCKREMAP} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs
+		chown -R ${DOCKREMAP}.${DOCKREMAP} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs
 	fi
 
 fi
-
-#	I do not feel these two lines are needed if the file owner is correct ??????  need to test before removing ????
-#	sudo mkdir -p ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/docker/registry
-#	sudo chmod 755 ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/docker/registry
-
-# >>>	 got this one to start with out any errors on port 5000 and 443
-#		$ docker container run --detach --disable-content-trust --name private-registry-$REGISTRY_PORT --publish $REGISTRY_PORT:443 --volume ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}:/var/lib/registry  --env REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY=/var/lib/registry --volume ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs:/certs  --env REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt --env REGISTRY_HTTP_TLS_KEY=/certs/domain.key registry:2
 
 #
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
