@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-registry-tls.sh  3.163.577  2019-04-01T13:34:12.416520-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.162  
+# 	   ruff cut before testing 
 # 	docker-TLS/copy-registry-tls.sh  3.162.576  2019-03-29T22:24:23.595703-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.161  
 # 	   ruff draft 
 # 	docker-TLS/copy-registry-tls.sh  3.142.556  2019-03-06T23:19:58.300034-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.141  
@@ -90,7 +92,7 @@ echo    "   │   └── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry contai
 echo    "   <STANDALONE>/                          <-- <STANDALONE> Architecture tree"
 echo    "                                              is the same as <CLUSTER> TREE but"
 echo -e "                                              the systems are not in a cluster\n"
-echo    "~<USER-1>/.docker/                        <-- user docker cert directory"
+echo    "~<USER-1>/.docker/                        <-- User docker cert directory"
 echo    "   ├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory to"
 echo    "   │   │                                      create registory certs"
 echo    "   │   ├── ca.crt                         <-- Daemon registry domain cert"
@@ -226,10 +228,13 @@ fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Begin loop through hosts in ${SYSTEMS_FILE} file and update other host information" 1>&2 ; fi
 for NODE in $(cat "${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}" | grep -v "#" ) ; do
 	if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Copy files to host ${NODE}" 1>&2 ; fi
+
 #       Check if ${NODE} is ${LOCALHOST}
         if [ "${LOCALHOST}" != "${NODE}" ] ; then
+
 #       	Check if ${NODE} is available on ssh port
 		if $(ssh ${NODE} 'exit' >/dev/null 2>&1 ) ; then
+
 #			For each Docker daemon to trust the Docker private registry certificate
 #			Copy ca.crt file to /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt on every Docker host.
 #			Restart Docker not required
@@ -244,11 +249,13 @@ for NODE in $(cat "${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}" | grep -v "#" ) ; do
                 fi
 	else
 		mkdir -p /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}
+
 #       	Check if ca.crt already exist
 		if [ -s /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt ] ; then
         		echo -e "\n\t${BOLD}ca.crt${NORMAL} already exists, renaming existing keys so new keys can be copied.\n"
         		mv /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)
 		fi
+
 #       	For each Docker daemon to trust the Docker private registry certificate
 #       	Copy ca.crt file to /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt on every Docker host.
 #       	Restart Docker not required
@@ -256,30 +263,30 @@ for NODE in $(cat "${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}" | grep -v "#" ) ; do
 		echo -e "\n\tCopy ~/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/ca.crt"
 		echo    "to ${BOLD}${NODE}${NORMAL} /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt"
 		tar -xf ./${REGISTRY_HOST}.${REGISTRY_PORT}.tar --owner=root --group=root --directory /etc/docker/certs.d
-#		rm -f   ./${REGISTRY_HOST}.${REGISTRY_PORT}.tar
+# >>>		rm -f   ./${REGISTRY_HOST}.${REGISTRY_PORT}.tar
         fi
 done
 
 #	Copy files to ${REGISTRY_HOST}
 #	Check if localhost = registry host
 if [ "${LOCALHOST}" != "${REGISTRY_HOST}" ] ; then
+
 #      	Check if ${NODE} is available on ssh port
 	if $(ssh ${NODE} 'exit' >/dev/null 2>&1 ) ; then
-
 # >>>	If NOT echo incident / connecting to remote host ${REGISTRY_HOST} test ERROR else cp files to ${REGISTRY_HOST}
 # >>>	
 # >>>	
+	exit
 # >>>	
 # >>>	
 # >>>	
-# >>>	
-# >>>	
-
 	else
-		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  ${REGISTRY_HOST} is not responding to ${LOCALHOST} on ssh port." 1>&2
+		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${REGISTRY_HOST} is not responding to ${LOCALHOST} on ssh port. " 1>&2
+		exit 1
 	fi
 else
-#	Copy files to ${LOCALHOST} for ${REGISTRY_HOST}
+
+#	Create REGISTRY_HOST certs directory
 	mkdir -p  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs
 
 #       Check if domain.crt already exist
@@ -294,27 +301,24 @@ else
 		mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z)
 	fi
 
-#
+#	Copy files to ${LOCALHOST} for ${REGISTRY_HOST}
 	cp -p ./domain.{crt,key} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs
 
-	if [ -d ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/docker ] ; then
-		FILE_UID=$(ls -l "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/docker" | awk '{$3}')
+#	Get directory 
+#	if [ -d ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/docker ] ; then
+#		FILE_UID=$(ls -l "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/docker" | awk '{print $3}')
 
-sudo ls /usr/local/data/us-tx-cluster-1/docker | grep -E '^[0-9]+\.[0-9]+'
+#	sudo ls /usr/local/data/us-tx-cluster-1/docker | grep -E '^[0-9]+\.[0-9]+'
 
+#
+	if [ $(ps -ef | grep remap | wc -l) == 2 ] ; then
 #		Currently when using --userns-remap=default with dockerd the UID and GID are the same as ID
-#		At this time it is challenging to pars the file /etc/subuid for the UID and /etc/subgid for the GID
-		chown -R ${FILE_UID}:${FILE_UID} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs
-	else
-        	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Unable to set owner and group ownership because docker registry directory has not been created.  Default setting is root unless you are using remapping UIDs in Docker Engine with the --userns-remap flag.  THen you will need to ...... maybe look at docker local direct for images and rethink  " 1>&2
-		echo
-
+#		At this time it is challenging to parse the file /etc/subuid for the UID and /etc/subgid for the GID
+		DOCKREMAP=$(grep dockremap /etc/subuid | cut -d ':' -f 2)
+		chown -R ${DOCKREMAP}:${DOCKREMAP} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs
 	fi
 
 fi
-
-
-sudo cp $HOME/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/domain.{crt,key} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs
 
 #	I do not feel these two lines are needed if the file owner is correct ??????  need to test before removing ????
 #	sudo mkdir -p ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/docker/registry
