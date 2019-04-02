@@ -1,13 +1,7 @@
 #!/bin/bash
-# 	docker-TLS/copy-registry-tls.sh  3.167.581  2019-04-02T15:45:41.347141-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.166  
-# 	   user help and production standard 7.0 
-# 	docker-TLS/copy-registry-tls.sh  3.165.579  2019-04-01T17:05:19.241879-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.164  
-# 	   completed first round of debugging 
-# 	docker-TLS/copy-registry-tls.sh  3.142.556  2019-03-06T23:19:58.300034-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.141  
-# 	   create docker-TLS/copy-registry-tls.sh #43 
+# 	docker-TLS/copy-registry-tls.sh  3.169.583  2019-04-02T17:28:14.726710-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.168  
+# 	   testing   create docker-TLS/copy-registry-tls.sh #43 
 #
-echo "In development            In developmen           In developmentt         In development          In development"
-echo "          In development          In developmen           In developmentt         In development          In development"
 ### production standard 5.0 Copyright
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
@@ -48,7 +42,7 @@ echo    "in <SYSTEMS_FILE> in the following"
 echo    "/etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/." 
 echo -e "\nThe administration user may receive password and/or passphrase prompts from a"
 echo    "remote systen; running the following may stop some prompts in your cluster."
-echo    "   ssh-copy-id <admin-user>@x.x.x.x"
+echo -e "\tssh-copy-id <admin-user>@x.x.x.x"
 echo -e "\nThe <DATA_DIR>/<CLUSTER>/<SYSTEMS_FILE> includes one FQDN or IP address per"
 echo    "line for all hosts in the cluster.  Lines in <SYSTEMS_FILE> that begin with a"
 echo    "'#' are comments.  The <SYSTEMS_FILE> is used by markit/find-code.sh,"
@@ -268,12 +262,16 @@ rm -f   ./${REGISTRY_HOST}.${REGISTRY_PORT}.tar
 
 #	Copy files to ${REGISTRY_HOST}
 #	Check if localhost = registry host
+echo -e "\n\tCopy domain.{crt,key} to ${USER}@${REGISTRY_HOST}:~/.docker/"
 if [ "${LOCALHOST}" != "${REGISTRY_HOST}" ] ; then
 
-#      	Check if ${NODE} is available on ssh port
+#      	Check if ${REGISTRY_HOST} is available on ssh port
 	if $(ssh ${REGISTRY_HOST} 'exit' >/dev/null 2>&1 ) ; then
-		scp -q -p -i ~/.ssh/id_rsa ./domain.{crt,key} ${USER}@${REGISTRY_HOST}:~/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/
-		TEMP="sudo mkdir -p  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; if sudo [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ] ; then echo -e "\n\t${BOLD}domain.crt${NORMAL} already exists, renaming existing keys so new keys can be copied." ; sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z) ; fi ; if sudo [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ] ; then echo -e "\n\t${BOLD}domain.key${NORMAL} already exists, renaming existing keys so new keys can be copied." ; sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z) ; fi ; sudo cp -p ~/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/domain.{crt,key} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; if [ $(ps -ef | grep remap | wc -l) == 2 ] ; then DOCKREMAP=$(grep dockremap /etc/subuid | cut -d ':' -f 2) ; sudo chown -R ${DOCKREMAP}.${DOCKREMAP} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; fi "
+
+#		Copy domain.{crt,key} to ${USER}@${REGISTRY_HOST}:~/.docker/
+		if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Copy domain.{crt,key} to ${USER}@${REGISTRY_HOST}:~/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/${f%}.new" 1>&2 ; fi
+		scp -q -p -i ~/.ssh/id_rsa ./domain.{crt,key} ${USER}@${REGISTRY_HOST}:~/.docker/
+		TEMP="sudo mkdir -p  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; if sudo [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ] ; then echo -e '\n\t${BOLD}domain.crt${NORMAL} already exists, renaming existing keys so new keys can be copied.' ; sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z) ; fi ; if sudo [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ] ; then echo -e '\n\t${BOLD}domain.key${NORMAL} already exists, renaming existing keys so new keys can be copied.' ; sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z) ; fi ; sudo mv ~/.docker/domain.{crt,key} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; if [ $(ps -ef | grep remap | wc -l) == 2 ] ; then DOCKREMAP=$(grep dockremap /etc/subuid | cut -d ':' -f 2) ; sudo chown -R ${DOCKREMAP}.${DOCKREMAP} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; fi "
 		ssh -q -t -i ~/.ssh/id_rsa ${USER}@${REGISTRY_HOST} ${TEMP}
 	else
 		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${REGISTRY_HOST} is not responding to ${LOCALHOST} on ssh port. " 1>&2
