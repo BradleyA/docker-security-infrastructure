@@ -1,16 +1,13 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.161.575  2019-03-28T09:40:11.338136-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.160  
-# 	   minor formating changes 
-# 	docker-TLS/create-registry-tls.sh  3.159.573  2019-03-27T21:34:28.744051-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.158  
-# 	   docker-TLS/create-registry-tls.sh update tree #41 
+# 	docker-TLS/create-registry-tls.sh  3.167.581  2019-04-02T15:45:41.489423-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.166  
+# 	   user help and production standard 7.0 
 # 	docker-TLS/create-registry-tls.sh  3.149.562  2019-03-09T08:08:07.812490-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.148  
 # 	   type create docker-TLS/create-registry-tls.sh close #41 
 #
 echo "In development            In developmen           In developmentt         In development          In development"
 echo "          In development          In developmen           In developmentt         In development          In development"
 # 
-### create-registry-tls.sh - Create TLS for Private Registry V2
-#   production standard 5
+### production standard 5.0 Copyright
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ###
@@ -20,6 +17,8 @@ if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, '
 #	set -v
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
+### production standard 7.0 Default variable value
+DEFAULT_REGISTRY_PORT="17313"
 ###
 display_help() {
 echo -e "\n${NORMAL}${0} - Create TLS for Private Registry V2"
@@ -34,7 +33,7 @@ echo    "a working directory, registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>.  T
 echo    "<REGISTRY_PORT> number is not required when creating private registry"
 echo    "certificates.  I use the <REGISTRY_PORT> number to keep track of multiple"
 echo    "certificates for multiple private registries on the same host."
-#   production standard 4
+### production standard 4.0 Documentation Language
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
         echo -e "\n--> ${LANG}"
@@ -50,10 +49,11 @@ echo    "command, 'unset DEBUG' to remove the exported information from the DEBU
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
 echo    "   DEBUG           (default '0')"
-echo    "   REGISTRY_PORT   Registry port number (default '5000')"
+echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
 echo -e "\nOPTIONS"
-echo    "   REGISTRY_PORT   Registry port number (default '5000')"
-#   production standard 6
+echo    "Order of precedence: CLI options, environment variable, default code."
+echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
+### production standard 6.0 Architecture tree
 echo -e "\nCERTIFICATION ARCHITECTURE TREE"
 echo    "~<USER-1>/.docker/                        <-- User docker cert directory"
 echo    "   └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory to"
@@ -62,8 +62,8 @@ echo    "       ├── ca.crt                         <-- Daemon registry dom
 echo    "       ├── domain.crt                     <-- Registry cert"
 echo    "       └── domain.key                     <-- Registry private key"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure"
-echo -e "\nEXAMPLES\n   ${0} 17313\n"
-echo    "   Create new certificates with 17313 port number reference"
+echo -e "\nEXAMPLES\n   ${0} 17315\n"
+echo    "   Create new certificates with 17315 port number reference"
 }
 
 #       Date and time function ISO 8601
@@ -106,7 +106,7 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 
 ###		
 #       Order of precedence: CLI argument, environment variable, default code
-if [ $# -ge  1 ]  ; then REGISTRY_PORT=${1} ; elif [ "${REGISTRY_PORT}" == "" ] ; then REGISTRY_PORT="5000" ; fi
+if [ $# -ge  1 ]  ; then REGISTRY_PORT=${1} ; elif [ "${REGISTRY_PORT}" == "" ] ; then REGISTRY_PORT=${DEFAULT_REGISTRY_PORT} ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_PORT >${REGISTRY_PORT}<" 1>&2 ; fi
 
 #	Check if user has home directory on system
