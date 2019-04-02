@@ -1,8 +1,8 @@
 #!/bin/bash
+# 	docker-TLS/copy-registry-tls.sh  3.166.580  2019-04-02T11:37:40.772948-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.165  
+# 	   output formating change 
 # 	docker-TLS/copy-registry-tls.sh  3.165.579  2019-04-01T17:05:19.241879-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.164  
 # 	   completed first round of debugging 
-# 	docker-TLS/copy-registry-tls.sh  3.164.578  2019-04-01T15:28:41.882467-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.163  
-# 	   ready for local testing 
 # 	docker-TLS/copy-registry-tls.sh  3.142.556  2019-03-06T23:19:58.300034-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.141  
 # 	   create docker-TLS/copy-registry-tls.sh #43 
 #
@@ -34,11 +34,12 @@ echo -e "\nDESCRIPTION"
 echo    "A user with administration authority uses this script to copy Docker private"
 echo    "registry certificates from "
 echo    "~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT> directory on this"
-echo    "system to the <REGISTRY_HOST> and systems in <SYSTEMS_FILE>.  The certificates"
-echo    "(domain.{crt,key}) for the <REGISTRY_HOST> are coped to it, into the following"
+echo    "system to systems in <SYSTEMS_FILE> which MUST include the <REGISTRY_HOST>."
+echo    "The certificates (domain.{crt,key}) for the <REGISTRY_HOST> are coped to it,"
+echo    "into the following directory:"
 echo    "<DATA_DIR>/<CLUSTER>/docker-registry/<REGISTRY_HOST>-<REGISTRY_PORT>/certs/."
-echo    "The daemon registry domain cert (ca.crt) is copied to the <REGISTRY_HOST> and"
-echo    "all the systems found in <SYSTEMS_FILE> in the following"
+echo    "The daemon registry domain cert (ca.crt) is copied to all the systems found"
+echo    "in <SYSTEMS_FILE> in the following"
 echo    "/etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/." 
 echo -e "\nThe administration user may receive password and/or passphrase prompts from a"
 echo    "remote systen; running the following may stop the prompts in your cluster."
@@ -149,15 +150,6 @@ get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_
 #       DEBUG
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Name_of_command >${0}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
 
-###		>>>   not sure need to be root  just sudo -i;exit or  need to think more about this
-#       Root is required to copy certs
-# >>>	if ! [ $(id -u) = 0 ] ; then
-# >>>	        display_help | more
-# >>>	        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Use sudo ${0}" 1>&2
-# >>>	        echo -e "${BOLD}\n>>   SCRIPT MUST BE RUN AS ROOT TO COPY FILES.  sudo copy-registry-tls.sh   <<\n${NORMAL}"     1>&2
-# >>>	        exit 1
-# >>>	fi
-
 #       Order of precedence: CLI argument, environment variable, default code
 if [ $# -ge  1 ]  ; then REGISTRY_HOST=${1} ; elif [ "${REGISTRY_HOST}" == "" ] ; then REGISTRY_HOST=${LOCALHOST} ; fi
 if [ $# -ge  2 ]  ; then REGISTRY_PORT=${2} ; elif [ "${REGISTRY_PORT}" == "" ] ; then REGISTRY_PORT="5000" ; fi
@@ -221,7 +213,7 @@ if ! [ -s "${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}" ] ; then
         echo -e "#      and other scripts."  >> ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}
         echo -e "#\n#   One FQDN or IP address per line for all hosts in cluster" >> ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}
         echo -e "###" >> ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}
-        echo -e "${LOCALHOST}" >> ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}
+        echo -e "${REGISTRY_HOST}" >> ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}
 fi
 
 #       Loop through hosts in ${SYSTEMS_FILE} file and update other host information
@@ -242,7 +234,7 @@ for NODE in $(cat "${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}" | grep -v "#" ) ; do
 			echo -e "\n\tCopy ~/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/ca.crt"
 			echo -e "\tto ${BOLD}${NODE}${NORMAL} /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt"
 			scp -q -p -i ~/.ssh/id_rsa ./${REGISTRY_HOST}.${REGISTRY_PORT}.tar ${USER}@${NODE}:/tmp
-			TEMP="sudo mkdir -p /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT} ; if sudo [ -s /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt ] ; then sudo mv /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt-$(date +%Y-%m-%dT%H:%M:%S%:z); fi ; sudo tar -xf /tmp/${REGISTRY_HOST}.${REGISTRY_PORT}.tar --owner=root --group=root --directory /etc/docker/certs.d ; sudo rm -f /tmp/${REGISTRY_HOST}.${REGISTRY_PORT}.tar"
+			TEMP="sudo mkdir -p /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT} ; if sudo [ -s /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt ] ; then echo -e '\n\t${BOLD}ca.crt${NORMAL} already exists, renaming existing keys so new keys can be copied.' ; sudo mv /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt-$(date +%Y-%m-%dT%H:%M:%S%:z); fi ; sudo tar -xf /tmp/${REGISTRY_HOST}.${REGISTRY_PORT}.tar --owner=root --group=root --directory /etc/docker/certs.d ; sudo rm -f /tmp/${REGISTRY_HOST}.${REGISTRY_PORT}.tar"
                         ssh -q -t -i ~/.ssh/id_rsa ${USER}@${NODE} ${TEMP}
                 else
                         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  ${NODE} found in ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE} file is not responding to ${LOCALHOST} on ssh port." 1>&2
@@ -254,7 +246,7 @@ for NODE in $(cat "${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}" | grep -v "#" ) ; do
 
 #       	Check if ca.crt already exist
 		if sudo [ -s /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt ] ; then
-        		echo -e "\n\t${BOLD}ca.crt${NORMAL} already exists, renaming existing keys so new keys can be copied.\n"
+        		echo -e "\n\t${BOLD}ca.crt${NORMAL} already exists, renaming existing keys so new keys can be copied."
         		sudo mv /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)
 		fi
 
@@ -272,14 +264,10 @@ done
 if [ "${LOCALHOST}" != "${REGISTRY_HOST}" ] ; then
 
 #      	Check if ${NODE} is available on ssh port
-	if $(ssh ${NODE} 'exit' >/dev/null 2>&1 ) ; then
-# >>>	If NOT echo incident / connecting to remote host ${REGISTRY_HOST} test ERROR else cp files to ${REGISTRY_HOST}
-# >>>	
-# >>>	
-	exit
-# >>>	
-# >>>	
-# >>>	
+	if $(ssh ${REGISTRY_HOST} 'exit' >/dev/null 2>&1 ) ; then
+		scp -q -p -i ~/.ssh/id_rsa ./domain.{crt,key} ${USER}@${REGISTRY_HOST}:~/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/
+		TEMP="sudo mkdir -p  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; if sudo [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ] ; then echo -e "\n\t${BOLD}domain.crt${NORMAL} already exists, renaming existing keys so new keys can be copied.\n" ; sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z) ; fi ; if sudo [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ] ; then echo -e "\n\t${BOLD}domain.key${NORMAL} already exists, renaming existing keys so new keys can be copied.\n" ; sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z) ; fi ; sudo cp -p ~/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/domain.{crt,key} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; if [ $(ps -ef | grep remap | wc -l) == 2 ] ; then DOCKREMAP=$(grep dockremap /etc/subuid | cut -d ':' -f 2) ; sudo chown -R ${DOCKREMAP}.${DOCKREMAP} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; fi "
+		ssh -q -t -i ~/.ssh/id_rsa ${USER}@${REGISTRY_HOST} ${TEMP}
 	else
 		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${REGISTRY_HOST} is not responding to ${LOCALHOST} on ssh port. " 1>&2
 		exit 1
@@ -310,7 +298,6 @@ else
 		DOCKREMAP=$(grep dockremap /etc/subuid | cut -d ':' -f 2)
 		sudo chown -R ${DOCKREMAP}.${DOCKREMAP} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs
 	fi
-
 fi
 
 #
