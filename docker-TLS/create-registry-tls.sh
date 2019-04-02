@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.168.582  2019-04-02T15:59:53.989438-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.167  
+# 	   during testing corrected tmp file name 
 # 	docker-TLS/create-registry-tls.sh  3.167.581  2019-04-02T15:45:41.489423-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.166  
 # 	   user help and production standard 7.0 
 # 	docker-TLS/create-registry-tls.sh  3.149.562  2019-03-09T08:08:07.812490-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.148  
@@ -123,8 +125,8 @@ if [ ! -d ${HOME}/.docker ] ; then
 fi
 
 #	Create tmp working directory
-mkdir ${HOME}/.docker/tmp-${0}
-cd ${HOME}/.docker/tmp-${0}
+mkdir ${HOME}/.docker/tmp-${REGISTRY_PORT}
+cd ${HOME}/.docker/tmp-${REGISTRY_PORT}
 
 #	Create Self-Signed Certificate Keys
 echo -e "\n\t${BOLD}Create Self-Signed Certificate Keys in $(pwd) ${NORMAL}\n" 
@@ -163,10 +165,10 @@ if [ -e ca.crt ] ; then
 fi
 
 #	Copy Self-Signed Certificate Keys
-cp -p ../tmp-${0}/domain.{crt,key} .
+cp -p ../tmp-${REGISTRY_PORT}/domain.{crt,key} .
 cp -p domain.crt ca.crt
 chmod 0400 ca.crt domain.crt domain.key 
-rm -rf ../tmp-${0}
+rm -rf ../tmp-${REGISTRY_PORT}
 
 #
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
