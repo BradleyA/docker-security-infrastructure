@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-registry-tls.sh  3.171.585  2019-04-02T19:36:22.558932-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.170  
+# 	   chown subuid domain.{crt,key} for local host 
 # 	docker-TLS/copy-registry-tls.sh  3.170.584  2019-04-02T19:34:21.846417-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.169  
 # 	   chown subuid domain.{crt,key} 
 # 	docker-TLS/copy-registry-tls.sh  3.169.583  2019-04-02T17:28:14.726710-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.168  
@@ -303,7 +305,7 @@ else
 	if [ $(ps -ef | grep remap | wc -l) == 2 ] ; then
 #		Currently when using --userns-remap=default with dockerd the UID and GID are the same as ID
 		DOCKREMAP=$(grep dockremap /etc/subuid | cut -d ':' -f 2)
-		sudo chown -R ${DOCKREMAP}.${DOCKREMAP} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs
+		sudo chown -R ${DOCKREMAP}.${DOCKREMAP} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.{crt,key}
 	fi
 fi
 
