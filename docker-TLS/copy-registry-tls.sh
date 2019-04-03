@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-registry-tls.sh  3.172.586  2019-04-02T23:04:46.520566-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.171  
+# 	   much testing and it finally works, need more testing tomorrow 
 # 	docker-TLS/copy-registry-tls.sh  3.171.585  2019-04-02T19:36:22.558932-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.170  
 # 	   chown subuid domain.{crt,key} for local host 
 # 	docker-TLS/copy-registry-tls.sh  3.170.584  2019-04-02T19:34:21.846417-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.169  
@@ -273,10 +275,16 @@ if [ "${LOCALHOST}" != "${REGISTRY_HOST}" ] ; then
 	if $(ssh ${REGISTRY_HOST} 'exit' >/dev/null 2>&1 ) ; then
 
 #		Copy domain.{crt,key} to ${USER}@${REGISTRY_HOST}:~/.docker/
-		if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Copy domain.{crt,key} to ${USER}@${REGISTRY_HOST}:~/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/${f%}.new" 1>&2 ; fi
+		if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Copy domain.{crt,key} to ${USER}@${REGISTRY_HOST}:~/.docker/" 1>&2 ; fi
 		scp -q -p -i ~/.ssh/id_rsa ./domain.{crt,key} ${USER}@${REGISTRY_HOST}:~/.docker/
-		TEMP="sudo mkdir -p  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; if sudo [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ] ; then echo -e '\n\t${BOLD}domain.crt${NORMAL} already exists, renaming existing keys so new keys can be copied.' ; sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z) ; fi ; if sudo [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ] ; then echo -e '\n\t${BOLD}domain.key${NORMAL} already exists, renaming existing keys so new keys can be copied.' ; sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z) ; fi ; sudo mv ~/.docker/domain.{crt,key} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; if [ $(ps -ef | grep remap | wc -l) == 2 ] ; then DOCKREMAP=$(grep dockremap /etc/subuid | cut -d ':' -f 2) ; sudo chown -R ${DOCKREMAP}.${DOCKREMAP} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.{crt,key} ; fi "
+     set -x
+		REMAP=$(ssh -q -t  -i ~/.ssh/id_rsa uadmin@two.cptx86.com "ps -ef | grep remap | wc -l | tr -d '\r\n'")
+		REMAPUID=$(ssh -q -t  -i ~/.ssh/id_rsa uadmin@two.cptx86.com "grep dockremap /etc/subuid | cut -d ':' -f 2 | tr -d '\r\n'")
+     set +x
+		TEMP="sudo mkdir -p  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; if sudo [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ] ; then echo -e '\n\t${BOLD}domain.crt${NORMAL} already exists, renaming existing keys so new keys can be copied.' ; sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z) ; fi ; if sudo [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ] ; then echo -e '\n\t${BOLD}domain.key${NORMAL} already exists, renaming existing keys so new keys can be copied.' ; sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z) ; fi ; sudo mv ~/.docker/domain.{crt,key} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; echo 'Hello >>>' ; if [ ${REMAP} -ge 3 ] ; then  sudo chown -vR ${REMAPUID}.${REMAPUID} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; fi ; echo '>>> DOne'"
+     set -x
 		ssh -q -t -i ~/.ssh/id_rsa ${USER}@${REGISTRY_HOST} ${TEMP}
+     set +x
 	else
 		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${REGISTRY_HOST} is not responding to ${LOCALHOST} on ssh port. " 1>&2
 		exit 1
