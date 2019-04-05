@@ -18,15 +18,15 @@ This script allows users to make sure that the ssh files and directory permissio
 
 To install, change to the location you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have git then enter; "sudo apt-get install git". On the github page of this script use the "HTTPS clone URL" with the 'git clone' command.
 
-    git clone https://github.com/BradleyA/docker-security-infrastructure-scripts
-    cd docker-security-infrastructure-scripts/ssh
+    git clone https://github.com/BradleyA/docker-security-infrastructure
+    cd docker-security-infrastructure/ssh
     
     sudo mkdir -p /usr/local/bin
     sudo chown $USER:$(id -g) /usr/local/bin
     chmod 0775 /usr/local/bin
     mv c* /usr/local/bin
     cd ../..
-    rm -rf docker-security-infrastructure-scripts
+    rm -rf docker-security-infrastructure
 
 ## Usage
 
