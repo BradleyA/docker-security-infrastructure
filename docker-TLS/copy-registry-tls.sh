@@ -1,12 +1,12 @@
 #!/bin/bash
-# 	docker-TLS/copy-registry-tls.sh  3.176.590  2019-04-04T22:27:46.466292-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.175  
-# 	   update EXAMPLES format 
+# 	docker-TLS/copy-registry-tls.sh  3.178.592  2019-04-05T14:02:05.819846-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.177  
+# 	   update comments 
 # 	docker-TLS/copy-registry-tls.sh  3.174.588  2019-04-04T21:51:35.491394-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.173  
 # 	   create docker-TLS/copy-registry-tls.sh close #43 ready for production 
 ### production standard 5.0 Copyright
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-###
+### production standard 1.0 DEBUG variable
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #       set -x
@@ -19,7 +19,7 @@ DEFAULT_REGISTRY_PORT="17313"
 DEFAULT_CLUSTER="us-tx-cluster-1/"
 DEFAULT_DATA_DIR="/usr/local/data/"
 DEFAULT_SYSTEMS_FILE="SYSTEMS"
-###
+### production standard 0.0 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Copy certs for Private Registry V2"
 echo -e "\nUSAGE\n   ${0} [<REGISTRY_HOST>]" 

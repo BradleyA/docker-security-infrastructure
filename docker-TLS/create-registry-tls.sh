@@ -1,12 +1,12 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.176.590  2019-04-04T22:27:46.555563-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.175  
-# 	   update EXAMPLES format 
+# 	docker-TLS/create-registry-tls.sh  3.178.592  2019-04-05T14:02:05.908777-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.177  
+# 	   update comments 
 # 	docker-TLS/create-registry-tls.sh  3.173.587  2019-04-04T17:16:34.749371-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.172  
 # 	   create docker-TLS/create-registry-tls.sh #41 ready for production 
 ### production standard 5.0 Copyright
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-###
+### production standard 1.0 DEBUG variable
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -x
@@ -15,7 +15,7 @@ BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 DEFAULT_REGISTRY_PORT="17313"
-###
+### production standard 0.0 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Create TLS for Private Registry V2"
 echo -e "\nUSAGE\n   ${0} [<REGISTRY_PORT>]" 

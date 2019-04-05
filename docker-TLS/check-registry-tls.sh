@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-registry-tls.sh  3.177.591  2019-04-04T23:03:45.129780-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.176  
-# 	   review ruff draft 
+# 	docker-TLS/check-registry-tls.sh  3.178.592  2019-04-05T14:02:05.666922-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.177  
+# 	   update comments 
 # 	docker-TLS/check-registry-tls.sh  3.153.566  2019-03-12T22:53:21.934335-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.152  
 # 	   ruff out design 
 # 	docker-TLS/check-registry-tls.sh  3.150.563  2019-03-09T08:26:16.534422-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.149  
@@ -10,7 +10,7 @@ echo "		In development		In developmen		In developmentt		In development		In devel
 ### production standard 5.0 Copyright
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-###
+### production standard 1.0 DEBUG variable
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #       set -x
@@ -23,7 +23,7 @@ DEFAULT_REGISTRY_PORT="17313"
 DEFAULT_CLUSTER="us-tx-cluster-1/"
 DEFAULT_DATA_DIR="/usr/local/data/"
 DEFAULT_SYSTEMS_FILE="SYSTEMS"
-###
+### production standard 0.0 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Check certifications for private registry"
 echo -e "\nUSAGE\n   ${0} " 
