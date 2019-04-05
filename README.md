@@ -1,9 +1,9 @@
-# docker-security-infrastructure-scripts   [![Stable Release](https://img.shields.io/badge/Release-3.122-blue.svg)](https://github.com/BradleyA/docker-security-infrastructure-scripts/releases/tag/3.122)    [![GitHub commits](https://img.shields.io/github/commits-since/BradleyA/docker-security-infrastructure-scripts/3.122.svg)](https://github.com/BradleyA/docker-security-infrastructure-scripts/commits/)
+# docker-security-infrastructure   [![Stable Release](https://img.shields.io/badge/Release-3.122-blue.svg)](https://github.com/BradleyA/docker-security-infrastructure/releases/tag/3.122)    [![GitHub commits](https://img.shields.io/github/commits-since/BradleyA/docker-security-infrastructure/3.122.svg)](https://github.com/BradleyA/docker-security-infrastructure/commits/)
 This repository contains shell scripts that check user ssh permissions, setup and manage both TLS and dockerd on Ubuntu 14.04 (upstart) and Ubuntu 16.04 (systemd).
 
- * [docker-TLS](https://github.com/BradleyA/docker-security-infrastructure-scripts/tree/master/docker-TLS)
- * [dockerd-configuration-options](https://github.com/BradleyA/docker-security-infrastructure-scripts/tree/master/dockerd-configuration-options)
- * [ssh](https://github.com/BradleyA/docker-security-infrastructure-scripts/tree/master/ssh)
+ * [docker-TLS](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS)
+ * [dockerd-configuration-options](https://github.com/BradleyA/docker-security-infrastructure/tree/master/dockerd-configuration-options)
+ * [ssh](https://github.com/BradleyA/docker-security-infrastructure/tree/master/ssh)
   ##### Docker security links
  * [Docker Bench for Security](https://github.com/docker/docker-bench-security)
  * 
@@ -15,7 +15,7 @@ This repository contains shell scripts that check user ssh permissions, setup an
 To install, change to the location you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have git then enter; "sudo apt-get install git". On the github repository page of this script use the "Clone with HTTPS" URL with the 'git clone' command.
 
     git clone https://github.com/BradleyA/docker-security-infrastructure.git
-    cd docker-security-infrastructure-scripts
+    cd docker-security-infrastructure
 
 #### To watch future updates in this repository select in the upper-right corner, the "Watch" list, and select Watching.
 
