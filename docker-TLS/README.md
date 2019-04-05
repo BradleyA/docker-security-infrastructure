@@ -25,15 +25,15 @@ copy-host-2-remote-host-tls.sh - An administration user can run this script to c
 ## Install
 To clone, change to the directory you want to download the scripts.  Use git to clone these scripts into your directory.  If you do not have git then enter; "sudo apt-get install git".  On the github page of this script use the "HTTPS clone URL" with the 'git clone' command. 
     
-    git clone https://github.com/BradleyA/docker-security-infrastructure-scripts
-    cd docker-security-infrastructure-scripts/docker-TLS
+    git clone https://github.com/BradleyA/docker-security-infrastructure
+    cd docker-security-infrastructure/docker-TLS
     
     sudo mkdir -p /usr/local/bin
     sudo chown $USER:$(id -g) /usr/local/bin
     chmod 0775 /usr/local/bin
     mv c* /usr/local/bin
     cd ../..
-    rm -rf docker-security-infrastructure-scripts
+    rm -rf docker-security-infrastructure
 
 ## Usage
 Run this script first on your host to create your site private and public TLS keys.  To change the default number of days (730 days = 2 years) enter a number of days as the parameter (example: create-site-private-public-tls 365 ).
@@ -231,7 +231,7 @@ The administration user may receive password and/or passphrase prompts from a re
     Add TLS flags to dockerd so it will know to use TLS certifications (--tlsverify,
     --tlscacert, --tlscert, --tlskey).  Scripts that will help with setup and
     operations of Docker using TLS can be found:
-    https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options
+    https://github.com/BradleyA/docker/tree/master/dockerd-configuration-options
 	The dockerd-configuration-options scripts will help with
 	configuration of dockerd on systems running Ubuntu 16.04
 	(systemd) and Ubuntu 14.04 (Upstart).
@@ -297,7 +297,7 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
 #### Install Scripts
 To install the scripts, change to the directory you have write permission (examples: ~/bin, /usr/local/bin) 
 
-    curl -L https://api.github.com/repos/BradleyA/docker-security-infrastructure-scripts/tarball | tar -xzf - --wildcards */c* && mv BradleyA-docker-security-infrastructure-scripts*/docker-TLS/c* . && rm -rf BradleyA-docker-security-infrastructure-scripts-*/
+    curl -L https://api.github.com/repos/BradleyA/docker-security-infrastructure/tarball | tar -xzf - --wildcards */c* && mv BradleyA-docker-security-infrastructure*/docker-TLS/c* . && rm -rf BradleyA-docker-security-infrastructure*/
 
 #### To watch future updates in this repository select in the upper-right corner, the "Watch" list, and select Watching.
 
@@ -325,4 +325,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
