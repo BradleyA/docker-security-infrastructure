@@ -1,10 +1,9 @@
 #!/bin/bash
-# 	docker-TLS/check-registry-tls.sh  3.179.593  2019-04-05T14:13:56.239080-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.178  
+# 	docker-TLS/check-registry-tls.sh  3.180.594  2019-04-05T14:25:39.833548-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.179  
 # 	   update comments 
-# 	docker-TLS/check-registry-tls.sh  3.150.563  2019-03-09T08:26:16.534422-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.149  
-# 	   begin writing create docker-TLS/check-registry-tls.sh #42 
 echo "In development		In developmen		In developmentt		In development		In development"
 echo "		In development		In developmen		In developmentt		In development		In development"
+### production standard 3.0 shellcheck
 ### production standard 5.0 Copyright
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.

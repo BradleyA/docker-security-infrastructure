@@ -1,8 +1,7 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.179.593  2019-04-05T14:13:56.484240-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.178  
+# 	docker-TLS/create-registry-tls.sh  3.180.594  2019-04-05T14:25:40.081369-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.179  
 # 	   update comments 
-# 	docker-TLS/create-registry-tls.sh  3.173.587  2019-04-04T17:16:34.749371-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.172  
-# 	   create docker-TLS/create-registry-tls.sh #41 ready for production 
+### production standard 3.0 shellcheck
 ### production standard 5.0 Copyright
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.

@@ -1,8 +1,7 @@
 #!/bin/bash
-# 	docker-TLS/copy-registry-tls.sh  3.179.593  2019-04-05T14:13:56.394954-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.178  
+# 	docker-TLS/copy-registry-tls.sh  3.180.594  2019-04-05T14:25:39.992077-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.179  
 # 	   update comments 
-# 	docker-TLS/copy-registry-tls.sh  3.174.588  2019-04-04T21:51:35.491394-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.173  
-# 	   create docker-TLS/copy-registry-tls.sh close #43 ready for production 
+### production standard 3.0 shellcheck
 ### production standard 5.0 Copyright
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
