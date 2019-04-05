@@ -1,5 +1,5 @@
 #!/bin/bash
-# 	docker-TLS/copy-registry-tls.sh  3.178.592  2019-04-05T14:02:05.819846-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.177  
+# 	docker-TLS/copy-registry-tls.sh  3.179.593  2019-04-05T14:13:56.394954-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.178  
 # 	   update comments 
 # 	docker-TLS/copy-registry-tls.sh  3.174.588  2019-04-04T21:51:35.491394-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.173  
 # 	   create docker-TLS/copy-registry-tls.sh close #43 ready for production 
@@ -146,6 +146,7 @@ if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] ||
         exit 0
 fi
 
+### production standard 2.0 log format (WHEN WHERE WHAT Version Line WHO UID:GID [TYPE] Message)
 #       INFO
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Started..." 1>&2
 

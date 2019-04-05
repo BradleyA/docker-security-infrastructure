@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-registry-tls.sh  3.178.592  2019-04-05T14:02:05.666922-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.177  
+# 	docker-TLS/check-registry-tls.sh  3.179.593  2019-04-05T14:13:56.239080-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.178  
 # 	   update comments 
-# 	docker-TLS/check-registry-tls.sh  3.153.566  2019-03-12T22:53:21.934335-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.152  
-# 	   ruff out design 
 # 	docker-TLS/check-registry-tls.sh  3.150.563  2019-03-09T08:26:16.534422-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.149  
 # 	   begin writing create docker-TLS/check-registry-tls.sh #42 
 echo "In development		In developmen		In developmentt		In development		In development"
@@ -140,6 +138,7 @@ if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] ||
         exit 0
 fi
 
+### production standard 2.0 log format (WHEN WHERE WHAT Version Line WHO UID:GID [TYPE] Message)
 #       INFO
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Started..." 1>&2
 
