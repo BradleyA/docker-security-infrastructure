@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-registry-tls.sh  3.176.590  2019-04-04T22:27:46.466292-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.175  
+# 	   update EXAMPLES format 
 # 	docker-TLS/copy-registry-tls.sh  3.174.588  2019-04-04T21:51:35.491394-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.173  
 # 	   create docker-TLS/copy-registry-tls.sh close #43 ready for production 
 ### production standard 5.0 Copyright
@@ -108,8 +110,8 @@ echo    "       │   └── ca.crt                     <-- Daemon registry d
 echo    "       └── <REGISTRY_HOST>:<REGISTRY_PORT>/ <-- Registry cert directory"
 echo    "           └── ca.crt                     <-- Daemon registry domain cert"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
-echo -e "\nEXAMPLES\n   ${BOLD}${0} two.cptx86.com 17313${NORMAL}\n\n   Copy certs for Private Registry, two.cptx86.com, using port 17313\n"
-echo -e "   ${BOLD}${0}${NORMAL}\n\n   Copy certs for Private Registry using environment variables and default options\n"
+echo -e "\nEXAMPLES\n   Copy certs for Private Registry, two.cptx86.com, using port 17313\n	${BOLD}${0} two.cptx86.com 17313${NORMAL}"
+echo -e "\n   Copy certs for Private Registry using environment variables and default options\n	${BOLD}${0}${NORMAL}"
 }
 
 #       Date and time function ISO 8601

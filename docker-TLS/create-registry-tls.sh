@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.176.590  2019-04-04T22:27:46.555563-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.175  
+# 	   update EXAMPLES format 
 # 	docker-TLS/create-registry-tls.sh  3.173.587  2019-04-04T17:16:34.749371-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.172  
 # 	   create docker-TLS/create-registry-tls.sh #41 ready for production 
 ### production standard 5.0 Copyright
@@ -56,8 +58,7 @@ echo    "       ├── ca.crt                         <-- Daemon registry dom
 echo    "       ├── domain.crt                     <-- Registry cert"
 echo    "       └── domain.key                     <-- Registry private key"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure"
-echo -e "\nEXAMPLES\n   ${0} 17315\n"
-echo    "   Create new certificates with 17315 port number reference"
+echo -e "\nEXAMPLES\n   Create new certificates with 17315 port number reference\n	${BOLD}${0} 17315${NORMAL}"
 }
 
 #       Date and time function ISO 8601
