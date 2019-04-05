@@ -1,20 +1,13 @@
 #!/bin/bash
-# 	docker-TLS/check-registry-tls.sh  3.161.575  2019-03-28T09:40:11.141719-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.160  
-# 	   minor formating changes 
+# 	docker-TLS/check-registry-tls.sh  3.175.589  2019-04-04T22:20:56.348853-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.174  
+# 	   ruff draft 
 # 	docker-TLS/check-registry-tls.sh  3.153.566  2019-03-12T22:53:21.934335-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.152  
 # 	   ruff out design 
-# 	docker-TLS/check-registry-tls.sh  3.152.565  2019-03-10T20:32:40.379938-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.151  
-# 	   more work 
-# 	docker-TLS/check-registry-tls.sh  3.151.564  2019-03-09T20:06:59.495406-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.150  
-# 	   update to display_help 
 # 	docker-TLS/check-registry-tls.sh  3.150.563  2019-03-09T08:26:16.534422-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.149  
 # 	   begin writing create docker-TLS/check-registry-tls.sh #42 
-#
 echo "In development		In developmen		In developmentt		In development		In development"
 echo "		In development		In developmen		In developmentt		In development		In development"
-# 
-### check-registry-tls.sh - Check certifications for private registry
-#   production standard 5
+### production standard 5.0 Copyright
 #       Copyright (c) 2019 Bradley Allen
 #       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ###
@@ -24,14 +17,21 @@ if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, '
 #       set -v
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
+### production standard 7.0 Default variable value
+DEFAULT_REGISTRY_HOST=$(hostname -f)    # local host
+DEFAULT_REGISTRY_PORT="17313"
+DEFAULT_CLUSTER="us-tx-cluster-1/"
+DEFAULT_DATA_DIR="/usr/local/data/"
+DEFAULT_SYSTEMS_FILE="SYSTEMS"
 ###
 display_help() {
 echo -e "\n${NORMAL}${0} - Check certifications for private registry"
 echo -e "\nUSAGE\n   ${0} " 
 echo -e "   ${0} [<REGISTRY_HOST>]" 
-echo -e "   ${0}  <REGISTRY_HOST> [<REGISTRY_PORT>]" 
-echo -e "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT> [<CLUSTER>]" 
-echo -e "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER> [<DATA_DIR>]"
+echo    "   ${0}  <REGISTRY_HOST> [<REGISTRY_PORT>]" 
+echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT> [<CLUSTER>]" 
+echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER>  [<DATA_DIR>]" 
+echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER>   <DATA_DIR>  [<SYSTEMS_FILE>]" 
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
@@ -50,7 +50,14 @@ echo    "<REGISTRY_HOST> and <REGISTRY_PORT> number is required when copying the
 echo    "ca.crt into the /etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/"
 echo    "directory on each host using the private registry."
 
-
+echo -e "\nThe <DATA_DIR>/<CLUSTER>/<SYSTEMS_FILE> includes one FQDN or IP address per"
+echo    "line for all hosts in the cluster.  Lines in <SYSTEMS_FILE> that begin with a"
+echo    "'#' are comments.  The <SYSTEMS_FILE> is used by markit/find-code.sh,"
+echo    "Linux-admin/cluster-command/cluster-command.sh, docker-TLS/copy-registry-tls.sh," 
+echo    "pi-display/create-message/create-display-message.sh, and other scripts.  A"
+echo    "different <SYSTEMS_FILE> can be entered on the command line or environment"
+echo    "variable."
+### production standard 4.0 Documentation Language
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
         echo -e "\n--> ${LANG}"
@@ -59,36 +66,46 @@ if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG
 elif ! [ "${LANG}" == "en_US.UTF-8" ] ; then
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
-echo -e "\nSTORAGE & CERTIFICATION ARCHITECTURE TREE"
-echo    "/usr/local/data/                            <-- <DATA_DIR>"
-echo    "   <CLUSTER>/                               <-- <CLUSTER>"
-echo    "   └── docker-registry/                     <-- Docker registry directory"
-echo    "       └── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry container mount"
-echo    "           ├── certs/                       <-- Registry cert directory"
-echo    "           │   ├── domain.crt               <-- Registry cert"
-echo    "           │   └── domain.key               <-- Registry private key"
-echo -e "           └── docker/                      <-- Registry storage directory\n"
-echo    "/etc/docker/certs.d/                        <-- Host docker cert directory"
-echo    "   └── <REGISTRY_HOST>:<REGISTRY_PORT>/     <-- Registry cert directory"
-echo    "       └── ca.crt                           <-- Daemon trust registry cert"
 echo -e "\nENVIRONMENT VARIABLES"
 echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
 echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
 echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
-echo    "   DEBUG       (default '0')"
-echo    "   REGISTRY_HOST   Registry host (default 'local host')"
-echo    "   REGISTRY_PORT   Registry port number (default '5000')"
-echo    "   CLUSTER         (default us-tx-cluster-1/)"
-echo    "   DATA_DIR        (default /usr/local/data/)"
+echo    "   DEBUG           (default '0')"
+echo    "   REGISTRY_HOST   Registry host (default '${DEFAULT_REGISTRY_HOST}')"
+echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
+echo    "   CLUSTER         (default '${DEFAULT_CLUSTER}')"
+echo    "   DATA_DIR        (default '${DEFAULT_DATA_DIR}')"
+echo    "   SYSTEMS_FILE    (default '${DEFAULT_SYSTEMS_FILE}')"
 echo -e "\nOPTIONS"
-echo    "   REGISTRY_HOST   Registry host (default 'local host')"
-echo    "   REGISTRY_PORT   Registry port number (default '5000')"
-echo    "   CLUSTER         (default us-tx-cluster-1/)"
-echo    "   DATA_DIR        (default /usr/local/data/)"
+echo    "Order of precedence: CLI options, environment variable, default code."
+echo    "   REGISTRY_HOST   Registry host (default '${DEFAULT_REGISTRY_HOST}')"
+echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
+echo    "   CLUSTER         (default '${DEFAULT_CLUSTER}')"
+echo    "   DATA_DIR        (default '${DEFAULT_DATA_DIR}')"
+echo    "   SYSTEMS_FILE    (default '${DEFAULT_SYSTEMS_FILE}')"
+### production standard 6.0 Architecture tree
+echo -e "\nSTORAGE & CERTIFICATION ARCHITECTURE TREE"
+echo    "/usr/local/data/                          <-- <DATA_DIR>"
+echo    "   <CLUSTER>/                             <-- <CLUSTER>"
+echo    "   ├── SYSTEMS                            <-- List of hosts in cluster"
+echo    "   └── docker-registry/                   <-- Docker registry directory"
+echo    "       ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry container mount"
+echo    "       │   ├── certs/                     <-- Registry cert directory"
+echo    "       │   │   ├── domain.crt             <-- Registry cert"
+echo    "       │   │   └── domain.key             <-- Registry private key"
+echo    "       │   └── docker/                    <-- Registry storage directory"
+echo -e "       └── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry container mount\n"
+echo    "/etc/ "
+echo    "   docker/ "
+echo    "   └── certs.d/                           <-- Host docker cert directory"
+echo    "       ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ <-- Registry cert directory"
+echo    "       │   └── ca.crt                     <-- Daemon registry domain cert"
+echo    "       └── <REGISTRY_HOST>:<REGISTRY_PORT>/ <-- Registry cert directory"
+echo    "           └── ca.crt                     <-- Daemon registry domain cert"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
-echo -e "\nEXAMPLES\n   ${BOLD}sudo ${0} <<code example goes here>>${NORMAL}\n\n   <<your code examples description goes here>>\n"
+echo -e "\nEXAMPLES\n   <<your code examples description goes here>>\n	${BOLD}${0} <<code example goes here>>${NORMAL}"
 }
 
 #       Date and time function ISO 8601
