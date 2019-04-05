@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-registry-tls.sh  3.181.595  2019-04-05T16:01:58.024535-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.180  
+# 	   Continue ruff out code 
 # 	docker-TLS/check-registry-tls.sh  3.180.594  2019-04-05T14:25:39.833548-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.179  
 # 	   update comments 
 echo "In development		In developmen		In developmentt		In development		In development"
@@ -19,7 +21,6 @@ DEFAULT_REGISTRY_HOST=$(hostname -f)    # local host
 DEFAULT_REGISTRY_PORT="17313"
 DEFAULT_CLUSTER="us-tx-cluster-1/"
 DEFAULT_DATA_DIR="/usr/local/data/"
-DEFAULT_SYSTEMS_FILE="SYSTEMS"
 ### production standard 0.0 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Check certifications for private registry"
@@ -27,8 +28,7 @@ echo -e "\nUSAGE\n   ${0} "
 echo -e "   ${0} [<REGISTRY_HOST>]" 
 echo    "   ${0}  <REGISTRY_HOST> [<REGISTRY_PORT>]" 
 echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT> [<CLUSTER>]" 
-echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER>  [<DATA_DIR>]" 
-echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER>   <DATA_DIR>  [<SYSTEMS_FILE>]" 
+echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER> [<DATA_DIR>]" 
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
@@ -47,13 +47,6 @@ echo    "<REGISTRY_HOST> and <REGISTRY_PORT> number is required when copying the
 echo    "ca.crt into the /etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/"
 echo    "directory on each host using the private registry."
 
-echo -e "\nThe <DATA_DIR>/<CLUSTER>/<SYSTEMS_FILE> includes one FQDN or IP address per"
-echo    "line for all hosts in the cluster.  Lines in <SYSTEMS_FILE> that begin with a"
-echo    "'#' are comments.  The <SYSTEMS_FILE> is used by markit/find-code.sh,"
-echo    "Linux-admin/cluster-command/cluster-command.sh, docker-TLS/copy-registry-tls.sh," 
-echo    "pi-display/create-message/create-display-message.sh, and other scripts.  A"
-echo    "different <SYSTEMS_FILE> can be entered on the command line or environment"
-echo    "variable."
 ### production standard 4.0 Documentation Language
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
@@ -74,19 +67,16 @@ echo    "   REGISTRY_HOST   Registry host (default '${DEFAULT_REGISTRY_HOST}')"
 echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
 echo    "   CLUSTER         (default '${DEFAULT_CLUSTER}')"
 echo    "   DATA_DIR        (default '${DEFAULT_DATA_DIR}')"
-echo    "   SYSTEMS_FILE    (default '${DEFAULT_SYSTEMS_FILE}')"
 echo -e "\nOPTIONS"
 echo    "Order of precedence: CLI options, environment variable, default code."
 echo    "   REGISTRY_HOST   Registry host (default '${DEFAULT_REGISTRY_HOST}')"
 echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
 echo    "   CLUSTER         (default '${DEFAULT_CLUSTER}')"
 echo    "   DATA_DIR        (default '${DEFAULT_DATA_DIR}')"
-echo    "   SYSTEMS_FILE    (default '${DEFAULT_SYSTEMS_FILE}')"
 ### production standard 6.0 Architecture tree
 echo -e "\nSTORAGE & CERTIFICATION ARCHITECTURE TREE"
 echo    "/usr/local/data/                          <-- <DATA_DIR>"
 echo    "   <CLUSTER>/                             <-- <CLUSTER>"
-echo    "   ├── SYSTEMS                            <-- List of hosts in cluster"
 echo    "   └── docker-registry/                   <-- Docker registry directory"
 echo    "       ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry container mount"
 echo    "       │   ├── certs/                     <-- Registry cert directory"
@@ -149,7 +139,7 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 if ! [ $(id -u) = 0 ] ; then
         display_help | more
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Use sudo ${0}" 1>&2
-        echo -e "${BOLD}\n>>   SCRIPT MUST BE RUN AS ROOT TO COPY FILES.  sudo copy-registry-tls.sh   <<\n${NORMAL}"     1>&2
+        echo -e "${BOLD}\n>>   SCRIPT MUST BE RUN AS ROOT TO check TLS certificates.   <<\n${NORMAL}"     1>&2
         exit 1
 fi
 
@@ -159,42 +149,41 @@ if [ $# -ge  1 ]  ; then REGISTRY_HOST=${1} ; elif [ "${REGISTRY_HOST}" == "" ] 
 if [ $# -ge  2 ]  ; then REGISTRY_PORT=${2} ; elif [ "${REGISTRY_PORT}" == "" ] ; then REGISTRY_PORT=${DEFAULT_REGISTRY_PORT} ; fi
 if [ $# -ge  3 ]  ; then CLUSTER=${3} ; elif [ "${CLUSTER}" == "" ] ; then CLUSTER=${DEFAULT_CLUSTER} ; fi
 if [ $# -ge  4 ]  ; then DATA_DIR=${4} ; elif [ "${DATA_DIR}" == "" ] ; then DATA_DIR=${DEFAULT_DATA_DIR} ; fi
-if [ $# -ge  5 ]  ; then SYSTEMS_FILE=${5} ; elif [ "${SYSTEMS_FILE}" == "" ] ; then SYSTEMS_FILE=${DEFAULT_SYSTEMS_FILE} ; fi
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_PORT >${REGISTRY_PORT}< CLUSTER >${CLUSTER}< DATA_DIR >${DATA_DIR}< SYSTEMS_FILE >${SYSTEMS_FILE}<" 1>&2 ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_PORT >${REGISTRY_PORT}< CLUSTER >${CLUSTER}< DATA_DIR >${DATA_DIR}<" 1>&2 ; fi
+
+#	Get currect date in seconds
+CURRENT_DATE_SECONDS=$(date '+%s' )
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... CURRENT_DATE_SECONDS >${CURRENT_DATE_SECONDS}<" 1>&2 ; fi
 
 #       Set REGISTRY_HOST_CERT variable to host entered during the creation of certificates
 REGISTRY_HOST_CERT=$(openssl x509 -in /etc/docker/certs.d/${REGISTRY_HOST}\:${REGISTRY_PORT}/ca.crt -noout -issuer | cut -d '/' -f 7 | cut -d '=' -f 2)
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_HOST_CERT >${REGISTRY_HOST_CERT}<" 1>&2 ; fi
-if [ ! "${REGISTRY_HOST_CERT}" == "${REGISTRY_HOST}" ] ; then 
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  The certificate, /etc/docker/certs.d/${REGISTRY_HOST}\:${REGISTRY_PORT}/ca.crt, is for host ${REGISTRY_HOST_CERT} not ${REGISTRY_HOST}" 1>&2
-# >>>	#
-	exit 1
-# >>>	#
-fi
 
 #	Get registry certificate expiration date from ca.crt
 REGISTRY_EXPIRE_DATE=$(openssl x509 -in /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt -noout -enddate | cut -d '=' -f 2)
 REGISTRY_EXPIRE_SECONDS=$(date -d "${REGISTRY_EXPIRE_DATE}" '+%s')
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_EXPIRE_DATE >${REGISTRY_EXPIRE_DATE}< REGISTRY_EXPIRE_SECONDS >${REGISTRY_EXPIRE_SECONDS}<" 1>&2 ; fi
 
-#	Get currect date in seconds
-CURRENT_DATE_SECONDS=$(date '+%s' )
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... CURRENT_DATE_SECONDS >${CURRENT_DATE_SECONDS}<" 1>&2 ; fi
-
+# >>>
+# >>> Check if ${REGISTRY_HOST_CERT}  ==  ${REGISTRY_HOST}
+# >>> ERROR or WARNING if not the same
 #	Check if certificate has expired
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  REGISTRY_EXPIRE_DATE  >${REGISTRY_EXPIRE_DATE}<  REGISTRY_EXPIRE_SECONDS > CURRENT_DATE_SECONDS ${REGISTRY_EXPIRE_SECONDS} -gt ${CURRENT_DATE_SECONDS}" 1>&2 ; fi
+# >>>
+# >>>	Add warning the cert will expire in 30 days
+# >>>
 if [ "${REGISTRY_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ] ; then
-	echo -e "\n\tCertificate, /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt, is ${BOLD}good${NORMAL} until ${REGISTRY_EXPIRE_DATE}\n"
+	echo -e "\n\tCertificate on ${LOCALHOST}, /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt, is ${BOLD}GOOD${NORMAL} until ${REGISTRY_EXPIRE_DATE}"
 else
-	echo -e "\n\tCertificate, /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt, ${BOLD}HAS EXPIRED${NORMAL} on ${REGISTRY_EXPIRE_DATE}"
-	echo -e "\tUse script create-registry-tls.sh to update expired registry TLS.\n"
+        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Certificate on ${LOCALHOST}, /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt, ${BOLD}HAS EXPIRED${NORMAL} on ${REGISTRY_EXPIRE_DATE}" 1>&2
+	echo -e "\n\t${BOLD}Use script create-registry-tls.sh to update expired registry TLS.${NORMAL}"
 fi
 
 #	Check if ${LOCALHOST} is ${REGISTRY_HOST} running the private registry
 if [ "${LOCALHOST}" == "${REGISTRY_HOST}" ] ; then
 	#       Check if private registry certificate directory
-	if [ ! -d ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}:${REGISTRY_PORT}/certs/ ] ; then
-        	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]  Directory ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}:${REGISTRY_PORT}/certs/ NOT found${NORMAL}" 1>&2
+	if [ ! -d ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/ ] ; then
+        	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]  Directory ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/ NOT found${NORMAL}" 1>&2
         	exit 1
 	fi
 	#       Set REGISTRY_HOST_CERT variable to host entered during the creation of certificates
