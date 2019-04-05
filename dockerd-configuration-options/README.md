@@ -13,13 +13,13 @@ To install, change to a location you want to download these files. Use git to pu
 
     mkdir temp
     cd temp
-    git clone https://github.com/BradleyA/docker-security-infrastructure-scripts
-    cd docker-security-infrastructure-scripts/dockerd-configuration-options
+    git clone https://github.com/BradleyA/docker-security-infrastructure
+    cd docker-security-infrastructure/dockerd-configuration-options
     sudo ./setup-dockerd.sh
     cd ../../..
     rm -rf ./temp
     
-#### Note: The default in this dockerd configuration (/etc/docker/dockerd-configuration-file) requires docker TLS.  Here are the scripts to help you setup [docker-TLS](https://github.com/BradleyA/docker-security-infrastructure-scripts/tree/master/docker-TLS).
+#### Note: The default in this dockerd configuration (/etc/docker/dockerd-configuration-file) requires docker TLS.  Here are the scripts to help you setup [docker-TLS](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS).
 
 Edit dockerd-configuration-file, change the [dockerd flags](https://docs.docker.com/engine/reference/commandline/dockerd/) to the flags your dockerd environment requires.  This file, dockerd-configuration-file, is an example.  It is what I am currently using.  You will want to remove --data-root=/usr/local/docker flag if you are using the default location (/var/lib/docker) or change it to your Docker root directory.  You will want to change the address of the local DNS server (--dns 192.168.1.202) to your DNS server address.  If you do not have [TLS CA certificates](https://docs.docker.com/engine/security/https/) setup or in a different location or using different names then you will want to remove or change those --tls flags.  If you have not used --userns-remap=default before you WILL want to remove this flag until you read more about this security feature.
 
