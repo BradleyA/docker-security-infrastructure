@@ -1,8 +1,8 @@
 #!/bin/bash
+# 	docker-TLS/check-registry-tls.sh  3.183.605  2019-04-06T17:06:50.611573-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.182-2-gb37491d  
+# 	   update display_help 
 # 	docker-TLS/check-registry-tls.sh  3.182.602  2019-04-06T13:47:32.436281-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.181-6-g5c8cb7c  
 # 	   Continue ruff out code 
-# 	docker-TLS/check-registry-tls.sh  3.180.594  2019-04-05T14:25:39.833548-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.179  
-# 	   update comments 
 echo "In development		In developmen		In developmentt		In development		In development"
 echo "		In development		In developmen		In developmentt		In development		In development"
 ### production standard 3.0 shellcheck
@@ -37,16 +37,17 @@ echo    "This script has to be run as root to check daemon registry cert (ca.crt
 echo    "registry cert (domain.crt), and registry private key (domain.key) in"
 echo    "/etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/ and"
 echo    "<DATA_DIR>/<CLUSTER>/docker-registry/<REGISTRY_HOST>-<REGISTRY_PORT>/certs/"
-echo    "directories.  This directory was selected to place"
-echo    "dockerd TLS certifications because docker registry stores it's TLS"
-echo    "certifications in /etc/docker/certs.d.  The certification files and"
-echo    "directory permissions are also checked."
-echo -e "\nThis script works for the local host only.  To test remote hosts try:"
-echo    "   ssh -tp 22 uadmin@six-rpi3b.cptx86.com 'sudo check-host-tls.sh'"
+echo    "directories.  The certification files and directory permissions are also"
+echo    "checked."
+echo -e "\nThis script works for the local host only.  To use check-host-tls.sh on a"
+echo    "remote hosts (one-rpi3b.cptx86.com) with ssh port of 12323 as uadmin user;"
+echo    "   ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo check-host-tls.sh'"
+echo    "To loop through a list of hosts in the cluster use,"
+echo    "https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
+echo    "   cluster-command.sh special 'sudo check-host-tls.sh'"
 
 echo    "<your help goes here>" 
 echo    ">>> NEED TO COMPLETE THIS SOON, ONCE I KNOW HOW IT IS GOING TO WORK :-) <<<    |"
-echo -e "\n<<Paragraph two>>                                                            |"
 
 echo    "An administration user can run this script to create Docker private registry"
 echo    "certificates on any host in the directory; \${HOME}/.docker/.  It will create"
