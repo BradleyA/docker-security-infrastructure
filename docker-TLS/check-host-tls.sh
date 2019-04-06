@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-host-tls.sh  3.184.606  2019-04-06T17:11:31.719937-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.183  
+# 	   update display_help 
 # 	docker-TLS/check-host-tls.sh  3.117.488  2019-01-22T23:09:00.796086-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.116  
 # 	   production standard 5 include Copyright notice 
 # 	docker-TLS/check-host-tls.sh  3.111.472  2019-01-20T00:05:37.241557-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
@@ -30,8 +32,12 @@ echo    "/etc/docker/certs.d/daemon directory.  This directory was selected to p
 echo    "dockerd TLS certifications because docker registry stores it's TLS"
 echo    "certifications in /etc/docker/certs.d.  The certification files and"
 echo    "directory permissions are also checked."
-echo -e "\nThis script works for the local host only.  To test remote hosts try:"
-echo    "   ssh -tp 22 uadmin@six-rpi3b.cptx86.com 'sudo check-host-tls.sh'"
+echo -e "\nThis script works for the local host only.  To use check-host-tls.sh on a"
+echo    "remote hosts (one-rpi3b.cptx86.com) with ssh port of 12323 as uadmin user;"
+echo    "   ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo check-host-tls.sh'"
+echo    "To loop through a list of hosts in the cluster use,"
+echo    "https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
+echo    "   cluster-command.sh special 'sudo check-host-tls.sh'"
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
         echo -e "\n--> ${LANG}"
