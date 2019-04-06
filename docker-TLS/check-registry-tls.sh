@@ -1,5 +1,5 @@
 #!/bin/bash
-# 	docker-TLS/check-registry-tls.sh  3.181.595  2019-04-05T16:01:58.024535-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.180  
+# 	docker-TLS/check-registry-tls.sh  3.182.602  2019-04-06T13:47:32.436281-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.181-6-g5c8cb7c  
 # 	   Continue ruff out code 
 # 	docker-TLS/check-registry-tls.sh  3.180.594  2019-04-05T14:25:39.833548-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.179  
 # 	   update comments 
@@ -33,9 +33,20 @@ echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
 #       Displaying help DESCRIPTION in English en_US.UTF-8
+echo    "This script has to be run as root to check daemon registry cert (ca.crt),"
+echo    "registry cert (domain.crt), and registry private key (domain.key) in"
+echo    "/etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/ and"
+echo    "<DATA_DIR>/<CLUSTER>/docker-registry/<REGISTRY_HOST>-<REGISTRY_PORT>/certs/"
+echo    "directories.  This directory was selected to place"
+echo    "dockerd TLS certifications because docker registry stores it's TLS"
+echo    "certifications in /etc/docker/certs.d.  The certification files and"
+echo    "directory permissions are also checked."
+echo -e "\nThis script works for the local host only.  To test remote hosts try:"
+echo    "   ssh -tp 22 uadmin@six-rpi3b.cptx86.com 'sudo check-host-tls.sh'"
+
 echo    "<your help goes here>" 
-echo    ">>> NEED TO COMPLETE THIS SOON, ONCE I KNOW HOW IT IS GOING TO WORK :-) <<<"
-echo -e "\n<<Paragraph two>>"
+echo    ">>> NEED TO COMPLETE THIS SOON, ONCE I KNOW HOW IT IS GOING TO WORK :-) <<<    |"
+echo -e "\n<<Paragraph two>>                                                            |"
 
 echo    "An administration user can run this script to create Docker private registry"
 echo    "certificates on any host in the directory; \${HOME}/.docker/.  It will create"
@@ -164,16 +175,23 @@ REGISTRY_EXPIRE_DATE=$(openssl x509 -in /etc/docker/certs.d/${REGISTRY_HOST}:${R
 REGISTRY_EXPIRE_SECONDS=$(date -d "${REGISTRY_EXPIRE_DATE}" '+%s')
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_EXPIRE_DATE >${REGISTRY_EXPIRE_DATE}< REGISTRY_EXPIRE_SECONDS >${REGISTRY_EXPIRE_SECONDS}<" 1>&2 ; fi
 
-# >>>
-# >>> Check if ${REGISTRY_HOST_CERT}  ==  ${REGISTRY_HOST}
-# >>> ERROR or WARNING if not the same
+#	Check if ${REGISTRY_HOST_CERT} is NOT ${REGISTRY_HOST}
+if ! [ "${REGISTRY_HOST_CERT}" -eq "${REGISTRY_HOST}" ] ; then
+        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Certificate (/etc/docker/certs.d/${REGISTRY_HOST}\:${REGISTRY_PORT}/ca.crt) is for ${REGISTRY_HOST_CERT}  NOT  ${REGISTRY_HOST} " 1>&2
+fi
+
 #	Check if certificate has expired
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  REGISTRY_EXPIRE_DATE  >${REGISTRY_EXPIRE_DATE}<  REGISTRY_EXPIRE_SECONDS > CURRENT_DATE_SECONDS ${REGISTRY_EXPIRE_SECONDS} -gt ${CURRENT_DATE_SECONDS}" 1>&2 ; fi
-# >>>
-# >>>	Add warning the cert will expire in 30 days
-# >>>
 if [ "${REGISTRY_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ] ; then
-	echo -e "\n\tCertificate on ${LOCALHOST}, /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt, is ${BOLD}GOOD${NORMAL} until ${REGISTRY_EXPIRE_DATE}"
+#	Check if certificate will expire in 30 day expired
+	if [  ] ; then
+
+# >>>	Add warning the cert will expire in 30 days
+echo $(date -d "+30 days")
+# >>>
+	else
+		echo -e "\n\tCertificate on ${LOCALHOST}, /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt, is ${BOLD}GOOD${NORMAL} until ${REGISTRY_EXPIRE_DATE}"
+	fi
 else
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Certificate on ${LOCALHOST}, /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt, ${BOLD}HAS EXPIRED${NORMAL} on ${REGISTRY_EXPIRE_DATE}" 1>&2
 	echo -e "\n\t${BOLD}Use script create-registry-tls.sh to update expired registry TLS.${NORMAL}"
