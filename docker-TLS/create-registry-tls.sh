@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.191.618  2019-04-07T15:04:52.801163-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.190  
+# 	   add example using number of days #41 
 # 	docker-TLS/create-registry-tls.sh  3.190.617  2019-04-07T14:48:56.727273-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.189-3-g163b680  
 # 	   update display_help 
 # 	docker-TLS/create-registry-tls.sh  3.189.613  2019-04-07T13:13:18.448749-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.188  
@@ -66,7 +68,8 @@ echo    "       ├── ca.crt                         <-- Daemon registry dom
 echo    "       ├── domain.crt                     <-- Registry cert"
 echo    "       └── domain.key                     <-- Registry private key"
 echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure"
-echo -e "\nEXAMPLES\n   Create new certificates with 17315 port number reference\n	${BOLD}${0} 17315${NORMAL}"
+echo -e "\nEXAMPLES\n   Create new certificates with 17315 port number\n	${BOLD}${0} 17315${NORMAL}"
+echo -e "   Create new certificates with 17315 port number valid for 90 days\n	${BOLD}${0} 17315 90${NORMAL}"
 }
 
 #       Date and time function ISO 8601
