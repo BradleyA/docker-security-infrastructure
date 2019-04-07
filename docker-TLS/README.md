@@ -24,7 +24,7 @@ These bash scripts also help minimize the exposure to risk when incidents happen
 **create-registry-tls.sh** - Run this script to create Docker private registry certificates on any host in the directory; ~/.docker/.  It will create a working directory, ~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>.  The <REGISTRY_PORT>
 number is not required when creating a private registry certificates.  It is used to keep track of multiple certificates for multiple private registries on the same host.  The scripts create-site-private-public-tls.sh and create-new-openssl.cnf-tls.sh are NOT required for a private registry.
 
-**copy-registry-tls.sh** - 
+**copy-registry-tls.sh** - A user with administration authority uses this script to copy Docker private registry certificates from ~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT> directory on this system to systems in <SYSTEMS_FILE> which MUST include the <REGISTRY_HOST>.  The certificates (domain.{crt,key}) for the <REGISTRY_HOST> are coped to it, into the following directory: <DATA_DIR>/<CLUSTER>/docker-registry/<REGISTRY_HOST>-<REGISTRY_PORT>/certs/.  The daemon registry domain cert (ca.crt) is copied to all the systems found in <SYSTEMS_FILE> in the following directory, /etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/.
 
 **check-registry-tls.sh** - 
 
