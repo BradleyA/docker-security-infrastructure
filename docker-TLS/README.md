@@ -4,21 +4,21 @@ These bash scripts will create, copy, and check TLS public keys, private keys, a
 
 These bash scripts also help minimize the exposure to risk when incidents happen requiring you to be agile and replace impacted certificates quickly. 
 
-create-site-private-public-tls.sh - Run this script first on your host that will be creating all your TLS keys.  It creates the site private and CA keys that all other TLS keys at your site will be using.  It creates the working directories  $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private for your site public and private keys.  If you later choose to use a different host to continue creating your user and host TLS keys; copy the files in $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private to the new host then run create-new-openssl.cnf-tls.sh scipt on the new host.
+**create-site-private-public-tls.sh** - Run this script first on your host that will be creating all your TLS keys.  It creates the site private and CA keys that all other TLS keys at your site will be using.  It creates the working directories  $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private for your site public and private keys.  If you later choose to use a different host to continue creating your user and host TLS keys; copy the files in $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private to the new host then run create-new-openssl.cnf-tls.sh scipt on the new host.
 
-create-new-openssl.cnf-tls.sh - Run this script second.  It is required to make changes to the openssl.cnf file on your host.  These changes are required to run create-user-tls and create-host-tls scripts.  This script is not required to run create-site-private-public-tls.sh script.  It is only required to be run once on a host that will be creating all your TLS host and user keys.  If you choose to use a different host to continue creating your user and host TLS keys, run this script on the new host to modify openssl.cnf file.
+**create-new-openssl.cnf-tls.sh** - Run this script second.  It is required to make changes to the openssl.cnf file on your host.  These changes are required to run create-user-tls and create-host-tls scripts.  This script is not required to run create-site-private-public-tls.sh script.  It is only required to be run once on a host that will be creating all your TLS host and user keys.  If you choose to use a different host to continue creating your user and host TLS keys, run this script on the new host to modify openssl.cnf file.
 
-create-user-tls.sh - Run this script any time a user requires a new Docker public and private TLS key.
+**create-user-tls.sh** - Run this script any time a user requires a new Docker public and private TLS key.
 
-create-host-tls.sh - Run this script any time a host requires a new Docker public and private TLS key.
+**create-host-tls.sh** - Run this script any time a host requires a new Docker public and private TLS key.
 
-check-user-tls.sh - A user can check their public, private keys, and CA in $HOME/.docker or a user can check other users certificates by using sudo.
+**check-user-tls.sh** - A user can check their public, private keys, and CA in $HOME/.docker or a user can check other users certificates by using sudo.
 
-check-host-tls.sh - An administration user can check a host public, private keys, and CA in /etc/docker/certs.d/daemon by using sudo.
+**check-host-tls.sh** - An administration user can check a host public, private keys, and CA in /etc/docker/certs.d/daemon by using sudo.
 
-copy-user-2-remote-host-tls.sh - An administration user can run this script to copy user public, private TLS keys, and CA to a remote host.
+**copy-user-2-remote-host-tls.sh** - An administration user can run this script to copy user public, private TLS keys, and CA to a remote host.
 
-copy-host-2-remote-host-tls.sh - An administration user can run this script to copy host public, private TLS keys, and CA to a remote host.
+**copy-host-2-remote-host-tls.sh** - An administration user can run this script to copy host public, private TLS keys, and CA to a remote host.
 
 ## Install
 To clone, change to the directory you want to download the scripts.  Use git to clone these scripts into your directory.  If you do not have git then enter; "sudo apt-get install git".  On the github page of this script use the "HTTPS clone URL" with the 'git clone' command. 
