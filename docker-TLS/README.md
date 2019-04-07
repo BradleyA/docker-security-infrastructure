@@ -349,31 +349,31 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
     	to one-rpi3b.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
     [sudo] password for uadmin: 
 
-	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
-	to two-rpi3b.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
+    	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
+    	to two-rpi3b.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
     [sudo] password for uadmin: 
 
-	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
-	to three-rpi3b.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
+    	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
+    	to three-rpi3b.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
     [sudo] password for uadmin: 
 
-	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
-	to four-rpi3b.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
+    	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
+    	to four-rpi3b.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
     [sudo] password for uadmin: 
 
-	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
-	to five-rpi3b.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
+    	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
+    	to five-rpi3b.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
     [sudo] password for uadmin: 
 
-	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
-	to six-rpi3b.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
+    	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
+    	to six-rpi3b.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
     [sudo] password for uadmin: 
 
-	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
-	to two.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
+    	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
+    	to two.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
     [sudo] password for uadmin: 
 
-	Copy domain.{crt,key} to /usr/local/data//us-tx-cluster-1//docker-registry/two-rpi3b.cptx86.com-17315/certs
+    	Copy domain.{crt,key} to /usr/local/data//us-tx-cluster-1//docker-registry/two-rpi3b.cptx86.com-17315/certs
     2019-04-07T15:24:01.572032-05:00 (CDT) two-rpi3b.cptx86.com /usr/local/bin/copy-registry-tls.sh[13176] 3.190.617 316 uadmin 10000:10000 [INFO]  Operation finished.
 
 ## Usage
