@@ -47,7 +47,7 @@ Run this script first on your host to create your site private and public TLS ke
     create-site-private-public-tls.sh <#days>
 
 ## Output
-    $ ./create-site-private-public-tls.sh
+    $ create-site-private-public-tls.sh
     
     ./create-site-private-public-tls.sh 48 [INFO]:	Creating private key with passphrase in /home/uadmin/.docker/docker-ca/.private
     Generating RSA private key, 4096 bit long modulus
@@ -100,7 +100,7 @@ Run this script first on your host to create your site private and public TLS ke
 ## Usage
 Run this script second on your host that will be used to create all your certificates.  This script makes a change to the openssl.cnf file.
 
-    sudo ./create-new-openssl.cnf-tls.sh
+    sudo create-new-openssl.cnf-tls.sh
 
 ## Output
     $ sudo ./create-new-openssl.cnf-tls.sh
@@ -117,10 +117,10 @@ Run this script second on your host that will be used to create all your certifi
 ## Usage
 Run this script for each user that requires a new Docker public and private TLS key.
 
-    ./create-user-tls.sh <user> <#days> 
+    create-user-tls.sh <user> <#days> 
 
 ## Output
-    $ ./create-user-tls.sh sally 30
+    $ create-user-tls.sh sally 30
     ./create-user-tls.sh 71 [INFO]:	Creating private key for user sally.
     Generating RSA private key, 2048 bit long modulus
     .........+++
@@ -141,10 +141,10 @@ Run this script for each user that requires a new Docker public and private TLS 
 ## Usage
 Run this script for each host that requires a new Docker public and private TLS key.
 
-    ./create-host-tls.sh <FQDN> <#days>
+    create-host-tls.sh <FQDN> <#days>
 
 ## Output
-    $ ./create-host-tls.sh two.cptx86.com 185
+    $ create-host-tls.sh two.cptx86.com 185
     ./create-host-tls.sh 82 [INFO]:	Creating private key for host
 	two.cptx86.com.
 	Generating RSA private key, 2048 bit long modulus
@@ -167,10 +167,10 @@ Run this script for each host that requires a new Docker public and private TLS 
 ## Usage
 An administration user can run this script to copy user public, private TLS keys, and CA to a remote host.
 
-    ./copy-user-2-remote-host-tls.sh <user> <remotehost> 
+    copy-user-2-remote-host-tls.sh <user> <remotehost> 
     
 ## Output
-    $ ./copy-user-2-remote-host-tls.sh sally two.cptx86.com
+    $ copy-user-2-remote-host-tls.sh sally two.cptx86.com
     ./copy-user-2-remote-host-tls.sh 75 [INFO]:	uadmin may receive password and
 	passphrase prompt from two.cptx86.com. Running
 	ssh-copy-id uadmin@two.cptx86.com may stop the prompts.
@@ -200,15 +200,14 @@ An administration user can run this script to copy user public, private TLS keys
     ./copy-user-2-remote-host-tls.sh 109 [INFO]:	Done.
 
 ## Usage
-A user with administration authority (uadmin) uses this script to copy host TLS CA, public, and private keys from /home/uadmin/.docker/docker-ca directory on this system to /etc/docker/certs.d directory on a remote system.
-The administration user may receive password and/or passphrase prompts from a remote systen; running the following may stop the prompts in your cluster.
+A user with administration authority (uadmin) uses this script to copy host TLS CA, public, and private keys from /home/uadmin/.docker/docker-ca directory on this system to /etc/docker/certs.d directory on a remote system.  The administration user may receive password and/or passphrase prompts from a remote systen; running the following may stop the prompts in your cluster.
    ssh-copy-id <admin-user>@x.x.x.x
 
-    ./copy-host-2-remote-host-tls.sh one-rpi3b.cptx86.com
+    copy-host-2-remote-host-tls.sh <remotehost>
 
 ## Output
 
-     $ ./copy-host-2-remote-host-tls.sh one-rpi3b.cptx86.com
+     $ copy-host-2-remote-host-tls.sh one-rpi3b.cptx86.com
      ./copy-host-2-remote-host-tls.sh 71 [INFO]:	uadmin may receive password and
 	passphrase prompt from one-rpi3b.cptx86.com. Running ssh-copy-id
 	uadmin@one-rpi3b.cptx86.com may stop the prompts.
@@ -250,7 +249,7 @@ The administration user may receive password and/or passphrase prompts from a re
 ## Usage
 A user can check their public, private keys, and CA in $HOME/.docker or a user can check other users certificates by using sudo.
     
-    ./check-user-tls.sh <user>
+    check-user-tls.sh <user>
 
 ## Output
 
@@ -277,7 +276,7 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
 
 ## Usage
 
-    ./check-host-tls.sh
+    check-host-tls.sh
 
 ## Output
 
@@ -299,6 +298,60 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
     
     Verify that dockerd daemon certificate was issued by the CA.
     /etc/docker/certs.d/daemon/cert.pem: OK
+
+## Usage
+Run this script to create Docker private registry certificates on any host in the directory; ~/.docker/.
+    
+    create-registry-tls.sh <REGISTRY_PORT> <NUMBER_DAYS>
+
+## Output
+
+    $ create-registry-tls.sh 17315 90
+    2019-04-07T15:05:25.694993-05:00 (CDT) two-rpi3b.cptx86.com /usr/local/bin/create-registry-tls.sh[8880] 3.190.617 106 uadmin 10000:10000 [INFO]  Started...
+    
+	Create Self-Signed Certificate Keys in /home/uadmin/.docker/tmp-17315 
+
+    Generating a 4096 bit RSA private key
+    .......................................................++
+    ................++
+    writing new private key to 'domain.key'
+    -----
+    You are about to be asked to enter information that will be incorporated
+    into your certificate request.
+    What you are about to enter is what is called a Distinguished Name or a DN.
+    There are quite a few fields but you can leave some blank
+    For some fields there will be a default value,
+    If you enter '.', the field will be left blank.
+    -----
+    Country Name (2 letter code) [AU]:US
+    State or Province Name (full name) [Some-State]:Texas
+    Locality Name (eg, city) []:Cedar Park
+    Organization Name (eg, company) [Internet Widgits Pty Ltd]:Top Company
+    Organizational Unit Name (eg, section) []:IT SRE Team A
+    Common Name (e.g. server FQDN or YOUR name) []:two-rpi3b.cptx86.com
+    Email Address []:
+    
+	    Move Self-Signed Certificate Keys into /home/uadmin/.docker/registry-certs-two-rpi3b.cptx86.com-17315 
+
+    2019-04-07T15:07:09.898001-05:00 (CDT) two-rpi3b.cptx86.com /usr/local/bin/create-registry-tls.sh[8880] 3.190.617 177 uadmin 10000:10000 [INFO]  Operation finished.
+
+## Usage
+A user can check their public, private keys, and CA in $HOME/.docker or a user can check other users certificates by using sudo.
+    
+    
+
+## Output
+
+    $
+
+## Usage
+A user can check their public, private keys, and CA in $HOME/.docker or a user can check other users certificates by using sudo.
+    
+    
+
+## Output
+
+    $
 
 #### Install Scripts
 To install the scripts, change to the directory you have write permission (examples: ~/bin, /usr/local/bin) 
