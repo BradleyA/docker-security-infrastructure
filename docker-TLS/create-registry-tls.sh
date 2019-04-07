@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.180.594  2019-04-05T14:25:40.081369-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.179  
-# 	   update comments 
+# 	docker-TLS/create-registry-tls.sh  3.189.613  2019-04-07T13:13:18.448749-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.188  
+# 	   updated display_help #41 
 ### production standard 3.0 shellcheck
 ### production standard 5.0 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -22,12 +22,12 @@ echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
 #       Displaying help DESCRIPTION in English en_US.UTF-8
-echo    "An administration user can run this script to create Docker private registry"
-echo    "certificates on any host in the directory; ~/.docker/.  It will create"
-echo    "a working directory, registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>.  The"
-echo    "<REGISTRY_PORT> number is not required when creating private registry"
-echo    "certificates.  I use the <REGISTRY_PORT> number to keep track of multiple"
-echo    "certificates for multiple private registries on the same host."
+echo    "Run this script to create Docker private registry certificates on any host in"
+echo    "the directory; ~/.docker/.  It will create a working directory,"
+echo    "~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>.  The <REGISTRY_PORT>"
+echo    "number is not required when creating a private registry certificates.  I use"
+echo    "the <REGISTRY_PORT> number to keep track of multiple certificates for multiple"
+echo    "private registries on the same host."
 ### production standard 4.0 Documentation Language
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
