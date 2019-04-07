@@ -1,7 +1,5 @@
 # docker-TLS
 
-### Working on xxx-registry-TLS.sh currently 3/1/2019, Registry scripts Not ready for test or production all other in production
-
 These bash scripts will create, copy, and check TLS public keys, private keys, and self-signed certificates for the docker user, daemon, and docker swarm.  After many reinstalls of OS's and Docker, I got tried of entering the cryptic command line text required to setup Docker to use TLS.
 
 These bash scripts also help minimize the exposure to risk when incidents happen requiring you to be agile and replace impacted certificates quickly. 
