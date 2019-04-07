@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-registry-tls.sh  3.190.617  2019-04-07T14:48:56.629856-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.189-3-g163b680  
+# 	   update display_help 
 # 	docker-TLS/copy-registry-tls.sh  3.188.612  2019-04-07T12:06:29.862737-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.187-2-g14f38ee  
 # 	   remove old debugging code and hard coded hostnames #43 
 ### production standard 3.0 shellcheck
@@ -18,10 +20,11 @@ DEFAULT_REGISTRY_PORT="17313"
 DEFAULT_CLUSTER="us-tx-cluster-1/"
 DEFAULT_DATA_DIR="/usr/local/data/"
 DEFAULT_SYSTEMS_FILE="SYSTEMS"
-### production standard 0.0 --help
+### production standard 0.3.158 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Copy certs for Private Registry V2"
-echo -e "\nUSAGE\n   ${0} [<REGISTRY_HOST>]" 
+echo -e "\nUSAGE"
+echo    "   ${0} [<REGISTRY_HOST>]" 
 echo    "   ${0}  <REGISTRY_HOST> [<REGISTRY_PORT>]" 
 echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT> [<CLUSTER>]" 
 echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER>  [<DATA_DIR>]" 
@@ -38,7 +41,7 @@ echo    "The certificates (domain.{crt,key}) for the <REGISTRY_HOST> are coped t
 echo    "into the following directory:"
 echo    "<DATA_DIR>/<CLUSTER>/docker-registry/<REGISTRY_HOST>-<REGISTRY_PORT>/certs/."
 echo    "The daemon registry domain cert (ca.crt) is copied to all the systems found"
-echo    "in <SYSTEMS_FILE> in the following"
+echo    "in <SYSTEMS_FILE> in the following directory,"
 echo    "/etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/." 
 echo -e "\nThe administration user may receive password and/or passphrase prompts from a"
 echo    "remote systen; running the following may stop some prompts in your cluster."
@@ -65,19 +68,19 @@ echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  U
 echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
-echo    "   DEBUG           (default '0')"
-echo    "   REGISTRY_HOST   Registry host (default '${DEFAULT_REGISTRY_HOST}')"
+echo    "   DEBUG           (default off '0')"
+echo    "   REGISTRY_HOST   Registry host name (default '${DEFAULT_REGISTRY_HOST}')"
 echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
-echo    "   CLUSTER         (default '${DEFAULT_CLUSTER}')"
-echo    "   DATA_DIR        (default '${DEFAULT_DATA_DIR}')"
-echo    "   SYSTEMS_FILE    (default '${DEFAULT_SYSTEMS_FILE}')"
+echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
+echo    "   DATA_DIR        Data directory (default '${DEFAULT_DATA_DIR}')"
+echo    "   SYSTEMS_FILE    Hosts in cluster (default '${DEFAULT_SYSTEMS_FILE}')"
 echo -e "\nOPTIONS"
 echo    "Order of precedence: CLI options, environment variable, default code."
 echo    "   REGISTRY_HOST   Registry host (default '${DEFAULT_REGISTRY_HOST}')"
 echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
-echo    "   CLUSTER         (default '${DEFAULT_CLUSTER}')"
-echo    "   DATA_DIR        (default '${DEFAULT_DATA_DIR}')"
-echo    "   SYSTEMS_FILE    (default '${DEFAULT_SYSTEMS_FILE}')"
+echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
+echo    "   DATA_DIR        Data directory (default '${DEFAULT_DATA_DIR}')"
+echo    "   SYSTEMS_FILE    Hosts in cluster (default '${DEFAULT_SYSTEMS_FILE}')"
 ### production standard 6.0 Architecture tree
 echo -e "\nSTORAGE & CERTIFICATION ARCHITECTURE TREE"
 echo    "/usr/local/data/                          <-- <DATA_DIR>"

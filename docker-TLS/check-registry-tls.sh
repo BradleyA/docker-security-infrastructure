@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-registry-tls.sh  3.190.617  2019-04-07T14:48:56.535282-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.189-3-g163b680  
+# 	   update display_help 
 # 	docker-TLS/check-registry-tls.sh  3.187.609  2019-04-06T22:34:42.066569-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.186  
 # 	   ready for production testing close #42 
 ### production standard 3.0 shellcheck
@@ -17,11 +19,11 @@ DEFAULT_REGISTRY_HOST=$(hostname -f)    # local host
 DEFAULT_REGISTRY_PORT="5000"
 DEFAULT_CLUSTER="us-tx-cluster-1/"
 DEFAULT_DATA_DIR="/usr/local/data/"
-### production standard 0.0 --help
+### production standard 0.3.158 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Check certifications for private registry"
-echo -e "\nUSAGE\n   ${0} "
-echo -e "   ${0} [<REGISTRY_HOST>]"
+echo -e "\nUSAGE"
+echo    "   ${0} [<REGISTRY_HOST>]"
 echo    "   ${0}  <REGISTRY_HOST> [<REGISTRY_PORT>]"
 echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT> [<CLUSTER>]"
 echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER> [<DATA_DIR>]"
@@ -56,17 +58,17 @@ echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  U
 echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
-echo    "   DEBUG           (default '0')"
+echo    "   DEBUG           (default off '0')"
 echo    "   REGISTRY_HOST   Registry host (default '${DEFAULT_REGISTRY_HOST}')"
 echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
-echo    "   CLUSTER         (default '${DEFAULT_CLUSTER}')"
-echo    "   DATA_DIR        (default '${DEFAULT_DATA_DIR}')"
+echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
+echo    "   DATA_DIR        Data directory (default '${DEFAULT_DATA_DIR}')"
 echo -e "\nOPTIONS"
 echo    "Order of precedence: CLI options, environment variable, default code."
 echo    "   REGISTRY_HOST   Registry host (default '${DEFAULT_REGISTRY_HOST}')"
 echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
-echo    "   CLUSTER         (default '${DEFAULT_CLUSTER}')"
-echo    "   DATA_DIR        (default '${DEFAULT_DATA_DIR}')"
+echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
+echo    "   DATA_DIR        Data directory (default '${DEFAULT_DATA_DIR}')"
 ### production standard 6.0 Architecture tree
 echo -e "\nSTORAGE & CERTIFICATION ARCHITECTURE TREE"
 echo    "/usr/local/data/                          <-- <DATA_DIR>"

@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.190.617  2019-04-07T14:48:56.727273-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.189-3-g163b680  
+# 	   update display_help 
 # 	docker-TLS/create-registry-tls.sh  3.189.613  2019-04-07T13:13:18.448749-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.188  
 # 	   updated display_help #41 
 ### production standard 3.0 shellcheck
@@ -14,10 +16,13 @@ BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 DEFAULT_REGISTRY_PORT="17313"
-### production standard 0.0 --help
+DEFAULT_NUMBER_DAYS='365'
+### production standard 0.3.158 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Create TLS for Private Registry V2"
-echo -e "\nUSAGE\n   ${0} [<REGISTRY_PORT>]" 
+echo -e "\nUSAGE"
+echo    "   ${0} [<REGISTRY_PORT>]" 
+echo    "   ${0}  <REGISTRY_PORT> [<NUMBER_DAYS>]" 
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
@@ -25,9 +30,11 @@ echo -e "\nDESCRIPTION"
 echo    "Run this script to create Docker private registry certificates on any host in"
 echo    "the directory; ~/.docker/.  It will create a working directory,"
 echo    "~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>.  The <REGISTRY_PORT>"
-echo    "number is not required when creating a private registry certificates.  I use"
-echo    "the <REGISTRY_PORT> number to keep track of multiple certificates for multiple"
-echo    "private registries on the same host."
+echo    "number is not required when creating a private registry certificates.  It is"
+echo    "used to keep track of multiple certificates for multiple private registries on"
+echo    "the same host."
+echo -e "\nThe scripts create-site-private-public-tls.sh and"
+echo    "create-new-openssl.cnf-tls.sh are NOT required for a private registry."
 ### production standard 4.0 Documentation Language
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
@@ -43,11 +50,13 @@ echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  U
 echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
-echo    "   DEBUG           (default '0')"
+echo    "   DEBUG           (default off '0')"
 echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
+echo    "   NUMBER_DAYS     Number of days certificate valid (default '${DEFAULT_NUMBER_DAYS}')" 
 echo -e "\nOPTIONS"
 echo    "Order of precedence: CLI options, environment variable, default code."
 echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
+echo    "   NUMBER_DAYS     Number of days certificate valid (default '${DEFAULT_NUMBER_DAYS}')" 
 ### production standard 6.0 Architecture tree
 echo -e "\nCERTIFICATION ARCHITECTURE TREE"
 echo    "~<USER-1>/.docker/                        <-- User docker cert directory"
@@ -102,6 +111,7 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 ###		
 #       Order of precedence: CLI argument, environment variable, default code
 if [ $# -ge  1 ]  ; then REGISTRY_PORT=${1} ; elif [ "${REGISTRY_PORT}" == "" ] ; then REGISTRY_PORT=${DEFAULT_REGISTRY_PORT} ; fi
+if [ $# -ge  2 ]  ; then NUMBER_DAYS=${2} ; elif [ "${NUMBER_DAYS}" == "" ] ; then NUMBER_DAYS=${DEFAULT_NUMBER_DAYS} ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_PORT >${REGISTRY_PORT}<" 1>&2 ; fi
 
 #	Check if user has home directory on system
@@ -123,7 +133,7 @@ cd ${HOME}/.docker/tmp-${REGISTRY_PORT}
 
 #	Create Self-Signed Certificate Keys
 echo -e "\n\t${BOLD}Create Self-Signed Certificate Keys in $(pwd) ${NORMAL}\n" 
-openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days 365 -out domain.crt
+openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days ${NUMBER_DAYS} -out domain.crt
 
 #	Set REGISTRY_HOST variable to host entered during the creation of certificates
 REGISTRY_HOST=$(openssl x509 -in domain.crt -noout -issuer | cut -d '/' -f 7 | cut -d '=' -f 2)
