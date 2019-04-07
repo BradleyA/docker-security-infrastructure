@@ -377,7 +377,7 @@ A user with administration authority uses this script to copy Docker private reg
     2019-04-07T15:24:01.572032-05:00 (CDT) two-rpi3b.cptx86.com /usr/local/bin/copy-registry-tls.sh[13176] 3.190.617 316 uadmin 10000:10000 [INFO]  Operation finished.
 
 ## Usage
-A user can check their public, private keys, and CA in $HOME/.docker or a user can check other users certificates by using sudo.
+This script has to be run as root to check daemon registry cert (ca.crt), registry cert (domain.crt), and registry private key (domain.key) in /etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/ and <DATA_DIR>/<CLUSTER>/docker-registry/<REGISTRY_HOST>-<REGISTRY_PORT>/certs/ directories.
     
     sudo check-registry-tls.sh <REGISTRY_HOST> <REGISTRY_PORT>
 
