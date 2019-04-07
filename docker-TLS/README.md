@@ -336,7 +336,7 @@ Run this script to create Docker private registry certificates on any host in th
     2019-04-07T15:07:09.898001-05:00 (CDT) two-rpi3b.cptx86.com /usr/local/bin/create-registry-tls.sh[8880] 3.190.617 177 uadmin 10000:10000 [INFO]  Operation finished.
 
 ## Usage
-A user can check their public, private keys, and CA in $HOME/.docker or a user can check other users certificates by using sudo.
+A user with administration authority uses this script to copy Docker private registry certificates from ~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT> directory on this system to systems in <SYSTEMS_FILE>.
     
     copy-registry-tls.sh <REGISTRY_HOST> <REGISTRY_PORT>
 
@@ -379,11 +379,23 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
 ## Usage
 A user can check their public, private keys, and CA in $HOME/.docker or a user can check other users certificates by using sudo.
     
-    
+    sudo check-registry-tls.sh <REGISTRY_HOST> <REGISTRY_PORT>
 
 ## Output
 
-    $
+    $ sudo check-registry-tls.sh two-rpi3b.cptx86.com 17315
+    2019-04-07T15:36:19.371823-05:00 (CDT) two-rpi3b.cptx86.com /usr/local/bin/check-registry-tls.sh[16672] 3.190.617 131 root 0:0 [INFO]  Started...
+
+    	Certificate on two-rpi3b.cptx86.com, /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt, is GOOD until Jul  6 20:07:09 2019 GMT
+
+    	Verify and correct file permissions.
+
+    	Certificate on two-rpi3b.cptx86.com, /usr/local/data//us-tx-cluster-1//docker-registry/two-rpi3b.cptx86.com-17315/certs/domain.crt, is GOOD until Jul  6 20:07:09 2019 GMT
+
+    	Verify and correct file permissions.
+    2019-04-07T15:36:19.605877-05:00 (CDT) two-rpi3b.cptx86.com /usr/local/bin/check-registry-tls.sh[16672] 3.190.617 263 root 0:0 [INFO]  Operation finished.
+
+
 
 #### Install Scripts
 To install the scripts, change to the directory you have write permission (examples: ~/bin, /usr/local/bin) 
