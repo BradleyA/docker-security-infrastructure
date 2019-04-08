@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-host-tls.sh  3.195.630  2019-04-08T14:09:38.415315-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.194  
+# 	   update help hints #38 
 # 	docker-TLS/check-host-tls.sh  3.194.629  2019-04-08T13:53:32.011184-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.193  
 # 	   update display_help, add new user messaging 
 ### production standard 3.0 shellcheck
@@ -51,8 +53,8 @@ echo    "you are using other shells."
 echo    "   DEBUG       (default off '0')"
 echo -e "\nOPTIONS"
 echo -e "   CERTDIR     dockerd certification directory (default ${DEFAULT_CERTDIR})"
-### production standard 6.0 Architecture tree
-echo -e "\nSTORAGE & CERTIFICATION ARCHITECTURE TREE"
+### production standard 6.3.163 Architecture tree
+echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
 echo    "/etc/ "
 echo    "   docker/ "
 echo    "   └── certs.d/                           <-- Host docker cert directory"
@@ -112,6 +114,7 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 if ! [ $(id -u) = 0 ] ; then
 	display_help | more
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Use sudo ${0}" 1>&2
+#	Help hint
 	echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT   <<\n${NORMAL}"  1>&2
 	exit 1
 fi
@@ -144,12 +147,15 @@ if [ "${HOST_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ] ; then
 		echo -e "\n\tCertificate on ${LOCALHOST}, ${CERTDIR}/ca.pem, is  ${BOLD}GOOD${NORMAL}  until ${HOST_EXPIRE_DATE}"
 	else
 		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Certificate on ${LOCALHOST}, ${CERTDIR}/ca.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
+#		Help hint
 		echo -e "\n\t${BOLD}Use script  create-site-private-public-tls.sh  to update expired host TLS.${NORMAL}"
 	fi
 else
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Certificate on ${LOCALHOST},  ${CERTDIR}/ca.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
-		echo -e "\n\t${BOLD}Use script  create-site-private-public-tls.sh  to update expired host TLS.${NORMAL}"
+#	Help hint
+	echo -e "\n\t${BOLD}Use script  create-site-private-public-tls.sh  to update expired host TLS.${NORMAL}"
 fi
+
 
 #	View dockerd daemon certificate expiration date of cert.pem file
 HOST_EXPIRE_DATE=$(openssl x509 -in "${CERTDIR}/cert.pem" -noout -enddate  | cut -d '=' -f 2)
@@ -164,11 +170,13 @@ if [ "${HOST_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ] ; then
 		echo -e "\n\tCertificate on ${LOCALHOST}, ${CERTDIR}/cert.pem, is  ${BOLD}GOOD${NORMAL}  until ${HOST_EXPIRE_DATE}"
 	else
 		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Certificate on ${LOCALHOST}, ${CERTDIR}/cert.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
+#		Help hint
 		echo -e "\n\t${BOLD}Use script  create-host-tls.sh  to update expired host TLS.${NORMAL}"
 	fi
 else
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Certificate on ${LOCALHOST},  ${CERTDIR}/cert.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
-		echo -e "\n\t${BOLD}Use script  create-host-tls.sh  to update expired host TLS.${NORMAL}"
+#	Help hint
+	echo -e "\n\t${BOLD}Use script  create-host-tls.sh  to update expired host TLS.${NORMAL}"
 
 #	View dockerd daemon certificate issuer data of the ca.pem file
 TEMP=$(openssl x509 -in ${CERTDIR}/ca.pem -noout -issuer)
