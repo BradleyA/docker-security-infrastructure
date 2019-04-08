@@ -1,12 +1,12 @@
 #!/bin/bash
-# 	docker-TLS/copy-registry-tls.sh  3.190.617  2019-04-07T14:48:56.629856-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.189-3-g163b680  
-# 	   update display_help 
+# 	docker-TLS/copy-registry-tls.sh  3.191.619  2019-04-07T19:28:52.453331-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.191  
+# 	   changed License to MIT License 
 # 	docker-TLS/copy-registry-tls.sh  3.188.612  2019-04-07T12:06:29.862737-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.187-2-g14f38ee  
 # 	   remove old debugging code and hard coded hostnames #43 
 ### production standard 3.0 shellcheck
-### production standard 5.0 Copyright
+### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
-#       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+#       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ### production standard 1.0 DEBUG variable
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
@@ -27,8 +27,8 @@ echo -e "\nUSAGE"
 echo    "   ${0} [<REGISTRY_HOST>]" 
 echo    "   ${0}  <REGISTRY_HOST> [<REGISTRY_PORT>]" 
 echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT> [<CLUSTER>]" 
-echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER>  [<DATA_DIR>]" 
-echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER>   <DATA_DIR>  [<SYSTEMS_FILE>]" 
+echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER> [<DATA_DIR>]" 
+echo    "   ${0}  <REGISTRY_HOST>  <REGISTRY_PORT>  <CLUSTER>  <DATA_DIR> [<SYSTEMS_FILE>]" 
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 #       Displaying help DESCRIPTION in English en_US.UTF-8
@@ -199,12 +199,12 @@ if ! [ -e ca.crt ] ; then
 fi
 
 #	Create tar file to copy $REGISTRY_HOST:$REGISTRY_PORT/ca.crt to hosts in <SYSTEMS_FILE>
-mkdir -p          ./"${REGISTRY_HOST}:${REGISTRY_PORT}"
-chmod 700         ./"${REGISTRY_HOST}:${REGISTRY_PORT}"
-cp -p ./ca.crt    ./"${REGISTRY_HOST}:${REGISTRY_PORT}"
-tar -cf           ./"${REGISTRY_HOST}.${REGISTRY_PORT}.tar" ./"${REGISTRY_HOST}:${REGISTRY_PORT}"
-chmod 600         ./"${REGISTRY_HOST}.${REGISTRY_PORT}.tar"
-rm -rf            ./"${REGISTRY_HOST}:${REGISTRY_PORT}"
+mkdir -p        ./"${REGISTRY_HOST}:${REGISTRY_PORT}"
+chmod 700       ./"${REGISTRY_HOST}:${REGISTRY_PORT}"
+cp -p ./ca.crt  ./"${REGISTRY_HOST}:${REGISTRY_PORT}"
+tar -cf         ./"${REGISTRY_HOST}.${REGISTRY_PORT}.tar" ./"${REGISTRY_HOST}:${REGISTRY_PORT}"
+chmod 600       ./"${REGISTRY_HOST}.${REGISTRY_PORT}.tar"
+rm -rf          ./"${REGISTRY_HOST}:${REGISTRY_PORT}"
 
 #       Check if ${SYSTEMS_FILE} file is on system, one FQDN or IP address per line for all hosts in cluster
 if ! [ -s "${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}" ] ; then

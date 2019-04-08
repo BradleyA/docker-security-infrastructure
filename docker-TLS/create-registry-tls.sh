@@ -1,14 +1,12 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.191.619  2019-04-07T19:28:52.542742-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.191  
+# 	   changed License to MIT License 
 # 	docker-TLS/create-registry-tls.sh  3.191.618  2019-04-07T15:04:52.801163-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.190  
 # 	   add example using number of days #41 
-# 	docker-TLS/create-registry-tls.sh  3.190.617  2019-04-07T14:48:56.727273-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.189-3-g163b680  
-# 	   update display_help 
-# 	docker-TLS/create-registry-tls.sh  3.189.613  2019-04-07T13:13:18.448749-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.188  
-# 	   updated display_help #41 
 ### production standard 3.0 shellcheck
-### production standard 5.0 Copyright
+### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
-#       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+#       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ### production standard 1.0 DEBUG variable
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
