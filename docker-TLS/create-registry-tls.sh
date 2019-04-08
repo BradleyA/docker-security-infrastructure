@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.193.628  2019-04-07T23:33:38.735532-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.192  
+# 	   update display_help 
 # 	docker-TLS/create-registry-tls.sh  3.191.619  2019-04-07T19:28:52.542742-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.191  
 # 	   changed License to MIT License 
 # 	docker-TLS/create-registry-tls.sh  3.191.618  2019-04-07T15:04:52.801163-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.190  
@@ -65,9 +67,9 @@ echo    "       │                                      create registory certs"
 echo    "       ├── ca.crt                         <-- Daemon registry domain cert"
 echo    "       ├── domain.crt                     <-- Registry cert"
 echo    "       └── domain.key                     <-- Registry private key"
-echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure"
-echo -e "\nEXAMPLES\n   Create new certificates with 17315 port number\n	${BOLD}${0} 17315${NORMAL}"
-echo -e "   Create new certificates with 17315 port number valid for 90 days\n	${BOLD}${0} 17315 90${NORMAL}"
+echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
+echo -e "\nEXAMPLES\n   Create new certificates with 17315 port number\n\t${BOLD}${0} 17315${NORMAL}"
+echo -e "   Create new certificates with 17315 port number valid for 90 days\n\t${BOLD}${0} 17315 90${NORMAL}"
 }
 
 #       Date and time function ISO 8601

@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.193.628  2019-04-07T23:33:38.643009-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.192  
+# 	   update display_help 
 # 	docker-TLS/create-new-openssl.cnf-tls.sh  3.192.627  2019-04-07T19:42:17.638002-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.191-8-gc662f79  
 # 	   changed License to MIT License 
 ### production standard 3.0 shellcheck
@@ -13,7 +15,10 @@ DEBUG=0                 # 0 = debug off, 1 = debug on
 #	set -v
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
-###
+### production standard 7.0 Default variable value
+BACKUP_FILE="/etc/ssl/openssl.cnf-$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)"
+ORIGINAL_FILE="/etc/ssl/openssl.cnf"
+### production standard 0.3.158 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Modify /etc/ssl/openssl.conf file"
 echo -e "\nUSAGE\n   sudo ${0}"
@@ -37,9 +42,9 @@ echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  U
 echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
-echo    "   DEBUG       (default '0')"
-echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
-echo -e "\nEXAMPLES\n   sudo ${0}\n"
+echo    "   DEBUG       (default off '0')"
+echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
+echo -e "\nEXAMPLES\n   Modify /etc/ssl/openssl.conf file\n\t${BOLD}sudo ${0}${NORMAL}"
 }
 
 #       Date and time function ISO 8601
@@ -81,32 +86,30 @@ get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Name_of_command >${0}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
 
 ###
-BACKUPFILE=/etc/ssl/openssl.cnf-$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
-ORIGINALFILE=/etc/ssl/openssl.cnf
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  BACKUPFILE >${BACKUPFILE} ORIGINALFILE >${ORIGINALFILE}<" 1>&2 ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  BACKUP_FILE >${BACKUP_FILE} ORIGINAL_FILE >${ORIGINAL_FILE}<" 1>&2 ; fi
 
 #       Must be root to run this script
 if ! [ $(id -u) = 0 ] ; then
 	display_help | more
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Use sudo ${0}" 1>&2
 	#	Help hint
-	echo -e "\n>>	SCRIPT MUST BE RUN AS ROOT TO MODIFY THE ${ORIGINALFILE}	<<\n"	1>&2
+	echo -e "\n>>	SCRIPT MUST BE RUN AS ROOT TO MODIFY THE ${ORIGINAL_FILE}	<<\n"	1>&2
         exit 1
 fi
 
-#	Check if ${ORIGINALFILE} file has previously been modified
-if ! grep -Fxq 'extendedKeyUsage = clientAuth,serverAuth' ${ORIGINALFILE} ; then
+#	Check if ${ORIGINAL_FILE} file has previously been modified
+if ! grep -Fxq 'extendedKeyUsage = clientAuth,serverAuth' ${ORIGINAL_FILE} ; then
 	#	Help hint
-	echo    "This script will make changes to ${ORIGINALFILE} file."
+	echo    "This script will make changes to ${ORIGINAL_FILE} file."
 	echo    "These changes are required before creating user and host TLS keys for Docker."
 	echo    "Run this script before running the user and host TLS scripts.  It is not"
 	echo    "required to be run on hosts not creating TLS keys."
-	echo -e "\nCreating backup file of ${ORIGINALFILE} and naming it ${BACKUPFILE}"
-	cp ${ORIGINALFILE} ${BACKUPFILE}
+	echo -e "\nCreating backup file of ${ORIGINAL_FILE} and naming it ${BACKUP_FILE}"
+	cp ${ORIGINAL_FILE} ${BACKUP_FILE}
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Adding the extended KeyUsage at the beginning of [ v3_ca ] section." 1>&2
-	sed '/\[ v3_ca \]/a extendedKeyUsage = clientAuth,serverAuth' ${BACKUPFILE} > ${ORIGINALFILE}
+	sed '/\[ v3_ca \]/a extendedKeyUsage = clientAuth,serverAuth' ${BACKUP_FILE} > ${ORIGINAL_FILE}
 else
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${ORIGINALFILE} file has previously been modified." 1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${ORIGINAL_FILE} file has previously been modified." 1>&2
 fi
 
 #

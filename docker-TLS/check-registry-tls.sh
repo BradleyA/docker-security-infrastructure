@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-registry-tls.sh  3.193.628  2019-04-07T23:33:38.086024-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.192  
+# 	   update display_help 
 # 	docker-TLS/check-registry-tls.sh  3.191.619  2019-04-07T19:28:52.292228-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.191  
 # 	   changed License to MIT License 
 # 	docker-TLS/check-registry-tls.sh  3.187.609  2019-04-06T22:34:42.066569-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.186  
@@ -91,7 +93,7 @@ echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrast
 echo -e "\nEXAMPLES\n   Check local host certificates for <REGISTRY_HOST> (two.cptx86.com) using\n   <REGISTRY_PORT> (17313)\n	${BOLD}sudo ${0} two.cptx86.com 17313${NORMAL}"
 echo -e "\n   Use cluster-command.sh script to loop through hosts in a cluster."
 echo    "   Check each host certificates for <REGISTRY_HOST> (two.cptx86.com) using"
-echo -e "	<REGISTRY_PORT> (17313)\n	${BOLD}cluster-command.sh special 'sudo ${0} two.cptx86.com 17313${NORMAL}"
+echo -e "	<REGISTRY_PORT> (17313)\n\t${BOLD}cluster-command.sh special 'sudo ${0} two.cptx86.com 17313${NORMAL}'"
 }
 
 #	Date and time function ISO 8601

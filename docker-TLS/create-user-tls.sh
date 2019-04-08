@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-user-tls.sh  3.193.628  2019-04-07T23:33:38.927706-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.192  
+# 	   update display_help 
 # 	docker-TLS/create-user-tls.sh  3.192.627  2019-04-07T19:42:17.831499-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.191-8-gc662f79  
 # 	   changed License to MIT License 
 ### production standard 3.0 shellcheck
@@ -12,10 +14,19 @@ if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, '
 #	set -v
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
-###
+### production standard 7.0 Default variable value
+DEFAULT_TLS_USER="${USER}"
+DEFAULT_NUMBER_DAYS="90"
+DEFAULT_USER_HOME="/home/"
+DEFAULT_ADM_TLS_USER="${USER}"
+### production standard 0.3.158 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Create user public and private key and CA"
-echo -e "\nUSAGE\n   ${0} [<TLSUSER>] [<NUMBERDAYS>] [<USERHOME>] [<ADMTLSUSER>]"
+echo -e "\nUSAGE"
+echo    "   ${0} [<TLS_USER>]"
+echo    "   ${0}  <TLS_USER> [<NUMBER_DAYS>]"
+echo    "   ${0}  <TLS_USER>  <NUMBER_DAYS> [<USER_HOME>]"
+echo    "   ${0}  <TLS_USER>  <NUMBER_DAYS>  <USER_HOME> [<ADM_TLS_USER>]"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
@@ -36,17 +47,17 @@ echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  U
 echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
-echo    "   DEBUG       (default '0')"
-echo    "   USERHOME    (default /home/)"
+echo    "   DEBUG       (default off '0')"
+echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo -e "\nOPTIONS "
-echo    "   TLSUSER      user requiring new TLS keys, default is user running script"
-echo    "   NUMBERDAYS   number of days user keys are valid, default 90 days"
-echo    "   USERHOME     location of admin user directory, default is /home/"
-echo    "                Many sites have different home directories (/u/north-office/)"
-echo    "   ADMTLSUSER   administration user creating TLS accounts, default is user"
-echo    "                running script"
-echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
-echo -e "\nEXAMPLES\n   ${0} bob 30 /u/north-office/ uadmin\n\n   Create TLS keys for user bob for 30 days in /u/north-office/ uadmin"
+echo    "   TLS_USER    User requiring new TLS keys (default ${DEFAULT_TLS_USER})"
+echo    "   TLS_USER    Administration user (default ${DEFAULT_TLS_USER})"
+echo    "   NUMBER_DAYS Number of days host CA is valid (default ${DEFAULT_NUMBER_DAYS})"
+echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
+echo    "               sites have different home directories (/u/north-office/)"
+echo    "   ADM_TLS_USER Administrator user creating TLS keys (default ${DEFAULT_ADM_TLS_USER})"
+echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
+echo -e "\nEXAMPLES\n   Create TLS keys for user bob for 30 days in /u/north-office/ uadmin\n\t${BOLD}${0} bob 30 /u/north-office/ uadmin${NORMAL}"
 }
 
 #       Date and time function ISO 8601
@@ -88,24 +99,24 @@ get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Name_of_command >${0}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
 
 ###
-TLSUSER=${1:-${USER}}
-NUMBERDAYS=${2:-90}
+TLS_USER=${1:-${DEFAULT_TLS_USER}}
+NUMBER_DAYS=${2:-${DEFAULT_NUMBER_DAYS}}
 #       Order of precedence: CLI argument, environment variable, default code
-if [ $# -ge  3 ]  ; then USERHOME=${3} ; elif [ "${USERHOME}" == "" ] ; then USERHOME="/home/" ; fi
-ADMTLSUSER=${4:-${USER}}
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[DEBUG]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  TLSUSER >${TLSUSER}< NUMBERDAYS >${NUMBERDAYS}< USERHOME >${USERHOME}< ADMTLSUSER >${ADMTLSUSER}<" 1>&2 ; fi
+if [ $# -ge  3 ]  ; then USER_HOME=${3} ; elif [ "${USER_HOME}" == "" ] ; then USER_HOME="${DEFAULT_USER_HOME}" ; fi
+ADM_TLS_USER=${4:-${DEFAULT_ADM_TLS_USER}}
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${0} ${SCRIPT_VERSION} ${LINENO} ${BOLD}[DEBUG]${NORMAL}  ${LOCALHOST}  ${USER}  ${USER_ID} ${GROUP_ID}  TLS_USER >${TLS_USER}< NUMBER_DAYS >${NUMBER_DAYS}< USER_HOME >${USER_HOME}< ADM_TLS_USER >${ADM_TLS_USER}<" 1>&2 ; fi
 
 #	Check if admin user has home directory on system
-if [ ! -d ${USERHOME}${ADMTLSUSER} ] ; then
+if [ ! -d ${USER_HOME}${ADM_TLS_USER} ] ; then
 	display_help | more
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}   ${ADMTLSUSER} does not have a home directory on this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}" 1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}   ${ADM_TLS_USER} does not have a home directory on this system or ${ADM_TLS_USER} home directory is not ${USER_HOME}${ADM_TLS_USER}" 1>&2
 	exit 1
 fi
 
 #	Check if site CA directory on system
-if [ ! -d ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private ] ; then
+if [ ! -d ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private ] ; then
 	display_help | more
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}   Default directory, ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private, not on system." 1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}   Default directory, ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private, not on system." 1>&2
 	#	Help hint
 	echo -e "\n\tRunning create-site-private-public-tls.sh will create directories"
 	echo -e "\tand site private and public keys.  Then run sudo"
@@ -113,44 +124,44 @@ if [ ! -d ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private ] ; then
 	echo -e "\tcreate-host-tls.sh or create-user-tls.sh as many times as you want."
 	exit 1
 fi
-cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
+cd ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca
 
 #	Check if ca-priv-key.pem file on system
-if ! [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem ] ; then
+if ! [ -e ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem ] ; then
 	display_help | more
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}   Site private key ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem is not in this location." 1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}   Site private key ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem is not in this location." 1>&2
 	#	Help hint
 	echo -e "\n\tEither move it from your site secure location to"
-	echo -e "\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/"
+	echo -e "\t${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/"
 	echo -e "\tOr run create-site-private-public-tls.sh and sudo"
 	echo -e "\tcreate-new-openssl.cnf-tls.sh to create a new one."
 	exit 1
 fi
 
-#	Check if ${TLSUSER}-user-priv-key.pem file on system
-if [ -e ${TLSUSER}-user-priv-key.pem ] ; then
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}   ${TLSUSER}-user-priv-key.pem already exists, renaming existing keys so new keys can be created." 1>&2
-	mv ${TLSUSER}-user-priv-key.pem ${TLSUSER}-user-priv-key.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
-	mv ${TLSUSER}-user-cert.pem ${TLSUSER}-user-cert.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
+#	Check if ${TLS_USER}-user-priv-key.pem file on system
+if [ -e ${TLS_USER}-user-priv-key.pem ] ; then
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}   ${TLS_USER}-user-priv-key.pem already exists, renaming existing keys so new keys can be created." 1>&2
+	mv ${TLS_USER}-user-priv-key.pem ${TLS_USER}-user-priv-key.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
+	mv ${TLS_USER}-user-cert.pem ${TLS_USER}-user-cert.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
 fi
 
-#	Creating private key for user ${TLSUSER}
-get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Creating private key for user ${TLSUSER}." 1>&2
-openssl genrsa -out ${TLSUSER}-user-priv-key.pem 2048
+#	Creating private key for user ${TLS_USER}
+get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Creating private key for user ${TLS_USER}." 1>&2
+openssl genrsa -out ${TLS_USER}-user-priv-key.pem 2048
 
 #	Generate a Certificate Signing Request (CSR)
-get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Generate a Certificate Signing Request (CSR) for user ${TLSUSER}." 1>&2
-openssl req -subj '/subjectAltName=client' -new -key ${TLSUSER}-user-priv-key.pem -out ${TLSUSER}-user.csr
+get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Generate a Certificate Signing Request (CSR) for user ${TLS_USER}." 1>&2
+openssl req -subj '/subjectAltName=client' -new -key ${TLS_USER}-user-priv-key.pem -out ${TLS_USER}-user.csr
 
-#	Create and sign a ${NUMBERDAYS} day certificate
-get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Create and sign a ${NUMBERDAYS} day certificate for user ${TLSUSER}." 1>&2
-openssl x509 -req -days ${NUMBERDAYS} -sha256 -in ${TLSUSER}-user.csr -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out ${TLSUSER}-user-cert.pem || { get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Wrong pass phrase for .private/ca-priv-key.pem:" ; exit 1; }
+#	Create and sign a ${NUMBER_DAYS} day certificate
+get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Create and sign a ${NUMBER_DAYS} day certificate for user ${TLS_USER}." 1>&2
+openssl x509 -req -days ${NUMBER_DAYS} -sha256 -in ${TLS_USER}-user.csr -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out ${TLS_USER}-user-cert.pem || { get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Wrong pass phrase for .private/ca-priv-key.pem:" ; exit 1; }
 
 #	Removing certificate signing requests (CSR)
-get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Removing certificate signing requests (CSR) and set file permissions for ${TLSUSER} key pairs." 1>&2
-rm ${TLSUSER}-user.csr
-chmod 0400 ${TLSUSER}-user-priv-key.pem
-chmod 0444 ${TLSUSER}-user-cert.pem
+get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Removing certificate signing requests (CSR) and set file permissions for ${TLS_USER} key pairs." 1>&2
+rm ${TLS_USER}-user.csr
+chmod 0400 ${TLS_USER}-user-priv-key.pem
+chmod 0444 ${TLS_USER}-user-cert.pem
 
 #	Help hint
 echo -e "\nUse script ${BOLD}copy-user-2-remote-host-tls.sh${NORMAL} to update remote host."

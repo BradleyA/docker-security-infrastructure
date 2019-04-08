@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.193.628  2019-04-07T23:33:38.550273-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.192  
+# 	   update display_help 
 # 	docker-TLS/create-host-tls.sh  3.192.627  2019-04-07T19:42:17.542321-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.191-8-gc662f79  
 # 	   changed License to MIT License 
 ### production standard 3.0 shellcheck
@@ -12,10 +14,18 @@ if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, '
 #	set -v
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
-###
+### production standard 7.0 Default variable value
+DEFAULT_NUMBER_DAYS="185"
+DEFAULT_USER_HOME="/home/"
+DEFAULT_ADM_TLS_USER="${USER}"
+### production standard 0.3.158 --help
 display_help() {
 echo -e "\n{NORMAL}${0} - Create host public, private keys and CA"
-echo -e "\nUSAGE\n   ${0} <FQDN> <#-of-days>  [<USERHOME>] [<ADMTLSUSER>]" 
+echo -e "\nUSAGE"
+echo    "   ${0} [<FQDN>]"
+echo    "   ${0}  <FQDN> [<NUMBER_DAYS>]"
+echo    "   ${0}  <FQDN>  <NUMBER_DAYS> [<USER_HOME>]"
+echo    "   ${0}  <FQDN>  <NUMBER_DAYS>  <USER_HOME> [<ADM_TLS_USER>]" 
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
@@ -36,17 +46,18 @@ echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  U
 echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
-echo    "   DEBUG       (default '0')"
-echo    "   USERHOME    (default /home/)"
+echo    "   DEBUG       (default off '0')"
+echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo -e "\nOPTIONS"
-echo    "   FQDN         Fully qualified domain name of host requiring new TLS keys"
-echo    "   NUMBERDAYS   number of days host CA is valid, default 185 days"
-echo    "   USERHOME     location of admin user directory, default is /home/"
-echo    "                sites have different home directories (/u/north-office/)"
-echo    "   ADMTLSUSER   site administrator creating TLS keys, default is user running"
-echo    "                script."
-echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
-echo -e "\nEXAMPLES\n   ${0} two.cptx86.com 180 /u/north-office/ uadmin\n"
+echo    "   FQDN        Fully qualified domain name of host requiring new TLS keys"
+echo    "   NUMBER_DAYS Number of days host CA is valid (default ${DEFAULT_NUMBER_DAYS})"
+echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
+echo    "               sites have different home directories (/u/north-office/)"
+echo    "   ADM_TLS_USER Administrator user creating TLS keys (default ${DEFAULT_ADM_TLS_USER})"
+echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
+echo -e "\nEXAMPLES\n   Create host TLS for two.cptx86.com valid for 180 days using home location,"
+echo    "   /u/north-office/, in administrator user, uadmin"
+echo -e "\t${BOLD}${0} two.cptx86.com 180 /u/north-office/ uadmin${NORMAL}"
 }
 
 #       Date and time function ISO 8601
@@ -89,23 +100,23 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 
 ###		
 FQDN=$1
-NUMBERDAYS=${2:-185}
+NUMBER_DAYS=${2:-${DEFAULT_NUMBER_DAYS}}
 #       Order of precedence: CLI argument, environment variable, default code
-if [ $# -ge  3 ]  ; then USERHOME=${3} ; elif [ "${USERHOME}" == "" ] ; then USERHOME="/home/" ; fi
-ADMTLSUSER=${4:-${USER}}
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  FQDN >${FQDN}< NUMBERDAYS >${NUMBERDAYS}< USERHOME >${USERHOME}< ADMTLSUSER  >${ADMTLSUSER}<" 1>&2 ; fi
+if [ $# -ge  3 ]  ; then USER_HOME=${3} ; elif [ "${USER_HOME}" == "" ] ; then USER_HOME="${DEFAULT_USER_HOME}" ; fi
+ADM_TLS_USER=${4:-${DEFAULT_ADM_TLS_USER}}
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  FQDN >${FQDN}< NUMBER_DAYS >${NUMBER_DAYS}< USER_HOME >${USER_HOME}< ADM_TLS_USER  >${ADM_TLS_USER}<" 1>&2 ; fi
 
 #	Check if admin user has home directory on system
-if [ ! -d ${USERHOME}${ADMTLSUSER} ] ; then
+if [ ! -d ${USER_HOME}${ADM_TLS_USER} ] ; then
 	display_help | more
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${ADMTLSUSER} does not have a home directory on this system or ${ADMTLSUSER} home directory is not ${USERHOME}${ADMTLSUSER}" 1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${ADM_TLS_USER} does not have a home directory on this system or ${ADM_TLS_USER} home directory is not ${USER_HOME}${ADM_TLS_USER}" 1>&2
 	exit 1
 fi
 
 #       Check if site CA directory on system
-if [ ! -d ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private ] ; then
+if [ ! -d ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private ] ; then
 	display_help | more
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Default directory, ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private, not on system." 1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Default directory, ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private, not on system." 1>&2
 	#	Help hint
 	echo -e "\n\tRunning create-site-private-public-tls.sh will create directories"
 	echo -e "\tand site private and public keys.  Then run sudo"
@@ -113,15 +124,15 @@ if [ ! -d ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private ] ; then
 	echo -e "\tcreate-host-tls.sh or create-user-tls.sh as many times as you want."
 	exit 1
 fi
-cd ${USERHOME}${ADMTLSUSER}/.docker/docker-ca
+cd ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca
 
 #       Check if ca-priv-key.pem file on system
-if ! [ -e ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem ] ; then
+if ! [ -e ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem ] ; then
 	display_help | more
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Site private key ${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/ca-priv-key.pem is not in this location." 1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Site private key ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem is not in this location." 1>&2
 	#	Help hint
 	echo -e "\n\tEither move it from your site secure location to"
-	echo -e "\t${USERHOME}${ADMTLSUSER}/.docker/docker-ca/.private/"
+	echo -e "\t${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/"
 	echo -e "\tOr run create-site-private-public-tls.sh and sudo"
 	echo -e "\tcreate-new-openssl.cnf-tls.sh to create a new one."
 	exit 1
@@ -158,9 +169,9 @@ echo -e "\thost ${BOLD}${FQDN}${NORMAL}"
 openssl req -sha256 -new -key ${FQDN}-priv-key.pem -subj "/CN=${FQDN}/subjectAltName=${FQDN}" -out ${FQDN}.csr
 
 #	Create and sign certificate for host ${FQDN}
-echo -e "\n\tCreate and sign a ${BOLD}${NUMBERDAYS}${NORMAL} day certificate for host"
+echo -e "\n\tCreate and sign a ${BOLD}${NUMBER_DAYS}${NORMAL} day certificate for host"
 echo -e "\t\t${BOLD}${FQDN}${NORMAL}"
-openssl x509 -req -days ${NUMBERDAYS} -sha256 -in ${FQDN}.csr -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out ${FQDN}-cert.pem -extensions v3_req -extfile /usr/lib/ssl/openssl.cnf || { get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Wrong pass phrase for .private/ca-priv-key.pem: " ; exit 1; }
+openssl x509 -req -days ${NUMBER_DAYS} -sha256 -in ${FQDN}.csr -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out ${FQDN}-cert.pem -extensions v3_req -extfile /usr/lib/ssl/openssl.cnf || { get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Wrong pass phrase for .private/ca-priv-key.pem: " ; exit 1; }
 openssl rsa -in ${FQDN}-priv-key.pem -out ${FQDN}-priv-key.pem
 echo -e "\n\tRemoving certificate signing requests (CSR) and set file permissions"
 echo -e "\tfor host ${BOLD}${FQDN}${NORMAL} key pairs."

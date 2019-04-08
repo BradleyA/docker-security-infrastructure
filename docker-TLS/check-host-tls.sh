@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-host-tls.sh  3.193.628  2019-04-07T23:33:37.993326-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.192  
+# 	   update display_help 
 # 	docker-TLS/check-host-tls.sh  3.192.627  2019-04-07T19:42:17.084121-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.191-8-gc662f79  
 # 	   changed License to MIT License 
 ### production standard 3.0 shellcheck
@@ -12,7 +14,9 @@ if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, '
 #	set -v
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
-###
+### production standard 7.0 Default variable value
+DEFAULT_CERTDIR="/etc/docker/certs.d/daemon/"
+### production standard 0.3.158 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Check public, private keys, and CA for host"
 echo -e "\nUSAGE\n   sudo ${0} [CERTDIR]"
@@ -45,15 +49,14 @@ echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  U
 echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
-echo    "   DEBUG       (default '0')"
+echo    "   DEBUG       (default off '0')"
 echo -e "\nOPTIONS"
 echo -e "   CERTDIR     dockerd certification directory, default"
-echo    "               /etc/docker/certs.d/daemon/"
-echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-scripts/tree/master/docker-TLS"
-echo -e "\nEXAMPLES"
-echo    "   sudo ${0}"
-echo -e "\n   Administration user checks local host TLS public, private keys,"
-echo -e "   CA, and file and directory permissions.\n"
+echo    "               ${DEFAULT_CERTDIR}"
+echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
+echo -e "\nEXAMPLES\n   Administration user checks local host TLS public, private keys,"
+echo -e "   CA, and file and directory permissions."
+echo    "\t${BOLD}sudo ${0}${NORMAL}"
 }
 
 #       Date and time function ISO 8601
@@ -95,7 +98,7 @@ get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Name_of_command >${0}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
 
 ### 
-CERTDIR=${1:-/etc/docker/certs.d/daemon/}
+CERTDIR=${1:-${DEFAULT_CERTDIR}}
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  CERTDIR >${CERTDIR}<<" 1>&2 ; fi
 #	Must be root to run this script
 if ! [ $(id -u) = 0 ] ; then
