@@ -1,18 +1,11 @@
 #!/bin/bash
-# 	docker-TLS/create-host-tls.sh  3.117.488  2019-01-22T23:09:01.145821-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.116  
-# 	   production standard 5 include Copyright notice 
-# 	docker-TLS/create-host-tls.sh  3.113.484  2019-01-22T21:26:49.243453-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.112-2-g66c0b22  
-# 	   change from 365 to 185 default for number of days, output format changes 
-# 	docker-TLS/create-host-tls.sh  3.111.472  2019-01-20T00:05:37.625390-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
-# 	   production standard 4 Internationalizing display-help close #39 
-# 	docker-TLS/create-host-tls.sh  3.110.471  2018-12-23T23:19:37.585130-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.109  
-# 	   format process output for user 
-#
-### create-host-tls.sh - Create host public, private keys and CA
+# 	docker-TLS/create-host-tls.sh  3.192.627  2019-04-07T19:42:17.542321-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.191-8-gc662f79  
+# 	   changed License to MIT License 
+### production standard 3.0 shellcheck
+### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
-#       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-###
-#   production standard 5
+#       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+### production standard 1.0 DEBUG variable
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -x

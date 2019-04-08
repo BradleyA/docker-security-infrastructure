@@ -1,22 +1,11 @@
 #!/bin/bash
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.121.521  2019-01-27T20:31:21.077507-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  six-rpi3b.cptx86.com 3.120  
-# 	   minor display_help change 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.117.488  2019-01-22T23:09:00.986659-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.116  
-# 	   production standard 5 include Copyright notice 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.111.472  2019-01-20T00:05:37.416544-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.110  
-# 	   production standard 4 Internationalizing display-help close #39 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.108.469  2018-12-23T22:54:50.624321-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.107  
-# 	   format process output information of command progress 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.107.468  2018-12-23T10:46:24.998551-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.106  
-# 	   typo 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.102.463  2018-12-13T16:26:15.232216-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.101  
-# 	   copy-host-2-remote-host-tls.sh  add support for environment variable USERHOME close #32 
-#
-### copy-host-2-remote-host-tls.sh - Copy public, private keys and CA to remote host
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.192.627  2019-04-07T19:42:17.339843-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.191-8-gc662f79  
+# 	   changed License to MIT License 
+### production standard 3.0 shellcheck
+### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
-#       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-###
-#   production standard 5
+#       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+### production standard 1.0 DEBUG variable
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -x

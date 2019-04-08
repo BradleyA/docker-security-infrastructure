@@ -1,14 +1,11 @@
 #!/bin/bash
-# 	docker-TLS/create-user-tls.sh  3.117.488  2019-01-22T23:09:01.384779-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.116  
-# 	   production standard 5 include Copyright notice 
-# 	docker-TLS/create-user-tls.sh  3.106.467  2018-12-13T16:42:08.738373-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.105  
-# 	   add support for environment variable USERHOME close #36 
-#
-### create-user-tls.sh - Create user public and private key and CA
+# 	docker-TLS/create-user-tls.sh  3.192.627  2019-04-07T19:42:17.831499-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.191-8-gc662f79  
+# 	   changed License to MIT License 
+### production standard 3.0 shellcheck
+### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
-#       License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-###
-#   production standard 5
+#       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+### production standard 1.0 DEBUG variable
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #	set -x
