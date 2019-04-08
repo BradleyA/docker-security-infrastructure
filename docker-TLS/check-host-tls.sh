@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-host-tls.sh  3.197.632  2019-04-08T16:54:09.745450-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.196  
+# 	   shellcheck and Check if certificate has expired messages #38 
 # 	docker-TLS/check-host-tls.sh  3.195.630  2019-04-08T14:09:38.415315-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.194  
 # 	   update help hints #38 
 # 	docker-TLS/check-host-tls.sh  3.194.629  2019-04-08T13:53:32.011184-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.193  
@@ -177,6 +179,7 @@ else
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Certificate on ${LOCALHOST},  ${CERTDIR}/cert.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
 #	Help hint
 	echo -e "\n\t${BOLD}Use script  create-host-tls.sh  to update expired host TLS.${NORMAL}"
+fi
 
 #	View dockerd daemon certificate issuer data of the ca.pem file
 TEMP=$(openssl x509 -in ${CERTDIR}/ca.pem -noout -issuer)
