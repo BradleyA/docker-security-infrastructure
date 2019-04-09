@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.199.634  2019-04-09T00:11:10.028119-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.198  
-# 	   update copy-host-2-remote-host-tls.sh 
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.200.635  2019-04-09T15:29:10.255327-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.199  
+# 	   update display_help 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -13,7 +13,7 @@ if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, '
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
-DEFAULT_REMOTE_HOST=""
+DEFAULT_REMOTE_HOST="$(hostname -f)"    # local host
 DEFAULT_USER_HOME="/home/"
 DEFAULT_TLS_USER="${USER}"
 ### production standard 0.3.158 --help
@@ -28,13 +28,15 @@ echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
 #       Displaying help DESCRIPTION in English en_US.UTF-8
 echo    "A user with administration authority uses this script to copy host TLS CA,"
-echo    "public, and private keys from"
-echo    "/home/<TLS_USER>/.docker/docker-ca directory on this system to"
-echo    "/etc/docker/certs.d directory on a remote system.  To copy to the local system,"
-echo    "enter the local hostname for the <REMOTE_HOST>." 
+echo    "public, and private keys from <USER_HOME>/<TLS_USER>/.docker/docker-ca"
+echo    "directory on this system to /etc/docker/certs.d/daemon directory on a local"
+echo    "system or remote system.  To copy to this local system, do not enter a"
+echo    "<REMOTE_HOST> option and this local system or local hostname will be used."
 echo -e "\nThe administration user may receive password and/or passphrase prompts from a"
 echo    "remote systen; running the following may stop the prompts in your cluster."
-echo    "   ssh-copy-id <admin-user>@x.x.x.x"
+echo -e "\t${BOLD}ssh-copy-id <TLS_USER>@<REMOTE_HOST>${NORMAL}"
+echo    "or"
+echo -e "\t${BOLD}ssh-copy-id <TLS_USER>@<x.x.x.x>${NORMAL}"
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
         echo -e "\n--> ${LANG}"
@@ -52,15 +54,24 @@ echo    "you are using other shells."
 echo    "   DEBUG       (default off '0')"
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo -e "\nOPTIONS"
-echo    "   REMOTE_HOST Remote host to copy certificates to"
+echo    "   REMOTE_HOST Remote host to copy certificates to (default ${DEFAULT_REMOTE_HOST})"
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo    "               Many sites have different home directories (/u/north-office/)"
 echo    "   TLS_USER    Administration user (default ${DEFAULT_TLS_USER})"
-### production standard 6.3.163 Architecture tree
+### production standard 6.3.170 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
-
-
-echo -e "\nDOCUMENTATION\n    https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
+echo    "<<USER_HOME>/                             <-- Location of user home directory"         # production standard 6.3.167
+echo    "   <USER-1>/.docker/                      <-- User docker cert directory"
+echo -e "      └── docker-ca/                      <-- Working directory to create certs\n"
+echo    "/etc/ "
+echo    "   docker/ "
+echo    "   └── certs.d/                           <-- Host docker cert directory"
+echo    "       └── daemon/                        <-- Daemon cert directory"
+echo    "           ├── ca.pem                     <-- Daemon tlscacert"
+echo    "           ├── cert.pem                   <-- Daemon tlscert"
+echo    "           └── key.pem                    <-- Daemon tlskey"
+echo -e "\nDOCUMENTATION"
+echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
 echo -e "\nEXAMPLES"
 echo -e "   Administration user copies TLS keys and CA to remote host, two.cptx86.com,\n   using default home directory, /home/, default administration user running\n   script.\n\t${BOLD}${0} two.cptx86.com${NORMAL}"
 }
@@ -104,7 +115,7 @@ get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Name_of_command >${0}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
 
 ###
-REMOTE_HOST=$1
+REMOTE_HOST=${1:-${DEFAULT_REMOTE_HOST}}
 #       Order of precedence: CLI argument, environment variable, default code
 if [ $# -ge  2 ]  ; then USER_HOME=${2} ; elif [ "${USER_HOME}" == "" ] ; then USER_HOME="${DEFAULT_USER_HOME}" ; fi
 USER_HOME=${USER_HOME}"/"
@@ -214,7 +225,7 @@ if $(ssh ${TLS_USER}@${REMOTE_HOST} 'exit' >/dev/null 2>&1 ) ; then
 	echo -e "\n\tAdd TLS flags to dockerd so it will know to use TLS certifications"
 	echo -e "\t(--tlsverify, --tlscacert, --tlscert, --tlskey).  Scripts that will"
 	echo -e "\thelp with setup and operations of Docker using TLS can be found:"
-	echo    "https://github.com/BradleyA/docker-scripts/tree/master/dockerd-configuration-options"
+	echo    "https://github.com/BradleyA/docker-security-infrastructure/tree/master/dockerd-configuration-options"
 	echo -e "\tThe dockerd-configuration-options scripts will help with configuration"
 	echo -e "\tof dockerd on systems running Ubuntu 16.04 (systemd) and Ubuntu 14.04"
 	echo -e "\t(Upstart)."
