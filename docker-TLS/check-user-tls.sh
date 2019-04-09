@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-user-tls.sh  3.197.632  2019-04-08T16:54:09.849281-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.196  
-# 	   shellcheck and Check if certificate has expired messages #38 
+# 	docker-TLS/check-user-tls.sh  3.199.634  2019-04-09T00:11:09.925555-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.198  
+# 	   update copy-host-2-remote-host-tls.sh 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen

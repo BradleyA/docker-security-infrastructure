@@ -1,10 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-registry-tls.sh  3.198.633  2019-04-08T23:46:25.471450-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.197  
-# 	   shellcheck changes 
-# 	docker-TLS/check-registry-tls.sh  3.196.631  2019-04-08T14:35:56.810445-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.195  
-# 	   minor updates #38 
-# 	docker-TLS/check-registry-tls.sh  3.187.609  2019-04-06T22:34:42.066569-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.186  
-# 	   ready for production testing close #42 
+# 	docker-TLS/check-registry-tls.sh  3.199.634  2019-04-09T00:11:09.805816-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.198  
+# 	   update copy-host-2-remote-host-tls.sh 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #	Copyright (c) 2019 Bradley Allen

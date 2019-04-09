@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.193.628  2019-04-07T23:33:38.274216-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.192  
-# 	   update display_help 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.192.627  2019-04-07T19:42:17.339843-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.191-8-gc662f79  
-# 	   changed License to MIT License 
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.199.634  2019-04-09T00:11:10.028119-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.198  
+# 	   update copy-host-2-remote-host-tls.sh 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -29,11 +27,11 @@ echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
 #       Displaying help DESCRIPTION in English en_US.UTF-8
-echo    "A user with administration authority uses this script to"
-echo    "copy host TLS CA, public, and private keys from"
+echo    "A user with administration authority uses this script to copy host TLS CA,"
+echo    "public, and private keys from"
 echo    "/home/<TLS_USER>/.docker/docker-ca directory on this system to"
-echo    "/etc/docker/certs.d directory on a remote system.  To copy to the"
-echo    "local system, enter the local hostname for the <REMOTE_HOST>." 
+echo    "/etc/docker/certs.d directory on a remote system.  To copy to the local system,"
+echo    "enter the local hostname for the <REMOTE_HOST>." 
 echo -e "\nThe administration user may receive password and/or passphrase prompts from a"
 echo    "remote systen; running the following may stop the prompts in your cluster."
 echo    "   ssh-copy-id <admin-user>@x.x.x.x"
@@ -45,7 +43,7 @@ if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG
 elif ! [ "${LANG}" == "en_US.UTF-8" ] ; then
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
-echo -e "\nEnvironment Variables"
+echo -e "\nENVIRONMENT VARIABLES"
 echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
 echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
 echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
@@ -58,8 +56,13 @@ echo    "   REMOTE_HOST Remote host to copy certificates to"
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo    "               Many sites have different home directories (/u/north-office/)"
 echo    "   TLS_USER    Administration user (default ${DEFAULT_TLS_USER})"
+### production standard 6.3.163 Architecture tree
+echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
+
+
 echo -e "\nDOCUMENTATION\n    https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
-echo -e "\nEXAMPLES\n   Administration user copies TLS keys and CA to remote host, two.cptx86.com,\n   using default home directory, /home/, default administration user running\n   script.\n\t${BOLD}${0} two.cptx86.com${NORMAL}"
+echo -e "\nEXAMPLES"
+echo -e "   Administration user copies TLS keys and CA to remote host, two.cptx86.com,\n   using default home directory, /home/, default administration user running\n   script.\n\t${BOLD}${0} two.cptx86.com${NORMAL}"
 }
 
 #       Date and time function ISO 8601
