@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-user-tls.sh  3.199.634  2019-04-09T00:11:09.925555-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.198  
-# 	   update copy-host-2-remote-host-tls.sh 
+# 	docker-TLS/check-user-tls.sh  3.203.638  2019-04-09T16:00:21.806718-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.202  
+# 	   update display_help 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -52,12 +52,13 @@ echo -e "\nOPTIONS"
 echo    "   TLS_USER    Administration user (default ${DEFAULT_TLS_USER})"
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo    "               sites have different home directory locations (/u/north-office/)"
-### production standard 6.3.163 Architecture tree
+### production standard 6.3.170 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
-echo    "~<USER-1>/.docker/                        <-- User docker cert directory"
-echo    "   ├── ca.pem                             <-- Symbolic link to user tlscacert"
-echo    "   ├── cert.pem                           <-- Symbolic link to user tlscert"
-echo -e "   └── key.pem                            <-- Symbolic link to user tlskey\n"
+echo    "<<USER_HOME>/                             <-- Location of user home directory"         # production standard 6.3.167
+echo    "   <USER-1>/.docker/                      <-- User docker cert directory"
+echo    "      ├── ca.pem                          <-- Symbolic link to user tlscacert"
+echo    "      ├── cert.pem                        <-- Symbolic link to user tlscert"
+echo -e "      └── key.pem                         <-- Symbolic link to user tlskey\n"
 echo    "/usr/local/data/                          <-- <DATA_DIR>"
 echo    "   <CLUSTER>/                             <-- <CLUSTER>"
 echo    "   └── docker-accounts/                   <-- Docker TLS certs"
@@ -67,8 +68,9 @@ echo    "       │   │   ├── ca.pem                 <-- User tlscacert"
 echo    "       │   │   ├── cert.pem               <-- User tlscert"
 echo    "       │   │   └── key.pem                <-- User tlskey"
 echo    "       │   └── <USER-2>/                  <-- User TLS certs directory"
-echo    "       └── <HOST-2>/                      <-- Host in cluster"
-echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
+echo -e "       └── <HOST-2>/                      <-- Host in cluster\n"
+echo -e "\nDOCUMENTATION"
+echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
 echo -e "\nEXAMPLES"
 echo -e "   User can check their certificates\n\t${BOLD}${0}${NORMAL}"
 echo -e "   User sam checks their certificates in a non-default home directory\n\t${BOLD}${0} sam /u/north-office/${NORMAL}"
