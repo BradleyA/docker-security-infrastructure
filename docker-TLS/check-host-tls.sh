@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-host-tls.sh  3.199.634  2019-04-09T00:11:09.701250-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.198  
-# 	   update copy-host-2-remote-host-tls.sh 
+# 	docker-TLS/check-host-tls.sh  3.201.636  2019-04-09T15:34:31.766809-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.200  
+# 	   update display_help 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -51,7 +51,7 @@ echo    "you are using other shells."
 echo    "   DEBUG       (default off '0')"
 echo -e "\nOPTIONS"
 echo -e "   CERTDIR     dockerd certification directory (default ${DEFAULT_CERTDIR})"
-### production standard 6.3.163 Architecture tree
+### production standard 6.3.170 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
 echo    "/etc/ "
 echo    "   docker/ "
@@ -60,7 +60,8 @@ echo    "       └── daemon/                        <-- Daemon cert directo
 echo    "           ├── ca.pem                     <-- Daemon tlscacert"
 echo    "           ├── cert.pem                   <-- Daemon tlscert"
 echo    "           └── key.pem                    <-- Daemon tlskey"
-echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
+echo -e "\nDOCUMENTATION"
+echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
 echo -e "\nEXAMPLES"
 echo    "   Administration user checks local host TLS public, private keys,"
 echo    "   CA, and file and directory permissions."
