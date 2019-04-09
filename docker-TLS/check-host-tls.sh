@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-host-tls.sh  3.201.636  2019-04-09T15:34:31.766809-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.200  
-# 	   update display_help 
+# 	docker-TLS/check-host-tls.sh  3.204.639  2019-04-09T16:16:06.937593-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.203  
+# 	   shellcheck 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -118,7 +118,7 @@ if ! [ $(id -u) = 0 ] ; then
 	exit 1
 fi
 #	Check for ${CERTDIR} directory
-if [ ! -d ${CERTDIR} ] ; then
+if [ ! -d "${CERTDIR}" ] ; then
 	display_help | more
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${CERTDIR} does not exist" 1>&2
 	exit 1
@@ -179,41 +179,41 @@ else
 fi
 
 #	View dockerd daemon certificate issuer data of the ca.pem file
-TEMP=$(openssl x509 -in ${CERTDIR}/ca.pem -noout -issuer)
+TEMP=$(openssl x509 -in "${CERTDIR}/ca.pem" -noout -issuer)
 echo -e "\nView dockerd daemon certificate issuer data of the ca.pem file:\n\t${BOLD}${TEMP}${NORMAL}"
 
 #	View dockerd daemon certificate issuer data of the cert.pem file
-TEMP=$(openssl x509 -in ${CERTDIR}/cert.pem -noout -issuer)
+TEMP=$(openssl x509 -in "${CERTDIR}/cert.pem" -noout -issuer)
 echo -e "\nView dockerd daemon certificate issuer data of the cert.pem file:\n\t${BOLD}${TEMP}${NORMAL}"
 
 #	Verify that dockerd daemon certificate was issued by the CA.
-TEMP=$(openssl verify -verbose -CAfile ${CERTDIR}/ca.pem ${CERTDIR}cert.pem)
+TEMP=$(openssl verify -verbose -CAfile "${CERTDIR}/ca.pem" "${CERTDIR}cert.pem")
 echo -e "\nVerify that dockerd daemon certificate was issued by the CA:\n\t${BOLD}${TEMP}${NORMAL}"
 
 echo -e "\nVerify and correct file permissions."
 
 #	Verify and correct file permissions for ${CERTDIR}/ca.pem
-if [ $(stat -Lc %a ${CERTDIR}/ca.pem) != 444 ]; then
+if [ $(stat -Lc %a "${CERTDIR}/ca.pem") != 444 ]; then
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${CERTDIR}ca.pem are not 444.  Correcting $(stat -Lc %a ${CERTDIR}/ca.pem) to 0444 file permissions." 1>&2
 	chmod 0444 "${CERTDIR}ca.pem"
 fi
 
 #	Verify and correct file permissions for ${CERTDIR}cert.pem
-if [ $(stat -Lc %a ${CERTDIR}/cert.pem) != 444 ]; then
+if [ $(stat -Lc %a "${CERTDIR}/cert.pem") != 444 ]; then
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${CERTDIR}cert.pem are not 444.  Correcting $(stat -Lc %a ${CERTDIR}/cert.pem) to 0444 file permissions." 1>&2
 	chmod 0444 "${CERTDIR}/cert.pem"
 fi
 
 #	Verify and correct file permissions for ${CERTDIR}/key.pem
-if [ $(stat -Lc %a ${CERTDIR}/key.pem) != 400 ]; then
+if [ $(stat -Lc %a "${CERTDIR}/key.pem") != 400 ]; then
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${CERTDIR}key.pem are not 400.  Correcting $(stat -Lc %a ${CERTDIR}/key.pem) to 0400 file permissions." 1>&2
 	chmod 0400 "${CERTDIR}/key.pem"
 fi
 
 #	Verify and correct directory permissions for ${CERTDIR} directory
-if [ $(stat -Lc %a ${CERTDIR}) != 700 ]; then
+if [ $(stat -Lc %a "${CERTDIR}") != 700 ]; then
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Directory permissions for ${CERTDIR} are not 700.  Correcting $(stat -Lc %a ${CERTDIR}) to 700 directory permissions." 1>&2
-	chmod 700 ${CERTDIR}
+	chmod 700 "${CERTDIR}"
 fi
 
 #	Help hint
