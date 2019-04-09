@@ -1,10 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-registry-tls.sh  3.193.628  2019-04-07T23:33:38.366696-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.192  
-# 	   update display_help 
-# 	docker-TLS/copy-registry-tls.sh  3.191.619  2019-04-07T19:28:52.453331-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.191  
-# 	   changed License to MIT License 
-# 	docker-TLS/copy-registry-tls.sh  3.188.612  2019-04-07T12:06:29.862737-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.187-2-g14f38ee  
-# 	   remove old debugging code and hard coded hostnames #43 
+# 	docker-TLS/copy-registry-tls.sh  3.206.641  2019-04-09T17:22:02.355695-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.205  
+# 	   shellcheck 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -47,7 +43,9 @@ echo    "in <SYSTEMS_FILE> in the following directory,"
 echo    "/etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/." 
 echo -e "\nThe administration user may receive password and/or passphrase prompts from a"
 echo    "remote systen; running the following may stop some prompts in your cluster."
-echo -e "\tssh-copy-id <admin-user>@x.x.x.x"
+echo -e "\t${BOLD}ssh-copy-id <USER>@<REMOTE_HOST>${NORMAL}"
+echo    "or"
+echo -e "\t${BOLD}ssh-copy-id <USER>@<x.x.x.x>${NORMAL}"
 echo -e "\nThe <DATA_DIR>/<CLUSTER>/<SYSTEMS_FILE> includes one FQDN or IP address per"
 echo    "line for all hosts in the cluster.  Lines in <SYSTEMS_FILE> that begin with a"
 echo    "'#' are comments.  The <SYSTEMS_FILE> is used by markit/find-code.sh,"
@@ -83,8 +81,8 @@ echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PO
 echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
 echo    "   DATA_DIR        Data directory (default '${DEFAULT_DATA_DIR}')"
 echo    "   SYSTEMS_FILE    Hosts in cluster (default '${DEFAULT_SYSTEMS_FILE}')"
-### production standard 6.0 Architecture tree
-echo -e "\nSTORAGE & CERTIFICATION ARCHITECTURE TREE"
+### production standard 6.3.170 Architecture tree
+echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
 echo    "/usr/local/data/                          <-- <DATA_DIR>"
 echo    "   <CLUSTER>/                             <-- <CLUSTER>"
 echo    "   ├── SYSTEMS                            <-- List of hosts in cluster"
@@ -98,14 +96,15 @@ echo    "   │   └── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry contai
 echo    "   <STANDALONE>/                          <-- <STANDALONE> Architecture tree"
 echo    "                                              is the same as <CLUSTER> TREE but"
 echo -e "                                              the systems are not in a cluster\n"
-echo    "~<USER-1>/.docker/                        <-- User docker cert directory"
-echo    "   ├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory to"
-echo    "   │   │                                      create registory certs"
-echo    "   │   ├── ca.crt                         <-- Daemon registry domain cert"
-echo    "   │   ├── domain.crt                     <-- Registry cert"
-echo    "   │   └── domain.key                     <-- Registry private key"
-echo    "   └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory to"
-echo -e "                                              create registory certs\n"
+echo    "<<USER_HOME>/                             <-- Location of user home directory"         # production standard 6.3.167
+echo    "   <USER-1>/.docker/                      <-- User docker cert directory"
+echo    "      ├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"       # production standard 6.3.170
+echo    "      │   │                                   to create registory certs"               # production standard 6.3.170
+echo    "      │   ├── ca.crt                      <-- Daemon registry domain cert"
+echo    "      │   ├── domain.crt                  <-- Registry cert"
+echo    "      │   └── domain.key                  <-- Registry private key"
+echo    "      └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"       # production standard 6.3.170
+echo -e "                                              to create registory certs\n"             # production standard 6.3.170
 echo    "/etc/ "
 echo    "   docker/ "
 echo    "   └── certs.d/                           <-- Host docker cert directory"
@@ -113,9 +112,11 @@ echo    "       ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ <-- Registry cert dir
 echo    "       │   └── ca.crt                     <-- Daemon registry domain cert"
 echo    "       └── <REGISTRY_HOST>:<REGISTRY_PORT>/ <-- Registry cert directory"
 echo    "           └── ca.crt                     <-- Daemon registry domain cert"
-echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
-echo -e "\nEXAMPLES\n   Copy certs for Private Registry, two.cptx86.com, using port 17313\n	${BOLD}${0} two.cptx86.com 17313${NORMAL}"
-echo -e "\n   Copy certs for Private Registry using environment variables and default options\n\t${BOLD}${0}${NORMAL}"
+echo -e "\nDOCUMENTATION"
+echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
+echo -e "\nEXAMPLES"
+echo -e "   Copy certs for Private Registry, two.cptx86.com, using port 17313\n	${BOLD}${0} two.cptx86.com 17313${NORMAL}"
+echo -e "   Copy certs for Private Registry using environment variables and default options\n\t${BOLD}${0}${NORMAL}"
 }
 
 #       Date and time function ISO 8601
@@ -175,6 +176,7 @@ fi
 #       Check if docker registry cert directory on system
 if [ ! -d "${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}" ] ; then
 	display_help | more
+#       Help hint
 	echo -e "\n\t${BOLD}${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}${NORMAL}"
 	echo -e "\tdirectory not found on ${REGISTRY_HOST}.  Use create-registry-tls.sh to create"
 	echo -e "\tdocker private registry certs.\n"
@@ -184,18 +186,21 @@ cd "${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}"
 
 #	Check if domain.crt 
 if ! [ -e domain.crt ] ; then
+#       Help hint
 	echo -e "\n\t${BOLD}domain.crt not found in $(pwd)${NORMAL}\n"
 	exit 1
 fi
 
 #	Check if domain.key 
 if ! [ -e domain.key ] ; then
+#       Help hint
 	echo -e "\n\t${BOLD}domain.key not found in $(pwd)${NORMAL}\n"
 	exit 1
 fi
 
 #	Check if ca.crt 
 if ! [ -e ca.crt ] ; then
+#       Help hint
 	echo -e "\n\t${BOLD}ca.crt not found in $(pwd)${NORMAL}\n"
 	exit 1
 fi
@@ -232,7 +237,7 @@ for NODE in $(cat "${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}" | grep -v "#" ) ; do
         if [ "${LOCALHOST}" != "${NODE}" ] ; then
 
 #       	Check if ${NODE} is available on ssh port
-		if $(ssh ${NODE} 'exit' >/dev/null 2>&1 ) ; then
+		if $(ssh "${NODE}" 'exit' >/dev/null 2>&1 ) ; then
 
 #			For each Docker daemon to trust the Docker private registry certificate
 #			Copy ca.crt file to /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt on every Docker host.
@@ -240,7 +245,7 @@ for NODE in $(cat "${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}" | grep -v "#" ) ; do
 			if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Checks complete; ${NODE}; Copy to /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}" 1>&2 ; fi
 			echo -e "\n\tCopy ~/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/ca.crt"
 			echo -e "\tto ${BOLD}${NODE}${NORMAL} /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt"
-			scp -q -p -i ~/.ssh/id_rsa ./${REGISTRY_HOST}.${REGISTRY_PORT}.tar ${USER}@${NODE}:/tmp
+			scp -q -p -i ~/.ssh/id_rsa "./${REGISTRY_HOST}.${REGISTRY_PORT}.tar" ${USER}@${NODE}:/tmp
 			TEMP="sudo mkdir -p /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT} ; if sudo [ -s /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt ] ; then echo -e '\n\t${BOLD}ca.crt${NORMAL} already exists, renaming existing keys so new keys can be copied.' ; sudo mv /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt-$(date +%Y-%m-%dT%H:%M:%S%:z); fi ; sudo tar -xf /tmp/${REGISTRY_HOST}.${REGISTRY_PORT}.tar --owner=root --group=root --directory /etc/docker/certs.d ; sudo rm -f /tmp/${REGISTRY_HOST}.${REGISTRY_PORT}.tar"
                         ssh -q -t -i ~/.ssh/id_rsa ${USER}@${NODE} ${TEMP}
                 else
@@ -249,22 +254,22 @@ for NODE in $(cat "${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}" | grep -v "#" ) ; do
 	else
 		echo -e "\n\tCopy ~/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/ca.crt"
 		echo -e "\tto ${BOLD}${NODE}${NORMAL} /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt"
-		sudo mkdir -p /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}
+		sudo mkdir -p "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}"
 
 #       	Check if ca.crt already exist
-		if sudo [ -s /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt ] ; then
+		if sudo [ -s "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt" ] ; then
         		echo -e "\n\t${BOLD}ca.crt${NORMAL} already exists, renaming existing keys so new keys can be copied."
-        		sudo mv /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)
+        		sudo mv "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt" "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)"
 		fi
 
 #       	For each Docker daemon to trust the Docker private registry certificate
 #       	Copy ca.crt file to /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt on every Docker host.
 #       	Restart Docker not required
 		if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  LOCALHOST; Copy to /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}" 1>&2 ; fi
-		sudo tar -xf ./${REGISTRY_HOST}.${REGISTRY_PORT}.tar --owner=root --group=root --directory /etc/docker/certs.d
+		sudo tar -xf "./${REGISTRY_HOST}.${REGISTRY_PORT}.tar" --owner=root --group=root --directory /etc/docker/certs.d
         fi
 done
-rm -f   ./${REGISTRY_HOST}.${REGISTRY_PORT}.tar
+rm -f "./${REGISTRY_HOST}.${REGISTRY_PORT}.tar"
 
 #	Copy files to ${REGISTRY_HOST}
 #	Check if localhost = ${REGISTRY_HOST}
@@ -276,7 +281,7 @@ if [ "${LOCALHOST}" != "${REGISTRY_HOST}" ] ; then
 
 #		Copy domain.{crt,key} to ${USER}@${REGISTRY_HOST}:~/.docker/
 		if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Copy domain.{crt,key} to ${USER}@${REGISTRY_HOST}:~/.docker/" 1>&2 ; fi
-		scp -q -p -i ~/.ssh/id_rsa ./domain.{crt,key} ${USER}@${REGISTRY_HOST}:~/.docker/
+		scp -q -p -i ~/.ssh/id_rsa ./domain.{crt,key} "${USER}@${REGISTRY_HOST}:~/.docker/"
 		REMAP=$(ssh -q -t  -i ~/.ssh/id_rsa ${USER}@${REGISTRY_HOST} "ps -ef | grep remap | wc -l | tr -d '\r\n'")
 		REMAPUID=$(ssh -q -t  -i ~/.ssh/id_rsa ${USER}@${REGISTRY_HOST} "grep dockremap /etc/subuid | cut -d ':' -f 2 | tr -d '\r\n'")
 		TEMP="sudo mkdir -p  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; sudo chmod 0700 ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; if sudo [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ] ; then echo -e '\n\t${BOLD}domain.crt${NORMAL} already exists, renaming existing keys so new keys can be copied.' ; sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z) ; fi ; if sudo [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ] ; then echo -e '\n\t${BOLD}domain.key${NORMAL} already exists, renaming existing keys so new keys can be copied.' ; sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z) ; fi ; sudo mv ~/.docker/domain.{crt,key} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; if [ ${REMAP} -ge 3 ] ; then  sudo chown -R ${REMAPUID}.${REMAPUID} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; fi'"
@@ -288,29 +293,29 @@ if [ "${LOCALHOST}" != "${REGISTRY_HOST}" ] ; then
 else
 
 #	Create REGISTRY_HOST certs directory
-	sudo mkdir -p   ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs
-	sudo chmod 0700 ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs
+	sudo mkdir -p   "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs"
+	sudo chmod 0700 "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs"
 
 #       Check if domain.crt already exist
-	if sudo [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ] ; then
+	if sudo [ -e "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt" ] ; then
 		echo -e "\n\t${BOLD}domain.crt${NORMAL} already exists, renaming existing keys so new keys can be copied."
-		sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)
+		sudo mv "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt" "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)"
 	fi
 
 #       Check if domain.key already exist
-	if sudo [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ] ; then
+	if sudo [ -e "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key" ] ; then
 		echo -e "\n\t${BOLD}domain.key${NORMAL} already exists, renaming existing keys so new keys can be copied."
-		sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z)
+		sudo mv "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key" "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z)"
 	fi
 
 #	Copy files to ${LOCALHOST} for ${REGISTRY_HOST}
-	sudo cp -p ./domain.{crt,key} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs
+	sudo cp -p ./domain.{crt,key} "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certa"s
 
 #	Change directory and file permissions if dockerd using --userns-remap=default
 	if [ $(ps -ef | grep remap | wc -l) == 2 ] ; then
 #		Currently when using --userns-remap=default with dockerd the UID and GID are the same as ID
 		DOCKREMAP=$(grep dockremap /etc/subuid | cut -d ':' -f 2)
-		sudo chown -R ${DOCKREMAP}.${DOCKREMAP} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs
+		sudo chown -R ${DOCKREMAP}.${DOCKREMAP} "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs" "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs"
 	fi
 fi
 
