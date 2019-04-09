@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-host-tls.sh  3.198.633  2019-04-08T23:46:25.381023-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.197  
+# 	   shellcheck changes 
 # 	docker-TLS/check-host-tls.sh  3.197.632  2019-04-08T16:54:09.745450-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.196  
 # 	   shellcheck and Check if certificate has expired messages #38 
 # 	docker-TLS/check-host-tls.sh  3.195.630  2019-04-08T14:09:38.415315-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.194  
@@ -198,19 +200,19 @@ echo -e "\nVerify and correct file permissions."
 #	Verify and correct file permissions for ${CERTDIR}/ca.pem
 if [ $(stat -Lc %a ${CERTDIR}/ca.pem) != 444 ]; then
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${CERTDIR}ca.pem are not 444.  Correcting $(stat -Lc %a ${CERTDIR}/ca.pem) to 0444 file permissions." 1>&2
-	chmod 0444 ${CERTDIR}ca.pem
+	chmod 0444 "${CERTDIR}ca.pem"
 fi
 
 #	Verify and correct file permissions for ${CERTDIR}cert.pem
 if [ $(stat -Lc %a ${CERTDIR}/cert.pem) != 444 ]; then
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${CERTDIR}cert.pem are not 444.  Correcting $(stat -Lc %a ${CERTDIR}/cert.pem) to 0444 file permissions." 1>&2
-	chmod 0444 ${CERTDIR}/cert.pem
+	chmod 0444 "${CERTDIR}/cert.pem"
 fi
 
 #	Verify and correct file permissions for ${CERTDIR}/key.pem
 if [ $(stat -Lc %a ${CERTDIR}/key.pem) != 400 ]; then
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${CERTDIR}key.pem are not 400.  Correcting $(stat -Lc %a ${CERTDIR}/key.pem) to 0400 file permissions." 1>&2
-	chmod 0400 ${CERTDIR}/key.pem
+	chmod 0400 "${CERTDIR}/key.pem"
 fi
 
 #	Verify and correct directory permissions for ${CERTDIR} directory
