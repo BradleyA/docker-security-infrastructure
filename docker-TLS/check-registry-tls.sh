@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-registry-tls.sh  3.199.634  2019-04-09T00:11:09.805816-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.198  
-# 	   update copy-host-2-remote-host-tls.sh 
+# 	docker-TLS/check-registry-tls.sh  3.202.637  2019-04-09T15:40:36.434177-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.201  
+# 	   update display_help 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #	Copyright (c) 2019 Bradley Allen
@@ -67,7 +67,7 @@ echo    "   REGISTRY_HOST   Registry host (default '${DEFAULT_REGISTRY_HOST}')"
 echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
 echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
 echo    "   DATA_DIR        Data directory (default '${DEFAULT_DATA_DIR}')"
-### production standard 6.3.163 Architecture tree
+### production standard 6.3.170 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
 echo    "/usr/local/data/                          <-- <DATA_DIR>"
 echo    "   <CLUSTER>/                             <-- <CLUSTER>"
@@ -85,11 +85,13 @@ echo    "       ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ <-- Registry cert dir
 echo    "       │   └── ca.crt                     <-- Daemon registry domain cert"
 echo    "       └── <REGISTRY_HOST>:<REGISTRY_PORT>/ <-- Registry cert directory"
 echo    "           └── ca.crt                     <-- Daemon registry domain cert"
-echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
-echo -e "\nEXAMPLES\n   Check local host certificates for <REGISTRY_HOST> (two.cptx86.com) using\n   <REGISTRY_PORT> (17313)\n	${BOLD}sudo ${0} two.cptx86.com 17313${NORMAL}"
-echo -e "\n   Use cluster-command.sh script to loop through hosts in a cluster."
+echo -e "\nDOCUMENTATION"
+echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
+echo -e "\nEXAMPLES"
+echo -e "   Check local host certificates for <REGISTRY_HOST> (two.cptx86.com) using\n   <REGISTRY_PORT> (17313)\n	${BOLD}sudo ${0} two.cptx86.com 17313${NORMAL}"
+echo -e "   Use cluster-command.sh script to loop through hosts in a cluster."
 echo    "   Check each host certificates for <REGISTRY_HOST> (two.cptx86.com) using"
-echo -e "	<REGISTRY_PORT> (17313)\n\t${BOLD}cluster-command.sh special 'sudo ${0} two.cptx86.com 17313${NORMAL}'"
+echo -e "   <REGISTRY_PORT> (17313)\n\t${BOLD}cluster-command.sh special 'sudo ${0} two.cptx86.com 17313${NORMAL}'"
 }
 
 #	Date and time function ISO 8601
