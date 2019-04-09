@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.200.635  2019-04-09T15:29:10.255327-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.199  
-# 	   update display_help 
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.205.640  2019-04-09T16:37:35.663061-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.204  
+# 	   shellcheck 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -123,29 +123,29 @@ TLS_USER=${3:-${DEFAULT_TLS_USER}}
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  REMOTE_HOST >${REMOTE_HOST}< USER_HOME >${USER_HOME}< TLS_USER >${TLS_USER}<" 1>&2 ; fi
 
 #	Check if admin user has home directory on system
-if [ ! -d ${USER_HOME}${TLS_USER} ] ; then
+if [ ! -d "${USER_HOME}${TLS_USER}" ] ; then
 	display_help | more
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${TLS_USER} does not have a home directory on this system or ${TLS_USER} home directory is not ${USER_HOME}${TLS_USER}" 1>&2
 	exit 1
 fi
 
 #	Check if ${USER_HOME}${TLS_USER}/.docker/docker-ca directory on system
-if [ ! -d ${USER_HOME}${TLS_USER}/.docker/docker-ca ] ; then
+if [ ! -d "${USER_HOME}${TLS_USER}/.docker/docker-ca" ] ; then
 	display_help | more
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Default directory, ${BOLD}${USER_HOME}${TLS_USER}/.docker/docker-ca${NORMAL}, not on system." 1>&2
 	echo -e "\tSee documentation for more information."
 	exit 1
 fi
-cd ${USER_HOME}${TLS_USER}/.docker/docker-ca
+cd "${USER_HOME}${TLS_USER}/.docker/docker-ca"
 
 #	Prompt for ${REMOTE_HOST} if argement not entered
-if [ -z ${REMOTE_HOST} ] ; then
+if [ -z "${REMOTE_HOST}" ] ; then
 	echo -e "\n\t${BOLD}Enter remote host where TLS keys are to be copied:${NORMAL}"
 	read REMOTE_HOST
 fi
 
 #	Check if ${REMOTE_HOST} string length is zero
-if [ -z ${REMOTE_HOST} ] ; then
+if [ -z "${REMOTE_HOST}" ] ; then
 	display_help | more
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Remote host is required." 1>&2
 	echo -e "\tSee documentation for more information."
@@ -153,7 +153,7 @@ if [ -z ${REMOTE_HOST} ] ; then
 fi
 
 #	Check if ${REMOTE_HOST}-priv-key.pem file on system
-if ! [ -e ${USER_HOME}${TLS_USER}/.docker/docker-ca/${REMOTE_HOST}-priv-key.pem ] ; then
+if ! [ -e "${USER_HOME}${TLS_USER}/.docker/docker-ca/${REMOTE_HOST}-priv-key.pem" ] ; then
 	display_help | more
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  The ${REMOTE_HOST}-priv-key.pem file was not found in ${USER_HOME}${TLS_USER}/.docker/docker-ca." 1>&2
 	#	Help hint
@@ -174,8 +174,8 @@ if $(ssh ${TLS_USER}@${REMOTE_HOST} 'exit' >/dev/null 2>&1 ) ; then
 	fi
 
 #	Create working directory ~/.docker/docker-ca/${REMOTE_HOST}
-	mkdir -p ${REMOTE_HOST}
-	cd ${REMOTE_HOST}
+	mkdir -p "${REMOTE_HOST}"
+	cd "${REMOTE_HOST}"
 
 #	Backup ${REMOTE_HOST}/etc/docker/certs.d
 	FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%6N%z)
@@ -184,31 +184,31 @@ if $(ssh ${TLS_USER}@${REMOTE_HOST} 'exit' >/dev/null 2>&1 ) ; then
 	ssh -t ${TLS_USER}@${REMOTE_HOST} "sudo mkdir -p /etc/docker/certs.d/daemon ; cd /etc ; sudo tar -pcf /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon ; sudo chown ${TLS_USER}.${TLS_USER} /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; chmod 0400 /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
 	scp -p ${TLS_USER}@${REMOTE_HOST}:/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar .
 	ssh -t ${TLS_USER}@${REMOTE_HOST} "rm -f /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
-	tar -pxf ${REMOTE_HOST}-${FILE_DATE_STAMP}.tar
+	tar -pxf "${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
 
 #	Check if /etc/docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem file exists on remote system
-	if [ -e ./docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem ] ; then
+	if [ -e "./docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem" ] ; then
 		echo -e "\n\t/etc/docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem"
 		echo -e "\talready exists, ${BOLD}renaming existing keys${NORMAL} so new keys can be installed.\n"
-		mv ./docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem ./docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem-${FILE_DATE_STAMP}
-		mv ./docker/certs.d/daemon/${REMOTE_HOST}-cert.pem ./docker/certs.d/daemon/${REMOTE_HOST}-cert.pem-${FILE_DATE_STAMP}
-		mv ./docker/certs.d/daemon/ca.pem ./docker/certs.d/daemon/ca.pem-${FILE_DATE_STAMP}
+		mv "./docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem" "./docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem-${FILE_DATE_STAMP}"
+		mv "./docker/certs.d/daemon/${REMOTE_HOST}-cert.pem" "./docker/certs.d/daemon/${REMOTE_HOST}-cert.pem-${FILE_DATE_STAMP}"
+		mv ./docker/certs.d/daemon/ca.pem "./docker/certs.d/daemon/ca.pem-${FILE_DATE_STAMP}"
 		rm ./docker/certs.d/daemon/{cert,key}.pem
 	fi
 
 #	Create certification tar file and install it to ${REMOTE_HOST}
 	chmod 0700 ./docker/certs.d/daemon
-	cp -p ../${REMOTE_HOST}-priv-key.pem ./docker/certs.d/daemon
-	cp -p ../${REMOTE_HOST}-cert.pem ./docker/certs.d/daemon
+	cp -p "../${REMOTE_HOST}-priv-key.pem" ./docker/certs.d/daemon
+	cp -p "../${REMOTE_HOST}-cert.pem" ./docker/certs.d/daemon
 	cp -p ../ca.pem ./docker/certs.d/daemon
 	cd ./docker/certs.d/daemon
-	ln -s ${REMOTE_HOST}-priv-key.pem key.pem
-	ln -s ${REMOTE_HOST}-cert.pem cert.pem
+	ln -s "${REMOTE_HOST}-priv-key.pem" key.pem
+	ln -s "${REMOTE_HOST}-cert.pem" cert.pem
 	cd ../../..
 	FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%6N%z)
-	tar -pcf ./${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon
-	chmod 0600 ./${REMOTE_HOST}-${FILE_DATE_STAMP}.tar
-	scp -p ./${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ${TLS_USER}@${REMOTE_HOST}:/tmp
+	tar -pcf "./${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" ./docker/certs.d/daemon
+	chmod 0600 "./${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
+	scp -p "./${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" "${TLS_USER}@${REMOTE_HOST}:/tmp"
 
 #	Create remote directory /etc/docker/certs.d/daemon
 #	This directory was selected to place dockerd TLS certifications because
@@ -219,7 +219,7 @@ if $(ssh ${TLS_USER}@${REMOTE_HOST} 'exit' >/dev/null 2>&1 ) ; then
 	cd ..
 
 #	Remove working directory ~/.docker/docker-ca/${REMOTE_HOST}
-	rm -rf ${REMOTE_HOST}
+	rm -rf "${REMOTE_HOST}"
 
 #       Display instructions about certification environment variables
 	echo -e "\n\tAdd TLS flags to dockerd so it will know to use TLS certifications"
