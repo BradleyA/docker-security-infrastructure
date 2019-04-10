@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-site-private-public-tls.sh  3.216.651  2019-04-10T13:06:17.928342-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.215  
+# 	   Completed testing after many changes shellcheck 
 # 	docker-TLS/create-site-private-public-tls.sh  3.211.646  2019-04-09T22:29:33.474279-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.210  
 # 	   shellcheck 
 ### production standard 3.0 shellcheck
@@ -103,13 +105,12 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 ###
 NUMBER_DAYS=${1:-${DEFAULT_NUMBER_DAYS}}
 #       Order of precedence: CLI argument, environment variable, default code
-if [ $# -ge  2 ]  ; then USER_HOME=${2} ; elif [ "${USER_HOME}" == "" ] ; then USER_HOME="DEFAULT_USER_HOME" ; fi
+if [ $# -ge  2 ]  ; then USER_HOME=${2} ; elif [ "${USER_HOME}" == "" ] ; then USER_HOME="${DEFAULT_USER_HOME}" ; fi
 ADM_TLS_USER=${3:-${DEFAULT_ADM_TLS_USER}}
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  NUMBER_DAYS >${NUMBER_DAYS}< USER_HOME >${USER_HOME}< ADM_TLS_USER >${ADM_TLS_USER}<" 1>&2 ; fi
 
 #	Check if admin user has home directory on system
 if [ ! -d "${USER_HOME}${ADM_TLS_USER}" ] ; then
-	display_help | more
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${ADM_TLS_USER} does not have a home directory on this system or ${ADM_TLS_USER} home directory is not ${USER_HOME}${ADM_TLS_USER}" 1>&2
 	exit 1
 fi
