@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.193.628  2019-04-07T23:33:38.643009-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.192  
-# 	   update display_help 
-# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.192.627  2019-04-07T19:42:17.638002-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.191-8-gc662f79  
-# 	   changed License to MIT License 
+# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.209.644  2019-04-09T21:58:32.205285-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.208  
+# 	   shellcheck 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -10,7 +8,6 @@
 ### production standard 1.0 DEBUG variable
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
-DEBUG=0                 # 0 = debug off, 1 = debug on
 #	set -x
 #	set -v
 BOLD=$(tput -Txterm bold)
@@ -21,7 +18,8 @@ ORIGINAL_FILE="/etc/ssl/openssl.cnf"
 ### production standard 0.3.158 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Modify /etc/ssl/openssl.conf file"
-echo -e "\nUSAGE\n   sudo ${0}"
+echo -e "\nUSAGE"
+echo    "   sudo ${0}"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
@@ -36,15 +34,17 @@ if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG
 elif ! [ "${LANG}" == "en_US.UTF-8" ] ; then
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
-echo -e "\nEnvironment Variables"
+echo -e "\nENVIRONMENT VARIABLES"
 echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
 echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
 echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
 echo    "   DEBUG       (default off '0')"
-echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
-echo -e "\nEXAMPLES\n   Modify /etc/ssl/openssl.conf file\n\t${BOLD}sudo ${0}${NORMAL}"
+echo -e "\nDOCUMENTATION"
+echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
+echo -e "\nEXAMPLES"
+echo -e "   Modify /etc/ssl/openssl.conf file\n\t${BOLD}sudo ${0}${NORMAL}"
 }
 
 #       Date and time function ISO 8601
@@ -93,7 +93,7 @@ if ! [ $(id -u) = 0 ] ; then
 	display_help | more
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Use sudo ${0}" 1>&2
 	#	Help hint
-	echo -e "\n>>	SCRIPT MUST BE RUN AS ROOT TO MODIFY THE ${ORIGINAL_FILE}	<<\n"	1>&2
+        echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT   <<\n${NORMAL}"    1>&2
         exit 1
 fi
 
@@ -105,9 +105,9 @@ if ! grep -Fxq 'extendedKeyUsage = clientAuth,serverAuth' ${ORIGINAL_FILE} ; the
 	echo    "Run this script before running the user and host TLS scripts.  It is not"
 	echo    "required to be run on hosts not creating TLS keys."
 	echo -e "\nCreating backup file of ${ORIGINAL_FILE} and naming it ${BACKUP_FILE}"
-	cp ${ORIGINAL_FILE} ${BACKUP_FILE}
+	cp "${ORIGINAL_FILE}"  "${BACKUP_FILE}"
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Adding the extended KeyUsage at the beginning of [ v3_ca ] section." 1>&2
-	sed '/\[ v3_ca \]/a extendedKeyUsage = clientAuth,serverAuth' ${BACKUP_FILE} > ${ORIGINAL_FILE}
+	sed '/\[ v3_ca \]/a extendedKeyUsage = clientAuth,serverAuth' "${BACKUP_FILE}" > ${ORIGINAL_FILE}
 else
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${ORIGINAL_FILE} file has previously been modified." 1>&2
 fi
