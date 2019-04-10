@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.220.655  2019-04-10T14:29:53.140579-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.219  
+# 	   correct display_help, complete testing, ready for release 
 # 	docker-TLS/create-host-tls.sh  3.208.643  2019-04-09T21:47:22.249189-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.207  
 # 	   shellcheck 
 ### production standard 3.0 shellcheck
@@ -30,8 +32,7 @@ echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
 #       Displaying help DESCRIPTION in English en_US.UTF-8
 echo    "An administration user runs this script to create host public, private keys and"
-echo    "CA in the working directory (<USER_HOME>/<ADM_TLS_USER>/.docker/docker-ca).  If"
-echo    "the directory is not found the script will create the working directory."
+echo    "CA in the working directory (<USER_HOME>/<ADM_TLS_USER>/.docker/docker-ca)."
 echo -e "\nThe scripts create-site-private-public-tls.sh and"
 echo    "create-new-openssl.cnf-tls.sh are required to be run once on a system before"
 echo    "using this script.  Review the documentation for a complete understanding."
@@ -124,7 +125,6 @@ fi
 
 #       Check if site CA directory on system
 if [ ! -d "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private" ] ; then
-	display_help | more
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Default directory, ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private, not on system." 1>&2
 	#	Help hint
 	echo -e "\n\tRunning create-site-private-public-tls.sh will create directories"
@@ -179,7 +179,7 @@ openssl req -sha256 -new -key "${FQDN}-priv-key.pem" -subj "/CN=${FQDN}/subjectA
 
 #	Create and sign certificate for host ${FQDN}
 echo -e "\n\tCreate and sign a ${BOLD}${NUMBER_DAYS}${NORMAL} day certificate for host"
-echo -e "\t\t${BOLD}${FQDN}${NORMAL}"
+echo -e "\t${BOLD}${FQDN}${NORMAL}"
 openssl x509 -req -days "${NUMBER_DAYS}" -sha256 -in "${FQDN}.csr" -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out "${FQDN}-cert.pem" -extensions v3_req -extfile /usr/lib/ssl/openssl.cnf || { get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Wrong pass phrase for .private/ca-priv-key.pem: " ; exit 1; }
 openssl rsa -in "${FQDN}-priv-key.pem" -out "${FQDN}-priv-key.pem"
 echo -e "\n\tRemoving certificate signing requests (CSR) and set file permissions"
