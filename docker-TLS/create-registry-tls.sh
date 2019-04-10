@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.223.658  2019-04-10T16:12:18.070130-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.222  
-# 	   corrected 2 bugs caused be rewrite, ready for release 
+# 	docker-TLS/create-registry-tls.sh  3.224.659  2019-04-10T16:39:02.169905-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.223  
+# 	   added check for integer for arguments 
 # 	docker-TLS/create-registry-tls.sh  3.222.657  2019-04-10T14:43:10.656877-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.221  
 # 	   testing complete, ready for release 
 ### production standard 3.0 shellcheck
@@ -120,11 +120,18 @@ if [ $# -ge  1 ]  ; then REGISTRY_PORT=${1} ; elif [ "${REGISTRY_PORT}" == "" ] 
 if [ $# -ge  2 ]  ; then NUMBER_DAYS=${2} ; elif [ "${NUMBER_DAYS}" == "" ] ; then NUMBER_DAYS=${DEFAULT_NUMBER_DAYS} ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_PORT >${REGISTRY_PORT}<" 1>&2 ; fi
 
-# >>> test arg for integer
-# >>>	if ! [[ "$scale" =~ ^[0-9]+$ ]]
-# >>>	# >>>	# >>>	# >>>	# >>>	# >>>	# >>>	# >>>	# >>>	    then
-# >>>	# >>>	# >>>	# >>>	# >>>	# >>>	# >>>	# >>>	# >>>	        echo "Sorry integers only"
-# >>>	# >>>	# >>>	# >>>	# >>>	# >>>	# >>>	# >>>	# >>>	fi
+#	Test <REGISTRY_PORT> for integer
+#	if ! [[ "${REGISTRY_PORT}" =~ ^[0-9]+$ ]]
+if ! [[ "${REGISTRY_PORT}" =~ ^[0-9]+$ ]] ; then
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  <REGISTRY_PORT> is not an interger.  <REGISTRY_PORT> is set to '${REGISTRY_PORT}'" 1>&2
+	exit 1
+fi
+
+#	Test <NUMBER_DAYS> for integer
+if ! [[ "${NUMBER_DAYS}" =~ ^[0-9]+$ ]] ; then
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  <NUMBER_DAYS> is not an interger.  <NUMBER_DAYS> is set to '${NUMBER_DAYS}'" 1>&2
+	exit 1
+fi
 
 #	Check if user has home directory on system
 if [ ! -d "${HOME}" ] ; then
