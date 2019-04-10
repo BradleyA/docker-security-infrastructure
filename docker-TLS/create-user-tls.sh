@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-user-tls.sh  3.212.647  2019-04-09T22:42:47.807583-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.211  
-# 	   shellcheck 
+# 	docker-TLS/create-user-tls.sh  3.219.654  2019-04-10T14:14:23.653210-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.218  
+# 	   testing complete after earlier changes, ready for release 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -120,14 +120,12 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 
 #	Check if admin user has home directory on system
 if [ ! -d "${USER_HOME}${ADM_TLS_USER}" ] ; then
-	display_help | more
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}   ${ADM_TLS_USER} does not have a home directory on this system or ${ADM_TLS_USER} home directory is not ${USER_HOME}${ADM_TLS_USER}" 1>&2
 	exit 1
 fi
 
 #	Check if site CA directory on system
 if [ ! -d "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private" ] ; then
-	display_help | more
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}   Default directory, ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private, not on system." 1>&2
 	#	Help hint
 	echo -e "\n\tRunning create-site-private-public-tls.sh will create directories"
@@ -152,7 +150,7 @@ fi
 
 #	Check if ${TLS_USER}-user-priv-key.pem file on system
 if [ -e "${TLS_USER}-user-priv-key.pem" ] ; then
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}   ${TLS_USER}-user-priv-key.pem already exists, renaming existing keys so new keys can be created." 1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}   ${TLS_USER}-user-priv-key.pem already exists, renaming existing keys so new keys can be created." 1>&2
 	mv "${TLS_USER}-user-priv-key.pem"  "${TLS_USER}-user-priv-key.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)"
 	mv "${TLS_USER}-user-cert.pem"  "${TLS_USER}-user-cert.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)"
 fi
