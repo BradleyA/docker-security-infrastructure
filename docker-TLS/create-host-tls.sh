@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-host-tls.sh  3.220.655  2019-04-10T14:29:53.140579-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.219  
-# 	   correct display_help, complete testing, ready for release 
+# 	docker-TLS/create-host-tls.sh  3.221.656  2019-04-10T14:32:53.376791-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.220  
+# 	   comment typo, ready for release 
 # 	docker-TLS/create-host-tls.sh  3.208.643  2019-04-09T21:47:22.249189-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.207  
 # 	   shellcheck 
 ### production standard 3.0 shellcheck
@@ -58,7 +58,7 @@ echo    "   NUMBER_DAYS Number of days host CA is valid (default ${DEFAULT_NUMBE
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo    "               sites have different home directories (/u/north-office/)"
 echo    "   ADM_TLS_USER Administrator user creating TLS keys (default ${DEFAULT_ADM_TLS_USER})"
-### production standard 6.3.170 Architecture tree
+### production standard 6.3.173 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                              <-- Location of user home directory"         # production standard 6.3.167
 echo    "   <USER-1>/.docker/                      <-- User docker cert directory"
