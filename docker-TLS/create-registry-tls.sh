@@ -1,10 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.193.628  2019-04-07T23:33:38.735532-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.192  
-# 	   update display_help 
-# 	docker-TLS/create-registry-tls.sh  3.191.619  2019-04-07T19:28:52.542742-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.191  
-# 	   changed License to MIT License 
-# 	docker-TLS/create-registry-tls.sh  3.191.618  2019-04-07T15:04:52.801163-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.190  
-# 	   add example using number of days #41 
+# 	docker-TLS/create-registry-tls.sh  3.210.645  2019-04-09T22:22:09.326727-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.209  
+# 	   shellcheck 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -19,7 +15,7 @@ NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 DEFAULT_REGISTRY_PORT="17313"
 DEFAULT_NUMBER_DAYS='365'
-### production standard 0.3.158 --help
+### production standard 0.3.160 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Create TLS for Private Registry V2"
 echo -e "\nUSAGE"
@@ -59,16 +55,21 @@ echo -e "\nOPTIONS"
 echo    "Order of precedence: CLI options, environment variable, default code."
 echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
 echo    "   NUMBER_DAYS     Number of days certificate valid (default '${DEFAULT_NUMBER_DAYS}')" 
-### production standard 6.0 Architecture tree
-echo -e "\nCERTIFICATION ARCHITECTURE TREE"
-echo    "~<USER-1>/.docker/                        <-- User docker cert directory"
-echo    "   └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory to"
-echo    "       │                                      create registory certs"
-echo    "       ├── ca.crt                         <-- Daemon registry domain cert"
-echo    "       ├── domain.crt                     <-- Registry cert"
-echo    "       └── domain.key                     <-- Registry private key"
-echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
-echo -e "\nEXAMPLES\n   Create new certificates with 17315 port number\n\t${BOLD}${0} 17315${NORMAL}"
+### production standard 6.3.170 Architecture tree
+echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
+echo    "<USER_HOME>/                              <-- Location of user home directory"         # production standard 6.3.167
+echo    "   <USER-1>/.docker/                      <-- User docker cert directory"
+echo    "      ├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"       # production standard 6.3.170
+echo    "      │   │                                   to create registory certs"               # production standard 6.3.170
+echo    "      │   ├── ca.crt                      <-- Daemon registry domain cert"
+echo    "      │   ├── domain.crt                  <-- Registry cert"
+echo    "      │   └── domain.key                  <-- Registry private key"
+echo    "      └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"       # production standard 6.3.170
+echo -e "                                              to create registory certs\n"             # production standard 6.3.170
+echo -e "\nDOCUMENTATION"
+echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
+echo -e "\nEXAMPLES"
+echo -e "   Create new certificates with 17315 port number\n\t${BOLD}${0} 17315${NORMAL}"
 echo -e "   Create new certificates with 17315 port number valid for 90 days\n\t${BOLD}${0} 17315 90${NORMAL}"
 }
 
@@ -118,56 +119,56 @@ if [ $# -ge  2 ]  ; then NUMBER_DAYS=${2} ; elif [ "${NUMBER_DAYS}" == "" ] ; th
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_PORT >${REGISTRY_PORT}<" 1>&2 ; fi
 
 #	Check if user has home directory on system
-if [ ! -d ${HOME} ] ; then
+if [ ! -d "${HOME}" ] ; then
 	display_help | more
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${USER} does not have a home directory on this system or ${USER} home directory is not ${HOME}" 1>&2
 	exit 1
 fi
 
 #       Check if .docker directory in $HOME
-if [ ! -d ${HOME}/.docker ] ; then
-	mkdir -p ${HOME}/.docker
-	chmod 700 ${HOME}/.docker
+if [ ! -d "${HOME}/.docker" ] ; then
+	mkdir -p "${HOME}/.docker"
+	chmod 700 "${HOME}/.docker"
 fi
 
 #	Create tmp working directory
-mkdir ${HOME}/.docker/tmp-${REGISTRY_PORT}
-cd ${HOME}/.docker/tmp-${REGISTRY_PORT}
+mkdir "${HOME}/.docker/tmp-${REGISTRY_PORT}"
+cd "${HOME}/.docker/tmp-${REGISTRY_PORT}"
 
 #	Create Self-Signed Certificate Keys
 echo -e "\n\t${BOLD}Create Self-Signed Certificate Keys in $(pwd) ${NORMAL}\n" 
-openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days ${NUMBER_DAYS} -out domain.crt
+openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days "${NUMBER_DAYS}" -out domain.crt
 
 #	Set REGISTRY_HOST variable to host entered during the creation of certificates
 REGISTRY_HOST=$(openssl x509 -in domain.crt -noout -issuer | cut -d '/' -f 7 | cut -d '=' -f 2)
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... REGISTRY_HOST >${REGISTRY_HOST}<" 1>&2 ; fi
 
 #       Check if site directory on system
-if [ ! -d ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT} ] ; then
-	mkdir -p ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}
-	chmod 700 ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}
+if [ ! -d "${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}" ] ; then
+	mkdir -p "${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}"
+	chmod 700 "${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}"
 fi
 
 #	Change into registry cert directory
-cd ${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}
+cd "${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}"
 echo -e "\n\t${BOLD}Move Self-Signed Certificate Keys into $(pwd) ${NORMAL}\n" 
 
 #	Check if domain.crt already exist
 if [ -e domain.crt ] ; then
 	echo -e "\n\t${BOLD}domain.crt${NORMAL} already exists, renaming existing keys so new keys can be created.\n"
-	mv domain.crt domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)
+	mv domain.crt "domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)"
 fi
 
 #	Check if domain.key already exist
 if [ -e domain.key ] ; then
 	echo -e "\n\t${BOLD}domain.key${NORMAL} already exists, renaming existing keys so new keys can be created.\n"
-	mv domain.key domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z)
+	mv domain.key "domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z)"
 fi
 
 #	Check if ca.crt already exist
 if [ -e ca.crt ] ; then
 	echo -e "\n\t${BOLD}ca.crt${NORMAL} already exists, renaming existing keys so new keys can be created.\n"
-	mv ca.crt ca.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)
+	mv ca.crt "ca.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)"
 fi
 
 #	Copy Self-Signed Certificate Keys
