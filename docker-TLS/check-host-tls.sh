@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-host-tls.sh  3.204.639  2019-04-09T16:16:06.937593-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.203  
-# 	   shellcheck 
+# 	docker-TLS/check-host-tls.sh  3.213.648  2019-04-10T10:44:46.341883-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.212  
+# 	   user hist formatting changes, test remote and local complete ready to be released 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -180,17 +180,17 @@ fi
 
 #	View dockerd daemon certificate issuer data of the ca.pem file
 TEMP=$(openssl x509 -in "${CERTDIR}/ca.pem" -noout -issuer)
-echo -e "\nView dockerd daemon certificate issuer data of the ca.pem file:\n\t${BOLD}${TEMP}${NORMAL}"
+echo -e "\n\tView dockerd daemon certificate issuer data of the ca.pem file:\n\t${BOLD}${TEMP}${NORMAL}"
 
 #	View dockerd daemon certificate issuer data of the cert.pem file
 TEMP=$(openssl x509 -in "${CERTDIR}/cert.pem" -noout -issuer)
-echo -e "\nView dockerd daemon certificate issuer data of the cert.pem file:\n\t${BOLD}${TEMP}${NORMAL}"
+echo -e "\n\tView dockerd daemon certificate issuer data of the cert.pem file:\n\t${BOLD}${TEMP}${NORMAL}"
 
 #	Verify that dockerd daemon certificate was issued by the CA.
 TEMP=$(openssl verify -verbose -CAfile "${CERTDIR}/ca.pem" "${CERTDIR}cert.pem")
-echo -e "\nVerify that dockerd daemon certificate was issued by the CA:\n\t${BOLD}${TEMP}${NORMAL}"
+echo -e "\n\tVerify that dockerd daemon certificate was issued by the CA:\n\t${BOLD}${TEMP}${NORMAL}"
 
-echo -e "\nVerify and correct file permissions."
+echo -e "\n\tVerify and correct file permissions."
 
 #	Verify and correct file permissions for ${CERTDIR}/ca.pem
 if [ $(stat -Lc %a "${CERTDIR}/ca.pem") != 444 ]; then
@@ -217,7 +217,7 @@ if [ $(stat -Lc %a "${CERTDIR}") != 700 ]; then
 fi
 
 #	Help hint
-echo -e "\nUse script ${BOLD}create-host-tls.sh${NORMAL} to update host TLS if host TLS certificate has expired."
+echo -e "\n\tUse script ${BOLD}create-host-tls.sh${NORMAL} to update host TLS if host TLS certificate has expired.\n"
  
 #	May want to create a version of this script that automates this process for SRE tools,
 #	but keep this script for users to run manually,
