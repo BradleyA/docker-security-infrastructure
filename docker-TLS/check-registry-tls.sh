@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-registry-tls.sh  3.202.637  2019-04-09T15:40:36.434177-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.201  
-# 	   update display_help 
+# 	docker-TLS/check-registry-tls.sh  3.215.650  2019-04-10T12:43:00.157176-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.214  
+# 	   change in display_help, test local and remote with cluster-command.sh and ssh 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #	Copyright (c) 2019 Bradley Allen
@@ -37,10 +37,12 @@ echo    "directories.  The certification files and directory permissions are als
 echo    "checked."
 echo -e "\nThis script works for the local host only.  To use check-registry-tls.sh on a"
 echo    "remote hosts (one-rpi3b.cptx86.com) with ssh port of 12323 as uadmin user;"
-echo    "   ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo check-registry-tls.sh two.cptx86.com 17313'"
+echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo check-registry-tls.sh two.cptx86.com 17313'${NORMAL}"
+echo    "or"
+echo -e "\t${BOLD}ssh -t uadmin@three-rpi3b.cptx86.com 'sudo check-registry-tls.sh two.cptx86.com 17313'${NORMAL}"
 echo    "To loop through a list of hosts in the cluster use,"
 echo    "https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
-echo    "   cluster-command.sh special 'sudo check-registry-tls.sh two.cptx86.com 17313'"
+echo -e "\t${BOLD}cluster-command.sh special 'sudo check-registry-tls.sh two.cptx86.com 17313'${NORMAL}"
 ### production standard 4.0 Documentation Language
 #	Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
