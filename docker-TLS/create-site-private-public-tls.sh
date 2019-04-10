@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-site-private-public-tls.sh  3.193.628  2019-04-07T23:33:38.827693-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.192  
-# 	   update display_help 
-# 	docker-TLS/create-site-private-public-tls.sh  3.192.627  2019-04-07T19:42:17.734355-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.191-8-gc662f79  
-# 	   changed License to MIT License 
+# 	docker-TLS/create-site-private-public-tls.sh  3.211.646  2019-04-09T22:29:33.474279-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.210  
+# 	   shellcheck 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -18,7 +16,7 @@ NORMAL=$(tput -Txterm sgr0)
 DEFAULT_NUMBER_DAYS="730"
 DEFAULT_USER_HOME="/home/"
 DEFAULT_ADM_TLS_USER="${USER}"
-### production standard 0.3.158 --help
+### production standard 0.3.160 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Create site private and CA keys"
 echo -e "\nUSAGE"
@@ -45,7 +43,7 @@ if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG
 elif ! [ "${LANG}" == "en_US.UTF-8" ] ; then
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
-echo -e "\nEnvironment Variables"
+echo -e "\nENVIRONMENT VARIABLES"
 echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
 echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
 echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
@@ -58,8 +56,10 @@ echo    "   NUMBER_DAYS Number of days host CA is valid (default ${DEFAULT_NUMBE
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo    "               Many sites have different home directories (/u/north-office/)"
 echo    "   ADM_TLS_USER Administrator user creating TLS keys (default ${DEFAULT_ADM_TLS_USER})"
-echo -e "\nDOCUMENTATION\n   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
-echo -e "\nEXAMPLES\n   Create site private and public keys for one year in /u/north-office/ uadmin\n\t${BOLD}${0} 365 /u/north-office/ uadmin${NORMAL}"
+echo -e "\nDOCUMENTATION"
+echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
+echo -e "\nEXAMPLES"
+echo -e "   Create site private and public keys for one year in /u/north-office/ uadmin\n\t${BOLD}${0} 365 /u/north-office/ uadmin${NORMAL}"
 }
 
 #       Date and time function ISO 8601
@@ -108,33 +108,33 @@ ADM_TLS_USER=${3:-${DEFAULT_ADM_TLS_USER}}
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  NUMBER_DAYS >${NUMBER_DAYS}< USER_HOME >${USER_HOME}< ADM_TLS_USER >${ADM_TLS_USER}<" 1>&2 ; fi
 
 #	Check if admin user has home directory on system
-if [ ! -d ${USER_HOME}${ADM_TLS_USER} ] ; then
+if [ ! -d "${USER_HOME}${ADM_TLS_USER}" ] ; then
 	display_help | more
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${ADM_TLS_USER} does not have a home directory on this system or ${ADM_TLS_USER} home directory is not ${USER_HOME}${ADM_TLS_USER}" 1>&2
 	exit 1
 fi
-mkdir -p   ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private
-chmod 0700 ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private
-chmod 0700 ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca
-chmod 0700 ${USER_HOME}${ADM_TLS_USER}/.docker
-cd         ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private
+mkdir -p   "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private"
+chmod 0700 "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private"
+chmod 0700 "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca"
+chmod 0700 "${USER_HOME}${ADM_TLS_USER}/.docker"
+cd         "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private"
 
 #	Check if ca-priv-key.pem file exists
-if [ -e ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem ] ; then
+if [ -e "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem" ] ; then
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Site private key ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem already exists, renaming existing site private key." 1>&2
-	mv ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
+	mv "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem"  "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)"
 fi
 
 #	Create private key
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Creating private key with passphrase in ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private" 1>&2
 openssl genrsa -aes256 -out ca-priv-key.pem 4096  || { get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Pass phrase does not match." ; exit 1; }
-chmod 0400 ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem
+chmod 0400 "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem"
 
 #       Check if ca.pem file exists
-cd ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca
-if [ -e ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/ca.pem ] ; then
+cd "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca"
+if [ -e "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/ca.pem" ] ; then
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Site CA ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/ca.pem already exists, renaming existing site CA" 1>&2
-	mv ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/ca.pem ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/ca.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
+	mv "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/ca.pem"  "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/ca.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)"
 fi
 
 #	Create public key
@@ -154,7 +154,7 @@ echo    "Organizational Unit Name (IT - SRE Team Central US)"
 echo    "Common Name (two.cptx86.com)"
 echo -e "Email Address ()\n"
 echo -e "\nCreating public key good for ${NUMBER_DAYS} days in\n${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca"	1>&2
-openssl req -x509 -days ${NUMBER_DAYS} -sha256 -new -key .private/ca-priv-key.pem -out ca.pem || { get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Incorrect pass phrase for .private/ca-priv-key.pem." ; exit 1; }
+openssl req -x509 -days "${NUMBER_DAYS}" -sha256 -new -key .private/ca-priv-key.pem -out ca.pem || { get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Incorrect pass phrase for .private/ca-priv-key.pem." ; exit 1; }
 chmod 0444 ca.pem
 #	Help hint
 echo -e "\n\t${BOLD}These certificates are valid for ${NUMBER_DAYS} days.${NORMAL}\n"
