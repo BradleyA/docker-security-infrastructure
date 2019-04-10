@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-user-tls.sh  3.203.638  2019-04-09T16:00:21.806718-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.202  
-# 	   update display_help 
+# 	docker-TLS/check-user-tls.sh  3.214.649  2019-04-10T12:17:39.668166-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.213  
+# 	   testing complete local, remote, user, and sudo different user, loop all hosts in cluster 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -20,7 +20,7 @@ display_help() {
 echo -e "\n${NORMAL}${0} - Check public, private keys, and CA for a user"
 echo -e "\nUSAGE"
 echo    "   ${0} [<TLS_USER>]"
-echo    "   ${0}  <TLS_USER> [<USER_HOME>]"
+echo    "   ${0}  <TLS_USER> [<USER_HOME>]" # >>> use case for the need for USER_HOME ver using $(eval echo '~sam') (issues with ~ unquoted literal in order for tilde expansion to work) or echo ~sam (no quotes) or echo '~sam' or getent passwd sam | cut -d: -f6 or ; but the origin idea was to be able to use '*' for all uses on a system (NFS server might serve home directories for users)  need to open ticket to solve this ...  another challenge is if sam's home directory location is different on each system . . .
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
@@ -29,8 +29,10 @@ echo    "Users can check their public, private keys, and CA in /home/ or other"
 echo    "non-default home directories.  The file and directory permissions are also"
 echo    "checked.  Administrators can check other users certificates by using"
 echo -e "\t${BOLD}sudo ${0} <user-name>${NORMAL}"
-echo    "To loop through a list of hosts in the cluster use,"
+echo    "To loop through a list of hosts in the cluster a user could use,"
 echo    "https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
+echo -e "\t${BOLD}cluster-command.sh special '${0}'${NORMAL}"
+echo    "or and administrators could use,"
 echo -e "\t${BOLD}cluster-command.sh special 'sudo ${0} <user-name>'${NORMAL}"
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
@@ -54,7 +56,7 @@ echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_
 echo    "               sites have different home directory locations (/u/north-office/)"
 ### production standard 6.3.170 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
-echo    "<<USER_HOME>/                             <-- Location of user home directory"         # production standard 6.3.167
+echo    "<USER_HOME>/                              <-- Location of user home directory"         # production standard 6.3.167
 echo    "   <USER-1>/.docker/                      <-- User docker cert directory"
 echo    "      ├── ca.pem                          <-- Symbolic link to user tlscacert"
 echo    "      ├── cert.pem                        <-- Symbolic link to user tlscert"
@@ -133,15 +135,13 @@ fi
 
 #	Check if user has home directory on system
 if [ ! -d "${USER_HOME}${TLS_USER}" ] ; then 
-	display_help | more
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${TLS_USER} does not have a home directory on this system, ${LOCALHOST}, or ${TLS_USER} home directory is not ${USER_HOME}${TLS_USER}." 1>&2
 	exit 1
 fi
 
 #	Check if user has .docker directory
 if [ ! -d "${USER_HOME}${TLS_USER}/.docker" ] ; then 
-	display_help | more
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${TLS_USER} does not have a .docker directory." 1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${TLS_USER} does not have a .docker directory on this system, ${LOCALHOST}." 1>&2
 	exit 1
 fi
 
