@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-site-private-public-tls.sh  3.216.651  2019-04-10T13:06:17.928342-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.215  
-# 	   Completed testing after many changes shellcheck 
-# 	docker-TLS/create-site-private-public-tls.sh  3.211.646  2019-04-09T22:29:33.474279-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.210  
-# 	   shellcheck 
+# 	docker-TLS/create-site-private-public-tls.sh  3.217.652  2019-04-10T13:13:55.289045-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.216  
+# 	   added ARCHITECTURE TREE, testing completed, ready to release 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -58,6 +56,11 @@ echo    "   NUMBER_DAYS Number of days host CA is valid (default ${DEFAULT_NUMBE
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo    "               Many sites have different home directories (/u/north-office/)"
 echo    "   ADM_TLS_USER Administrator user creating TLS keys (default ${DEFAULT_ADM_TLS_USER})"
+### production standard 6.3.170 Architecture tree
+echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
+echo    "<USER_HOME>/                              <-- Location of user home directory"         # production standard 6.3.167
+echo    "   <USER-1>/.docker/                      <-- User docker cert directory"
+echo    "      └── docker-ca/                      <-- Working directory to create certs"
 echo -e "\nDOCUMENTATION"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
 echo -e "\nEXAMPLES"
