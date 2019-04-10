@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.209.644  2019-04-09T21:58:32.205285-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.208  
-# 	   shellcheck 
+# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.218.653  2019-04-10T13:37:29.057330-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.217  
+# 	   formatting Help Hint, added ARCHITECTURE TREE, testing completed, ready to release 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -41,6 +41,10 @@ echo    "command, 'unset DEBUG' to remove the exported information from the DEBU
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
 echo    "   DEBUG       (default off '0')"
+### production standard 6.3.173 Architecture tree
+echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
+echo    "/etc/ "
+echo    "   ssl/openssl.cnf                        <-- OpenSSL configuration file"              # production standard 6.3.173
 echo -e "\nDOCUMENTATION"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
 echo -e "\nEXAMPLES"
@@ -100,11 +104,11 @@ fi
 #	Check if ${ORIGINAL_FILE} file has previously been modified
 if ! grep -Fxq 'extendedKeyUsage = clientAuth,serverAuth' ${ORIGINAL_FILE} ; then
 	#	Help hint
-	echo    "This script will make changes to ${ORIGINAL_FILE} file."
-	echo    "These changes are required before creating user and host TLS keys for Docker."
-	echo    "Run this script before running the user and host TLS scripts.  It is not"
-	echo    "required to be run on hosts not creating TLS keys."
-	echo -e "\nCreating backup file of ${ORIGINAL_FILE} and naming it ${BACKUP_FILE}"
+	echo -e "\tThis script will make changes to ${ORIGINAL_FILE} file."
+	echo -e "\tThese changes are required before creating user and host TLS keys for Docker."
+	echo -e "\tRun this script before running the user and host TLS scripts.  It is not"
+	echo -e "\trequired to be run on hosts not creating TLS keys."
+	echo -e "\n\tCreating backup file of ${ORIGINAL_FILE} and naming it ${BACKUP_FILE}"
 	cp "${ORIGINAL_FILE}"  "${BACKUP_FILE}"
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Adding the extended KeyUsage at the beginning of [ v3_ca ] section." 1>&2
 	sed '/\[ v3_ca \]/a extendedKeyUsage = clientAuth,serverAuth' "${BACKUP_FILE}" > ${ORIGINAL_FILE}
