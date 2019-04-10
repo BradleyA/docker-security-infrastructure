@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.225.660  2019-04-10T16:57:29.488909-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.224  
-# 	   completed testing after rewrite, ready for release 
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.226.661  2019-04-10T17:18:19.236587-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.225  
+# 	   testing complete ready for release 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -58,7 +58,7 @@ echo    "   REMOTE_HOST Remote host to copy certificates to (default ${DEFAULT_R
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo    "               Many sites have different home directories (/u/north-office/)"
 echo    "   TLS_USER    Administration user (default ${DEFAULT_TLS_USER})"
-### production standard 6.3.170 Architecture tree
+### production standard 6.3.173 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
 echo    "<<USER_HOME>/                             <-- Location of user home directory"         # production standard 6.3.167
 echo    "   <USER-1>/.docker/                      <-- User docker cert directory"

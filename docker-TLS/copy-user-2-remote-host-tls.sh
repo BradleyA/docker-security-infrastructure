@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.207.642  2019-04-09T20:59:31.173874-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.206  
-# 	   shellcheck 
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.226.661  2019-04-10T17:18:19.334225-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.225  
+# 	   testing complete ready for release 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -62,7 +62,7 @@ echo    "   TLS_USER    User requiring new TLS keys on remote host (default ${DE
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo    "               Many sites have different home directories (/u/north-office/)"
 echo    "   ADM_TLS_USER Administrator user creating TLS keys (default ${DEFAULT_ADM_TLS_USER})"
-### production standard 6.3.170 Architecture tree
+### production standard 6.3.173 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
 echo    "<<USER_HOME>/                             <-- Location of user home directory"         # production standard 6.3.167
 echo    "   <USER-1>/.docker/                      <-- User docker cert directory"
@@ -155,7 +155,6 @@ fi
 
 #	Check if ${TLS_USER}-user-priv-key.pem file on system
 if ! [ -e "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/${TLS_USER}-user-priv-key.pem" ] ; then
-	display_help | more
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  The ${TLS_USER}-user-priv-key.pem file was not found in ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca." 1>&2
 	#	Help hint
 	echo -e "\n\tRunning create-user-tls.sh will create public and private keys."
@@ -177,7 +176,8 @@ fi
 
 #	Check if ${REMOTE_HOST} is available on ssh port
 if $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  ${ADM_TLS_USER} user may receive password and passphrase prompt from ${REMOTE_HOST}.  Running ${BOLD}ssh-copy-id ${ADM_TLS_USER}@${REMOTE_HOST}${NORMAL} may stop some of the prompts." 1>&2
+	#	Help hint
+	echo -e "\n\t${ADM_TLS_USER} user may receive password and passphrase prompt from ${REMOTE_HOST}.\n\tRunning ${BOLD}ssh-copy-id ${ADM_TLS_USER}@${REMOTE_HOST}${NORMAL} may stop some of the prompts."
 	ssh -t ${ADM_TLS_USER}@${REMOTE_HOST} " cd ~${TLS_USER} " || { get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${TLS_USER} user does not have home directory on ${REMOTE_HOST}"  ; exit 1; }
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Create directory, change file permissions, and copy TLS keys to ${TLS_USER}@${REMOTE_HOST}." 1>&2
 	cd "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca"
