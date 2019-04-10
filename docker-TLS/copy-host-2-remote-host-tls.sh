@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.205.640  2019-04-09T16:37:35.663061-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.204  
-# 	   shellcheck 
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.225.660  2019-04-10T16:57:29.488909-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.224  
+# 	   completed testing after rewrite, ready for release 
 ### production standard 3.0 shellcheck
 ### production standard 5.3.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
