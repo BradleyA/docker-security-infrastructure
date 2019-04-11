@@ -395,8 +395,38 @@ This script has to be run as root to check daemon registry cert (ca.crt), regist
     	Verify and correct file permissions.
     2019-04-07T15:36:19.605877-05:00 (CDT) two-rpi3b.cptx86.com /usr/local/bin/check-registry-tls.sh[16672] 3.190.617 263 root 0:0 [INFO]  Operation finished.
 
-## ARCHITECTURE TREE
+#### ARCHITECTURE TREE
 
+    /usr/local/data/                           <-- <DATA_DIR>
+    ├── <CLUSTER>/                             <-- <CLUSTER>
+    │   ├── docker/                            <-- Root directory of persistent
+    │   │   │                                      Docker state files; (images)
+    │   │   └── ######.######/                 <-- Root directory of persistent
+    │   │                                          Docker state files; (images)
+    │   │                                          when using user namespace
+    │   ├── SYSTEMS                            <-- List of hosts in cluster
+    │   ├── log/                               <-- Host log directory
+    │   ├── logrotate/                         <-- Host logrotate directory
+    │   ├── docker-accounts/                   <-- Docker TLS certs
+    │   │   ├── <HOST-1>/                      <-- Host in cluster
+    │   │   │   ├── <USER-1>/                  <-- User TLS certs directory
+    │   │   │   │   ├── ca.pem       FUTURE    <-- User tlscacert
+    │   │   │   │   ├── cert.pem     FUTURE    <-- User tlscert
+    │   │   │   │   ├── key.pem      FUTURE    <-- User tlskey
+    │   │   │   │   └── trust/                 <-- Backup of Docker Content Trust
+    │   │   │   │                                  (DCT) keys
+    │   │   │   └── <USER-2>/                  <-- User TLS certs directory
+    │   │   └── <HOST-2>/                      <-- Host in cluster
+    │   └── docker-registry/                   <-- Docker registry directory
+    │       ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ < Registry container mount
+    │       │   ├── certs/                     <-- Registry cert directory
+    │       │   │   ├── domain.crt             <-- Registry cert
+    │       │   │   └── domain.key             <-- Registry private key
+    │       │   └── docker/                    <-- Registry storage directory
+    │       └── <REGISTRY_HOST>-<REGISTRY_PORT>/ < Registry container mount
+    └── <STANDALONE>/                          <-- <STANDALONE> Architecture tree
+                                                   is the same as <CLUSTER> TREE but
+                                                   the systems are not in a cluster
 
     <USER_HOME>/                               <-- Location of user home directory
     └── <USER-1>/.docker/                      <-- User docker cert directory
