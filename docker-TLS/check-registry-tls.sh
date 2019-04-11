@@ -1,8 +1,8 @@
 #!/bin/bash
-# 	docker-TLS/check-registry-tls.sh  3.215.650  2019-04-10T12:43:00.157176-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.214  
-# 	   change in display_help, test local and remote with cluster-command.sh and ssh 
+# 	docker-TLS/check-registry-tls.sh  3.228.673  2019-04-10T22:41:25.427249-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.227-10-gbcb5b46  
+# 	   production standard 6.1.176 Architecture tree 
 ### production standard 3.0 shellcheck
-### production standard 5.3.160 Copyright
+### production standard 5.1.160 Copyright
 #	Copyright (c) 2019 Bradley Allen
 #	MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ### production standard 1.0 DEBUG variable
@@ -17,7 +17,7 @@ DEFAULT_REGISTRY_HOST=$(hostname -f)    # local host
 DEFAULT_REGISTRY_PORT="5000"
 DEFAULT_CLUSTER="us-tx-cluster-1/"
 DEFAULT_DATA_DIR="/usr/local/data/"
-### production standard 0.3.158 --help
+### production standard 0.1.158 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Check certifications for private registry"
 echo -e "\nUSAGE"
@@ -69,24 +69,25 @@ echo    "   REGISTRY_HOST   Registry host (default '${DEFAULT_REGISTRY_HOST}')"
 echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
 echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
 echo    "   DATA_DIR        Data directory (default '${DEFAULT_DATA_DIR}')"
-### production standard 6.3.170 Architecture tree
+### production standard 6.1.176 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
-echo    "/usr/local/data/                          <-- <DATA_DIR>"
-echo    "   <CLUSTER>/                             <-- <CLUSTER>"
-echo    "   └── docker-registry/                   <-- Docker registry directory"
-echo    "       ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry container mount"
-echo    "       │   ├── certs/                     <-- Registry cert directory"
-echo    "       │   │   ├── domain.crt             <-- Registry cert"
-echo    "       │   │   └── domain.key             <-- Registry private key"
-echo    "       │   └── docker/                    <-- Registry storage directory"
-echo -e "       └── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry container mount\n"
+echo    "/usr/local/data/                           <-- <DATA_DIR>"
+echo    "└── <CLUSTER>/                             <-- <CLUSTER>"
+echo    "    └── docker-registry/                   <-- Docker registry directory"
+echo    "        ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ < Registry container mount"
+echo    "        │   ├── certs/                     <-- Registry cert directory"
+echo    "        │   │   ├── domain.crt             <-- Registry cert"
+echo    "        │   │   └── domain.key             <-- Registry private key"
+echo    "        │   └── docker/                    <-- Registry storage directory"
+echo    "        ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ < Registry container mount"
+echo -e "        └── <REGISTRY_HOST>-<REGISTRY_PORT>/ < Registry container mount\n"
 echo    "/etc/ "
-echo    "   docker/ "
-echo    "   └── certs.d/                           <-- Host docker cert directory"
-echo    "       ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ <-- Registry cert directory"
-echo    "       │   └── ca.crt                     <-- Daemon registry domain cert"
-echo    "       └── <REGISTRY_HOST>:<REGISTRY_PORT>/ <-- Registry cert directory"
-echo    "           └── ca.crt                     <-- Daemon registry domain cert"
+echo    "└── docker/ "
+echo    "    └── certs.d/                           <-- Host docker cert directory"
+echo    "        ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory"
+echo    "        │   └── ca.crt                     <-- Daemon registry domain cert"
+echo    "        ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory"
+echo    "        └── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory"
 echo -e "\nDOCUMENTATION"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
 echo -e "\nEXAMPLES"
