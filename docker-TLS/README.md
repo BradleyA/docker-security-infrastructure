@@ -423,6 +423,7 @@ This script has to be run as root to check daemon registry cert (ca.crt), regist
     │       │   │   ├── domain.crt             <-- Registry cert
     │       │   │   └── domain.key             <-- Registry private key
     │       │   └── docker/                    <-- Registry storage directory
+    │       ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ < Registry container mount
     │       └── <REGISTRY_HOST>-<REGISTRY_PORT>/ < Registry container mount
     └── <STANDALONE>/                          <-- <STANDALONE> Architecture tree
                                                    is the same as <CLUSTER> TREE but
