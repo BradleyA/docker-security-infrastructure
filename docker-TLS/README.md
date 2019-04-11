@@ -397,61 +397,43 @@ This script has to be run as root to check daemon registry cert (ca.crt), regist
 
 ## ARCHITECTURE TREE
 
-        ARCHITECTURE TREE
-        /usr/local/data/                          <-- <DATA_DIR>
-           <CLUSTER>/                             <-- <CLUSTER>
-           ├── docker/                            <-- Root directory of persistent
-           │   │                                      Docker state files; (images)
-           │   └── ######.######/                 <-- Root directory of persistent
-           │                                          Docker state files; (images)
-           │                                          when using user namespace
-           ├── SYSTEMS                            <-- List of hosts in cluster
-           ├── log/                               <-- Host log directory
-           ├── logrotate/                         <-- Host logrotate directory
-           ├── docker-accounts/                   <-- Docker TLS certs
-           │   ├── <HOST-1>/                      <-- Host in cluster
-           │   │   ├── <USER-1>/                  <-- User TLS certs directory
-           │   │   │   ├── ca.pem       FUTURE    <-- User tlscacert
-           │   │   │   ├── cert.pem     FUTURE    <-- User tlscert
-           │   │   │   ├── key.pem      FUTURE    <-- User tlskey
-           │   │   │   └── trust/                 <-- Backup of Docker Content Trust
-           │   │   │                                  (DCT) keys
-           │   │   └── <USER-2>/                  <-- User TLS certs directory
-           │   └── <HOST-2>/                      <-- Host in cluster
-           ├── docker-registry/                   <-- Docker registry directory
-           │   ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry container mount
-           │   │   ├── certs/                     <-- Registry cert directory
-           │   │   │   ├── domain.crt             <-- Registry cert
-           │   │   │   └── domain.key             <-- Registry private key
-           │   │   └── docker/                    <-- Registry storage directory
-           │   └── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry container mount
-           <STANDALONE>/                          <-- <STANDALONE> Architecture tree
-                                                      is the same as <CLUSTER> TREE but
-                                                      the systems are not in a cluster
-						      
-        <USER_HOME>/                              <-- Location of user home directory
-           <USER-1>/.docker/                      <-- User docker cert directory
-              ├── ca.pem                          <-- Symbolic link to user tlscacert
-              ├── cert.pem                        <-- Symbolic link to user tlscert
-              ├── key.pem                         <-- Symbolic link to user tlskey
-              ├── docker-ca/                      <-- Working directory to create certs
-              ├── trust/                          <-- Docker Content Trust (DCT)
-              │   ├── private/                    <-- Notary Canonical Root Key ID
-              │   │                                   (DCT Root Key)
-              │   ├── trusted_certificates/       <-- Docker Content Trust (DCT) keys
-              │   └── tuf/                        <-- Update Framework (TUF)
-              ├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory
-              │   │                                   to create registory certs
-              │   ├── ca.crt                      <-- Daemon registry domain cert
-              │   ├── domain.crt                  <-- Registry cert
-              │   └── domain.key                  <-- Registry private key
-              └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory
-                                                      to create registory certs
 
 
+    │   ├── 10-override.begin                  <-- docker.service.d default lines
+    │   ├── dockerd-configuration-file         <-- Daemon configuration
+    │   ├── dockerd-configuration-file.service <- runs start-dockerd-with-systemd.sh
+    │   │                                          during boot
+    │   ├── docker.org                         <-- Copy of /etc/default/docker
+    │   ├── key.json                           <-- dockerd key for TLS connections
+    │   │                                          to other TLS servers
+    │   ├── README.md
+    │   ├── setup-dockerd.sh                   <-- moves and creates files
+    │   ├── start-dockerd-with-systemd.begin   <-- Beginning default lines
+    │   ├── start-dockerd-with-systemd.end     <-- Ending default lines
+    │   ├── start-dockerd-with-systemd.sh
+    │   └── uninstall-dockerd-scripts.sh       <-- Removes files and scripts
+    ├── systemd/system/                        <-- Local systemd configurations
+    │   ├── dockerd-configuration-file.service <-- Runs start-dockerd-with-systemd.sh
+    │   ├── docker.service.d/10-override.conf  <-- Override configutation file
+    │   └── docker.service.wants/              <-- Dependencies
+    ├── default/
+    │   └── docker                             <-- Docker daemon Upstart and
+    │                                              SysVinit configuration file
+    └── ssl/openssl.cnf                        <-- OpenSSL configuration file
 
+    /var/
+    ├── lib/docker/                            <-- Root directory of persistent
+    │                                              Docker state files; (images)
+    │                                              changed to symbolic link pointing
+    │                                              to <DATA_DIR>/<CLUSTER>/docker
+    └── run/
+        ├── docker/                            <-- Root directory for Docker
+        │                                          execution state files
+        ├── docker.pid                         <-- Docker daemon PID file
+        └── docker.######.######/              <-- Root directory for Docker
+                                                   execution state files using
+                                                   user namespace
 
-       
 
 
 #### Install Scripts
