@@ -1,8 +1,8 @@
 #!/bin/bash
-# 	docker-TLS/copy-registry-tls.sh  3.223.658  2019-04-10T16:12:17.942716-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.222  
-# 	   corrected 2 bugs caused be rewrite, ready for release 
+# 	docker-TLS/copy-registry-tls.sh  3.233.678  2019-04-10T23:18:20.100955-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.232  
+# 	   production standard 6.1.177 Architecture tree 
 ### production standard 3.0 shellcheck
-### production standard 5.3.160 Copyright
+### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
 #       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ### production standard 1.0 DEBUG variable
@@ -18,7 +18,7 @@ DEFAULT_REGISTRY_PORT="17313"
 DEFAULT_CLUSTER="us-tx-cluster-1/"
 DEFAULT_DATA_DIR="/usr/local/data/"
 DEFAULT_SYSTEMS_FILE="SYSTEMS"
-### production standard 0.3.158 --help
+### production standard 0.1.158 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Copy certs for Private Registry V2"
 echo -e "\nUSAGE"
@@ -81,37 +81,39 @@ echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PO
 echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
 echo    "   DATA_DIR        Data directory (default '${DEFAULT_DATA_DIR}')"
 echo    "   SYSTEMS_FILE    Hosts in cluster (default '${DEFAULT_SYSTEMS_FILE}')"
-### production standard 6.3.173 Architecture tree
+### production standard 6.1.177 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
-echo    "/usr/local/data/                          <-- <DATA_DIR>"
-echo    "   <CLUSTER>/                             <-- <CLUSTER>"
-echo    "   ├── SYSTEMS                            <-- List of hosts in cluster"
-echo    "   ├── docker-registry/                   <-- Docker registry directory"
-echo    "   │   ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry container mount"
-echo    "   │   │   ├── certs/                     <-- Registry cert directory"
-echo    "   │   │   │   ├── domain.crt             <-- Registry cert"
-echo    "   │   │   │   └── domain.key             <-- Registry private key"
-echo    "   │   │   └── docker/                    <-- Registry storage directory"
-echo    "   │   └── <REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Registry container mount"
-echo    "   <STANDALONE>/                          <-- <STANDALONE> Architecture tree"
-echo    "                                              is the same as <CLUSTER> TREE but"
-echo -e "                                              the systems are not in a cluster\n"
-echo    "<<USER_HOME>/                             <-- Location of user home directory"         # production standard 6.3.167
-echo    "   <USER-1>/.docker/                      <-- User docker cert directory"
-echo    "      ├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"       # production standard 6.3.170
-echo    "      │   │                                   to create registory certs"               # production standard 6.3.170
-echo    "      │   ├── ca.crt                      <-- Daemon registry domain cert"
-echo    "      │   ├── domain.crt                  <-- Registry cert"
-echo    "      │   └── domain.key                  <-- Registry private key"
-echo    "      └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"       # production standard 6.3.170
-echo -e "                                              to create registory certs\n"             # production standard 6.3.170
+echo    "/usr/local/data/                           <-- <DATA_DIR>"
+echo    "├── <CLUSTER>/                             <-- <CLUSTER>"
+echo    "│   └── docker-registry/                   <-- Docker registry directory"
+echo    "│       ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ < Registry container mount"
+echo    "│       │   ├── certs/                     <-- Registry cert directory"
+echo    "│       │   │   ├── domain.crt             <-- Registry cert"
+echo    "│       │   │   └── domain.key             <-- Registry private key"
+echo    "│       │   └── docker/                    <-- Registry storage directory"
+echo    "│       ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ < Registry container mount"
+echo    "│       └── <REGISTRY_HOST>-<REGISTRY_PORT>/ < Registry container mount"
+echo    "└── <STANDALONE>/                          <-- <STANDALONE> Architecture tree"
+echo    "                                               is the same as <CLUSTER> TREE but"
+echo -e "                                               the systems are not in a cluster\n"
+echo    "<USER_HOME>/                               <-- Location of user home directory"
+echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
+echo    "    ├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"
+echo    "    │   │                                      to create registory certs"
+echo    "    │   ├── ca.crt                         <-- Daemon registry domain cert"
+echo    "    │   ├── domain.crt                     <-- Registry cert"
+echo    "    │   └── domain.key                     <-- Registry private key"
+echo    "    ├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"
+echo    "    │                                          to create registory certs"
+echo    "    └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"
+echo -e "                                               to create registory certs\n"
 echo    "/etc/ "
-echo    "   docker/ "
-echo    "   └── certs.d/                           <-- Host docker cert directory"
-echo    "       ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ <-- Registry cert directory"
-echo    "       │   └── ca.crt                     <-- Daemon registry domain cert"
-echo    "       └── <REGISTRY_HOST>:<REGISTRY_PORT>/ <-- Registry cert directory"
-echo    "           └── ca.crt                     <-- Daemon registry domain cert"
+echo    "└── docker/ "
+echo    "    └── certs.d/                           <-- Host docker cert directory"
+echo    "        ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory"
+echo    "        │   └── ca.crt                     <-- Daemon registry domain cert"
+echo    "        ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory"
+echo    "        └── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory"
 echo -e "\nDOCUMENTATION"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
 echo -e "\nEXAMPLES"
