@@ -463,7 +463,6 @@ This script has to be run as root to check daemon registry cert (ca.crt), regist
     │   ├── daemon.json                        <-- Daemon configuration file
     │   ├── key.json                           <-- Automatically generated dockerd
     │   │                                          key for TLS connections
-
     │   ├── 10-override.begin                  <-- docker.service.d default lines
     │   ├── dockerd-configuration-file         <-- Daemon configuration
     │   ├── dockerd-configuration-file.service <- runs start-dockerd-with-systemd.sh
@@ -498,8 +497,6 @@ This script has to be run as root to check daemon registry cert (ca.crt), regist
         └── docker.######.######/              <-- Root directory for Docker
                                                    execution state files using
                                                    user namespace
-
-
 
 #### Install Scripts
 To install the scripts, change to the directory you have write permission (examples: ~/bin, /usr/local/bin) 
