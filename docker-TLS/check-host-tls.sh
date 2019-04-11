@@ -1,10 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-host-tls.sh  3.231.676  2019-04-10T22:59:37.448189-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.230  
-# 	   production standard 6.1.176 Architecture tree 
-# 	docker-TLS/check-host-tls.sh  3.227.662  2019-04-10T22:32:36.625823-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.226  
-# 	   production standard 6.1.176 Architecture tree 
-# 	docker-TLS/check-host-tls.sh  3.213.648  2019-04-10T10:44:46.341883-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.212  
-# 	   user hist formatting changes, test remote and local complete ready to be released 
+# 	docker-TLS/check-host-tls.sh  3.232.677  2019-04-10T23:04:43.449464-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.231  
+# 	   production standard 6.1.177 Architecture tree 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen

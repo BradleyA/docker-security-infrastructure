@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-user-tls.sh  3.229.674  2019-04-10T22:48:15.633783-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.228  
-# 	   production standard 6.1.176 Architecture tree 
+# 	docker-TLS/check-user-tls.sh  3.232.677  2019-04-10T23:04:43.671650-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.231  
+# 	   production standard 6.1.177 Architecture tree 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -54,10 +54,8 @@ echo -e "\nOPTIONS"
 echo    "   TLS_USER    Administration user (default ${DEFAULT_TLS_USER})"
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo    "               sites have different home directory locations (/u/north-office/)"
-
-### production standard 6.1.176 Architecture tree
+### production standard 6.1.177 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
-
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
 echo    "    ├── ca.pem                             <-- Symbolic link to user tlscacert"
@@ -70,7 +68,7 @@ echo    "        ├── <HOST-1>/                      <-- Host in cluster"
 echo    "        │   ├── <USER-1>/                  <-- User TLS certs directory"
 echo    "        │   │   ├── ca.pem       FUTURE    <-- User tlscacert"
 echo    "        │   │   ├── cert.pem     FUTURE    <-- User tlscert"
-echo    "        │   │   ├── key.pem      FUTURE    <-- User tlskey"
+echo    "        │   │   └── key.pem      FUTURE    <-- User tlskey"
 echo    "        │   └── <USER-2>/                  <-- User TLS certs directory"
 echo    "        └── <HOST-2>/                      <-- Host in cluster"
 echo -e "\nDOCUMENTATION"

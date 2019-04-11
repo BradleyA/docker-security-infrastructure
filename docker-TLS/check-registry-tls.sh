@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-registry-tls.sh  3.228.673  2019-04-10T22:41:25.427249-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.227-10-gbcb5b46  
-# 	   production standard 6.1.176 Architecture tree 
+# 	docker-TLS/check-registry-tls.sh  3.232.677  2019-04-10T23:04:43.569614-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.231  
+# 	   production standard 6.1.177 Architecture tree 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #	Copyright (c) 2019 Bradley Allen
@@ -69,7 +69,7 @@ echo    "   REGISTRY_HOST   Registry host (default '${DEFAULT_REGISTRY_HOST}')"
 echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
 echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
 echo    "   DATA_DIR        Data directory (default '${DEFAULT_DATA_DIR}')"
-### production standard 6.1.176 Architecture tree
+### production standard 6.1.177 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
 echo    "/usr/local/data/                           <-- <DATA_DIR>"
 echo    "└── <CLUSTER>/                             <-- <CLUSTER>"
