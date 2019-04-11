@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-host-tls.sh  3.231.676  2019-04-10T22:59:37.448189-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.230  
+# 	   production standard 6.1.176 Architecture tree 
 # 	docker-TLS/check-host-tls.sh  3.227.662  2019-04-10T22:32:36.625823-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.226  
 # 	   production standard 6.1.176 Architecture tree 
 # 	docker-TLS/check-host-tls.sh  3.213.648  2019-04-10T10:44:46.341883-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.212  
@@ -53,15 +55,15 @@ echo    "you are using other shells."
 echo    "   DEBUG       (default off '0')"
 echo -e "\nOPTIONS"
 echo -e "   CERTDIR     dockerd certification directory (default ${DEFAULT_CERTDIR})"
-### production standard 6.1.176 Architecture tree
+### production standard 6.1.177 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
 echo    "/etc/ "
 echo    "└── docker/ "
 echo    "    └── certs.d/                           <-- Host docker cert directory"
 echo    "        └── daemon/                        <-- Daemon cert directory"
-echo    "                ├── ca.pem                 <-- Daemon tlscacert"
-echo    "                ├── cert.pem               <-- Daemon tlscert"
-echo    "                └── key.pem                <-- Daemon tlskey"
+echo    "            ├── ca.pem                     <-- Daemon tlscacert"
+echo    "            ├── cert.pem                   <-- Daemon tlscert"
+echo    "            └── key.pem                    <-- Daemon tlskey"
 echo -e "\nDOCUMENTATION"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
 echo -e "\nEXAMPLES"
