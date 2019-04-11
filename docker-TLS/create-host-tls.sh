@@ -1,10 +1,8 @@
 #!/bin/bash
-# 	docker-TLS/create-host-tls.sh  3.221.656  2019-04-10T14:32:53.376791-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.220  
-# 	   comment typo, ready for release 
-# 	docker-TLS/create-host-tls.sh  3.208.643  2019-04-09T21:47:22.249189-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.207  
-# 	   shellcheck 
+# 	docker-TLS/create-host-tls.sh  3.234.679  2019-04-10T23:30:18.473500-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.233  
+# 	   production standard 6.1.177 Architecture tree 
 ### production standard 3.0 shellcheck
-### production standard 5.3.160 Copyright
+### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
 #       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ### production standard 1.0 DEBUG variable
@@ -19,7 +17,7 @@ DEFAULT_FQDN=$(hostname -f)    # local host
 DEFAULT_NUMBER_DAYS="185"
 DEFAULT_USER_HOME="/home/"
 DEFAULT_ADM_TLS_USER="${USER}"
-### production standard 0.3.160 --help
+### production standard 0.1.160 --help
 display_help() {
 echo -e "\n{NORMAL}${0} - Create host public, private keys and CA"
 echo -e "\nUSAGE"
@@ -58,11 +56,11 @@ echo    "   NUMBER_DAYS Number of days host CA is valid (default ${DEFAULT_NUMBE
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo    "               sites have different home directories (/u/north-office/)"
 echo    "   ADM_TLS_USER Administrator user creating TLS keys (default ${DEFAULT_ADM_TLS_USER})"
-### production standard 6.3.173 Architecture tree
+### production standard 6.1.177 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
-echo    "<USER_HOME>/                              <-- Location of user home directory"         # production standard 6.3.167
-echo    "   <USER-1>/.docker/                      <-- User docker cert directory"
-echo    "      └── docker-ca/                      <-- Working directory to create certs"
+echo    "<USER_HOME>/                               <-- Location of user home directory"
+echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
+echo    "    └── docker-ca/                         <-- Working directory to create certs"
 echo -e "\nDOCUMENTATION"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
 echo -e "\nEXAMPLES\n   Create host TLS for two.cptx86.com valid for 180 days using home location,"

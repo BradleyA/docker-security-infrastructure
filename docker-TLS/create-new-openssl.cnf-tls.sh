@@ -1,8 +1,8 @@
 #!/bin/bash
-# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.218.653  2019-04-10T13:37:29.057330-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.217  
-# 	   formatting Help Hint, added ARCHITECTURE TREE, testing completed, ready to release 
+# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.234.679  2019-04-10T23:30:18.635712-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.233  
+# 	   production standard 6.1.177 Architecture tree 
 ### production standard 3.0 shellcheck
-### production standard 5.3.160 Copyright
+### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
 #       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ### production standard 1.0 DEBUG variable
@@ -15,7 +15,7 @@ NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 BACKUP_FILE="/etc/ssl/openssl.cnf-$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)"
 ORIGINAL_FILE="/etc/ssl/openssl.cnf"
-### production standard 0.3.158 --help
+### production standard 0.1.158 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Modify /etc/ssl/openssl.conf file"
 echo -e "\nUSAGE"
@@ -41,10 +41,10 @@ echo    "command, 'unset DEBUG' to remove the exported information from the DEBU
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
 echo    "   DEBUG       (default off '0')"
-### production standard 6.3.173 Architecture tree
+### production standard 6.1.177 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
 echo    "/etc/ "
-echo    "   ssl/openssl.cnf                        <-- OpenSSL configuration file"              # production standard 6.3.173
+echo -e "└── ssl/openssl.cnf                        <-- OpenSSL configuration file\n"
 echo -e "\nDOCUMENTATION"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
 echo -e "\nEXAMPLES"

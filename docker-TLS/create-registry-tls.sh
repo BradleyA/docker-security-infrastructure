@@ -1,10 +1,8 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.224.659  2019-04-10T16:39:02.169905-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.223  
-# 	   added check for integer for arguments 
-# 	docker-TLS/create-registry-tls.sh  3.222.657  2019-04-10T14:43:10.656877-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.221  
-# 	   testing complete, ready for release 
+# 	docker-TLS/create-registry-tls.sh  3.234.679  2019-04-10T23:30:18.738262-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.233  
+# 	   production standard 6.1.177 Architecture tree 
 ### production standard 3.0 shellcheck
-### production standard 5.3.160 Copyright
+### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
 #       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ### production standard 1.0 DEBUG variable
@@ -17,7 +15,7 @@ NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 DEFAULT_REGISTRY_PORT="17313"
 DEFAULT_NUMBER_DAYS='365'
-### production standard 0.3.160 --help
+### production standard 0.1.160 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Create TLS for Private Registry V2"
 echo -e "\nUSAGE"
@@ -57,17 +55,20 @@ echo -e "\nOPTIONS"
 echo    "Order of precedence: CLI options, environment variable, default code."
 echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
 echo    "   NUMBER_DAYS     Number of days certificate valid (default '${DEFAULT_NUMBER_DAYS}')" 
-### production standard 6.3.173 Architecture tree
+
+### production standard 6.1.177 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
-echo    "<USER_HOME>/                              <-- Location of user home directory"         # production standard 6.3.167
-echo    "   <USER-1>/.docker/                      <-- User docker cert directory"
-echo    "      ├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"       # production standard 6.3.170
-echo    "      │   │                                   to create registory certs"               # production standard 6.3.170
-echo    "      │   ├── ca.crt                      <-- Daemon registry domain cert"
-echo    "      │   ├── domain.crt                  <-- Registry cert"
-echo    "      │   └── domain.key                  <-- Registry private key"
-echo    "      └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"       # production standard 6.3.170
-echo -e "                                              to create registory certs\n"             # production standard 6.3.170
+echo    "<USER_HOME>/                               <-- Location of user home directory"
+echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
+echo    "    ├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"
+echo    "    │   │                                      to create registory certs"
+echo    "    │   ├── ca.crt                         <-- Daemon registry domain cert"
+echo    "    │   ├── domain.crt                     <-- Registry cert"
+echo    "    │   └── domain.key                     <-- Registry private key"
+echo    "    ├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"
+echo    "    │                                          to create registory certs"
+echo    "    └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"
+echo -e "                                               to create registory certs\n"
 echo -e "\nDOCUMENTATION"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
 echo -e "\nEXAMPLES"
