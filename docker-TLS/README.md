@@ -460,9 +460,7 @@ This script has to be run as root to check daemon registry cert (ca.crt), regist
     │   │   ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory
     │   │   │   └── ca.crt                     <-- Daemon registry domain cert
     │   │   ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory
-    │   │   │   └── ca.crt                     <-- Daemon registry domain cert
     │   │   └── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory
-    │   │       └── ca.crt                     <-- Daemon registry domain cert
     │   ├── daemon.json                        <-- Daemon configuration file
     │   ├── key.json                           <-- Automatically generated dockerd
     │   │                                          key for TLS connections
