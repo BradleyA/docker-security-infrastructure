@@ -398,6 +398,41 @@ This script has to be run as root to check daemon registry cert (ca.crt), regist
 ## ARCHITECTURE TREE
 
 
+    <USER_HOME>/                               <-- Location of user home directory
+    └── <USER-1>/.docker/                      <-- User docker cert directory
+        ├── ca.pem                             <-- Symbolic link to user tlscacert
+        ├── cert.pem                           <-- Symbolic link to user tlscert
+        ├── key.pem                            <-- Symbolic link to user tlskey
+        ├── docker-ca/                         <-- Working directory to create certs
+        ├── trust/                             <-- Docker Content Trust (DCT)
+        │   ├── private/                       <-- Notary Canonical Root Key ID
+        │   │                                      (DCT Root Key)
+        │   ├── trusted_certificates/          <-- Docker Content Trust (DCT) keys
+        │   └── tuf/                           <-- Update Framework (TUF)
+        ├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory
+        │   │                                      to create registory certs
+        │   ├── ca.crt                         <-- Daemon registry domain cert
+        │   ├── domain.crt                     <-- Registry cert
+        │   └── domain.key                     <-- Registry private key
+        └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory to
+                                                   create registory certs
+
+    /etc/
+    ├── docker/
+    │   ├── certs.d/                           <-- Host docker cert directory
+    │   │   ├── daemon/                        <-- Daemon cert directory
+    │   │   │       ├── ca.pem                 <-- Daemon tlscacert
+    │   │   │       ├── cert.pem               <-- Daemon tlscert
+    │   │   │       └── key.pem                <-- Daemon tlskey
+    │   │   ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory
+    │   │   │   └── ca.crt                     <-- Daemon registry domain cert
+    │   │   ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory
+    │   │   │   └── ca.crt                     <-- Daemon registry domain cert
+    │   │   └── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory
+    │   │       └── ca.crt                     <-- Daemon registry domain cert
+    │   ├── daemon.json                        <-- Daemon configuration file
+    │   ├── key.json                           <-- Automatically generated dockerd
+    │   │                                          key for TLS connections
 
     │   ├── 10-override.begin                  <-- docker.service.d default lines
     │   ├── dockerd-configuration-file         <-- Daemon configuration
