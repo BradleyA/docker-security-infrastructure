@@ -1,8 +1,8 @@
 #!/bin/bash
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.226.661  2019-04-10T17:18:19.236587-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.225  
-# 	   testing complete ready for release 
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.230.675  2019-04-10T22:58:32.010745-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.229  
+# 	   production standard 6.1.176 Architecture tree 
 ### production standard 3.0 shellcheck
-### production standard 5.3.160 Copyright
+### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
 #       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ### production standard 1.0 DEBUG variable
@@ -16,7 +16,7 @@ NORMAL=$(tput -Txterm sgr0)
 DEFAULT_REMOTE_HOST="$(hostname -f)"    # local host
 DEFAULT_USER_HOME="/home/"
 DEFAULT_TLS_USER="${USER}"
-### production standard 0.3.158 --help
+### production standard 0.1.158 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Copy public, private keys and CA to remote host"
 echo -e "\nUSAGE"
@@ -58,18 +58,19 @@ echo    "   REMOTE_HOST Remote host to copy certificates to (default ${DEFAULT_R
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo    "               Many sites have different home directories (/u/north-office/)"
 echo    "   TLS_USER    Administration user (default ${DEFAULT_TLS_USER})"
-### production standard 6.3.173 Architecture tree
+
+### production standard 6.1.176 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
-echo    "<<USER_HOME>/                             <-- Location of user home directory"         # production standard 6.3.167
-echo    "   <USER-1>/.docker/                      <-- User docker cert directory"
-echo -e "      └── docker-ca/                      <-- Working directory to create certs\n"
+echo    "<USER_HOME>/                               <-- Location of user home directory"
+echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
+echo -e "    └── docker-ca/                         <-- Working directory to create certs\n"
 echo    "/etc/ "
-echo    "   docker/ "
-echo    "   └── certs.d/                           <-- Host docker cert directory"
-echo    "       └── daemon/                        <-- Daemon cert directory"
-echo    "           ├── ca.pem                     <-- Daemon tlscacert"
-echo    "           ├── cert.pem                   <-- Daemon tlscert"
-echo    "           └── key.pem                    <-- Daemon tlskey"
+echo    "└── docker/ "
+echo    "    └── certs.d/                           <-- Host docker cert directory"
+echo    "        └── daemon/                        <-- Daemon cert directory"
+echo    "            ├── ca.pem                     <-- Daemon tlscacert"
+echo    "            ├── cert.pem                   <-- Daemon tlscert"
+echo    "            └── key.pem                    <-- Daemon tlskey"
 echo -e "\nDOCUMENTATION"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
 echo -e "\nEXAMPLES"
