@@ -1,8 +1,8 @@
 #!/bin/bash
-# 	docker-TLS/check-user-tls.sh  3.214.649  2019-04-10T12:17:39.668166-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.213  
-# 	   testing complete local, remote, user, and sudo different user, loop all hosts in cluster 
+# 	docker-TLS/check-user-tls.sh  3.229.674  2019-04-10T22:48:15.633783-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.228  
+# 	   production standard 6.1.176 Architecture tree 
 ### production standard 3.0 shellcheck
-### production standard 5.3.160 Copyright
+### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
 #       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ### production standard 1.0 DEBUG variable
@@ -15,7 +15,7 @@ NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 DEFAULT_TLS_USER="${USER}"
 DEFAULT_USER_HOME="/home/"
-### production standard 0.3.158 --help
+### production standard 0.1.158 --help
 display_help() {
 echo -e "\n${NORMAL}${0} - Check public, private keys, and CA for a user"
 echo -e "\nUSAGE"
@@ -54,23 +54,25 @@ echo -e "\nOPTIONS"
 echo    "   TLS_USER    Administration user (default ${DEFAULT_TLS_USER})"
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo    "               sites have different home directory locations (/u/north-office/)"
-### production standard 6.3.170 Architecture tree
+
+### production standard 6.1.176 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
-echo    "<USER_HOME>/                              <-- Location of user home directory"         # production standard 6.3.167
-echo    "   <USER-1>/.docker/                      <-- User docker cert directory"
-echo    "      ├── ca.pem                          <-- Symbolic link to user tlscacert"
-echo    "      ├── cert.pem                        <-- Symbolic link to user tlscert"
-echo -e "      └── key.pem                         <-- Symbolic link to user tlskey\n"
-echo    "/usr/local/data/                          <-- <DATA_DIR>"
-echo    "   <CLUSTER>/                             <-- <CLUSTER>"
-echo    "   └── docker-accounts/                   <-- Docker TLS certs"
-echo    "       ├── <HOST-1>/                      <-- Host in cluster"
-echo    "       │   ├── <USER-1>/                  <-- User TLS certs directory"
-echo    "       │   │   ├── ca.pem                 <-- User tlscacert"
-echo    "       │   │   ├── cert.pem               <-- User tlscert"
-echo    "       │   │   └── key.pem                <-- User tlskey"
-echo    "       │   └── <USER-2>/                  <-- User TLS certs directory"
-echo -e "       └── <HOST-2>/                      <-- Host in cluster\n"
+
+echo    "<USER_HOME>/                               <-- Location of user home directory"
+echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
+echo    "    ├── ca.pem                             <-- Symbolic link to user tlscacert"
+echo    "    ├── cert.pem                           <-- Symbolic link to user tlscert"
+echo -e "    └── key.pem                            <-- Symbolic link to user tlskey\n"
+echo    "/usr/local/data/                           <-- <DATA_DIR>"
+echo    " ── <CLUSTER>/                             <-- <CLUSTER>"
+echo    "    └── docker-accounts/                   <-- Docker TLS certs"
+echo    "        ├── <HOST-1>/                      <-- Host in cluster"
+echo    "        │   ├── <USER-1>/                  <-- User TLS certs directory"
+echo    "        │   │   ├── ca.pem       FUTURE    <-- User tlscacert"
+echo    "        │   │   ├── cert.pem     FUTURE    <-- User tlscert"
+echo    "        │   │   ├── key.pem      FUTURE    <-- User tlskey"
+echo    "        │   └── <USER-2>/                  <-- User TLS certs directory"
+echo    "        └── <HOST-2>/                      <-- Host in cluster"
 echo -e "\nDOCUMENTATION"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
 echo -e "\nEXAMPLES"
