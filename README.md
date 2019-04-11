@@ -1,4 +1,4 @@
-# docker-security-infrastructure   [![Stable Release](https://img.shields.io/badge/Release-3.122-blue.svg)](https://github.com/BradleyA/docker-security-infrastructure/releases/tag/3.122)    [![GitHub commits](https://img.shields.io/github/commits-since/BradleyA/docker-security-infrastructure/3.122.svg)](https://github.com/BradleyA/docker-security-infrastructure/commits/)
+# docker-security-infrastructure   [![Stable Release](https://img.shields.io/badge/Release-3.234-blue.svg)](https://github.com/BradleyA/docker-security-infrastructure/releases/tag/3.234)    [![GitHub commits](https://img.shields.io/github/commits-since/BradleyA/docker-security-infrastructure/3.234.svg)](https://github.com/BradleyA/docker-security-infrastructure/commits/)
 This repository contains shell scripts that check user ssh permissions, setup and manage both TLS and dockerd on Ubuntu 14.04 (upstart) and Ubuntu 16.04 (systemd).
 
  * [docker-TLS](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS)
