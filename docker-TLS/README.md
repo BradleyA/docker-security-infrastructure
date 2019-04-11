@@ -428,6 +428,27 @@ This script has to be run as root to check daemon registry cert (ca.crt), regist
            <STANDALONE>/                          <-- <STANDALONE> Architecture tree
                                                       is the same as <CLUSTER> TREE but
                                                       the systems are not in a cluster
+						      
+        <USER_HOME>/                              <-- Location of user home directory
+           <USER-1>/.docker/                      <-- User docker cert directory
+              ├── ca.pem                          <-- Symbolic link to user tlscacert
+              ├── cert.pem                        <-- Symbolic link to user tlscert
+              ├── key.pem                         <-- Symbolic link to user tlskey
+              ├── docker-ca/                      <-- Working directory to create certs
+              ├── trust/                          <-- Docker Content Trust (DCT)
+              │   ├── private/                    <-- Notary Canonical Root Key ID
+              │   │                                   (DCT Root Key)
+              │   ├── trusted_certificates/       <-- Docker Content Trust (DCT) keys
+              │   └── tuf/                        <-- Update Framework (TUF)
+              ├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory
+              │   │                                   to create registory certs
+              │   ├── ca.crt                      <-- Daemon registry domain cert
+              │   ├── domain.crt                  <-- Registry cert
+              │   └── domain.key                  <-- Registry private key
+              └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory
+                                                      to create registory certs
+
+
 
 
        
