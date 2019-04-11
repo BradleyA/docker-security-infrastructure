@@ -445,8 +445,10 @@ This script has to be run as root to check daemon registry cert (ca.crt), regist
         │   ├── ca.crt                         <-- Daemon registry domain cert
         │   ├── domain.crt                     <-- Registry cert
         │   └── domain.key                     <-- Registry private key
-        └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory to
-                                                   create registory certs
+	├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory
+        │                                          to create registory certs
+        └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory
+                                                   to create registory certs
 
     /etc/
     ├── docker/
