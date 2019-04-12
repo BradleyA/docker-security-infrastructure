@@ -1,7 +1,11 @@
-###	
-#	dockerd-configuration-options/start-dockerd-with-systemd.end  3.99.459  2018-12-11T12:49:08.046958-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.98  
-#	   start-dockerd-with-systemd.end Change echo or print DEBUG INFO WARNING ERROR close #28 
-#
+###
+#	dockerd-configuration-options/start-dockerd-with-systemd.end  3.237.687  2019-04-12T16:15:43.354750-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.236  
+#	   updated production standard 5.1.160 Copyright 
+### production standard 3.0 shellcheck
+### production standard 5.1.160 Copyright
+#       Copyright (c) 2019 Bradley Allen
+#       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+
 ### start-dockerd-with-systemd.end
 #	 Configure dockerd (systemd) on Ubuntu 16.04
 #	Any changes to dockerd-configuration-file will be added to the override
