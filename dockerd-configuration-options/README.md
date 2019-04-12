@@ -63,8 +63,44 @@ To verfy that upstart started dockerd with no incidents, enter the following:
 
 700 uninstall-dockerd-scripts.sh - script removes from your system the above files from /etc/docker directory and /etc/systemd/system/dockerd-configuration-file.service file; removes files and directories from /etc/systemd/system/docker.service.d and /etc/systemd/system/docker.service.wants; and displays what commands to run to remove this script and information from memory by dockerd.  Thus resetting your system back to its previous state.
 
+#### ARCHITECTURE TREE
+
+    /etc/
+    ├── docker/
+    │   ├── daemon.json                        <-- Daemon configuration file
+    │   ├── key.json                           <-- Automatically generated dockerd
+    │   │                                          key for TLS connections to other
+    │   │                                          TLS servers
+    │   ├── 10-override.begin                  <-- docker.service.d default lines
+    │   ├── dockerd-configuration-file         <-- Daemon configuration
+    │   ├── dockerd-configuration-file.service <- runs start-dockerd-with-systemd.sh
+    │   │                                          during boot
+    │   ├── docker.org                         <-- Copy of /etc/default/docker
+    │   ├── README.md
+    │   ├── setup-dockerd.sh                   <-- moves and creates files
+    │   ├── start-dockerd-with-systemd.begin   <-- Beginning default lines
+    │   ├── start-dockerd-with-systemd.end     <-- Ending default lines
+    │   ├── start-dockerd-with-systemd.sh
+    │   └── uninstall-dockerd-scripts.sh       <-- Removes files and scripts
+    ├── systemd/system/                        <-- Local systemd configurations
+    │   ├── dockerd-configuration-file.service <-- Runs start-dockerd-with-systemd.sh
+    │   ├── docker.service.d/
+    │   │   └── 10-override.conf               <-- Override configutation file
+    │   └── docker.service.wants/              <-- Dependencies
+    └── default/
+        └── docker                             <-- Docker daemon Upstart and
+                                                   SysVinit configuration file
+
+
+#### To watch future updates in this repository select in the upper-right corner, the "Watch" list, and select Watching.
+
+#### Author
+[<img id="twitter" src="../images/twitter.png" width="50" a="twitter.com/bradleyaustintx/">
+](https://twitter.com/bradleyaustintx/)   [<img id="github" src="../images/github.png" width="50" a="https://github.com/BradleyA/">
+](https://github.com/BradleyA/)    [<img src="../images/linkedin.png" style="max-width:100%;" >](https://www.linkedin.com/in/bradleyhallen)
+
 #### System OS script tested
- * Ubuntu 14.04.3 LTS
+ * Ubuntu 14.04.4 LTS
  * Ubuntu 16.04.3 LTS (armv7l)
 
 #### Design Principles
