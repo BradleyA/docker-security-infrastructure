@@ -1,17 +1,18 @@
 #!/bin/bash
-#	dockerd-configuration-options/start-dockerd-with-systemd.begin  3.99.459  2018-12-11T12:48:46.767654-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.98  
-#	   start-dockerd-with-systemd.end Change echo or print DEBUG INFO WARNING ERROR close #28 
-#	dockerd-configuration-options/start-dockerd-with-systemd.begin  3.93.450  2018-12-06T22:47:15.674969-06:00 (CST)  https://github.com/BradleyA/docker-scripts  uadmin  six-rpi3b.cptx86.com 3.92  
-#	   added DEBUG environment variable, include process ID in ERROR, INFO, WARN, DEBUG statements, display_help | more , shellcheck #30 
-#
-### start-dockerd-with-systemd.begin
+#	dockerd-configuration-options/start-dockerd-with-systemd.begin  3.236.686  2019-04-12T16:11:06.917380-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.235  
+#	   updated production standard 5.1.160 Copyright 
+### production standard 3.0 shellcheck
+### production standard 5.1.160 Copyright
+#       Copyright (c) 2019 Bradley Allen
+#       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+### production standard 1.0 DEBUG variable
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 #       set -x
 #       set -v
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
-
+ 
 #       Date and time function ISO 8601
 get_date_stamp() {
 DATE_STAMP=$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
