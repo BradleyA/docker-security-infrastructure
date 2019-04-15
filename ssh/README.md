@@ -95,6 +95,11 @@ To remove a host from ~/.ssh/authorized_keys file:
         ├── id_rsa.pub                         <-- SSH public key
         └── known_hosts                        <-- Systems previously connected to
 
+#### Author
+[<img id="twitter" src="../images/twitter.png" width="50" a="twitter.com/bradleyaustintx/">
+](https://twitter.com/bradleyaustintx/)   [<img id="github" src="../images/github.png" width="50" a="https://github.com/BradleyA/">
+](https://github.com/BradleyA/)    [<img src="../images/linkedin.png" style="max-width:100%;" >](https://www.linkedin.com/in/bradleyhallen)
+
 #### System OS script tested
 
  * Ubuntu 14.04.3 LTS
