@@ -2,9 +2,7 @@
 
 ## Description
 
-Check user uadmin ssh file permissions
-
-This script allows users to make sure that the ssh files and directory permissions are correct.  If they are not correct then this script will correct the permissions.  Administrators can check other users ssh keys by using: sudo /usr/local/bin/check-user-ssh.sh <SSH-USER>.  Currently not supporting id_dsa.pub.
+This script allows users to make sure that the ssh files and directory permissions are correct.  If they are not correct then this script will correct the permissions.  Administrators can check other users ssh keys by using: sudo /usr/local/bin/check-user-ssh.sh <SSH-USER>.  Currently not supporting id_dsa.pub.  Example of file permissions for uadmin user in ~/.ssh directory:
 
     drwx------  2 uadmin uadmin 4096 Mar  5 13:55 .
     drwxr-xr-x 15 uadmin uadmin 4096 Mar 10 19:22 ..
