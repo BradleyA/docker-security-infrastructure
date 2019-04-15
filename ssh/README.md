@@ -86,6 +86,15 @@ To remove a host from ~/.ssh/authorized_keys file:
     grep -v $REMOVE_HOST /home/uadmin/.ssh/authorized_keys > /home/uadmin/.ssh/authorized_keys.new
     mv /home/uadmin/.ssh/authorized_keys.new /home/uadmin/.ssh/authorized_keys
 
+#### ARCHITECTURE TREE
+    <USER_HOME>/                               <-- Location of user home directory
+    └── <USER-1>/.ssh/                         <-- Secure Socket Shell directory
+        ├── authorized_keys                    <-- SSH keys for logging into account
+        ├── config                             <-- SSH client configuration file
+        ├── id_rsa                             <-- SSH private key
+        ├── id_rsa.pub                         <-- SSH public key
+        └── known_hosts                        <-- Systems previously connected to
+
 #### System OS script tested
 
  * Ubuntu 14.04.3 LTS
