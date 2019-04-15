@@ -2,7 +2,7 @@
 
 ## Description
 
-Check user RSA ssh file permissions
+Check user uadmin ssh file permissions
 
 This script allows users to make sure that the ssh files and directory permissions are correct.  If they are not correct then this script will correct the permissions.  Administrators can check other users ssh keys by using: sudo /usr/local/bin/check-user-ssh.sh <SSH-USER>.  Currently not supporting id_dsa.pub.
 
