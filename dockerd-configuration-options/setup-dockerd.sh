@@ -1,5 +1,5 @@
 #!/bin/bash
-# 	dockerd-configuration-options/setup-dockerd.sh  3.239.689  2019-04-15T09:38:21.210643-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.238  
+# 	dockerd-configuration-options/setup-dockerd.sh  3.240.690  2019-04-15T09:49:31.653272-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.239  
 # 	   correct incident chown chmod /etc/docker/* not found 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.235.685  2019-04-11T23:02:08.821768-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.234-5-g2b3f0c6  
 # 	   added production standard and ran shell check need to test more 
@@ -166,7 +166,7 @@ elif [ ! -f "${WORK_DIRECTORY}setup-dockerd.sh" ] ; then
 	mv start-dockerd-with-systemd.end	"${WORK_DIRECTORY}"
 	mv uninstall-dockerd-scripts.sh		"${WORK_DIRECTORY}"
 	$(cd "${WORK_DIRECTORY}" ; chown root.root *)
-	$(cd "${WORK_DIRECTORY}" ; chmod go-xw *)
+	$(cd "${WORK_DIRECTORY}" ; chmod go-rxw *)
 else
 	get_date_stamp ; echo -e "\n${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Skipping installation because ${WORK_DIRECTORY}setup-dockerd.sh is already installed.  Updating Docker daemon with changes in ${WORK_DIRECTORY}dockerd-configuration-file.\n" 1>&2
 fi
