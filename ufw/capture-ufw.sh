@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	ufw/capture-ufw.sh  3.243.700  2019-04-17T13:30:07.806459-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.242  
+# 	   added more production standard default code 
 # 	ufw/capture-ufw.sh  3.242.699  2019-04-16T21:38:47.409701-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.241-5-g26b5e67  
 # 	   first ruff out still more needed 
 ### production standard 3.0 shellcheck
@@ -86,8 +88,65 @@ echo    "   DATA_DIR        Data directory (default '${DEFAULT_DATA_DIR}')"
 echo    "   SYSTEMS_FILE    Hosts in cluster (default '${DEFAULT_SYSTEMS_FILE}')"
 
 
-us-tx-cluster-1/o
-n standard 6.1.177 Architecture tree
+### production standard 6.1.177 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
+
+
+echo -e "\nDOCUMENTATION"
+echo    "   https://github.com/BradleyA/   <<URL to online repository README>>"
+echo -e "\nEXAMPLES"
+echo -e "   <<your code examples description goes here>>\n\t${BOLD}${0} <<code example goes here>>${NORMAL}"
+echo -e "   <<your code examples description goes here>>\n\t${BOLD}${0}${NORMAL}"
+}
+
+#       Date and time function ISO 8601
+get_date_stamp() {
+DATE_STAMP=$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
+TEMP=$(date +%Z)
+DATE_STAMP="${DATE_STAMP} (${TEMP})"
+}
+
+#       Fully qualified domain name FQDN hostname
+LOCALHOST=$(hostname -f)
+
+#       Version
+SCRIPT_NAME=$(head -2 "${0}" | awk {'printf $2'})
+SCRIPT_VERSION=$(head -2 "${0}" | awk {'printf $3'})
+
+#       UID and GID
+USER_ID=$(id -u)
+GROUP_ID=$(id -g)
+
+#       Added line because USER is not defined in crobtab jobs
+if ! [ "${USER}" == "${LOGNAME}" ] ; then  USER=${LOGNAME} ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
+
+#       Default help and version arguments
+if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] ; then
+        display_help | more
+        exit 0
+fi
+if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
+        echo "${SCRIPT_NAME} ${SCRIPT_VERSION}"
+        exit 0
+fi
+
+### production standard 2.0 log format (WHEN WHERE WHAT Version Line WHO UID:GID [TYPE] Message)
+#       INFO
+get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Started..." 1>&2
+
+#       DEBUG
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Name_of_command >${0}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
+
+###
+#       Root is required to copy certs
+if ! [ $(id -u) = 0 ] ; then
+        display_help | more
+        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Use sudo ${0}" 1>&2
+#       Help hint
+        echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT   <<\n${NORMAL}"    1>&2
+        exit 1
+fi
+
 
 
