@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.245.702  2019-05-07T20:58:07.062084-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.244  
+# 	   docker-TLS/check-host-tls.sh - modify output: add user message about cert expires close #50 
 # 	docker-TLS/create-host-tls.sh  3.234.679  2019-04-10T23:30:18.473500-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.233  
 # 	   production standard 6.1.177 Architecture tree 
 ### production standard 3.0 shellcheck
@@ -30,10 +32,11 @@ echo    "   ${0} [--version | -version | -v]"
 echo -e "\nDESCRIPTION"
 #       Displaying help DESCRIPTION in English en_US.UTF-8
 echo    "An administration user runs this script to create host public, private keys and"
-echo    "CA in the working directory (<USER_HOME>/<ADM_TLS_USER>/.docker/docker-ca)."
+echo    "CA into the working directory (<USER_HOME>/<ADM_TLS_USER>/.docker/docker-ca) on"
+echo    "the site TLS server."
 echo -e "\nThe scripts create-site-private-public-tls.sh and"
-echo    "create-new-openssl.cnf-tls.sh are required to be run once on a system before"
-echo    "using this script.  Review the documentation for a complete understanding."
+echo    "create-new-openssl.cnf-tls.sh are required to create a site TLS server. Review"
+echo    "the DOCUMENTATION for a complete understanding."
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
         echo -e "\n--> ${LANG}"
