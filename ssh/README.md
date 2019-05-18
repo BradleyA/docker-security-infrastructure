@@ -74,7 +74,7 @@ To create a new ssh key;
 
 To check if a private key and public key are a matched set (identical) or not a matched set (differ):
     
-    diff -qs <(ssh-keygen -yf ~/.ssh/id_rsa) <(cut -d ' ' -f 1,2 ~/.ssh/id_rsa.pub)
+    ssh-keygen -y -f ~/.ssh/id_rsa | diff -s - <(cut -d ' ' -f 1,2 ~/.ssh/id_rsa.pub)
 
 To debug SSH login use the -vvv for verbose mode to help resolve this incident.
 
