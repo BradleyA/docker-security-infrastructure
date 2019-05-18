@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	ssh/check-user-ssh.sh  3.246.707  2019-05-18T17:50:55.742880-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.245-4-g6bb0eb9  
+# 	   updated ssh-keygen compare public and private keys 
 # 	ssh/check-user-ssh.sh  3.241.693  2019-04-15T12:14:03.299896-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.240-2-g7efc75c  
 # 	   update production standards 
 ### production standard 3.0 shellcheck
@@ -34,7 +36,7 @@ echo -e "\t${BOLD}ssh-keygen -t rsa${NORMAL}"
 echo    "To copy ssh key to a remote system:"
 echo -e "\t${BOLD}ssh-copy-id <SSH_USER>@<REMOTE_HOST>${NORMAL}"
 echo    "Enter the following command to test if public and private key match:"
-echo -e "\t${BOLD}diff -qs <(ssh-keygen -yf ~/.ssh/id_rsa) <(cut -d ' ' -f 1,2 ~/.ssh/id_rsa.pub)${NORMAL}"
+echo -e "\t${BOLD}ssh-keygen -y -f ~/.ssh/id_rsa | diff -s - <(cut -d ' ' -f 1,2 ~/.ssh/id_rsa.pub)${NORMAL}"
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
         echo -e "\n--> ${LANG}"
@@ -229,7 +231,7 @@ echo   "${NORMAL}"
 #	Check if user private key and user public key are a matched set
 if ! [ "$(id -u)" = 0 ] ; then
 	echo -e "\n\tCheck if ${SSH_USER} private key and public key are a\n\tmatched set (identical) or not a matched set (differ):\n"
-	diff -qs <(ssh-keygen -y -f "${USER_HOME}"/"${SSH_USER}"/.ssh/id_rsa) <(cut -d ' ' -f 1,2 "${USER_HOME}"/"${SSH_USER}"/.ssh/id_rsa.pub)
+	ssh-keygen -y -f "${USER_HOME}"/"${SSH_USER}"/.ssh/id_rsa | diff -s - <(cut -d ' ' -f 1,2 "${USER_HOME}"/"${SSH_USER}"/.ssh/id_rsa.pub)
 else
 	echo -e "\n\tRoot is unable to check if ${SSH_USER} private key and public key are a\n\tmatched set (identical) or not a matched set (differ).  Only a user will be\n\table to check if their keys are a matched set or not matched set.\n"
 fi
