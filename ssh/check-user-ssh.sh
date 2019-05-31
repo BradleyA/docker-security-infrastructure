@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	ssh/check-user-ssh.sh  3.247.710  2019-05-31T13:14:50.829509-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.246-2-ga0116d9  
+# 	   updated ssh-keygen for user 
 # 	ssh/check-user-ssh.sh  3.246.709  2019-05-31T11:16:51.943687-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.246-1-gce6599f  
 # 	   check-user-ssh.sh usage added production standard 8.0 --usage 
 # 	ssh/check-user-ssh.sh  3.246.707  2019-05-18T17:50:55.742880-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.245-4-g6bb0eb9  
@@ -39,7 +41,7 @@ echo    "permissions are correct.  If they are not correct then this script will
 echo    "the permissions.  Administrators can check other users ssh keys by using:"
 echo -e "\t${BOLD}sudo ${0} <SSH_USER>{NORMAL}"
 echo    "To create a new ssh key:"
-echo -e "\t${BOLD}ssh-keygen -t rsa${NORMAL}"
+echo -e "\t${BOLD}ssh-keygen -t rsa -b 4096 -o -C '[$(date +%Y-%m-%dT%H:%M:%S.%6N%:z) - $(date -d +52weeks +%Y-%m-%dT%H:%M:%S.%6N%:z) ${USER}@$(hostname -f)]'${NORMAL}"
 echo    "To copy ssh key to a remote system:"
 echo -e "\t${BOLD}ssh-copy-id <SSH_USER>@<REMOTE_HOST>${NORMAL}"
 echo    "Enter the following command to test if public and private key match:"
@@ -134,7 +136,7 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 
 #	Root is required to check other users or user can check their own certs
 if ! [ "${USER_ID}" = 0 -o "${USER}" = "${SSH_USER}" ] ; then
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}   Use sudo ${0}  ${SSH_USER}" 1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}   Use sudo ${0}  ${SSH_USER} to check other users certs" 1>&2
 #       Help hint
 	echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT TO CHECK <another-user>/.ssh DIRECTORY. <<\n${NORMAL}"	1>&2
 	exit 1
@@ -151,7 +153,7 @@ fi
 if [ ! -d "${USER_HOME}"/"${SSH_USER}"/.ssh ] ; then 
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${SSH_USER} does not have a .ssh directory" 1>&2
 #       Help hint
-	echo -e "\n\tTo create an ssh key enter: ${BOLD}ssh-keygen -t rsa${NORMAL}\n"
+	echo -e "\n\tTo create an ssh key enter: ${BOLD}ssh-keygen -t rsa -b 4096 -o -C '[$(date +%Y-%m-%dT%H:%M:%S.%6N%:z) - $(date -d +52weeks +%Y-%m-%dT%H:%M:%S.%6N%:z) ${USER}@$(hostname -f)]'${NORMAL}\n"
 	exit 1
 fi
 
@@ -166,7 +168,7 @@ fi
 #	Check if user has .ssh/id_rsa file
 if [ ! -e "${USER_HOME}"/"${SSH_USER}"/.ssh/id_rsa ] ; then 
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${SSH_USER} does not have a .ssh/id_rsa file" 1>&2
-	echo -e "\n\tTo create an ssh key enter: ${BOLD}ssh-keygen -t rsa${NORMAL}\n"
+	echo -e "\n\tTo create an ssh key enter: ${BOLD}ssh-keygen -t rsa -b 4096 -o -C '[$(date +%Y-%m-%dT%H:%M:%S.%6N%:z) - $(date -d +52weeks +%Y-%m-%dT%H:%M:%S.%6N%:z) ${USER}@$(hostname -f)]'${NORMAL}\n"
 	exit 1
 fi
 
@@ -174,7 +176,7 @@ fi
 if [ ! -e "${USER_HOME}"/"${SSH_USER}"/.ssh/id_rsa.pub ] ; then 
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${SSH_USER} does not have a .ssh/id_rsa.pub file" 1>&2
 #       Help hint
-	echo -e "\n\tTo create an ssh key enter: ${BOLD}ssh-keygen -t rsa${NORMAL}\n"
+	echo -e "\n\tTo create an ssh key enter: ${BOLD}ssh-keygen -t rsa -b 4096 -o -C '[$(date +%Y-%m-%dT%H:%M:%S.%6N%:z) - $(date -d +52weeks +%Y-%m-%dT%H:%M:%S.%6N%:z) ${USER}@$(hostname -f)]'${NORMAL}\n"
 	exit 1
 fi
 
