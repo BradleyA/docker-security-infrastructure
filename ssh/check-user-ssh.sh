@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	ssh/check-user-ssh.sh  3.246.709  2019-05-31T11:16:51.943687-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.246-1-gce6599f  
+# 	   check-user-ssh.sh usage added production standard 8.0 --usage 
 # 	ssh/check-user-ssh.sh  3.246.707  2019-05-18T17:50:55.742880-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.245-4-g6bb0eb9  
 # 	   updated ssh-keygen compare public and private keys 
 # 	ssh/check-user-ssh.sh  3.241.693  2019-04-15T12:14:03.299896-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.240-2-g7efc75c  
@@ -17,16 +19,21 @@ NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 DEFAULT_USER_HOME="/home/"
 DEFAULT_SSH_USER="${USER}"
-###
-display_help() {
+### production standard 8.0 --usage
+display_usage() {
 echo -e "\n${NORMAL}${0} - Check user RSA ssh file permissions"
 echo -e "\nUSAGE"
 echo    "   ${0} [<USER_HOME>]"
-echo    "   ${0}  <USER_HOME> [<SSH_USER>]"
+echo -e "   ${0}  <USER_HOME> [<SSH_USER>]\n"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
+echo    "   ${0} [--usage | -usage | -u]"
 echo    "   ${0} [--version | -version | -v]"
-echo -e "\nDESCRIPTION"
+}
+### production standard 0.1.166 --help
+display_help() {
+display_usage
 #       Displaying help DESCRIPTION in English en_US.UTF-8
+echo -e "\nDESCRIPTION"
 echo    "This script allows users to make sure that the ssh files and directory"
 echo    "permissions are correct.  If they are not correct then this script will correct"
 echo    "the permissions.  Administrators can check other users ssh keys by using:"
@@ -97,13 +104,17 @@ GROUP_ID=$(id -g)
 if ! [ "${USER}" == "${LOGNAME}" ] ; then  USER=${LOGNAME} ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
 
-#       Default help and version arguments
+#       Default help, usage, and version arguments
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] ; then
         display_help | more
         exit 0
 fi
 if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
         echo "${SCRIPT_NAME} ${SCRIPT_VERSION}"
+        exit 0
+fi
+if [ "$1" == "--usage" ] || [ "$1" == "-usage" ] || [ "$1" == "usage" ] || [ "$1" == "-u" ] ; then
+        display_usage | more
         exit 0
 fi
 
