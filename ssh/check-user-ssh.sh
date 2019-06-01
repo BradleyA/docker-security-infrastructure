@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	ssh/check-user-ssh.sh  3.248.711  2019-05-31T22:36:05.642316-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.247  
-# 	   ./check-user-ssh.sh update logic during permission checking 
+# 	ssh/check-user-ssh.sh  3.249.712  2019-05-31T23:12:12.939731-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.248  
+# 	   ssh/check-user-ssh.sh testing complete ready for release 
 # 	ssh/check-user-ssh.sh  3.246.709  2019-05-31T11:16:51.943687-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.246-1-gce6599f  
 # 	   check-user-ssh.sh usage added production standard 8.0 --usage 
 # 	ssh/check-user-ssh.sh  3.246.707  2019-05-18T17:50:55.742880-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.245-4-g6bb0eb9  
@@ -160,8 +160,8 @@ fi
 
 #	Check ${USER_HOME}/${SSH_USER} directory permissions
 #	https://unix.stackexchange.com/questions/37164/ssh-and-home-directory-permissions
-if [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}") != 755 ] || [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}/.ssh") != 750 ] || [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}/.ssh") != 700 ] ; then
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Directory permissions for ${USER_HOME}/${SSH_USER} are not 755 or 750 or 700.  Correcting $(stat -Lc %a ${USER_HOME}/${SSH_USER}/.ssh) to only the directory owner with write permissions" 1>&2
+if ! [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}") == 755 ] || [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}") == 750 ] || [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}") == 700 ] ; then
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Directory permissions for ${USER_HOME}/${SSH_USER} are not 755 or 750 or 700.  Correcting $(stat -Lc %a ${USER_HOME}/${SSH_USER}) to only the directory owner with write permissions" 1>&2
 	chmod go-w "${USER_HOME}"/"${SSH_USER}"
 fi
 
@@ -216,6 +216,17 @@ if [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}/.ssh/id_rsa.pub") != 644 ]; then
 	chmod 0644 "${USER_HOME}"/"${SSH_USER}"/.ssh/id_rsa.pub
 fi
 
+#	Check if user has .ssh/config file
+if [ -e "${USER_HOME}"/"${SSH_USER}"/.ssh/config ] ; then 
+#	Verify and correct file permissions for ${USER_HOME}/${SSH_USER}/.ssh/config
+	if [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}/.ssh/config") != 600 ]; then
+		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${USER_HOME}/${SSH_USER}/.ssh/config are not 600.  Correcting $(stat -Lc %a ${USER_HOME}/${SSH_USER}/.ssh/config) to 600 file permissions" 1>&2
+		chmod 600 "${USER_HOME}"/"${SSH_USER}"/.ssh/config
+	fi
+else
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  User does not have a .ssh/config file.  For more information enter:  ${BOLD}man ssh_config${NORMAL}" 1>&2
+fi
+
 #	Check if user has .ssh/known_hosts file
 if [ -e "${USER_HOME}"/"${SSH_USER}"/.ssh/known_hosts ] ; then 
 #	Verify and correct file permissions for ${USER_HOME}/${SSH_USER}/.ssh/known_hosts
@@ -248,17 +259,6 @@ if [ -e "${USER_HOME}"/"${SSH_USER}"/.ssh/authorized_keys ] ; then
 	echo -e "\n\t${NORMAL}To remove a host from ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys file:\n\n\t${BOLD}REMOVE_HOST='<user_name>@<host_name>'\n\tgrep -v \$REMOVE_HOST ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys > ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys.new\n\tmv ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys.new ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys${NORMAL}"
 else
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  User does not have a .ssh/authorized_keys file." 1>&2
-fi
-
-#	Check if user has .ssh/config file
-if [ -e "${USER_HOME}"/"${SSH_USER}"/.ssh/config ] ; then 
-#	Verify and correct file permissions for ${USER_HOME}/${SSH_USER}/.ssh/config
-	if [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}/.ssh/config") != 600 ]; then
-		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${USER_HOME}/${SSH_USER}/.ssh/config are not 600.  Correcting $(stat -Lc %a ${USER_HOME}/${SSH_USER}/.ssh/config) to 600 file permissions" 1>&2
-		chmod 600 "${USER_HOME}"/"${SSH_USER}"/.ssh/config
-	fi
-else
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  User does not have a .ssh/config file.  For more information enter:  ${BOLD}man ssh_config${NORMAL}" 1>&2
 fi
 
 #	Check if user owns .ssh files
