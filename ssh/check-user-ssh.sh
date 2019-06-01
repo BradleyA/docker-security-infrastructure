@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	ssh/check-user-ssh.sh  3.247.710  2019-05-31T13:14:50.829509-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.246-2-ga0116d9  
-# 	   updated ssh-keygen for user 
+# 	ssh/check-user-ssh.sh  3.248.711  2019-05-31T22:36:05.642316-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.247  
+# 	   ./check-user-ssh.sh update logic during permission checking 
 # 	ssh/check-user-ssh.sh  3.246.709  2019-05-31T11:16:51.943687-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.246-1-gce6599f  
 # 	   check-user-ssh.sh usage added production standard 8.0 --usage 
 # 	ssh/check-user-ssh.sh  3.246.707  2019-05-18T17:50:55.742880-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.245-4-g6bb0eb9  
@@ -138,10 +138,12 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 if ! [ "${USER_ID}" = 0 -o "${USER}" = "${SSH_USER}" ] ; then
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}   Use sudo ${0}  ${SSH_USER} to check other users certs" 1>&2
 #       Help hint
-	echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT TO CHECK <another-user>/.ssh DIRECTORY. <<\n${NORMAL}"	1>&2
+	echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT TO CHECK <another-user>/.ssh DIRECTORY. <<\n${NORMAL}" 1>&2
 	exit 1
 fi
 
+echo -e "\n\t${NORMAL}Verify and correct file and directory permissions for ${USER_HOME}/${SSH_USER}/.ssh"
+###
 #	Check if user has home directory on system
 if [ ! -d "${USER_HOME}"/"${SSH_USER}" ] ; then 
 #       Help hint
@@ -149,6 +151,21 @@ if [ ! -d "${USER_HOME}"/"${SSH_USER}" ] ; then
 	exit 1
 fi
 
+#	Check if ${USER_HOME}/${SSH_USER} directory is owned by ${SSH_USER}
+if [ $(stat -Lc %U "${USER_HOME}/${SSH_USER}") != ${SSH_USER} ]; then
+#       Help hint
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${SSH_USER} does not own ${USER_HOME}/${SSH_USER} directory" 1>&2
+	exit 1
+fi
+
+#	Check ${USER_HOME}/${SSH_USER} directory permissions
+#	https://unix.stackexchange.com/questions/37164/ssh-and-home-directory-permissions
+if [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}") != 755 ] || [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}/.ssh") != 750 ] || [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}/.ssh") != 700 ] ; then
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Directory permissions for ${USER_HOME}/${SSH_USER} are not 755 or 750 or 700.  Correcting $(stat -Lc %a ${USER_HOME}/${SSH_USER}/.ssh) to only the directory owner with write permissions" 1>&2
+	chmod go-w "${USER_HOME}"/"${SSH_USER}"
+fi
+
+###
 #	Check if .ssh directory exists
 if [ ! -d "${USER_HOME}"/"${SSH_USER}"/.ssh ] ; then 
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${SSH_USER} does not have a .ssh directory" 1>&2
@@ -158,39 +175,39 @@ if [ ! -d "${USER_HOME}"/"${SSH_USER}"/.ssh ] ; then
 fi
 
 #	Check if .ssh directory is owned by ${SSH_USER}
-DIRECTORY_OWNER=$(ls -ld "${USER_HOME}/${SSH_USER}/.ssh" | awk '{print $3}')
-if [ ! "${SSH_USER}" == "${DIRECTORY_OWNER}" ] ; then 
-#       Help hint
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${SSH_USER} does not own ${USER_HOME}/${SSH_USER}/.ssh directory" 1>&2
-	exit 1
+if [ $(stat -Lc %U "${USER_HOME}/${SSH_USER}/.ssh") != ${SSH_USER} ]; then
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Directory owner for ${USER_HOME}/${SSH_USER}/.ssh is not owned by ${SSH_USER}.  Correcting $(stat -Lc %U ${USER_HOME}/${SSH_USER}/.ssh) to ${SSH_USER}" 1>&2
+	chown -R ${SSH_USER} "${USER_HOME}"/"${SSH_USER}"/.ssh
 fi
 
-#	Check if user has .ssh/id_rsa file
-if [ ! -e "${USER_HOME}"/"${SSH_USER}"/.ssh/id_rsa ] ; then 
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${SSH_USER} does not have a .ssh/id_rsa file" 1>&2
-	echo -e "\n\tTo create an ssh key enter: ${BOLD}ssh-keygen -t rsa -b 4096 -o -C '[$(date +%Y-%m-%dT%H:%M:%S.%6N%:z) - $(date -d +52weeks +%Y-%m-%dT%H:%M:%S.%6N%:z) ${USER}@$(hostname -f)]'${NORMAL}\n"
-	exit 1
-fi
-
-#	Check if user has .ssh/id_rsa.pub file
-if [ ! -e "${USER_HOME}"/"${SSH_USER}"/.ssh/id_rsa.pub ] ; then 
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${SSH_USER} does not have a .ssh/id_rsa.pub file" 1>&2
-#       Help hint
-	echo -e "\n\tTo create an ssh key enter: ${BOLD}ssh-keygen -t rsa -b 4096 -o -C '[$(date +%Y-%m-%dT%H:%M:%S.%6N%:z) - $(date -d +52weeks +%Y-%m-%dT%H:%M:%S.%6N%:z) ${USER}@$(hostname -f)]'${NORMAL}\n"
-	exit 1
-fi
-
-#
-echo -e "\n\t${NORMAL}Verify and correct file and directory permissions for ${USER_HOME}/${SSH_USER}/.ssh"
+#	Check ${USER_HOME}/${SSH_USER}/.ssh directory permissions
 if [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}/.ssh") != 700 ]; then
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Directory permissions for ${USER_HOME}/${SSH_USER}/.ssh are not 700.  Correcting $(stat -Lc %a ${USER_HOME}/${SSH_USER}/.ssh) to 0700 directory permissions" 1>&2
 	chmod 0700 "${USER_HOME}"/"${SSH_USER}"/.ssh
+fi
+
+###
+#	Check if user has ${USER_HOME}/${SSH_USER}/.ssh/id_rsa file
+if [ ! -e "${USER_HOME}"/"${SSH_USER}"/.ssh/id_rsa ] ; then 
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${SSH_USER} does not have a .ssh/id_rsa file" 1>&2
+#       Help hint
+	echo -e "\n\tTo create an ssh key enter: ${BOLD}ssh-keygen -t rsa -b 4096 -o -C '[$(date +%Y-%m-%dT%H:%M:%S.%6N%:z) - $(date -d +52weeks +%Y-%m-%dT%H:%M:%S.%6N%:z) ${USER}@$(hostname -f)]'${NORMAL}\n"
+	exit 1
 fi
 
 #	Verify and correct file permissions for ${USER_HOME}/${SSH_USER}/.ssh/id_rsa
 if [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}/.ssh/id_rsa") != 600 ]; then
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${USER_HOME}/${SSH_USER}/.ssh/id_rsa are not 600.  Correcting $(stat -Lc %a ${USER_HOME}/${SSH_USER}/.ssh/id_rsa) to 0600 file permissions" 1>&2
 	chmod 0600 "${USER_HOME}"/"${SSH_USER}"/.ssh/id_rsa
+fi
+
+###
+#	Check if user has ${USER_HOME}/${SSH_USER}/.ssh/id_rsa.pub file
+if [ ! -e "${USER_HOME}"/"${SSH_USER}"/.ssh/id_rsa.pub ] ; then 
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${SSH_USER} does not have a .ssh/id_rsa.pub file" 1>&2
+#       Help hint
+	echo -e "\n\tTo create an ssh key enter: ${BOLD}ssh-keygen -t rsa -b 4096 -o -C '[$(date +%Y-%m-%dT%H:%M:%S.%6N%:z) - $(date -d +52weeks +%Y-%m-%dT%H:%M:%S.%6N%:z) ${USER}@$(hostname -f)]'${NORMAL}\n"
+	exit 1
 fi
 
 #	Verify and correct file permissions for ${USER_HOME}/${SSH_USER}/.ssh/id_rsa.pub
@@ -203,43 +220,52 @@ fi
 if [ -e "${USER_HOME}"/"${SSH_USER}"/.ssh/known_hosts ] ; then 
 #	Verify and correct file permissions for ${USER_HOME}/${SSH_USER}/.ssh/known_hosts
 	if [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}/.ssh/known_hosts") != 600 ]; then
-		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${USER_HOME}/${SSH_USER}/.ssh/known_hosts are not 600.  Correcting $(stat -Lc %a ${USER_HOME}/${SSH_USER}/.ssh/known_hosts) to 600 file permissions"      1>&2
+		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${USER_HOME}/${SSH_USER}/.ssh/known_hosts are not 600.  Correcting $(stat -Lc %a ${USER_HOME}/${SSH_USER}/.ssh/known_hosts) to 600 file permissions" 1>&2
 		chmod 600 "${USER_HOME}"/"${SSH_USER}"/.ssh/known_hosts
 	fi
 else
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  User does not have a .ssh/known_hosts file."      1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  User does not have a .ssh/known_hosts file." 1>&2
 fi
 
-#	Check if user has .ssh/authorized_keys file
+
+### >>> Need to add check for other authorized_keys file location in /etc/ssh/sshd_config file #51
+#	directory permission to this location  755 ?
+#	file permissions for authorized_keys  644 ?
+#	trouble shooting section, need to test
+#	https://unix.stackexchange.com/questions/37164/ssh-and-home-directory-permissions
+
+
+#	Check if user has ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys file
 if [ -e "${USER_HOME}"/"${SSH_USER}"/.ssh/authorized_keys ] ; then 
 #	Verify and correct file permissions for ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys
 	if [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}/.ssh/authorized_keys") != 600 ]; then
-		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys are not 600.  Correcting $(stat -Lc %a ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys) to 600 file permissions"      1>&2
+		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys are not 600.  Correcting $(stat -Lc %a ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys) to 600 file permissions" 1>&2
 		chmod 600 "${USER_HOME}"/"${SSH_USER}"/.ssh/authorized_keys
 	fi
 #	List of authorized hosts in ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys
 	echo -e "\n\tList of ${BOLD}authorized hosts${NORMAL} in ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys:${BOLD}\n"
-	cut -d ' ' -f 3 "${USER_HOME}"/"${SSH_USER}"/.ssh/authorized_keys | sort
+	cut -d ' ' -f 3- "${USER_HOME}"/"${SSH_USER}"/.ssh/authorized_keys | sort
 	echo -e "\n\t${NORMAL}To remove a host from ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys file:\n\n\t${BOLD}REMOVE_HOST='<user_name>@<host_name>'\n\tgrep -v \$REMOVE_HOST ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys > ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys.new\n\tmv ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys.new ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys${NORMAL}"
 else
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  User does not have a .ssh/authorized_keys file."      1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  User does not have a .ssh/authorized_keys file." 1>&2
 fi
 
 #	Check if user has .ssh/config file
 if [ -e "${USER_HOME}"/"${SSH_USER}"/.ssh/config ] ; then 
 #	Verify and correct file permissions for ${USER_HOME}/${SSH_USER}/.ssh/config
 	if [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}/.ssh/config") != 600 ]; then
-		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${USER_HOME}/${SSH_USER}/.ssh/config are not 600.  Correcting $(stat -Lc %a ${USER_HOME}/${SSH_USER}/.ssh/config) to 600 file permissions"      1>&2
+		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${USER_HOME}/${SSH_USER}/.ssh/config are not 600.  Correcting $(stat -Lc %a ${USER_HOME}/${SSH_USER}/.ssh/config) to 600 file permissions" 1>&2
 		chmod 600 "${USER_HOME}"/"${SSH_USER}"/.ssh/config
 	fi
 else
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  User does not have a .ssh/config file.  For more information enter:  ${BOLD}man ssh_config${NORMAL}"      1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  User does not have a .ssh/config file.  For more information enter:  ${BOLD}man ssh_config${NORMAL}" 1>&2
 fi
 
 #	Check if user owns .ssh files
-echo -e "\n\tCheck if all files in ${USER_HOME}/${SSH_USER}/.ssh directory are owned\n\tby ${SSH_USER}.  If files are not owned by ${SSH_USER} then list them below:${BOLD}"        1>&2
+echo -e "\n\tCheck if all files in ${USER_HOME}/${SSH_USER}/.ssh directory are owned\n\tby ${SSH_USER}.  If files are not owned by ${SSH_USER} then list them below:${BOLD}" 1>&2
 find "${USER_HOME}"/"${SSH_USER}"/.ssh ! -user "${SSH_USER}" -exec ls -l {} \;
 echo   "${NORMAL}"
+chown -R ${SSH_USER} "${USER_HOME}"/"${SSH_USER}"/.ssh
 
 #	Check if user private key and user public key are a matched set
 if ! [ "$(id -u)" = 0 ] ; then
