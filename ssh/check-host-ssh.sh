@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	ssh/check-host-ssh.sh  3.251.715  2019-06-02T13:56:12.378295-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.250  
+# 	   ready to begin debug 
 # 	ssh/check-hosts-ssh.sh  3.246.703  2019-05-15T23:15:15.068587-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.245  
 # 	   first draft NOT ready for test 
 # 	ssh/check-hosts-ssh.sh  3.246.703  2019-05-15T23:14:06.597644-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.245  
@@ -292,8 +294,8 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 #	It breaks for obvious reasons though. Your authorized_keys file lives in ~/.ssh/ which is intentionally encrypted when you are not logged in.
 #	
 #	A trivial change to still allow password less/free logins, is to add a second authorized_keys file location to /etc/ssh/sshd_config.
-#	Just add/change AuthorizedKeysFile to point to '%h/.ssh/authorized_keys /etc/ssh/%u/authorized_keys'.
-#	This makes ssh first look into ~/.ssh/ and fall back to /etc/ssh/~/ if no valid authorized_keys file can be found (make sure to chown
+#	Just add/change AuthorizedKeysFile to point to '%h/.ssh/authorized_keys /etc/ssh/keys/%u/authorized_keys'.
+#	This makes ssh first look into ~/.ssh/ and fall back to /etc/ssh/keys/~/ if no valid authorized_keys file can be found (make sure to chown
 #	ownership of the latter to the login user).
 ###
 #	authorizedkeysfile /etc/ssh/keys/%u/authorized_keys
@@ -308,32 +310,18 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 #	%% is replaced by a literal '%',
 #	%h is replaced by the home directory of the user being authenticated,
 #	%u is replaced by the username of that user
-#	default is ~/.ssh/authorized_keys and ~/.ssh/authorized_keys2
 #	
 #	Lines starting with ‘#’ and empty lines are interpreted as comments.
 #	keywords are case-insensitive
 #	grep AuthorizedKeysFile /tmp/foo | grep -v '^#'
 #	/tmp/foo test file
-#		#AuthorizedKeysFile	%h/.ssh/authorized_keys
-#		authorizedkeysfile	%h/.ssh/authorized_keys
-#		AuthorizedKeysFile	%h/.ssh/authorized_keys #
-#		AuthorizedKeysFile	%h/.ssh/authorized_keys /etc/ssh/%u/authorized_keys /etc/ssh/keys/%u/.ssh/authorized_keys
-#		AuthorizedKeysFile      %h/.ssh/authorized_keys /etc/ssh/%u/authorized_keys /etc/ssh/keys/%u/authorized_keys /etc/ssh/keys/%u/.ssh/authorized_keys
-#		AuthorizedKeysFile      /etc/ssh/%u/authorized_keys /etc/ssh/keys/%u/authorized_keys /etc/ssh/keys/%u/.ssh/authorized_keys %h/.ssh/authorized_keys
-#		# AuthorizedKeysFile	%h/.ssh/authorized_keys /etc/ssh/%u/authorized_keys /etc/ssh/keys/%u /etc/ssh/keys/%u/.ssh/authorized_keys
-#		AuthorizedKeysFile	~/.ssh/authorized_keys
-#		#AuthorizedKeysFile	~/.ssh/authorized_keys
-#		# AuthorizedKeysFile	~/.ssh/authorized_keys
-#		 # AuthorizedKeysFile	~/.ssh/authorized_keys
+#		AuthorizedKeysFile      %h/.ssh/authorized_keys /etc/ssh/keys/%u/authorized_keys
 ###
-#	AuthorizedKeysFile      /etc/ssh/%u/authorized_keys /etc/ssh/keys/%u/authorized_keys /etc/ssh/keys/%u/.ssh/authorized_keys %h/.ssh/authorized_keys
+#	AuthorizedKeysFile      /etc/ssh/keys/%u/authorized_keys %h/.ssh/authorized_keys
 #	authorized_keys2 deprecated since 2001
-AUTHORIZED_KEY_FILES=$(grep 'AuthorizedKeysFile' /etc/ssh/sshd_config | grep -v '#')
+AUTHORIZED_KEY_FILES=$(grep 'AuthorizedKeysFile' /etc/ssh/sshd_config | grep -v '#' | cut -d ' ' -f 2-)
 if [ -z "${AUTHORIZED_KEY_FILES}" ] ; then
 	AUTHORIZED_KEY_FILES=${DEFAULT_KEY_LOCATION}
-else
-	AUTHORIZED_KEY_FILES=$(echo "${AUTHORIZED_KEY_FILES}" | sed 's/AuthorizedKeysFile//')  + ' ' + ${DEFAULT_KEY_LOCATION}
-#	AUTHORIZED_KEY_FILES=${AUTHORIZED_KEY_FILES} + ' ' + ${DEFAULT_KEY_LOCATION}
 fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  AUTHORIZED_KEY_FILES >${AUTHORIZED_KEY_FILES}< DEFAULT_KEY_LOCATION >${DEFAULT_KEY_LOCATION}<" 1>&2 ; fi
 
