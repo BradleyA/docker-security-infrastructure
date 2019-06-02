@@ -63,7 +63,8 @@ Check user, uadmin, RSA ssh file permissions
         Check if uadmin private key and public key are a
         matched set (identical) or not a matched set (differ):
 
-    Files /dev/fd/63 and /dev/fd/62 are identical
+    Enter passphrase:
+    Files /dev/fd/63 are identical
     2019-04-15T12:17:11.573398-05:00 (CDT) six-rpi3b.cptx86.com ./check-user-ssh.sh[17204] 3.241.693 243 uadmin 10000:10000 [INFO]  Operation finished.
 
 ## ssh Hints
