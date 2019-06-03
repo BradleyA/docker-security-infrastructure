@@ -71,7 +71,7 @@ Check user, uadmin, RSA ssh file permissions
 
 To create a new ssh key;
 
-    ssh-keygen -t rsa
+    ssh-keygen -t rsa -b 4096 -o -C \"${USER}@$(hostname -f)_[$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)_$(date -d +52weeks +%Y-%m-%dT%H:%M:%S.%6N%:z)]\"
 
 To check if a private key and public key are a matched set (identical) or not a matched set (differ):
     
