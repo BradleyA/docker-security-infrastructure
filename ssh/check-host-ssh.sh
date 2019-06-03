@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	ssh/check-host-ssh.sh  3.252.717  2019-06-02T20:24:27.971921-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.251-1-gc608054  
+# 	   debugging 
 # 	ssh/check-host-ssh.sh  3.251.715  2019-06-02T13:56:12.378295-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.250  
 # 	   ready to begin debug 
 # 	ssh/check-hosts-ssh.sh  3.246.703  2019-05-15T23:15:15.068587-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.245  
@@ -329,8 +331,6 @@ USER_ACCOUNTS=$(grep -v -e 'false$' -e 'nologin$' -e 'sync$' /etc/passwd | cut  
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  USER_ACCOUNTS >${USER_ACCOUNTS}<" 1>&2 ; fi
 
 for USER_ACCOUNT in ${USER_ACCOUNTS} ; do
-#        echo "${AUTHORIZED_KEY_FILES}"
-#        $(echo "${AUTHORIZED_KEY_FILES}" | sed 's&%u&${USER_ACCOUNT}&')
         USER_KEY_FILES=$(echo "${AUTHORIZED_KEY_FILES}" | sed 's&%u&'${USER_ACCOUNT}'&')
 	USER_HOME=$(eval echo "~${USER_ACCOUNT}")
         USER_KEY_FILES=$(echo "${USER_KEY_FILES}" | sed 's&%h&'${USER_HOME}'&')
@@ -343,10 +343,10 @@ for USER_ACCOUNT in ${USER_ACCOUNTS} ; do
 		if [ ! -s "${USER_KEY_FILE}" ] ; then 
 			get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  ${USER_KEY_FILE} file not found or is empty." 1>&2
 		else
-			ls -la ${USER_KEY_FILE}
-			echo "       XXXX xxxx found file  what what WHAT"
-			USER_AUTHORIZED_KEYS=$(grep -v '#' ${USER_KEY_FILE} | cut -d ' ' -f 3)
-			touch /tmp/KEYS/${USER_ACCOUNT}/ssh/${LOCALHOST}/${USER_AUTHORIZED_KEYS}
+			for USER_AUTHORIZED_KEYS in $(grep -v '#' ${USER_KEY_FILE} | cut -d ' ' -f 3- | sed 's/ /_/g') ; do
+				echo ${USER_AUTHORIZED_KEYS}
+				touch /tmp/KEYS/${USER_ACCOUNT}/ssh/${LOCALHOST}/${USER_AUTHORIZED_KEYS}
+			done
 		fi
 	done
 done
