@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-user-tls.sh  3.257.724  2019-06-07T21:09:59.495428-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.256  
+# 	   docker-TLS/c* - added production standard 8.0 --usage #52 
 # 	docker-TLS/check-user-tls.sh  3.232.677  2019-04-10T23:04:43.671650-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.231  
 # 	   production standard 6.1.177 Architecture tree 
 ### production standard 3.0 shellcheck
@@ -15,16 +17,21 @@ NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 DEFAULT_TLS_USER="${USER}"
 DEFAULT_USER_HOME="/home/"
-### production standard 0.1.158 --help
-display_help() {
+### production standard 8.0 --usage
+display_usage() {
 echo -e "\n${NORMAL}${0} - Check public, private keys, and CA for a user"
 echo -e "\nUSAGE"
 echo    "   ${0} [<TLS_USER>]"
-echo    "   ${0}  <TLS_USER> [<USER_HOME>]" # >>> use case for the need for USER_HOME ver using $(eval echo '~sam') (issues with ~ unquoted literal in order for tilde expansion to work) or echo ~sam (no quotes) or echo '~sam' or getent passwd sam | cut -d: -f6 or ; but the origin idea was to be able to use '*' for all uses on a system (NFS server might serve home directories for users)  need to open ticket to solve this ...  another challenge is if sam's home directory location is different on each system . . .
+echo -e "   ${0}  <TLS_USER> [<USER_HOME>]\n" # >>> use case for the need for USER_HOME ver using $(eval echo '~sam') (issues with ~ unquoted literal in order for tilde expansion to work) or echo ~sam (no quotes) or echo '~sam' or getent passwd sam | cut -d: -f6 or ; but the origin idea was to be able to use '*' for all uses on a system (NFS server might serve home directories for users)  need to open ticket to solve this ...  another challenge is if sam's home directory location is different on each system . . .
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
+echo    "   ${0} [--usage | -usage | -u]"
 echo    "   ${0} [--version | -version | -v]"
-echo -e "\nDESCRIPTION"
+}
+### production standard 0.1.158 --help
+display_help() {
+display_usage
 #       Displaying help DESCRIPTION in English en_US.UTF-8
+echo -e "\nDESCRIPTION"
 echo    "Users can check their public, private keys, and CA in /home/ or other"
 echo    "non-default home directories.  The file and directory permissions are also"
 echo    "checked.  Administrators can check other users certificates by using"
@@ -102,9 +109,13 @@ GROUP_ID=$(id -g)
 if ! [ "${USER}" == "${LOGNAME}" ] ; then  USER=${LOGNAME} ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
 
-#       Default help and version arguments
+#       Default help, usage, and version arguments
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] ; then
         display_help | more
+        exit 0
+fi
+if [ "$1" == "--usage" ] || [ "$1" == "-usage" ] || [ "$1" == "usage" ] || [ "$1" == "-u" ] ; then
+        display_usage | more
         exit 0
 fi
 if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
