@@ -1,5 +1,14 @@
 # docker-security-infrastructure   [![Stable Release](https://img.shields.io/badge/Release-3.234-blue.svg)](https://github.com/BradleyA/docker-security-infrastructure/releases/tag/3.234)    [![GitHub commits](https://img.shields.io/github/commits-since/BradleyA/docker-security-infrastructure/3.234.svg)](https://github.com/BradleyA/docker-security-infrastructure/commits/)
 This repository contains shell scripts that check user ssh permissions, setup and manage both TLS and dockerd on Ubuntu 14.04 (upstart) and Ubuntu 16.04 (systemd).
+  
+#### If you like this repository, select in the upper-right corner,  STAR,  thank you.
+
+## Install
+
+To install, change to the location you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have git then enter; "sudo apt-get install git". On the github repository page of this script use the "Clone with HTTPS" URL with the 'git clone' command.
+
+    git clone https://github.com/BradleyA/docker-security-infrastructure.git
+    cd docker-security-infrastructure
 
  * [docker-TLS](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS)
  * [dockerd-configuration-options](https://github.com/BradleyA/docker-security-infrastructure/tree/master/dockerd-configuration-options)
@@ -36,15 +45,7 @@ This repository contains shell scripts that check user ssh permissions, setup an
  * [Sysdig Secure](https://sysdig.com/products/secure/)
  * [Sysdig](https://sysdig.com/)
  * [Tenable - FlawCheck](https://www.tenable.com/products/tenable-io/container-security)
-  
-#### If you like this repository, select in the upper-right corner,  STAR,  thank you.
 
-## Install
-
-To install, change to the location you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have git then enter; "sudo apt-get install git". On the github repository page of this script use the "Clone with HTTPS" URL with the 'git clone' command.
-
-    git clone https://github.com/BradleyA/docker-security-infrastructure.git
-    cd docker-security-infrastructure
 
 #### To watch future updates in this repository select in the upper-right corner, the "Watch" list, and select Watching.
 
