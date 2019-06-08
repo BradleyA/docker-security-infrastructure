@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	dockerd-configuration-options/setup-dockerd.sh  3.266.733  2019-06-07T22:17:55.369699-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.265  
+# 	   dockerd-configuration-options{setup-dockerd.sh,uninstall-dockerd-scripts.sh} - added production standard 8.0 --usage #53 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.240.690  2019-04-15T09:49:31.653272-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.239  
 # 	   correct incident chown chmod /etc/docker/* not found 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.235.685  2019-04-11T23:02:08.821768-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.234-5-g2b3f0c6  
@@ -17,16 +19,21 @@ NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 DEFAULT_WORK_DIRECTORY="/etc/docker/"
 DEFAULT_UPSTART_SYSVINIT_DIRECTORY="/etc/default/"
-### production standard 0.1.166 --help
-display_help() {
+### production standard 8.0 --usage
+display_usage() {
 echo -e "\n${NORMAL}${0} - setup system to support dockerd on Systemd and Upstart."
 echo -e "\nUSAGE"
 echo    "   sudo ${0} [<WORK_DIRECTORY>]"
-echo    "   sudo ${0}  <WORK_DIRECTORY> [<UPSTART_SYSVINIT_DIRECTORY>]"
+echo -e "   sudo ${0}  <WORK_DIRECTORY> [<UPSTART_SYSVINIT_DIRECTORY>]\n"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
+echo    "   ${0} [--usage | -usage | -u]"
 echo    "   ${0} [--version | -version | -v]"
-echo -e "\nDESCRIPTION"
+}
+### production standard 0.1.166 --help
+display_help() {
+display_usage
 #       Displaying help DESCRIPTION in English en_US.UTF-8
+echo -e "\nDESCRIPTION"
 echo    "This script has to be run as root to move files into /etc/docker and create or"
 echo    "update the /etc/systemd/system/docker.service.d/10-override.conf file (Ubuntu"
 echo    "16.04, systemd) and the /etc/default/docker (Ubuntu 14.04, Upstart).  To"
@@ -117,9 +124,13 @@ GROUP_ID=$(id -g)
 if ! [ "${USER}" == "${LOGNAME}" ] ; then  USER=${LOGNAME} ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
 
-#       Default help and version arguments
+#       Default help and, usage, version arguments
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] ; then
         display_help | more
+        exit 0
+fi
+if [ "$1" == "--usage" ] || [ "$1" == "-usage" ] || [ "$1" == "usage" ] || [ "$1" == "-u" ] ; then
+        display_usage | more
         exit 0
 fi
 if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
