@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.263.730  2019-06-07T21:31:59.600776-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.262  
+# 	   docker-TLS/c* - added production standard 8.0 --usage #52 
 # 	docker-TLS/create-registry-tls.sh  3.234.679  2019-04-10T23:30:18.738262-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.233  
 # 	   production standard 6.1.177 Architecture tree 
 ### production standard 3.0 shellcheck
@@ -15,16 +17,21 @@ NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 DEFAULT_REGISTRY_PORT="17313"
 DEFAULT_NUMBER_DAYS='365'
-### production standard 0.1.160 --help
-display_help() {
+### production standard 8.0 --usage
+display_usage() {
 echo -e "\n${NORMAL}${0} - Create TLS for Private Registry V2"
 echo -e "\nUSAGE"
 echo    "   ${0} [<REGISTRY_PORT>]" 
-echo    "   ${0}  <REGISTRY_PORT> [<NUMBER_DAYS>]" 
+echo -e "   ${0}  <REGISTRY_PORT> [<NUMBER_DAYS>]\n"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
+echo    "   ${0} [--usage | -usage | -u]"
 echo    "   ${0} [--version | -version | -v]"
-echo -e "\nDESCRIPTION"
+}
+### production standard 0.1.160 --help
+display_help() {
+display_usage
 #       Displaying help DESCRIPTION in English en_US.UTF-8
+echo -e "\nDESCRIPTION"
 echo    "Run this script to create Docker private registry certificates on any host in"
 echo    "the directory; ~/.docker/.  It will create a working directory,"
 echo    "~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>.  The <REGISTRY_PORT>"
@@ -98,9 +105,13 @@ GROUP_ID=$(id -g)
 if ! [ "${USER}" == "${LOGNAME}" ] ; then  USER=${LOGNAME} ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
 
-#       Default help and version arguments
+#       Default help, usage, and version arguments
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] ; then
         display_help | more
+        exit 0
+fi
+if [ "$1" == "--usage" ] || [ "$1" == "-usage" ] || [ "$1" == "usage" ] || [ "$1" == "-u" ] ; then
+        display_usage | more
         exit 0
 fi
 if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
