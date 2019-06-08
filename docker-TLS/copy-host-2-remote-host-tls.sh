@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.258.725  2019-06-07T21:13:59.538936-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.257  
+# 	   docker-TLS/c* - added production standard 8.0 --usage #52 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.233.678  2019-04-10T23:18:20.000442-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.232  
 # 	   production standard 6.1.177 Architecture tree 
 ### production standard 3.0 shellcheck
@@ -16,17 +18,22 @@ NORMAL=$(tput -Txterm sgr0)
 DEFAULT_REMOTE_HOST="$(hostname -f)"    # local host
 DEFAULT_USER_HOME="/home/"
 DEFAULT_TLS_USER="${USER}"
-### production standard 0.1.158 --help
-display_help() {
+### production standard 8.0 --usage
+display_usage() {
 echo -e "\n${NORMAL}${0} - Copy public, private keys and CA to remote host"
 echo -e "\nUSAGE"
 echo    "   ${0} [<REMOTE_HOST>]"
 echo    "   ${0}  <REMOTE_HOST> [<USER_HOME>]"
-echo    "   ${0}  <REMOTE_HOST>  <USER_HOME> [<TLS_USER>]"
+echo -e "   ${0}  <REMOTE_HOST>  <USER_HOME> [<TLS_USER>]\n"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
+echo    "   ${0} [--usage | -usage | -u]"
 echo    "   ${0} [--version | -version | -v]"
-echo -e "\nDESCRIPTION"
+}
+### production standard 0.1.158 --help
+display_help() {
+display_usage
 #       Displaying help DESCRIPTION in English en_US.UTF-8
+echo -e "\nDESCRIPTION"
 echo    "A user with administration authority uses this script to copy host TLS CA,"
 echo    "public, and private keys from <USER_HOME>/<TLS_USER>/.docker/docker-ca"
 echo    "directory on this system to /etc/docker/certs.d/daemon directory on a local"
@@ -98,9 +105,13 @@ GROUP_ID=$(id -g)
 if ! [ "${USER}" == "${LOGNAME}" ] ; then  USER=${LOGNAME} ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
 
-#       Default help and version arguments
+#       Default help, usage, and version arguments
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] ; then
         display_help | more
+        exit 0
+fi
+if [ "$1" == "--usage" ] || [ "$1" == "-usage" ] || [ "$1" == "usage" ] || [ "$1" == "-u" ] ; then
+        display_usage | more
         exit 0
 fi
 if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
