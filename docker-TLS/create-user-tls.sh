@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-user-tls.sh  3.265.732  2019-06-07T21:37:34.570312-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.264  
+# 	   docker-TLS/c* - added production standard 8.0 --usage #52 
 # 	docker-TLS/create-user-tls.sh  3.234.679  2019-04-10T23:30:18.940023-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.233  
 # 	   production standard 6.1.177 Architecture tree 
 ### production standard 3.0 shellcheck
@@ -17,18 +19,23 @@ DEFAULT_TLS_USER="${USER}"
 DEFAULT_NUMBER_DAYS="90"
 DEFAULT_USER_HOME="/home/"
 DEFAULT_ADM_TLS_USER="${USER}"
-### production standard 0.1.160 --help
-display_help() {
+### production standard 8.0 --usage
+display_usage() {
 echo -e "\n${NORMAL}${0} - Create user public and private key and CA"
 echo -e "\nUSAGE"
 echo    "   ${0} [<TLS_USER>]"
 echo    "   ${0}  <TLS_USER> [<NUMBER_DAYS>]"
 echo    "   ${0}  <TLS_USER>  <NUMBER_DAYS> [<USER_HOME>]"
-echo    "   ${0}  <TLS_USER>  <NUMBER_DAYS>  <USER_HOME> [<ADM_TLS_USER>]"
+echo -e "   ${0}  <TLS_USER>  <NUMBER_DAYS>  <USER_HOME> [<ADM_TLS_USER>]\n"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
+echo    "   ${0} [--usage | -usage | -u]"
 echo    "   ${0} [--version | -version | -v]"
-echo -e "\nDESCRIPTION"
+}
+### production standard 0.1.160 --help
+display_help() {
+display_usage
 #       Displaying help DESCRIPTION in English en_US.UTF-8
+echo -e "\nDESCRIPTION"
 echo    "An administration user runs this script to create user public, private keys and"
 echo    "CA in the working directory (<USER_HOME>/<ADM_TLS_USER>/.docker/docker-ca).  If"
 echo    "the directory is not found the script will create the working directory."
@@ -94,9 +101,13 @@ GROUP_ID=$(id -g)
 if ! [ "${USER}" == "${LOGNAME}" ] ; then  USER=${LOGNAME} ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
 
-#       Default help and version arguments
+#       Default help, usage, and version arguments
 if [ "$1" == "--help" ] || [ "$1" == "-help" ] || [ "$1" == "help" ] || [ "$1" == "-h" ] || [ "$1" == "h" ] || [ "$1" == "-?" ] ; then
         display_help | more
+        exit 0
+fi
+if [ "$1" == "--usage" ] || [ "$1" == "-usage" ] || [ "$1" == "usage" ] || [ "$1" == "-u" ] ; then
+        display_usage | more
         exit 0
 fi
 if [ "$1" == "--version" ] || [ "$1" == "-version" ] || [ "$1" == "version" ] || [ "$1" == "-v" ] ; then
