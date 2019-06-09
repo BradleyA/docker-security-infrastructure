@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-user-tls.sh  3.272.739  2019-06-08T21:26:08.695535-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.271  
+# 	   docker-TLS/c{} - change DEFAULT_USER_HOME="/home/" to ~ #54 
 # 	docker-TLS/create-user-tls.sh  3.265.732  2019-06-07T21:37:34.570312-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.264  
 # 	   docker-TLS/c* - added production standard 8.0 --usage #52 
 # 	docker-TLS/create-user-tls.sh  3.234.679  2019-04-10T23:30:18.940023-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.233  
@@ -17,7 +19,7 @@ NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 DEFAULT_TLS_USER="${USER}"
 DEFAULT_NUMBER_DAYS="90"
-DEFAULT_USER_HOME="/home/"
+DEFAULT_USER_HOME=$(echo ~ | sed s/${USER}//)
 DEFAULT_ADM_TLS_USER="${USER}"
 ### production standard 8.0 --usage
 display_usage() {
