@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-site-private-public-tls.sh  3.274.741  2019-06-09T13:50:14.583771-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.273  
+# 	   typo 
 # 	docker-TLS/create-site-private-public-tls.sh  3.273.740  2019-06-09T13:04:05.271312-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.272  
 # 	   docker-TLS/create-site-private-public-tls.sh - create CA copy with start and end dates close #55 
 #	docker-TLS/create-site-private-public-tls.sh  3.271.738  2019-06-08T21:16:28.860817-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.270
@@ -168,7 +170,7 @@ if [ -e "${CA_CERT}" ] ; then
 	CA_CERT_EXPIRE_DATE=$(date -u -d"${CA_CERT_EXPIRE_DATE}" +%Y-%m-%dT%H:%M:%S%z)
 	mv -f "${CA_CERT}" "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
 	chmod 0444 "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
-	touch -m -t ${CA_CERT_START_DATE_2} "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
+	touch -m -t "${CA_CERT_START_DATE_2}" "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
 fi
 
 #	Create site public key
@@ -198,7 +200,7 @@ CA_CERT_EXPIRE_DATE=$(openssl x509 -in "${CA_CERT}" -noout -enddate | cut -d '='
 CA_CERT_EXPIRE_DATE=$(date -u -d"${CA_CERT_EXPIRE_DATE}" +%Y-%m-%dT%H:%M:%S%z)
 cp -f -p "${CA_CERT}" "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
 chmod 0444 "${CA_CERT}" "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
-touch -m -t $CA_CERT_START_DATE_2 "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
+touch -m -t "${CA_CERT_START_DATE_2}" "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
 
 cp -f -p ".private/${CA_PRIVATE_CERT}" ".private/${CA_PRIVATE_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
 touch 0400 ".private/${CA_PRIVATE_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
