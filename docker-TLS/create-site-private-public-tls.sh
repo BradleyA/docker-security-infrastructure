@@ -1,10 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-site-private-public-tls.sh  3.278.745  2019-06-09T15:45:59.273090-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.277  
-# 	   updated while try to reproduct docker-TLS/check-{host,user}-tls.sh - which one should check if the ca.pem match #49 
-# 	docker-TLS/create-site-private-public-tls.sh  3.277.744  2019-06-09T14:53:33.435810-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.276  
-# 	   create-site-private-public-tls.sh update display_help 
-# 	docker-TLS/create-site-private-public-tls.sh  3.274.741  2019-06-09T13:50:14.583771-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.273  
-# 	   typo 
+# 	docker-TLS/create-site-private-public-tls.sh  3.279.746  2019-06-09T16:02:24.275026-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.278  
+# 	   minor update 
 # 	docker-TLS/create-site-private-public-tls.sh  3.273.740  2019-06-09T13:04:05.271312-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.272  
 # 	   docker-TLS/create-site-private-public-tls.sh - create CA copy with start and end dates close #55 
 #	docker-TLS/create-site-private-public-tls.sh  3.271.738  2019-06-08T21:16:28.860817-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.270
@@ -27,8 +23,8 @@ NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 DEFAULT_NUMBER_DAYS="730"
 DEFAULT_CA_CERT="ca.pem"
-DEFAULT_WORKING_DIRECTORY="$(echo ~)/.docker"
 DEFAULT_CA_PRIVATE_CERT="ca-priv-key.pem"
+DEFAULT_WORKING_DIRECTORY="$(echo ~)/.docker"
 ### production standard 8.0 --usage
 display_usage() {
 echo -e "\n${NORMAL}${0} - Create site private and CA keys"
@@ -70,9 +66,9 @@ echo    "environment variable.  You are on your own defining environment variabl
 echo    "you are using other shells."
 echo    "   DEBUG             (default off '0')"
 echo    "   CA_CERT           File name of certificate (default ${DEFAULT_CA_CERT})"
+echo    "   CA_PRIVATE_CERT   File name of private certificate (default ${DEFAULT_CA_PRIVATE_CERT})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
-echo    "   CA_PRIVATE_CERT   File name of private certificate (default ${DEFAULT_CA_PRIVATE_CERT})"
 echo -e "\nOPTIONS"
 echo    "   NUMBER_DAYS       Number of days host CA is valid (default ${DEFAULT_NUMBER_DAYS})"
 echo    "   CA_CERT           File name of certificate (default ${DEFAULT_CA_CERT})"
