@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	ssh/check-user-ssh.sh  3.268.735  2019-06-08T21:10:21.816373-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.267  
+# 	   docker-TLS/c{} - change DEFAULT_USER_HOME="/home/" to ~ #54 
 # 	ssh/check-user-ssh.sh  3.252.717  2019-06-02T20:24:28.077008-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.251-1-gc608054  
 # 	   debugging 
 # 	ssh/check-user-ssh.sh  3.249.712  2019-05-31T23:12:12.939731-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.248  
@@ -21,7 +23,7 @@ if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, '
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
-DEFAULT_USER_HOME="/home/"
+DEFAULT_USER_HOME=$(echo ~ | sed s/${USER}//)
 DEFAULT_SSH_USER="${USER}"
 ### production standard 8.0 --usage
 display_usage() {
