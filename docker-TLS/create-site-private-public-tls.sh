@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-site-private-public-tls.sh  3.277.744  2019-06-09T14:53:33.435810-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.276  
+# 	   create-site-private-public-tls.sh update display_help 
 # 	docker-TLS/create-site-private-public-tls.sh  3.274.741  2019-06-09T13:50:14.583771-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.273  
 # 	   typo 
 # 	docker-TLS/create-site-private-public-tls.sh  3.273.740  2019-06-09T13:04:05.271312-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.272  
@@ -44,12 +46,12 @@ echo -e "\nDESCRIPTION"
 echo    "An administration user can run this script to create site private and CA"
 echo    "keys.  Run this script first on your host that will be creating all your TLS"
 echo    "keys for your site.  It creates the working directories"
-echo    "${DEFAULT_WORKING_DIRECTORY}/docker-ca and ${DEFAULT_WORKING_DIRECTORY}/docker-ca/.private"
+echo    "<WORKING_DIRECTORY>/docker-ca and <WORKING_DIRECTORY>/docker-ca/.private"
 echo -e "for your site private and CA keys. \n"
 echo    "If you later choose to use a different host to continue creating your user"
-echo    "and host TLS keys, cp the ${DEFAULT_WORKING_DIRECTORY}/docker-ca"
-echo    "and ${DEFAULT_WORKING_DIRECTORY}/docker-ca/.private to the new host and"
-echo    "run create-new-openssl.cnf-tls.sh scipt."
+echo    "and host TLS keys, cp the <WORKING_DIRECTORY>/docker-ca and"
+echo    "<WORKING_DIRECTORY>/docker-ca/.private to the new host and run"
+echo -e "\t${BOLD}create-new-openssl.cnf-tls.sh scipt.${NORMAL}"
 #       Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
         echo -e "\n--> ${LANG}"

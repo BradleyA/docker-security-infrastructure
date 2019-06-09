@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.277.744  2019-06-09T14:53:33.337992-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.276  
+# 	   create-site-private-public-tls.sh update display_help 
 # 	docker-TLS/create-host-tls.sh  3.270.737  2019-06-08T21:14:35.453098-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.269  
 # 	   docker-TLS/c{} - change DEFAULT_USER_HOME="/home/" to ~ #54 
 # 	docker-TLS/create-host-tls.sh  3.261.728  2019-06-07T21:25:30.263492-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.260  
@@ -21,16 +23,18 @@ NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 DEFAULT_FQDN=$(hostname -f)    # local host
 DEFAULT_NUMBER_DAYS="185"
+DEFAULT_WORKING_DIRECTORY="$(echo ~)/.docker"
+
 DEFAULT_USER_HOME=$(echo ~ | sed s/${USER}//)
 DEFAULT_ADM_TLS_USER="${USER}"
+
 ### production standard 8.0 --usage
 display_usage() {
 echo -e "\n{NORMAL}${0} - Create host public, private keys and CA"
 echo -e "\nUSAGE"
 echo    "   ${0} [<FQDN>]"
 echo    "   ${0}  <FQDN> [<NUMBER_DAYS>]"
-echo    "   ${0}  <FQDN>  <NUMBER_DAYS> [<USER_HOME>]"
-echo -e "   ${0}  <FQDN>  <NUMBER_DAYS>  <USER_HOME> [<ADM_TLS_USER>]\n"
+echo -e "   ${0}  <FQDN>  <NUMBER_DAYS> [<WORKING_DIRECTORY>]\n"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--usage | -usage | -u]"
 echo    "   ${0} [--version | -version | -v]"
@@ -64,6 +68,7 @@ echo    "   DEBUG       (default off '0')"
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo -e "\nOPTIONS"
 echo    "   FQDN        Fully qualified domain name of host requiring new TLS keys"
+echo    "               (default ${DEFAULT_FQDN})"
 echo    "   NUMBER_DAYS Number of days host CA is valid (default ${DEFAULT_NUMBER_DAYS})"
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo    "               sites have different home directories (/u/north-office/)"
@@ -126,9 +131,8 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 FQDN=${1:-${DEFAULT_FQDN}}
 NUMBER_DAYS=${2:-${DEFAULT_NUMBER_DAYS}}
 #       Order of precedence: CLI argument, environment variable, default code
-if [ $# -ge  3 ]  ; then USER_HOME=${3} ; elif [ "${USER_HOME}" == "" ] ; then USER_HOME="${DEFAULT_USER_HOME}" ; fi
-ADM_TLS_USER=${4:-${DEFAULT_ADM_TLS_USER}}
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  FQDN >${FQDN}< NUMBER_DAYS >${NUMBER_DAYS}< USER_HOME >${USER_HOME}< ADM_TLS_USER  >${ADM_TLS_USER}<" 1>&2 ; fi
+if [ $# -ge  3 ]  ; then WORKING_DIRECTORY=${3} ; elif [ "${WORKING_DIRECTORY}" == "" ] ; then WORKING_DIRECTORY="${DEFAULT_WORKING_DIRECTORY}" ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  FQDN >${FQDN}< NUMBER_DAYS >${NUMBER_DAYS}< WORKING_DIRECTORY >${WORKING_DIRECTORY}<" 1>&2 ; fi
 
 #	Check if admin user has home directory on system
 if [ ! -d "${USER_HOME}${ADM_TLS_USER}" ] ; then
