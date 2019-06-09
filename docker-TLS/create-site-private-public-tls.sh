@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-site-private-public-tls.sh  3.278.745  2019-06-09T15:45:59.273090-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.277  
+# 	   updated while try to reproduct docker-TLS/check-{host,user}-tls.sh - which one should check if the ca.pem match #49 
 # 	docker-TLS/create-site-private-public-tls.sh  3.277.744  2019-06-09T14:53:33.435810-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.276  
 # 	   create-site-private-public-tls.sh update display_help 
 # 	docker-TLS/create-site-private-public-tls.sh  3.274.741  2019-06-09T13:50:14.583771-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.273  
@@ -134,6 +136,7 @@ NUMBER_DAYS=${1:-${DEFAULT_NUMBER_DAYS}}
 #       Order of precedence: CLI argument, environment variable, default code
 if [ $# -ge  2 ]  ; then CA_CERT=${2} ; elif [ "${CA_CERT}" == "" ] ; then CA_CERT="${DEFAULT_CA_CERT}" ; fi
 if [ $# -ge  3 ]  ; then WORKING_DIRECTORY=${3} ; elif [ "${WORKING_DIRECTORY}" == "" ] ; then WORKING_DIRECTORY="${DEFAULT_WORKING_DIRECTORY}" ; fi
+#       Order of precedence: environment variable, default code
 if [ "${CA_PRIVATE_CERT}" == "" ] ; then CA_PRIVATE_CERT="${DEFAULT_CA_PRIVATE_CERT}" ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  NUMBER_DAYS >${NUMBER_DAYS}< CA_CERT >${CA_CERT}< WORKING_DIRECTORY >${WORKING_DIRECTORY}< CA_PRIVATE_CERT >${CA_PRIVATE_CERT}<" 1>&2 ; fi
 
