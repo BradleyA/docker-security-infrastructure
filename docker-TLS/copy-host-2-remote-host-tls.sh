@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.269.736  2019-06-08T21:12:20.478613-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.268  
+# 	   docker-TLS/c{} - change DEFAULT_USER_HOME="/home/" to ~ #54 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.258.725  2019-06-07T21:13:59.538936-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.257  
 # 	   docker-TLS/c* - added production standard 8.0 --usage #52 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.233.678  2019-04-10T23:18:20.000442-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.232  
@@ -16,7 +18,7 @@ BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 DEFAULT_REMOTE_HOST="$(hostname -f)"    # local host
-DEFAULT_USER_HOME="/home/"
+DEFAULT_USER_HOME=$(echo ~ | sed s/${USER}//)
 DEFAULT_TLS_USER="${USER}"
 ### production standard 8.0 --usage
 display_usage() {
