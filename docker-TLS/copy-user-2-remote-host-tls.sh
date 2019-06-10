@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.280.747  2019-06-10T12:43:31.653463-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.279  
+# 	   update copy-host-2-remote-host-tls.sh while trying to reporduct docker-TLS/check-{host,user}-tls.sh - which one should check if the ca.pem match #49 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.260.727  2019-06-07T21:21:50.256317-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.259  
 # 	   docker-TLS/c* - added production standard 8.0 --usage #52 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.233.678  2019-04-10T23:18:20.199434-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.232  
@@ -15,18 +17,21 @@ if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, '
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
-DEFAULT_REMOTE_HOST=""
+DEFAULT_REMOTE_HOST="$(hostname -f)"    # local host
 DEFAULT_TLS_USER="${USER}"
+
+DEFAULT_WORKING_DIRECTORY="$(echo ~)/.docker/docker-ca"
+
 DEFAULT_USER_HOME="/home/"
 DEFAULT_ADM_TLS_USER="${USER}"
+
 ### production standard 8.0 --usage
 display_usage() {
 echo -e "\n${NORMAL}${0} - Copy user TLS public, private keys and CA to remote host."
 echo -e "\nUSAGE"
-echo    "   ${0} [<REMOTE_HOST>]"
-echo    "   ${0}  <REMOTE_HOST> [<TLS_USER>]"
-echo    "   ${0}  <REMOTE_HOST>  <TLS_USER> [<USER_HOME>]"
-echo -e "   ${0}  <REMOTE_HOST>  <TLS_USER>  <USER_HOME> [<ADM_TLS_USER>]\n"
+echo    "   ${0} [<TLS_USER>]"
+echo    "   ${0}  <TLS_USER> [<REMOTE_HOST>]"
+echo -e "   ${0}  <TLS_USER>  <REMOTE_HOST> [<WORKING_DIRECTORY>]\n"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--usage | -usage | -u]"
 echo    "   ${0} [--version | -version | -v]"
@@ -37,9 +42,8 @@ display_usage
 #       Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\nDESCRIPTION"
 echo    "A user with administration authority uses this script to copy user TLS CA,"
-echo    "public, and private keys from <USER_HOME>/<TLS_USER>/.docker/docker-ca"
-echo    "directory on this system to <USER_HOME>/<TLS_USER>/.docker/docker-ca remote"
-echo    "system."
+echo    "public, and private keys from <WORKING_DIRECTORY> directory on this system"
+echo    "to <TLS_USER>/.docker on <REMOTE_HOST> system."
 # >>>   FUTURE  echo    "To copy to this local system, do not enter a"
 # >>>   FUTURE  echo    "<REMOTE_HOST> option and this local system or local hostname will be used."
 echo -e "\nThe administration user may receive password and/or passphrase prompts from a"
