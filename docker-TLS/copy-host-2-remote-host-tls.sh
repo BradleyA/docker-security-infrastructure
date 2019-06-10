@@ -1,10 +1,8 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.281.748  2019-06-10T16:46:36.699590-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.280  
+# 	   trying to reproduce docker-TLS/check-{host,user}-tls.sh - which one should check if the ca.pem match #49 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.280.747  2019-06-10T12:43:31.498537-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.279  
-# 	   update copy-host-2-remote-host-tls.sh while trying to reporduct docker-TLS/check-{host,user}-tls.sh - which one should check if the ca.pem match #49 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.258.725  2019-06-07T21:13:59.538936-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.257  
-# 	   docker-TLS/c* - added production standard 8.0 --usage #52 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.233.678  2019-04-10T23:18:20.000442-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.232  
-# 	   production standard 6.1.177 Architecture tree 
+# 	   update copy-host-2-remote-host-tls.sh while trying to reproduce incident docker-TLS/check-{host,user}-tls.sh - which one should check if the ca.pem match #49 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -18,7 +16,8 @@ BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 DEFAULT_REMOTE_HOST="$(hostname -f)"    # local host
-DEFAULT_WORKING_DIRECTORY="$(echo ~)/.docker/docker-ca"
+#	DEFAULT_WORKING_DIRECTORY="$(echo ~)/.docker/docker-ca"
+DEFAULT_WORKING_DIRECTORY="$(echo ~/.docker/docker-ca)"
 DEFAULT_CA_CERT="ca.pem"
 ### production standard 8.0 --usage
 display_usage() {
@@ -137,33 +136,15 @@ if [ $# -ge  2 ]  ; then WORKING_DIRECTORY=${2} ; elif [ "${WORKING_DIRECTORY}" 
 if [ "${CA_CERT}" == "" ] ; then CA_CERT="${DEFAULT_CA_CERT}" ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  REMOTE_HOST >${REMOTE_HOST}< WORKING_DIRECTORY >${WORKING_DIRECTORY}< CA_CERT >${CA_CERT}<" 1>&2 ; fi
 
-#	Check if admin user has home directory on system
-if [ ! -d "${WORKING_DIRECTORY}" ] ; then
-	display_help | more
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${WORKING_DIRECTORY} does not exist on this system" 1>&2
-	exit 1
-fi
-
 #	Check if ${WORKING_DIRECTORY} directory on system
 if [ ! -d "${WORKING_DIRECTORY}" ] ; then
 	display_help | more
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Default directory, ${BOLD}${WORKING_DIRECTORY}${NORMAL}, not on system." 1>&2
-	echo -e "\tSee documentation for more information."
-	exit 1
-fi
-cd "${WORKING_DIRECTORY}"
-
-#	Prompt for ${REMOTE_HOST} if argement not entered
-if [ -z "${REMOTE_HOST}" ] ; then
-	echo -e "\n\t${BOLD}Enter remote host where TLS keys are to be copied:${NORMAL}"
-	read REMOTE_HOST
-fi
-
-#	Check if ${REMOTE_HOST} string length is zero
-if [ -z "${REMOTE_HOST}" ] ; then
-	display_help | more
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Remote host is required." 1>&2
-	echo -e "\tSee documentation for more information."
+        #       Help hint
+        echo -e "\n\tRunning create-site-private-public-tls.sh will create directories"
+        echo -e "\tand site private and public keys.  Then run sudo"
+        echo -e "\tcreate-new-openssl.cnf-tls.sh to modify openssl.cnf file."
+        echo -e "\t${BOLD}See DOCUMENTATION link in '${0} --help' for more information.${NORMAL}"
 	exit 1
 fi
 
@@ -176,14 +157,15 @@ if ! [ -e "${WORKING_DIRECTORY}/${REMOTE_HOST}-priv-key.pem" ] ; then
 	exit 1
 fi
 
+cd "${WORKING_DIRECTORY}"
 #	Check if ${REMOTE_HOST} is available on ssh port
 echo -e "\n\t${BOLD}${USER}${NORMAL} user may receive password and passphrase prompts"
 echo -e "\tfrom ${REMOTE_HOST}.  Running"
 echo -e "\t${BOLD}ssh-copy-id ${USER}@${REMOTE_HOST}${NORMAL}"
 echo -e "\tmay stop some of the prompts.\n"
-if $(ssh ${USER}@${REMOTE_HOST} 'exit' >/dev/null 2>&1 ) ; then
+if $(ssh ${REMOTE_HOST} 'exit' >/dev/null 2>&1 ) ; then
 #	Check if /etc/docker directory on ${REMOTE_HOST}
-	if ! $(ssh -t ${USER}@${REMOTE_HOST} "test -d /etc/docker") ; then
+	if ! $(ssh -t ${REMOTE_HOST} "test -d /etc/docker") ; then
 		get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  /etc/docker directory missing, is docker installed on ${REMOTE_HOST}." 1>&2
 		exit 1
 	fi

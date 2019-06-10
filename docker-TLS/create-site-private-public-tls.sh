@@ -1,14 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-site-private-public-tls.sh  3.279.746  2019-06-09T16:02:24.275026-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.278  
-# 	   minor update 
-# 	docker-TLS/create-site-private-public-tls.sh  3.273.740  2019-06-09T13:04:05.271312-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.272  
-# 	   docker-TLS/create-site-private-public-tls.sh - create CA copy with start and end dates close #55 
-#	docker-TLS/create-site-private-public-tls.sh  3.271.738  2019-06-08T21:16:28.860817-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.270
-#	   docker-TLS/c{} - change DEFAULT_USER_HOME="/home/" to ~ #54
-#	docker-TLS/create-site-private-public-tls.sh  3.264.731  2019-06-07T21:34:43.972549-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.263
-#	   docker-TLS/c* - added production standard 8.0 --usage #52
-#	docker-TLS/create-site-private-public-tls.sh  3.234.679  2019-04-10T23:30:18.839348-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.233
-#	   production standard 6.1.177 Architecture tree
+# 	docker-TLS/create-site-private-public-tls.sh  3.281.748  2019-06-10T16:46:36.898604-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.280  
+# 	   trying to reproduce docker-TLS/check-{host,user}-tls.sh - which one should check if the ca.pem match #49 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
