@@ -1,10 +1,14 @@
 #!/bin/bash
+# 	docker-TLS/check-ca-tls.sh  3.283.750  2019-06-10T23:51:10.701588-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.282  
+# 	   docker-TLS/check-ca-tls.sh - complete design - in development #56 
 # 	docker-TLS/check-ca-tls.sh  3.276.743  2019-06-09T14:26:35.259926-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.275  
 # 	   marked in development 
 # 	docker-TLS/check-ca-tls.sh  3.275.742  2019-06-09T14:23:33.079346-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.274  
 # 	   created new tool docker-TLS/check-ca-tls.sh,  need to add production standards 
 echo -e ">>>>   >>>>   IN DEVELOPMENT   IN DEVELOPMENT   IN DEVELOPMENT   <<<<   <<<<"
 echo -e ">>>>   >>>>   IN DEVELOPMENT   IN DEVELOPMENT   IN DEVELOPMENT   <<<<   <<<<"
+
+#	check-ca-tls.sh - complete design - in development #56
 
 
 CA_CERT="ca.pem"

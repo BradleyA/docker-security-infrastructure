@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-host-tls.sh  3.283.750  2019-06-10T23:51:10.800496-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.282  
+# 	   docker-TLS/check-ca-tls.sh - complete design - in development #56 
 # 	docker-TLS/check-host-tls.sh  3.255.722  2019-06-07T21:01:25.687206-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.254  
 # 	   docker-TLS/c* - added production standard 8.0 --usage #52 
 # 	docker-TLS/check-host-tls.sh  3.245.702  2019-05-07T20:58:06.966364-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.244  
@@ -33,10 +35,10 @@ display_usage
 #       Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\nDESCRIPTION"
 echo    "This script has to be run as root to check public, private keys, and CA in"
-echo    "/etc/docker/certs.d/daemon directory.  This directory was selected to place"
-echo    "dockerd TLS certifications because docker registry stores it's TLS"
-echo    "certifications in /etc/docker/certs.d.  The certification files and"
-echo    "directory permissions are also checked."
+echo    "/etc/docker/certs.d/daemon directory(<CERTDIR>).  This directory was"
+echo    "selected to place dockerd TLS certifications because docker registry"
+echo    "stores it's TLS certifications in /etc/docker/certs.d.  The certification"
+echo    "files and directory permissions are also checked."
 echo -e "\nThis script works for the local host only.  To use check-host-tls.sh on a"
 echo    "remote hosts (one-rpi3b.cptx86.com) with ssh port of 12323 as uadmin user;"
 echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo check-host-tls.sh'${NORMAL}"
