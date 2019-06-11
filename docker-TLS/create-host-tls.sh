@@ -1,14 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-host-tls.sh  3.278.745  2019-06-09T15:45:59.106393-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.277  
-# 	   updated while try to reproduct docker-TLS/check-{host,user}-tls.sh - which one should check if the ca.pem match #49 
-# 	docker-TLS/create-host-tls.sh  3.270.737  2019-06-08T21:14:35.453098-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.269  
-# 	   docker-TLS/c{} - change DEFAULT_USER_HOME="/home/" to ~ #54 
-# 	docker-TLS/create-host-tls.sh  3.261.728  2019-06-07T21:25:30.263492-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.260  
-# 	   docker-TLS/c* - added production standard 8.0 --usage #52 
-# 	docker-TLS/create-host-tls.sh  3.245.702  2019-05-07T20:58:07.062084-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.244  
-# 	   docker-TLS/check-host-tls.sh - modify output: add user message about cert expires close #50 
-# 	docker-TLS/create-host-tls.sh  3.234.679  2019-04-10T23:30:18.473500-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.233  
-# 	   production standard 6.1.177 Architecture tree 
+# 	docker-TLS/create-host-tls.sh  3.282.749  2019-06-10T23:15:47.531120-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.281  
+# 	   change DEFAULT_WORKING_DIRECTORY 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -23,7 +15,7 @@ NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 DEFAULT_FQDN=$(hostname -f)    # local host
 DEFAULT_NUMBER_DAYS="185"
-DEFAULT_WORKING_DIRECTORY="$(echo ~)/.docker"
+DEFAULT_WORKING_DIRECTORY="$(echo ~)/.docker/docker-ca"
 DEFAULT_CA_CERT="ca.pem"
 DEFAULT_CA_PRIVATE_CERT="ca-priv-key.pem"
 ### production standard 8.0 --usage
@@ -43,8 +35,7 @@ display_usage
 #       Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\nDESCRIPTION"
 echo    "An administration user runs this script to create host public, private keys and"
-echo    "CA into the working directory (<WORKING_DIRECTORY>/docker-ca) on"
-echo    "the site TLS server."
+echo    "CA into the working directory (<WORKING_DIRECTORY>) on the site TLS server."
 echo -e "\nThe scripts create-site-private-public-tls.sh and create-new-openssl.cnf-tls.sh"
 echo    "are required to create a site TLS server.  Review the DOCUMENTATION for a"
 echo    "complete understanding."
@@ -64,13 +55,15 @@ echo    "environment variable.  You are on your own defining environment variabl
 echo    "you are using other shells."
 echo    "   DEBUG             (default off '0')"
 echo    "   CA_CERT           File name of certificate (default ${DEFAULT_CA_CERT})"
-echo    "   CA_PRIVATE_CERT   File name of private certificate (default ${DEFAULT_CA_PRIVATE_CERT})"
+echo    "   CA_PRIVATE_CERT   File name of private certificate"
+echo    "                     (default ${DEFAULT_CA_PRIVATE_CERT})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 echo -e "\nOPTIONS"
 echo    "   FQDN              Fully qualified domain name of host requiring new TLS keys"
 echo    "                     (default ${DEFAULT_FQDN})"
-echo    "   NUMBER_DAYS Number of days host CA is valid (default ${DEFAULT_NUMBER_DAYS})"
+echo    "   NUMBER_DAYS       Number of days host CA is valid"
+echo    "                     (default ${DEFAULT_NUMBER_DAYS})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 ### production standard 6.1.177 Architecture tree
@@ -145,8 +138,8 @@ if [ ! -d "${WORKING_DIRECTORY}" ] ; then
 fi
 
 #       Check if site CA directory on system
-if [ ! -d "${WORKING_DIRECTORY}/docker-ca/.private" ] ; then
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Default directory, ${WORKING_DIRECTORY}/docker-ca/.private, not on system." 1>&2
+if [ ! -d "${WORKING_DIRECTORY}/.private" ] ; then
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Default directory, ${WORKING_DIRECTORY}/.private, not on system." 1>&2
 	#	Help hint
 	echo -e "\n\tRunning create-site-private-public-tls.sh will create directories"
 	echo -e "\tand site private and public keys.  Then run sudo"
@@ -154,15 +147,15 @@ if [ ! -d "${WORKING_DIRECTORY}/docker-ca/.private" ] ; then
 	echo -e "\tcreate-host-tls.sh or create-user-tls.sh as many times as you want."
 	exit 1
 fi
-cd "${WORKING_DIRECTORY}/docker-ca"
+cd "${WORKING_DIRECTORY}"
 
 #       Check if ${CA_PRIVATE_CERT} file on system
-if ! [ -e "${WORKING_DIRECTORY}/docker-ca/.private/${CA_PRIVATE_CERT}" ] ; then
+if ! [ -e "${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}" ] ; then
 	display_help | more
-	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Site private key ${WORKING_DIRECTORY}/docker-ca/.private/${CA_PRIVATE_CERT} is not in this location." 1>&2
+	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Site private key ${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT} is not in this location." 1>&2
 	#	Help hint
 	echo -e "\n\tEither move it from your site secure location to"
-	echo -e "\t${WORKING_DIRECTORY}/docker-ca/.private/"
+	echo -e "\t${WORKING_DIRECTORY}/.private/"
 	echo -e "\tOr run create-site-private-public-tls.sh and sudo"
 	echo -e "\tcreate-new-openssl.cnf-tls.sh to create a new one."
 	exit 1
