@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-host-tls.sh  3.284.751  2019-06-21T21:17:39.403875-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.283  
+# 	   check-ca-tls.sh draft 
 # 	docker-TLS/check-host-tls.sh  3.283.750  2019-06-10T23:51:10.800496-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.282  
 # 	   docker-TLS/check-ca-tls.sh - complete design - in development #56 
 # 	docker-TLS/check-host-tls.sh  3.255.722  2019-06-07T21:01:25.687206-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.254  
@@ -61,7 +63,7 @@ echo    "environment variable.  You are on your own defining environment variabl
 echo    "you are using other shells."
 echo    "   DEBUG       (default off '0')"
 echo -e "\nOPTIONS"
-echo -e "   CERTDIR     dockerd certification directory (default ${DEFAULT_CERTDIR})"
+echo    "   CERTDIR     dockerd certification directory (default ${DEFAULT_CERTDIR})"
 ### production standard 6.1.177 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
 echo    "/etc/ "
