@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-ca-tls.sh  3.288.755  2019-06-30T14:06:06.614186-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.287  
+# 	   draw display_help content 
 # 	docker-TLS/check-ca-tls.sh  3.286.753  2019-06-23T10:02:31.122517-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.285  
 # 	   add production standards 
 # 	docker-TLS/check-ca-tls.sh  3.285.752  2019-06-21T21:27:32.676784-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.284  
@@ -25,7 +27,7 @@ DEFAULT_CERTDIR="${HOME}/.docker"
 DEFAULT_CA_CERT="ca.pem"
 ### production standard 8.0 --usage
 display_usage() {
-echo -e "\n${NORMAL}${0} - read start and end date of ${DEFAULT_CA_CERT}"
+echo -e "\n${NORMAL}${0} - start and end dates of ${DEFAULT_CA_CERT}"
 echo -e "\nUSAGE"
 echo    "   ${0} [<CERTDIR>]"
 echo -e "   ${0}  <CERTDIR> [<CA_CERT>]\n"
@@ -38,6 +40,48 @@ display_help() {
 display_usage
 #       Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\nDESCRIPTION"
+
+echo    "Users can check their public, private keys, and CA in /home/ or other"
+echo    "non-default home directories.  The file and directory permissions are also"
+echo    "checked.  Administrators can check other users certificates by using"
+echo -e "\t${BOLD}sudo ${0} <user-name>${NORMAL}"
+echo    "To loop through a list of hosts in the cluster a user could use,"
+echo    "https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
+echo -e "\t${BOLD}cluster-command.sh special '${0}'${NORMAL}"
+echo    "or and administrators could use,"
+echo -e "\t${BOLD}cluster-command.sh special 'sudo ${0} <user-name>'${NORMAL}"
+
+
+echo    "This script has to be run as root to check daemon registry cert (ca.crt),"
+echo    "registry cert (domain.crt), and registry private key (domain.key) in"
+echo    "/etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/ and"
+echo    "<DATA_DIR>/<CLUSTER>/docker-registry/<REGISTRY_HOST>-<REGISTRY_PORT>/certs/"
+echo    "directories.  The certification files and directory permissions are also"
+echo    "checked."
+echo -e "\nThis script works for the local host only.  To use check-registry-tls.sh on a"
+echo    "remote hosts (one-rpi3b.cptx86.com) with ssh port of 12323 as uadmin user;"
+echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo check-registry-tls.sh two.cptx86.com 17313'${NORMAL}"
+echo    "or"
+echo -e "\t${BOLD}ssh -t uadmin@three-rpi3b.cptx86.com 'sudo check-registry-tls.sh two.cptx86.com 17313'${NORMAL}"
+echo    "To loop through a list of hosts in the cluster use,"
+echo    "https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
+echo -e "\t${BOLD}cluster-command.sh special 'sudo check-registry-tls.sh two.cptx86.com 17313'${NORMAL}"
+
+
+echo    "This script has to be run as root to check public, private keys, and CA in"
+echo    "/etc/docker/certs.d/daemon directory(<CERTDIR>).  This directory was"
+echo    "selected to place dockerd TLS certifications because docker registry"
+echo    "stores it's TLS certifications in /etc/docker/certs.d.  The certification"
+echo    "files and directory permissions are also checked."
+echo -e "\nThis script works for the local host only.  To use check-host-tls.sh on a"
+echo    "remote hosts (one-rpi3b.cptx86.com) with ssh port of 12323 as uadmin user;"
+echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo check-host-tls.sh'${NORMAL}"
+echo    "To loop through a list of hosts in the cluster use,"
+echo    "https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
+echo -e "\t${BOLD}cluster-command.sh special 'sudo check-host-tls.sh'${NORMAL}"
+
+
+
 echo    "<your help goes here>"
 echo    ">>> NEED TO COMPLETE THIS SOON, ONCE I KNOW HOW IT IS GOING TO WORK :-) <<<    |"
 
@@ -157,13 +201,13 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 
 ###
 #       Root is required to copy certs
-if ! [ $(id -u) = 0 ] ; then
-        display_help | more
-        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Use sudo ${0}" 1>&2
-#       Help hint
-        echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT   <<\n${NORMAL}"    1>&2
-        exit 1
-fi
+###	if ! [ $(id -u) = 0 ] ; then
+###	        display_help | more
+###	        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Use sudo ${0}" 1>&2
+###	#       Help hint
+###	        echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT   <<\n${NORMAL}"    1>&2
+###	        exit 1
+###	fi
 
 ### production standard 7.0 Default variable value
 #       Order of precedence: CLI argument, environment variable, default code
