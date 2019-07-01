@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-ca-tls.sh  3.289.756  2019-06-30T23:24:16.691496-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.288  
+# 	   complete display_help 
 # 	docker-TLS/check-ca-tls.sh  3.288.755  2019-06-30T14:06:06.614186-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.287  
 # 	   draw display_help content 
 # 	docker-TLS/check-ca-tls.sh  3.286.753  2019-06-23T10:02:31.122517-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.285  
@@ -23,14 +25,14 @@ if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, '
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
-DEFAULT_CERTDIR="${HOME}/.docker"
+DEFAULT_CERT_DIR="${HOME}/.docker"
 DEFAULT_CA_CERT="ca.pem"
 ### production standard 8.0 --usage
 display_usage() {
-echo -e "\n${NORMAL}${0} - start and end dates of ${DEFAULT_CA_CERT}"
+echo -e "\n${NORMAL}${0} - start and end dates of ${DEFAULT_CERT_DIR}/${DEFAULT_CA_CERT}"
 echo -e "\nUSAGE"
-echo    "   ${0} [<CERTDIR>]"
-echo -e "   ${0}  <CERTDIR> [<CA_CERT>]\n"
+echo    "   ${0} [<CERT_DIR>]"
+echo -e "   ${0}  <CERT_DIR> [<CA_CERT>]\n"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--usage | -usage | -u]"
 echo    "   ${0} [--version | -version | -v]"
@@ -40,70 +42,27 @@ display_help() {
 display_usage
 #       Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\nDESCRIPTION"
-
-echo    "Users can check their public, private keys, and CA in /home/ or other"
-echo    "non-default home directories.  The file and directory permissions are also"
-echo    "checked.  Administrators can check other users certificates by using"
-echo -e "\t${BOLD}sudo ${0} <user-name>${NORMAL}"
-echo    "To loop through a list of hosts in the cluster a user could use,"
-echo    "https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
+echo    ">>> NEED TO COMPLETE THIS SOON, ONCE I KNOW HOW IT IS GOING TO WORK :-) <<<    |"
+echo    "A user can check their start and end dates of their Docker CA in <CERT_DIR>"
+echo    "(default: ${DEFAULT_CERT_DIR}).  This script will create a copy of the <CA_CERT>"
+echo    "file with the start and end dates appended to the file name in"
+echo    "${DEFAULT_CERT_DIR}."
+echo -n "An administratore can use this script to check the start and end dates of other"
+echo    "certificates by using:"
+echo -e "\t${BOLD}sudo ${0} <CERT_DIR> <CA_CERT>${NORMAL}"
+echo    "To loop through a list of hosts in a cluster a user could use,"
+echo    "(https://github.com/BradleyA/Linux-admin/tree/master/cluster-command)"
 echo -e "\t${BOLD}cluster-command.sh special '${0}'${NORMAL}"
 echo    "or and administrators could use,"
-echo -e "\t${BOLD}cluster-command.sh special 'sudo ${0} <user-name>'${NORMAL}"
-
-
-echo    "This script has to be run as root to check daemon registry cert (ca.crt),"
-echo    "registry cert (domain.crt), and registry private key (domain.key) in"
-echo    "/etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/ and"
-echo    "<DATA_DIR>/<CLUSTER>/docker-registry/<REGISTRY_HOST>-<REGISTRY_PORT>/certs/"
-echo    "directories.  The certification files and directory permissions are also"
-echo    "checked."
-echo -e "\nThis script works for the local host only.  To use check-registry-tls.sh on a"
-echo    "remote hosts (one-rpi3b.cptx86.com) with ssh port of 12323 as uadmin user;"
-echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo check-registry-tls.sh two.cptx86.com 17313'${NORMAL}"
-echo    "or"
-echo -e "\t${BOLD}ssh -t uadmin@three-rpi3b.cptx86.com 'sudo check-registry-tls.sh two.cptx86.com 17313'${NORMAL}"
-echo    "To loop through a list of hosts in the cluster use,"
-echo    "https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
-echo -e "\t${BOLD}cluster-command.sh special 'sudo check-registry-tls.sh two.cptx86.com 17313'${NORMAL}"
-
-
-echo    "This script has to be run as root to check public, private keys, and CA in"
-echo    "/etc/docker/certs.d/daemon directory(<CERTDIR>).  This directory was"
-echo    "selected to place dockerd TLS certifications because docker registry"
-echo    "stores it's TLS certifications in /etc/docker/certs.d.  The certification"
-echo    "files and directory permissions are also checked."
-echo -e "\nThis script works for the local host only.  To use check-host-tls.sh on a"
-echo    "remote hosts (one-rpi3b.cptx86.com) with ssh port of 12323 as uadmin user;"
-echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo check-host-tls.sh'${NORMAL}"
-echo    "To loop through a list of hosts in the cluster use,"
-echo    "https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
-echo -e "\t${BOLD}cluster-command.sh special 'sudo check-host-tls.sh'${NORMAL}"
-
-
-
-echo    "<your help goes here>"
+echo -e "\t${BOLD}cluster-command.sh special 'sudo ${0} <CERT_DIR> <CA_CERT>'${NORMAL}"
 echo    ">>> NEED TO COMPLETE THIS SOON, ONCE I KNOW HOW IT IS GOING TO WORK :-) <<<    |"
-
-echo -e "\n<<Paragraph two>>"
-
-echo -e "\nThe <DATA_DIR>/<CLUSTER>/<SYSTEMS_FILE> includes one FQDN or IP address per"
-echo    "line for all hosts in the cluster.  Lines in <SYSTEMS_FILE> that begin with a"
-echo    "'#' are comments.  The <SYSTEMS_FILE> is used by markit/find-code.sh,"
-echo    "Linux-admin/cluster-command/cluster-command.sh, docker-TLS/copy-registry-tls.sh,"
-echo    "pi-display/create-message/create-display-message.sh, and other scripts.  A"
-echo    "different <SYSTEMS_FILE> can be entered on the command line or environment"
-echo    "variable."
-
-echo -e "\nThis script works for the local host only.  To use check-host-tls.sh on a"
-echo    "remote hosts (one-rpi3b.cptx86.com) with ssh port of 12323 as uadmin user;"
-echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo check-host-tls.sh'${NORMAL}"
-
-echo    "To loop through a list of hosts in the cluster use,"
-echo    "https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
-echo -e "\t${BOLD}cluster-command.sh special 'sudo check-host-tls.sh'${NORMAL}"
-
-echo -e "\nThe administration user may receive password and/or passphrase prompts from a"
+echo -e "\nAn administrator can also check a Docker daemon CA or a Docker private"
+echo    "registry CA by including sudo.  To use ${0} on a remote hosts"
+echo    "(one-rpi3b.cptx86.com) with ssh port of 12323 as uadmin user;"
+echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo ${0} <CERT_DIR> <CA_CERT>'${NORMAL}"
+echo    "or to a different host with default ssh port as uadmin user;"
+echo -e "\t${BOLD}ssh -t uadmin@three-rpi3b.cptx86.com 'sudo ${0} <CERT_DIR> <CA_CERT>'${NORMAL}"
+echo -e "\nAn administrator may receive password and/or passphrase prompts from a"
 echo    "remote systen; running the following may stop the prompts in your cluster."
 echo -e "\t${BOLD}ssh-copy-id <TLS_USER>@<REMOTE_HOST>${NORMAL}"
 echo    "or"
@@ -128,11 +87,11 @@ echo    "command, 'unset DEBUG' to remove the exported information from the DEBU
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
 echo    "   DEBUG           (default off '0')"
-echo    "   CERTDIR         Certification directory (default '${DEFAULT_CERTDIR}')"
+echo    "   CERT_DIR         Certification directory (default '${DEFAULT_CERT_DIR}')"
 echo    "   CA_CERT         Name of CA certificate (default '${DEFAULT_CA_CERT}')"
 echo -e "\nOPTIONS"
 echo    "Order of precedence: CLI options, environment variable, default code."
-echo    "   CERTDIR         Certification directory (default '${DEFAULT_CERTDIR}')"
+echo    "   CERT_DIR         Certification directory (default '${DEFAULT_CERT_DIR}')"
 echo    "   CA_CERT         Name of CA certificate (default '${DEFAULT_CA_CERT}')"
 ### production standard 6.1.177 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
@@ -211,26 +170,26 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 
 ### production standard 7.0 Default variable value
 #       Order of precedence: CLI argument, environment variable, default code
-if [ $# -ge  1 ]  ; then CERTDIR=${1} ; elif [ "${CERTDIR}" == "" ] ; then CERTDIR=${DEFAULT_CERTDIR} ; fi
+if [ $# -ge  1 ]  ; then CERT_DIR=${1} ; elif [ "${CERT_DIR}" == "" ] ; then CERT_DIR=${DEFAULT_CERT_DIR} ; fi
 if [ $# -ge  2 ]  ; then CA_CERT=${2} ; elif [ "${CA_CERT}" == "" ] ; then CA_CERT=${DEFAULT_CA_CERT} ; fi
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... CERTDIR >${CERTDIR}< CA_CERT >${CA_CERT}<" 1>&2 ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... CERT_DIR >${CERT_DIR}< CA_CERT >${CA_CERT}<" 1>&2 ; fi
 
-#	argument over ride default $HOME/.docker    -   DEFAULT_CERTDIR="/etc/docker/certs.d/daemon/"
+#	argument over ride default $HOME/.docker    -   DEFAULT_CERT_DIR="/etc/docker/certs.d/daemon/"
 
 #
-if [ -s "${CERTDIR}/${CA_CERT}" ] ; then
+if [ -s "${CERT_DIR}/${CA_CERT}" ] ; then
 	#       Get certificate start and expiration date of ${CA_CERT} file
-	CA_CERT_START_DATE=$(openssl x509 -in "${CERTDIR}/${CA_CERT}" -noout -startdate | cut -d '=' -f 2)
+	CA_CERT_START_DATE=$(openssl x509 -in "${CERT_DIR}/${CA_CERT}" -noout -startdate | cut -d '=' -f 2)
 	CA_CERT_START_DATE_2=$(date -u -d"${CA_CERT_START_DATE}" +%g%m%d%H%M.%S)
 	CA_CERT_START_DATE=$(date -u -d"${CA_CERT_START_DATE}" +%Y-%m-%dT%H:%M:%S%z)
-	CA_CERT_EXPIRE_DATE=$(openssl x509 -in "${CERTDIR}/${CA_CERT}" -noout -enddate | cut -d '=' -f 2)
+	CA_CERT_EXPIRE_DATE=$(openssl x509 -in "${CERT_DIR}/${CA_CERT}" -noout -enddate | cut -d '=' -f 2)
 	CA_CERT_EXPIRE_DATE=$(date -u -d"${CA_CERT_EXPIRE_DATE}" +%Y-%m-%dT%H:%M:%S%z)
-	cp -f -p "${CERTDIR}/${CA_CERT}" "${CERTDIR}/${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
-	chmod 0444 "${CERTDIR}/${CA_CERT}" "${CERTDIR}/${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
-	touch -m -t "${CA_CERT_START_DATE_2}" "${CERTDIR}/${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}" "${CERTDIR}/${CA_CERT}"
-	ls -l ${CERTDIR}/${CA_CERT}*
+	cp -f -p "${CERT_DIR}/${CA_CERT}" "${CERT_DIR}/${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
+	chmod 0400 "${CERT_DIR}/${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
+	touch -m -t "${CA_CERT_START_DATE_2}" "${CERT_DIR}/${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}" "${CERT_DIR}/${CA_CERT}"
+	ls -l ${CERT_DIR}/${CA_CERT}*
 else
-	echo "${CERTDIR}/${CA_CERT} not found in this directory $(pwd)"
+	echo "${CERT_DIR}/${CA_CERT} not found in this directory $(pwd)"
 fi
 
 #
