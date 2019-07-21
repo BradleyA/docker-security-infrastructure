@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-ca-tls.sh  3.291.758  2019-07-20T19:42:22.776745-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.290  
+# 	   testing, updated one user hint #56 
 # 	docker-TLS/check-ca-tls.sh  3.290.757  2019-07-20T19:09:26.872735-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.289  
 # 	   update display_help #56 
 # 	docker-TLS/check-ca-tls.sh  3.275.742  2019-06-09T14:23:33.079346-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.274  
@@ -150,23 +152,11 @@ get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_
 #       DEBUG
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Name_of_command >${0}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
 
-###
-#       Root is required to copy certs
-###	if ! [ $(id -u) = 0 ] ; then
-###	        display_help | more
-###	        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Use sudo ${0}" 1>&2
-###	#       Help hint
-###	        echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT   <<\n${NORMAL}"    1>&2
-###	        exit 1
-###	fi
-
 ### production standard 7.0 Default variable value
 #       Order of precedence: CLI argument, environment variable, default code
 if [ $# -ge  1 ]  ; then CERT_DIR=${1} ; elif [ "${CERT_DIR}" == "" ] ; then CERT_DIR=${DEFAULT_CERT_DIR} ; fi
 if [ $# -ge  2 ]  ; then CA_CERT=${2} ; elif [ "${CA_CERT}" == "" ] ; then CA_CERT=${DEFAULT_CA_CERT} ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... CERT_DIR >${CERT_DIR}< CA_CERT >${CA_CERT}<" 1>&2 ; fi
-
-#	argument over ride default $HOME/.docker    -   DEFAULT_CERT_DIR="/etc/docker/certs.d/daemon/"
 
 #
 if [ -s "${CERT_DIR}/${CA_CERT}" ] ; then
@@ -181,7 +171,8 @@ if [ -s "${CERT_DIR}/${CA_CERT}" ] ; then
 	touch -m -t "${CA_CERT_START_DATE_2}" "${CERT_DIR}/${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}" "${CERT_DIR}/${CA_CERT}"
 	ls -l ${CERT_DIR}/${CA_CERT}*
 else
-	echo "${CERT_DIR}/${CA_CERT} not found in this directory $(pwd)"
+#	Help hint
+	echo "Cannot access ${CERT_DIR}/${CA_CERT}: Permission denied or No such file or directory"
 fi
 
 #
