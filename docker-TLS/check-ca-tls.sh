@@ -1,12 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-ca-tls.sh  3.289.756  2019-06-30T23:24:16.691496-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.288  
-# 	   complete display_help 
-# 	docker-TLS/check-ca-tls.sh  3.288.755  2019-06-30T14:06:06.614186-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.287  
-# 	   draw display_help content 
-# 	docker-TLS/check-ca-tls.sh  3.286.753  2019-06-23T10:02:31.122517-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.285  
-# 	   add production standards 
-# 	docker-TLS/check-ca-tls.sh  3.285.752  2019-06-21T21:27:32.676784-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.284  
-# 	   check-ca-tls.sh usage #56 
+# 	docker-TLS/check-ca-tls.sh  3.290.757  2019-07-20T19:09:26.872735-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.289  
+# 	   update display_help #56 
 # 	docker-TLS/check-ca-tls.sh  3.275.742  2019-06-09T14:23:33.079346-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.274  
 # 	   created new tool docker-TLS/check-ca-tls.sh,  need to add production standards 
 echo -e ">>>>   >>>>   IN DEVELOPMENT   IN DEVELOPMENT   IN DEVELOPMENT   <<<<   <<<<"
@@ -42,26 +36,18 @@ display_help() {
 display_usage
 #       Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\nDESCRIPTION"
-echo    ">>> NEED TO COMPLETE THIS SOON, ONCE I KNOW HOW IT IS GOING TO WORK :-) <<<    |"
 echo    "A user can check their start and end dates of their Docker CA in <CERT_DIR>"
-echo    "(default: ${DEFAULT_CERT_DIR}).  This script will create a copy of the <CA_CERT>"
-echo    "file with the start and end dates appended to the file name in"
+echo    "(default: ${DEFAULT_CERT_DIR}).  This script will create a copy of the "
+echo    "<CA_CERT> file with the start and end dates appended to the file name in"
 echo    "${DEFAULT_CERT_DIR}."
-echo -n "An administratore can use this script to check the start and end dates of other"
+echo -e "\nAn administrator can use this script to check the start and end dates of other"
 echo    "certificates by using:"
 echo -e "\t${BOLD}sudo ${0} <CERT_DIR> <CA_CERT>${NORMAL}"
-echo    "To loop through a list of hosts in a cluster a user could use,"
+echo -e "\nTo loop through a list of hosts in a cluster a user could use,"
 echo    "(https://github.com/BradleyA/Linux-admin/tree/master/cluster-command)"
 echo -e "\t${BOLD}cluster-command.sh special '${0}'${NORMAL}"
-echo    "or and administrators could use,"
-echo -e "\t${BOLD}cluster-command.sh special 'sudo ${0} <CERT_DIR> <CA_CERT>'${NORMAL}"
-echo    ">>> NEED TO COMPLETE THIS SOON, ONCE I KNOW HOW IT IS GOING TO WORK :-) <<<    |"
-echo -e "\nAn administrator can also check a Docker daemon CA or a Docker private"
-echo    "registry CA by including sudo.  To use ${0} on a remote hosts"
-echo    "(one-rpi3b.cptx86.com) with ssh port of 12323 as uadmin user;"
-echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo ${0} <CERT_DIR> <CA_CERT>'${NORMAL}"
-echo    "or to a different host with default ssh port as uadmin user;"
-echo -e "\t${BOLD}ssh -t uadmin@three-rpi3b.cptx86.com 'sudo ${0} <CERT_DIR> <CA_CERT>'${NORMAL}"
+echo    "or an administrators could use,"
+echo -e "\t${BOLD}cluster-command.sh special 'sudo ${0} /home/uadmin/.docker ca.pem'${NORMAL}"
 echo -e "\nAn administrator may receive password and/or passphrase prompts from a"
 echo    "remote systen; running the following may stop the prompts in your cluster."
 echo -e "\t${BOLD}ssh-copy-id <TLS_USER>@<REMOTE_HOST>${NORMAL}"
@@ -87,11 +73,11 @@ echo    "command, 'unset DEBUG' to remove the exported information from the DEBU
 echo    "environment variable.  You are on your own defining environment variables if"
 echo    "you are using other shells."
 echo    "   DEBUG           (default off '0')"
-echo    "   CERT_DIR         Certification directory (default '${DEFAULT_CERT_DIR}')"
+echo    "   CERT_DIR        Certification directory (default '${DEFAULT_CERT_DIR}')"
 echo    "   CA_CERT         Name of CA certificate (default '${DEFAULT_CA_CERT}')"
 echo -e "\nOPTIONS"
 echo    "Order of precedence: CLI options, environment variable, default code."
-echo    "   CERT_DIR         Certification directory (default '${DEFAULT_CERT_DIR}')"
+echo    "   CERT_DIR        Certification directory (default '${DEFAULT_CERT_DIR}')"
 echo    "   CA_CERT         Name of CA certificate (default '${DEFAULT_CA_CERT}')"
 ### production standard 6.1.177 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
@@ -111,8 +97,14 @@ echo -e "            └── ca.crt                     <-- Daemon registry do
 echo -e "\nDOCUMENTATION"
 echo    "   https://github.com/BradleyA/   <<URL to online repository README>>"
 echo -e "\nEXAMPLES"
-echo -e "   <<your code examples description goes here>>\n\t${BOLD}${0} <<code example goes here>>${NORMAL}"
-echo -e "   <<your code examples description goes here>>\n\t${BOLD}${0}${NORMAL}"
+echo -e "   An administrator can check a Docker daemon CA by including sudo.  To use"
+echo    "   ${0} on a remote hosts (one-rpi3b.cptx86.com) with ssh port"
+echo    "   of 12323 as uadmin user;"
+echo -e "\n\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo ${0} /etc/docker/certs.d/daemon ca.pem'${NORMAL}"
+echo -e "   An administrator can check a Docker private registry CA by including"
+echo    "   sudo.  To use ${0} on a remote hosts (two-rpi3b.cptx86.com)"
+echo    "   with default ssh port as uadmin user;"
+echo -e "\t${BOLD}ssh -t uadmin@two-rpi3b.cptx86.com 'sudo ${0} /etc/docker/certs.d/two.cptx86.com:17315 ca.crt'${NORMAL}"
 }
 
 #       Date and time function ISO 8601
