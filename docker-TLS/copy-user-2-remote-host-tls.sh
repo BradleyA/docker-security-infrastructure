@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.295.762  2019-07-21T10:32:24.265636-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.294  
+# 	   updated ARCHITECTURE TREE <USER_HOME>/<USER-1>/.docker/ca.pem 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.281.748  2019-06-10T16:46:36.797714-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.280  
 # 	   trying to reproduce docker-TLS/check-{host,user}-tls.sh - which one should check if the ca.pem match #49 
 ### production standard 3.0 shellcheck
@@ -67,12 +69,10 @@ echo    "                     (default ${DEFAULT_REMOTE_HOST})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 ### production standard 6.1.177 Architecture tree
-echo    ">>> NEED TO COMPLETE THIS SOON, ONCE I KNOW HOW IT IS GOING TO WORK :-) <<<    |"
-
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
-echo    "    ├── ca.pem                             <-- Symbolic link to user tlscacert"
+echo    "    ├── ca.pem                             <-- User tlscacert or symbolic link"
 echo    "    ├── cert.pem                           <-- Symbolic link to user tlscert"
 echo    "    ├── key.pem                            <-- Symbolic link to user tlskey"
 echo    "    └── docker-ca/                         <-- Working directory to create certs"

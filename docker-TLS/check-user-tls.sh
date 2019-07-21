@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-user-tls.sh  3.295.762  2019-07-21T10:32:24.151073-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.294  
+# 	   updated ARCHITECTURE TREE <USER_HOME>/<USER-1>/.docker/ca.pem 
 # 	docker-TLS/check-user-tls.sh  3.257.724  2019-06-07T21:09:59.495428-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.256  
 # 	   docker-TLS/c* - added production standard 8.0 --usage #52 
 # 	docker-TLS/check-user-tls.sh  3.232.677  2019-04-10T23:04:43.671650-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.231  
@@ -65,7 +67,7 @@ echo    "               sites have different home directory locations (/u/north-
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
-echo    "    ├── ca.pem                             <-- Symbolic link to user tlscacert"
+echo    "    ├── ca.pem                             <-- User tlscacert or symbolic link"
 echo    "    ├── cert.pem                           <-- Symbolic link to user tlscert"
 echo -e "    └── key.pem                            <-- Symbolic link to user tlskey\n"
 echo    "/usr/local/data/                           <-- <DATA_DIR>"
@@ -81,9 +83,9 @@ echo    "        └── <HOST-2>/                      <-- Host in cluster"
 echo -e "\nDOCUMENTATION"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS"
 echo -e "\nEXAMPLES"
-echo -e "   User can check their certificates\n\t${BOLD}${0}${NORMAL}"
-echo -e "   User sam checks their certificates in a non-default home directory\n\t${BOLD}${0} sam /u/north-office/${NORMAL}"
-echo -e "   Administrator user checks user bob certificates\n\t${BOLD}sudo ${0} bob${NORMAL}"
+echo -e "   User checking their certificates\n\t${BOLD}${0}${NORMAL}"
+echo -e "   User sam checking their certificates in a non-default home directory\n\t${BOLD}${0} sam /u/north-office/${NORMAL}"
+echo -e "   Administrator checks user bob certificates\n\t${BOLD}sudo ${0} bob${NORMAL}"
 echo -e "   Administrator checks user sam certificates in a different home directory\n\t${BOLD}sudo ${0} sam /u/north-office/${NORMAL}"
 }
 
