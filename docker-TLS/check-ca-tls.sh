@@ -1,16 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-ca-tls.sh  3.292.759  2019-07-20T19:45:18.821599-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.291  
-# 	   entering test #56 
-# 	docker-TLS/check-ca-tls.sh  3.291.758  2019-07-20T19:42:22.776745-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.290  
-# 	   testing, updated one user hint #56 
-# 	docker-TLS/check-ca-tls.sh  3.290.757  2019-07-20T19:09:26.872735-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.289  
-# 	   update display_help #56 
-# 	docker-TLS/check-ca-tls.sh  3.275.742  2019-06-09T14:23:33.079346-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.274  
-# 	   created new tool docker-TLS/check-ca-tls.sh,  need to add production standards 
-echo -e ">>>>   >>>>   IN TEST   IN TEST   IN TEST   <<<<   <<<<"
-echo -e ">>>>   >>>>   IN TEST   IN TEST   IN TEST   <<<<   <<<<"
-#	check-ca-tls.sh - complete design - in development #56
-
+# 	docker-TLS/check-ca-tls.sh  3.293.760  2019-07-20T19:51:00.914284-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.292  
+# 	   complete, release to production close #56 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
