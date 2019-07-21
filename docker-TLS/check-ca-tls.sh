@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-ca-tls.sh  3.294.761  2019-07-21T10:23:02.299570-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.293  
+# 	   update DESCRIPTION and EXAMPLES 
 # 	docker-TLS/check-ca-tls.sh  3.293.760  2019-07-20T19:51:00.914284-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.292  
 # 	   complete, release to production close #56 
 ### production standard 3.0 shellcheck
@@ -30,18 +32,10 @@ display_help() {
 display_usage
 #       Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\nDESCRIPTION"
-echo    "A user can check their start and end dates of their Docker CA in <CERT_DIR>"
-echo    "(default: ${DEFAULT_CERT_DIR}).  This script will create a copy of the "
+echo    "Check start and end dates of a Docker CA in <CERT_DIR> (default:"
+echo    "${DEFAULT_CERT_DIR}).  This script will create a copy of the"
 echo    "<CA_CERT> file with the start and end dates appended to the file name in"
 echo    "${DEFAULT_CERT_DIR}."
-echo -e "\nAn administrator can use this script to check the start and end dates of other"
-echo    "certificates by using:"
-echo -e "\t${BOLD}sudo ${0} <CERT_DIR> <CA_CERT>${NORMAL}"
-echo -e "\nTo loop through a list of hosts in a cluster a user could use,"
-echo    "(https://github.com/BradleyA/Linux-admin/tree/master/cluster-command)"
-echo -e "\t${BOLD}cluster-command.sh special '${0}'${NORMAL}"
-echo    "or an administrators could use,"
-echo -e "\t${BOLD}cluster-command.sh special 'sudo ${0} /home/uadmin/.docker ca.pem'${NORMAL}"
 echo -e "\nAn administrator may receive password and/or passphrase prompts from a"
 echo    "remote systen; running the following may stop the prompts in your cluster."
 echo -e "\t${BOLD}ssh-copy-id <TLS_USER>@<REMOTE_HOST>${NORMAL}"
@@ -77,10 +71,7 @@ echo    "   CA_CERT         Name of CA certificate (default '${DEFAULT_CA_CERT}'
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
-echo    "    ├── ca.pem                             <-- Symbolic link to user tlscacert"
-echo    "    └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"
-echo    "        │                                      to create registory certs"
-echo -e "        └── ca.crt                         <-- Daemon registry domain cert"
+echo    "    └── ca.pem                             <-- User tlscacert or symbolic link"
 echo    "/etc/ "
 echo    "└── docker/ "
 echo    "    └── certs.d/                           <-- Host docker cert directory"
@@ -91,13 +82,23 @@ echo -e "            └── ca.crt                     <-- Daemon registry do
 echo -e "\nDOCUMENTATION"
 echo    "   https://github.com/BradleyA/   <<URL to online repository README>>"
 echo -e "\nEXAMPLES"
-echo -e "   An administrator can check a Docker daemon CA by including sudo.  To use"
+echo    "   User checking start and end dates of their Docker CA in \$HOME/.docker."
+echo -e "\t${BOLD}${0}${NORMAL}"
+echo    "   To loop through a list of hosts in a cluster a user could use,"
+echo    "(https://github.com/BradleyA/Linux-admin/tree/master/cluster-command)"
+echo -e "\t${BOLD}cluster-command.sh special '${0}'${NORMAL}"
+echo    "   To loop through a list of hosts in a cluster an administrator could check the"
+echo    "   start and end dates of Docker CA for user sam in /home/sam/.docker."
+echo -e "\t${BOLD}cluster-command.sh special 'sudo ${0} /home/sam/.docker ca.pem'${NORMAL}"
+echo    "   Administrator checking start and end dates of other certificates by using:"
+echo -e "\t${BOLD}sudo ${0} <CERT_DIR> <CA_CERT>${NORMAL}"
+echo -e "   Administrator checking a Docker daemon CA by including sudo.  To use"
 echo    "   ${0} on a remote hosts (one-rpi3b.cptx86.com) with ssh port"
 echo    "   of 12323 as uadmin user;"
-echo -e "\n\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo ${0} /etc/docker/certs.d/daemon ca.pem'${NORMAL}"
-echo -e "   An administrator can check a Docker private registry CA by including"
-echo    "   sudo.  To use ${0} on a remote hosts (two-rpi3b.cptx86.com)"
-echo    "   with default ssh port as uadmin user;"
+echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo ${0} /etc/docker/certs.d/daemon ca.pem'${NORMAL}"
+echo -e "   Administrator checking a Docker private registry CA by including sudo.  To"
+echo    "   use ${0} on a remote hosts (two-rpi3b.cptx86.com) with"
+echo    "   default ssh port as uadmin user;"
 echo -e "\t${BOLD}ssh -t uadmin@two-rpi3b.cptx86.com 'sudo ${0} /etc/docker/certs.d/two.cptx86.com:17315 ca.crt'${NORMAL}"
 }
 
