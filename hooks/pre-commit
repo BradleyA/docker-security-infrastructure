@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/pre-commit  3.306.773  2019-07-26T14:49:19.424907-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.305  
+#	   again trying to a a FILE_LIST of files to be commited 
 #	hooks/pre-commit  3.305.772  2019-07-26T14:46:07.067396-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.304  
 #	   testing FILE_LIST pre-commit 
 #	hooks/pre-commit  3.304.771  2019-07-26T14:44:19.555463-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.303  
@@ -23,7 +25,7 @@ echo "\$(git status -s --untracked-files=no | grep -v '^D  ' | awk '{print \$2}'
 echo "\$(git status -s --untracked-files=no | grep -v '^D  ' | awk '{print \$2}') >$(git status -s --untracked-files=no | grep -v '^D  ' | awk '{print $2}')<"
 
 WORKING_DIRECTORY=$(git rev-parse --show-toplevel)
-git status -s --untracked-files=no | grep -v '^D  ' | awk '{print $2}' > ${WORKING_DIRECTORY}/FILE_LIST
+git status -s --untracked-files=no | grep -v '^D  ' | awk '{print $2}' > ${WORKING_DIRECTORY}/hooks/FILE_LIST
 
 echo -e "\n\n"
 
