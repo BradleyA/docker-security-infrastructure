@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/pre-commit  3.312.779  2019-07-26T15:28:59.979867-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.311  
+#	   pre-commit add logging information to output / corrected incident with function not being call #57 
 #	hooks/pre-commit  3.311.778  2019-07-26T15:24:54.721125-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.310  
 #	   pre-commit add logging information to output #57 
 #	hooks/pre-commit  3.310.777  2019-07-26T15:19:17.281992-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.309  
@@ -14,12 +16,9 @@
 #       MIT License is in the online DOCUMENTATION
 ###
 #       Date and time function ISO 8601
-get_date_stamp() {
 DATE_STAMP=$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
 TEMP=$(date +%Z)
 DATE_STAMP="${DATE_STAMP} (${TEMP})"
-}
-
 #       Fully qualified domain name FQDN hostname
 LOCALHOST=$(hostname -f)
 ###
