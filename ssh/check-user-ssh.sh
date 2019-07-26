@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	ssh/check-user-ssh.sh  3.296.763  2019-07-26T12:53:58.770864-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.295  
+# 	   updated production standard 8.3.204 --usage #57 
 # 	ssh/check-user-ssh.sh  3.268.735  2019-06-08T21:10:21.816373-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.267  
 # 	   docker-TLS/c{} - change DEFAULT_USER_HOME="/home/" to ~ #54 
 # 	ssh/check-user-ssh.sh  3.252.717  2019-06-02T20:24:28.077008-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.251-1-gc608054  
@@ -25,15 +27,15 @@ NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 DEFAULT_USER_HOME=$(echo ~ | sed s/${USER}//)
 DEFAULT_SSH_USER="${USER}"
-### production standard 8.0 --usage
+### production standard 8.3.204 --usage
 display_usage() {
-echo -e "\n${NORMAL}${0} - Check user RSA ssh file permissions"
+COMMAND_NAME=$(echo $0 | sed 's/^.*\///')
+echo -e "\n${NORMAL}${0}\n   Check user RSA ssh file permissions"
 echo -e "\nUSAGE"
-echo    "   ${0} [<USER_HOME>]"
-echo -e "   ${0}  <USER_HOME> [<SSH_USER>]\n"
-echo    "   ${0} [--help | -help | help | -h | h | -?]"
-echo    "   ${0} [--usage | -usage | -u]"
-echo    "   ${0} [--version | -version | -v]"
+echo -e "   ${COMMAND_NAME} [-U <USER_HOME>] [-S <SSH_USER>]\n"
+echo    "   ${COMMAND_NAME} [--help | -help | help | -h | h | -?]"
+echo    "   ${COMMAND_NAME} [--usage | -usage | -u]"
+echo    "   ${COMMAND_NAME} [--version | -version | -v]"
 }
 ### production standard 0.1.166 --help
 display_help() {
@@ -43,9 +45,9 @@ echo -e "\nDESCRIPTION"
 echo    "This script allows users to make sure that the ssh files and directory"
 echo    "permissions are correct.  If they are not correct then this script will correct"
 echo    "the permissions.  Administrators can check other users ssh keys by using:"
-echo -e "\t${BOLD}sudo ${0} <SSH_USER>{NORMAL}"
+echo -e "\t${BOLD}sudo ${COMMAND_NAME} <SSH_USER>${NORMAL}"
 echo    "To create a new ssh key:"
-echo -e "\t${BOLD}ssh-keygen -t rsa -b 4096 -o -C \"${USER}@$(hostname -f)_[$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)_$(date -d +52weeks +%Y-%m-%dT%H:%M:%S.%6N%:z)]\"${NORMAL}"
+echo -e "\t${BOLD}ssh-keygen -t rsa -b 4096 -o -C \"\${USER}@\$(hostname -f)_[\$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)_\$(date -d +52weeks +%Y-%m-%dT%H:%M:%S.%6N%:z)]\"${NORMAL}"
 echo    "To copy ssh key to a remote system:"
 echo -e "\t${BOLD}ssh-copy-id <SSH_USER>@<REMOTE_HOST>${NORMAL}"
 echo    "Enter the following command to test if public and private key match:"
@@ -82,10 +84,10 @@ echo    "    └── known_hosts                        <-- Systems previously
 echo -e "\nDOCUMENTATION"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/ssh"
 echo -e "\nEXAMPLES"
-echo -e "   User checks their ssh file permissions\n\t${BOLD}${0}${NORMAL}"
-echo -e "   User sam checks their ssh file permissions in a non-default home directory\n\t${BOLD}${0} sam /u/north-office/${NORMAL}"
-echo -e "   Administrator checks user bob ssh file permissions\n\t${BOLD}sudo ${0} bob${NORMAL}"
-echo -e "   Administrator checks user sally ssh file permissions in a different home\n   directory\n\t${BOLD}sudo ${0} sally /u/home-office/${NORMAL}"
+echo -e "   User checks their ssh file permissions\n\t${BOLD}${COMMAND_NAME}${NORMAL}"
+echo -e "   User sam checks their ssh file permissions in a non-default home directory\n\t${BOLD}${COMMAND_NAME} sam /u/north-office/${NORMAL}"
+echo -e "   Administrator checks user bob ssh file permissions\n\t${BOLD}sudo ${COMMAND_NAME} bob${NORMAL}"
+echo -e "   Administrator checks user sally ssh file permissions in a different home\n   directory\n\t${BOLD}sudo ${COMMAND_NAME} sally /u/home-office/${NORMAL}"
 }
 
 #       Date and time function ISO 8601
@@ -242,8 +244,15 @@ else
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  User does not have a .ssh/known_hosts file." 1>&2
 fi
 
+#	Use case:
+#	   If you have an encrypted home directory, SSH cannot access your authorized_keys file
+#	   because it is inside your encrypted home directory and won't be available until after
+#	   you are authenticated.  Therefore, SSH will default to password authentication 
+
+#	Check if AuthorizedKeysFile in /etc/ssh/sshd_config is defined with additional locations for authorized_keys
 
 ### >>> Need to add check for other authorized_keys file location in /etc/ssh/sshd_config file #51
+###	grep -v "#" /etc/ssh/sshd_config | grep -i AuthorizedKeysFile
 #	directory permission to this location  755 ?
 #	file permissions for authorized_keys  644 ?
 #	trouble shooting section, need to test
