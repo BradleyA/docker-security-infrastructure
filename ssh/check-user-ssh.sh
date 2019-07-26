@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	ssh/check-user-ssh.sh  3.297.764  2019-07-26T13:23:46.474164-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.296  
+# 	   updated display_help OPTIONS section #57 
 # 	ssh/check-user-ssh.sh  3.296.763  2019-07-26T12:53:58.770864-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.295  
 # 	   updated production standard 8.3.204 --usage #57 
 # 	ssh/check-user-ssh.sh  3.268.735  2019-06-08T21:10:21.816373-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.267  
@@ -70,8 +72,11 @@ echo    "   DEBUG       (default off '0')"
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo    "               Many sites have different home directories (/u/north-office/)"
 echo -e "\nOPTIONS"
-echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
-echo    "   SSH_USER    User (default ${DEFAULT_SSH_USER})"
+echo -e "Order of precedence: CLI options, environment variable, default code.\n"
+echo    "   -U, --user_home, -U=, --user_home=<USER_HOME>"
+echo -e "\tLocation of user home directory (default ${DEFAULT_USER_HOME})\n"
+echo    "   -S, --ssh_user, -S=*, --ssh_user=<SSH_USER>"
+echo -e "\tUser (default ${DEFAULT_SSH_USER})"
 ### production standard 6.1.177 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
