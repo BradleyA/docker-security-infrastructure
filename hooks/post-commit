@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.300.767  2019-07-26T14:15:38.798149-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.299  
+#	   trying to determine path with files being committed #57 
 #	hooks/post-commit  3.299.766  2019-07-26T14:12:47.493461-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.298  
 #	   update test post-commit hook 
 #	hooks/post-commit  3.298.765  2019-07-26T14:07:57.437941-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.297  
@@ -27,6 +29,7 @@ echo "GIT_INDEX_FILE >${GIT_INDEX_FILE}<"
 echo "\$GIT_DIR >${GIT_DIR}<"
 echo "\$(git rev-parse --git-dir) >$(git rev-parse --git-dir)<"
 echo "\$(git rev-parse --show-toplevel) >$(git rev-parse --show-toplevel)<"
+echo "\$(git status -s --untracked-files=${UNTRACKED_FILES} | grep -v '^D  ' | awk '{print $2}') >$(git status -s --untracked-files=${UNTRACKED_FILES} | grep -v '^D  ' | awk '{print $2}')<"
 echo "pwd >$(pwd)<"
 
 echo "GIT_WORK_TREE >${GIT_WORK_TREE}<"
