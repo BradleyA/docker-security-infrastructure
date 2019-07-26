@@ -1,15 +1,8 @@
 #!/bin/bash
+#	hooks/post-commit  3.313.780  2019-07-26T15:52:03.495438-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.312  
+#	   testing post-commit #57 
 #	hooks/post-commit  3.309.776  2019-07-26T15:15:00.108370-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.308  
 #	   determine how to parse FILE_LIST #57 
-#	hooks/post-commit  3.303.770  2019-07-26T14:38:02.027369-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.302  
-#	   working on creating a file_list 
-#	hooks/post-commit  3.300.767  2019-07-26T14:15:38.798149-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.299 
-#	   trying to determine path with files being committed #57 
-#	hooks/post-commit  3.299.766  2019-07-26T14:12:47.493461-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.298  
-#	   update test post-commit hook 
-#	hooks/post-commit  3.298.765  2019-07-26T14:07:57.437941-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.297  
-#	   move .git/hooks/post-commit to hooks/post-commit so updated can be pushed to github during development #57 
-
 ###
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
@@ -41,4 +34,12 @@ echo "GIT_WORK_TREE >${GIT_WORK_TREE}<"
 hook="$(git rev-parse --git-path hooks/post-commit)"
 echo "hook >${hook}<"
 
-cat hooks/FILE_LIST
+cat hooks/FILE_LIST > FILE_LIST
+echo ${FILE_LIST}
+#       Mark each file
+for FILE_NAME in ${FILE_LIST} ; do
+#		FILE_DIRECTORY=$(sed 's/
+	if [ -d ${FILE_NAME}/TEST ] ; then
+		echo ">>><<<>>><<"
+	fi
+done
