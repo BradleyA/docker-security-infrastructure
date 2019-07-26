@@ -1,9 +1,7 @@
 #!/bin/bash
-#	hooks/post-commit  3.302.769  2019-07-26T14:24:08.658507-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.301  
-#	   continuing to locate pushed files list 
-#	hooks/post-commit  3.301.768  2019-07-26T14:22:10.323181-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.300  
-#	   change UNTRACKED_FILES to no #57 
-#	hooks/post-commit  3.300.767  2019-07-26T14:15:38.798149-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.299  
+#	hooks/post-commit  3.303.770  2019-07-26T14:38:02.027369-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.302  
+#	   working on creating a file_list 
+#	hooks/post-commit  3.300.767  2019-07-26T14:15:38.798149-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.299 
 #	   trying to determine path with files being committed #57 
 #	hooks/post-commit  3.299.766  2019-07-26T14:12:47.493461-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.298  
 #	   update test post-commit hook 
