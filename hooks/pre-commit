@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/pre-commit  3.308.775  2019-07-26T15:04:20.488675-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.307  
+#	   added commiter to message when run #57 
 #	hooks/pre-commit  3.307.774  2019-07-26T14:59:48.012839-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.306  
 #	   completed creating ${WORKING_DIRECTORY}/hooks/FILE_LIST of commited files pre commit #57 
 ###
@@ -8,5 +10,5 @@
 #       MIT License is in the online DOCUMENTATION
 ###
 WORKING_DIRECTORY=$(git rev-parse --show-toplevel)
-echo -e "Create ${WORKING_DIRECTORY}/hooks/FILE_LIST file of files that are being commited."
+echo -e "Create ${WORKING_DIRECTORY}/hooks/FILE_LIST file of files that are being commited by ${GIT_AUTHOR_NAME}."
 git status -s --untracked-files=no | grep -v '^D  ' | awk '{print $2}' > "${WORKING_DIRECTORY}"/hooks/FILE_LIST
