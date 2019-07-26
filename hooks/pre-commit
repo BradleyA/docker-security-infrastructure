@@ -1,0 +1,27 @@
+#!/bin/bash
+#	hooks/pre-commit  3.304.771  2019-07-26T14:44:19.555463-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.303  
+#	   add pre-commit to create FILE_LIST file #57 
+
+###
+### production standard 3.0 shellcheck
+### production standard 5.1.160 Copyright
+#       Copyright (c) 2019 Bradley Allen
+#       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+### production standard 1.0 DEBUG variable
+#       Order of precedence: environment variable, default code
+if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
+#       set -x
+#       set -v
+BOLD=$(tput -Txterm bold)
+NORMAL=$(tput -Txterm sgr0)
+###
+
+echo "\$(git rev-parse --show-toplevel) >$(git rev-parse --show-toplevel)<"
+echo "\$(git status -s --untracked-files=no | grep -v '^D  ' | awk '{print \$2}') >$(git status -s --untracked-files=no)<"
+echo "\$(git status -s --untracked-files=no | grep -v '^D  ' | awk '{print \$2}') >$(git status -s --untracked-files=no | grep -v '^D  ' | awk '{print $2}')<"
+
+WORKING_DIRECTORY=git rev-parse --show-toplevel
+git status -s --untracked-files=no | grep -v '^D  ' | awk '{print $2}' > ${WORKING_DIRECTORY}/FILE_LIST
+
+echo -e "\n\n"
+
