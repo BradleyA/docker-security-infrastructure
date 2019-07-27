@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.351.818  2019-07-26T22:57:13.931766-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.350  
+#	   testing post-commit .git/hook for FVT 
 #	hooks/post-commit  3.350.817  2019-07-26T22:55:48.735474-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.349  
 #	   testing post-commit .git/hook for FVT 
 #	hooks/post-commit  3.349.816  2019-07-26T22:53:31.224341-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.348  
@@ -71,7 +73,7 @@ for POST_FILE_NAME in ${POST_FILE_LIST} ; do
 		for POST_FVT_TEST_CASE in ${POST_FVT_TEST_CASES} ; do
 			echo "\${POST_WORKING_DIRECTORY}/\${POST_TMP_DIR}/TEST/\${POST_TMP_FILE}/\${POST_FVT_TEST_CASE} >${POST_WORKING_DIRECTORY}/${POST_TMP_DIR}/TEST/${POST_TMP_FILE}/${POST_FVT_TEST_CASE}< \${POST_WORKING_DIRECTORY}/${POST_FILE_NAME} >${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}<"
 			echo "\${USER_HOME} >${USER_HOME}<"
-			eval $(/home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/check-user-ssh.sh /home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/TEST/check-user-ssh.sh/FVT-option-help-001)
+			$(/home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/check-user-ssh.sh /home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/TEST/check-user-ssh.sh/FVT-option-help-001)
 			exit
 			echo "><><><><><><><><><><><<"
 			eval $(${POST_WORKING_DIRECTORY}/${POST_TMP_DIR}/TEST/${POST_TMP_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME})
