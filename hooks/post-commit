@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.346.813  2019-07-26T22:39:09.699773-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.345  
+#	   testing post-commit .git/hook for FVT 
 #	hooks/post-commit  3.345.812  2019-07-26T22:24:32.460213-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.344  
 #	   testing post-commit .git/hook for FVT 
 #	hooks/post-commit  3.343.810  2019-07-26T22:12:14.587205-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.342  
@@ -69,7 +71,7 @@ for FILE_NAME in ${FILE_LIST} ; do
 		for FVT_TEST_CASE in ${FVT_TEST_CASES} ; do
 			echo "\${WORKING_DIRECTORY}/\${TMP_DIR}/TEST/\${TMP_FILE}/\${FVT_TEST_CASE} >${WORKING_DIRECTORY}/${TMP_DIR}/TEST/${TMP_FILE}/${FVT_TEST_CASE}< \${WORKING_DIRECTORY}/${FILE_NAME} >${WORKING_DIRECTORY}/${FILE_NAME}<"
 set -x
-			eval $(eval /home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/check-user-ssh.sh /home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/TEST/check-user-ssh.sh/FVT-option-help-001)
+			eval $(/home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/check-user-ssh.sh /home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/TEST/check-user-ssh.sh/FVT-option-help-001)
 			echo "><><><><><><><><><><><<"
 			eval $(${WORKING_DIRECTORY}/${TMP_DIR}/TEST/${TMP_FILE}/${FVT_TEST_CASE} ${WORKING_DIRECTORY}/${FILE_NAME})
 set +x

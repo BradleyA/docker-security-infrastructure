@@ -1,5 +1,5 @@
 #!/bin/bash
-# 	ssh/check-user-ssh.sh  3.345.812  2019-07-26T22:24:32.646115-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.344  
+# 	ssh/check-user-ssh.sh  3.346.813  2019-07-26T22:39:09.866347-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.345  
 # 	   testing post-commit .git/hook for FVT 
 # 	ssh/check-user-ssh.sh  3.297.764  2019-07-26T13:23:46.474164-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.296  
 # 	   updated display_help OPTIONS section #57 
