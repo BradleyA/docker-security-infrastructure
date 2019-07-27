@@ -1,22 +1,10 @@
 #!/bin/bash
+#	hooks/post-commit  3.359.826  2019-07-27T11:15:47.098189-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.358  
+#	   testing .git/hooks/post-commit FVT 
 #	hooks/post-commit  3.358.825  2019-07-27T11:06:46.400886-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.357  
 #	   testing .git/hooks/post-commit FVT 
 #	hooks/post-commit  3.357.824  2019-07-27T10:58:34.614954-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.356  
 #	   testing .git/hooks/post-commit FVT 
-#	hooks/post-commit  3.355.822  2019-07-27T10:50:55.960000-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.354  
-#	   testing post-commit hooks FVT 
-#	hooks/post-commit  3.354.821  2019-07-27T10:46:56.934836-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.353  
-#	   Bssh/check-user-ssh.sh  BOLD display_help section titles 
-#	hooks/post-commit  3.353.820  2019-07-26T23:11:13.120633-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.352  
-#	   testing post-commit .git/hook for FVT 
-#	hooks/post-commit  3.352.819  2019-07-26T23:05:54.034724-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.351  
-#	   testing post-commit .git/hook for FVT 
-#	hooks/post-commit  3.351.818  2019-07-26T22:57:13.931766-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.350  
-#	   testing post-commit .git/hook for FVT 
-#	hooks/post-commit  3.350.817  2019-07-26T22:55:48.735474-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.349  
-#	   testing post-commit .git/hook for FVT 
-#	hooks/post-commit  3.349.816  2019-07-26T22:53:31.224341-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.348  
-#	   testing post-commit .git/hook for FVT 
 #	hooks/post-commit  3.343.810  2019-07-26T22:12:14.587205-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.342  
 #	   testing post-commit .git/hook for FVT 
 #	hooks/post-commit  3.320.787  2019-07-26T19:58:47.273386-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.319  
@@ -82,6 +70,9 @@ for POST_FILE_NAME in ${POST_FILE_LIST} ; do
 			echo "\${POST_WORKING_DIRECTORY}/\${POST_TMP_DIR}/TEST/\${POST_TMP_FILE}/\${POST_FVT_TEST_CASE} >${POST_WORKING_DIRECTORY}/${POST_TMP_DIR}/TEST/${POST_TMP_FILE}/${POST_FVT_TEST_CASE}< \${POST_WORKING_DIRECTORY}/${POST_FILE_NAME} >${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}<"
 			echo "\${USER_HOME} >${USER_HOME}<"
 			/home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/TEST/check-user-ssh.sh/FVT-option-help-001 /home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/check-user-ssh.sh
+			echo "DONE -------------------->"
+			echo "${POST_WORKING_DIRECTORY}/${POST_TMP_DIR}/TEST/${POST_TMP_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}"
+			echo "Begin test two ------->"
 			POST_COMMAND="${POST_WORKING_DIRECTORY}/${POST_TMP_DIR}/TEST/${POST_TMP_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}"
 			echo "${POST_COMMAND}"
 #			eval $(${POST_WORKING_DIRECTORY}/${POST_TMP_DIR}/TEST/${POST_TMP_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME})
