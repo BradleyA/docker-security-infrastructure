@@ -1,26 +1,6 @@
 #!/bin/bash
-#	hooks/post-commit  3.342.809  2019-07-26T22:03:32.381234-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.341  
-#	   testing post-commit FVT 
-#	hooks/post-commit  3.341.808  2019-07-26T22:00:33.796132-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.340  
-#	   testing post-commit FVT 
-#	hooks/post-commit  3.340.807  2019-07-26T21:53:59.345580-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.339  
-#	   testing post-commit FVT 
-#	hooks/post-commit  3.339.806  2019-07-26T21:50:28.487667-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.338  
-#	   testing post-commit FVT 
-#	hooks/post-commit  3.338.805  2019-07-26T21:47:54.400230-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.337  
-#	   testing post-commit FVT 
-#	hooks/post-commit  3.337.804  2019-07-26T21:44:10.886698-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.336  
-#	   testing post-commit FVT 
-#	hooks/post-commit  3.336.803  2019-07-26T21:32:34.613725-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.335  
-#	   testing post-commit hook 
-#	hooks/post-commit  3.335.802  2019-07-26T21:30:22.866945-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.334  
-#	   testing post-commit 
-#	hooks/post-commit  3.334.801  2019-07-26T21:18:04.075282-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.333  
-#	   testing post-commit 
-#	hooks/post-commit  3.333.800  2019-07-26T21:13:36.228508-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.332  
-#	   testing post-commit 
-#	hooks/post-commit  3.332.799  2019-07-26T21:09:18.633178-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.331  
-#	   testing post-commit 
+#	hooks/post-commit  3.343.810  2019-07-26T22:12:14.587205-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.342  
+#	   testing post-commit .git/hook for FVT 
 #	hooks/post-commit  3.320.787  2019-07-26T19:58:47.273386-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.319  
 #	   testing hooks pre-commit and post-commit #57 
 #	hooks/post-commit  3.309.776  2019-07-26T15:15:00.108370-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.308  
@@ -87,7 +67,7 @@ for FILE_NAME in ${FILE_LIST} ; do
 		for FVT_TEST_CASE in ${FVT_TEST_CASES} ; do
 			echo "\${WORKING_DIRECTORY}/\${TMP_DIR}/TEST/\${TMP_FILE}/\${FVT_TEST_CASE} >${WORKING_DIRECTORY}/${TMP_DIR}/TEST/${TMP_FILE}/${FVT_TEST_CASE}< \${WORKING_DIRECTORY}/${FILE_NAME} >${WORKING_DIRECTORY}/${FILE_NAME}<"
 set -x
-			$(${WORKING_DIRECTORY}/${TMP_DIR}/TEST/${TMP_FILE}/${FVT_TEST_CASE} ${WORKING_DIRECTORY}/${FILE_NAME})
+			eval $(${WORKING_DIRECTORY}/${TMP_DIR}/TEST/${TMP_FILE}/${FVT_TEST_CASE} ${WORKING_DIRECTORY}/${FILE_NAME})
 set +x
 		done
 	else
