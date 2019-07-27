@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	ssh/check-user-ssh.sh  3.354.821  2019-07-27T10:46:57.122255-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.353  
+# 	   Bssh/check-user-ssh.sh  BOLD display_help section titles 
 # 	ssh/check-user-ssh.sh  3.353.820  2019-07-26T23:11:13.282300-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.352  
 # 	   testing post-commit .git/hook for FVT 
 # 	ssh/check-user-ssh.sh  3.297.764  2019-07-26T13:23:46.474164-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.296  
@@ -29,21 +31,21 @@ NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
 DEFAULT_USER_HOME=$(echo ~ | sed s/${USER}//)
 DEFAULT_SSH_USER="${USER}"
-### production standard 8.3.204 --usage
+### production standard 8.3.214 --usage
 display_usage() {
 COMMAND_NAME=$(echo $0 | sed 's/^.*\///')
 echo -e "\n${NORMAL}${0}\n   Check user RSA ssh file permissions"
-echo -e "\nUSAGE"
+echo -e "\n${BOLD}USAGE${NORMAL}"
 echo -e "   ${COMMAND_NAME} [-U <USER_HOME>] [-S <SSH_USER>]\n"
 echo    "   ${COMMAND_NAME} [--help | -help | help | -h | h | -?]"
 echo    "   ${COMMAND_NAME} [--usage | -usage | -u]"
 echo    "   ${COMMAND_NAME} [--version | -version | -v]"
 }
-### production standard 0.1.166 --help
+### production standard 0.3.214 --help
 display_help() {
 display_usage
 #       Displaying help DESCRIPTION in English en_US.UTF-8
-echo -e "\nDESCRIPTION"
+echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
 echo    "This script allows users to make sure that the ssh files and directory"
 echo    "permissions are correct.  If they are not correct then this script will correct"
 echo    "the permissions.  Administrators can check other users ssh keys by using:"
@@ -62,7 +64,7 @@ if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG
 elif ! [ "${LANG}" == "en_US.UTF-8" ] ; then
         get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
-echo -e "\nENVIRONMENT VARIABLES"
+echo -e "\n${BOLD}ENVIRONMENT VARIABLES${NORMAL}"
 echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
 echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
 echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
@@ -71,14 +73,14 @@ echo    "you are using other shells."
 echo    "   DEBUG       (default off '0')"
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo    "               Many sites have different home directories (/u/north-office/)"
-echo -e "\nOPTIONS"
+echo -e "\n${BOLD}OPTIONS${NORMAL}"
 echo -e "Order of precedence: CLI options, environment variable, default code.\n"
 echo    "   -U, --user_home, -U=, --user_home=<USER_HOME>"
 echo -e "\tLocation of user home directory (default ${DEFAULT_USER_HOME})\n"
 echo    "   -S, --ssh_user, -S=*, --ssh_user=<SSH_USER>"
 echo -e "\tUser (default ${DEFAULT_SSH_USER})"
 ### production standard 6.1.177 Architecture tree
-echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
+echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"   # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.ssh/                         <-- Secure Socket Shell directory"
 echo    "    ├── authorized_keys                    <-- SSH keys for logging into account"
@@ -86,9 +88,9 @@ echo    "    ├── config                             <-- SSH client configu
 echo    "    ├── id_rsa                             <-- SSH private key"
 echo    "    ├── id_rsa.pub                         <-- SSH public key"
 echo    "    └── known_hosts                        <-- Systems previously connected to"
-echo -e "\nDOCUMENTATION"
+echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/tree/master/ssh"
-echo -e "\nEXAMPLES"
+echo -e "\n${BOLD}EXAMPLES${NORMAL}"
 echo -e "   User checks their ssh file permissions\n\t${BOLD}${COMMAND_NAME}${NORMAL}"
 echo -e "   User sam checks their ssh file permissions in a non-default home directory\n\t${BOLD}${COMMAND_NAME} sam /u/north-office/${NORMAL}"
 echo -e "   Administrator checks user bob ssh file permissions\n\t${BOLD}sudo ${COMMAND_NAME} bob${NORMAL}"

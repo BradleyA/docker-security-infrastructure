@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.354.821  2019-07-27T10:46:56.934836-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.353  
+#	   Bssh/check-user-ssh.sh  BOLD display_help section titles 
 #	hooks/post-commit  3.353.820  2019-07-26T23:11:13.120633-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.352  
 #	   testing post-commit .git/hook for FVT 
 #	hooks/post-commit  3.352.819  2019-07-26T23:05:54.034724-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.351  
@@ -30,15 +32,11 @@ echo "GIT_AUTHOR_NAME >${GIT_AUTHOR_NAME}<"
 echo "GIT_AUTHOR_EMAIL >${GIT_AUTHOR_EMAIL}<"
 echo "GIT_REFLOG_ACTION >${GIT_REFLOG_ACTION}<"
 echo "GIT_INDEX_FILE >${GIT_INDEX_FILE}<"
-
 echo "\$GIT_DIR >${GIT_DIR}<"
 echo "\$(git rev-parse --git-dir) >$(git rev-parse --git-dir)<"
 echo "\$(git rev-parse --show-toplevel) >$(git rev-parse --show-toplevel)<"
-
 echo "pwd >$(pwd)<"
-
 echo "GIT_WORK_TREE >${GIT_WORK_TREE}<"
-
 hook="$(git rev-parse --git-path hooks/post-commit)"
 echo "hook >${hook}<"
 
