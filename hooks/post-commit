@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.335.802  2019-07-26T21:30:22.866945-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.334  
+#	   testing post-commit 
 #	hooks/post-commit  3.334.801  2019-07-26T21:18:04.075282-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.333  
 #	   testing post-commit 
 #	hooks/post-commit  3.333.800  2019-07-26T21:13:36.228508-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.332  
@@ -17,10 +19,6 @@
 ### production standard 1.0 DEBUG variable
 #       Order of precedence: environment variable, default code
 if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
-#       set -x
-#       set -v
-BOLD=$(tput -Txterm bold)
-NORMAL=$(tput -Txterm sgr0)
 ###
 
 echo "GIT_AUTHOR_DATE >${GIT_AUTHOR_DATE}<"
@@ -68,7 +66,9 @@ for FILE_NAME in ${FILE_LIST} ; do
 
 	if [ -d ${TMP_DIR}/TEST/${TMP_FILE} ] ; then
 		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} Located ${TMP_DIR}/TEST/${TMP_FILE} directory in ${WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
-		$(ls -l ${TMP_DIR}/TEST/${TMP_FILE}/*)
+		FVT_TEST_CASE=$(ls -1 ../ssh/TEST/check-user-ssh.sh | grep -v "\." | grep FVT)
+		echo "\${FVT_TEST_CASE} >${FVT_TEST_CASE}<"
+#		$(ls -1 ${TMP_DIR}/TEST/${TMP_FILE}/*)
 	else
 		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} ${TMP_DIR}/TEST/${TMP_FILE} directory not found in ${WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
 	fi
