@@ -1,12 +1,6 @@
 #!/bin/bash
-#	hooks/post-commit  3.319.786  2019-07-26T19:54:11.639074-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.318  
-#	   testing 
-#	hooks/post-commit  3.318.785  2019-07-26T19:51:58.563857-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.317  
-#	   testing 
-#	hooks/post-commit  3.317.784  2019-07-26T19:44:37.126097-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.316  
-#	   testing 
-#	hooks/post-commit  3.315.782  2019-07-26T19:34:13.157602-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.314  
-#	   testing 
+#	hooks/post-commit  3.320.787  2019-07-26T19:58:47.273386-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.319  
+#	   testing hooks pre-commit and post-commit #57 
 #	hooks/post-commit  3.309.776  2019-07-26T15:15:00.108370-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.308  
 #	   determine how to parse FILE_LIST #57 
 ###
@@ -57,7 +51,7 @@ for FILE_NAME in ${FILE_LIST} ; do
 #		FILE_DIRECTORY=$(sed 's/
 		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${FILE_NAME}/TEST directory not found in ${WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
 	if [ -d ${FILE_NAME}/TEST ] ; then
-		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] Located ${FILE_NAME}/TEST directory in ${WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME}."
+		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] Located ${FILE_NAME}/TEST directory in ${WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
 		$(ls -l ${FILE_NAME}/TEST)
 	fi
 done
