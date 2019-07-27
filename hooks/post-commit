@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.368.836  2019-07-27T16:27:05.647105-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.367  
+#	   testing .git/hooks/pre- post- commit FVT #57 
 #	hooks/post-commit  3.367.835  2019-07-27T16:09:03.566462-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.366  
 #	   testing .git/hooks/pre-post-commit FVT 
 #	hooks/post-commit  3.366.834  2019-07-27T15:52:02.028120-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.365-1-g0b2e3c6  
@@ -14,6 +16,9 @@
 #       Copyright (c) 2019 Bradley Allen
 #       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
 ###
+### production standard 1.0 DEBUG variable
+#       Order of precedence: environment variable, default code
+if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 #       Date and time function ISO 8601
@@ -24,34 +29,39 @@ DATE_STAMP="${DATE_STAMP} (${TEMP})"
 }
 #       Fully qualified domain name FQDN hostname
 LOCALHOST=$(hostname -f)
+
 ###
 POST_WORKING_DIRECTORY=$(git rev-parse --show-toplevel)
 #  >>>	How do I know if there is a directory and file '.../hooks/COMMIT_FILE_LIST'  else exit 
 POST_COMMIT_FILES=$(cat "${POST_WORKING_DIRECTORY}"/hooks/COMMIT_FILE_LIST)
 
-echo -e "\${POST_COMMIT_FILES} >${POST_COMMIT_FILES}<\n\n"
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} ${BOLD}[DEBUG]${NORMAL}  Files being commited hy ${GIT_AUTHOR_NAME} (${USER}): >${POST_COMMIT_FILES}<" 1>&2 ; fi
 
-#       Mark each file
+#       Commited file loop to determine if TEST case directory for commited file
 for POST_FILE_NAME in ${POST_COMMIT_FILES} ; do
 	POST_COMMIT_FILE=$(echo ${POST_FILE_NAME} | rev | cut -d '/' -f 1 | rev)
 	POST_FILE_DIR=$(echo ${POST_FILE_NAME} | cut -d '/' -f 1 )
 	if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} ${BOLD}[DEBUG]${NORMAL}  \${POST_FILE_NAME} >${POST_FILE_NAME}< \${POST_COMMIT_FILE} >${POST_COMMIT_FILE}< \${POST_FILE_DIR} >${POST_FILE_DIR}< \${POST_FILE_DIR}/TEST/\${POST_COMMIT_FILE} >${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}<" 1>&2 ; fi
+	#	if TEST case directory for commited file
 	if [ -d ${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE} ] ; then
 		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO}  ${BOLD}Test case directory found${NORMAL} (${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}) for ${GIT_AUTHOR_NAME} (${USER})."
+		#	Create list of FVT test cases
 		POST_FVT_TEST_CASES=$(ls -1 ${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE} | grep -v "\." | grep FVT)
-		echo "\${POST_FVT_TEST_CASES} >${POST_FVT_TEST_CASES}<"
+		if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} ${BOLD}[DEBUG]${NORMAL}  \${POST_FVT_TEST_CASES} >${POST_FVT_TEST_CASES}<" 1>&2 ; fi
 		### >>>	need an 'if' statement to check if there are any FVT test cases in the TEST directory OR does the for loop just skip all code in loop (Hope this is correct! be neet to test) <<<   ###
-		#       Run FVT test cases
+		#	Loop through test cases
 		for POST_FVT_TEST_CASE in ${POST_FVT_TEST_CASES} ; do
+			#       Run FVT test cases
 			echo "\${POST_WORKING_DIRECTORY}/\${POST_FILE_DIR}/TEST/\${POST_COMMIT_FILE}/\${POST_FVT_TEST_CASE} >${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE}< \${POST_WORKING_DIRECTORY}/${POST_FILE_NAME} >${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}<"
-			echo "\${USER_HOME} >${USER_HOME}<"
 			/home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/TEST/check-user-ssh.sh/FVT-option-help-001 /home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/check-user-ssh.sh
 			echo "Begin test two ------------------->"
 			echo "${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}"
 			echo "Begin test two ------------------->"
 			POST_COMMAND="${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}"
 			echo "${POST_COMMAND}"
-#			eval $(${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME})
+			eval $("${POST_COMMAND}")
+			eval "${POST_COMMAND}"
+			eval ${POST_COMMAND}
 			echo "Begin test three ----------------->"
 			eval $(${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME})
 			exit
