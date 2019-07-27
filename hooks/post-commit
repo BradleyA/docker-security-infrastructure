@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.365.832  2019-07-27T12:37:43.989734-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.364  
+#	   hooks/post-commit cleanup old test code 
 #	hooks/post-commit  3.359.826  2019-07-27T11:15:47.098189-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.358  
 #	   testing .git/hooks/post-commit FVT 
 #	hooks/post-commit  3.358.825  2019-07-27T11:06:46.400886-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.357  
@@ -11,39 +13,21 @@
 #	   testing hooks pre-commit and post-commit #57 
 #	hooks/post-commit  3.309.776  2019-07-26T15:15:00.108370-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.308  
 #	   determine how to parse FILE_LIST #57 
-###
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
 #       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-### production standard 1.0 DEBUG variable
-#       Order of precedence: environment variable, default code
-if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 ###
-
-echo "GIT_AUTHOR_DATE >${GIT_AUTHOR_DATE}<"
-echo "GIT_AUTHOR_NAME >${GIT_AUTHOR_NAME}<"
-echo "GIT_AUTHOR_EMAIL >${GIT_AUTHOR_EMAIL}<"
-echo "GIT_REFLOG_ACTION >${GIT_REFLOG_ACTION}<"
-echo "GIT_INDEX_FILE >${GIT_INDEX_FILE}<"
-echo "\$GIT_DIR >${GIT_DIR}<"
-echo "\$(git rev-parse --git-dir) >$(git rev-parse --git-dir)<"
-echo "\$(git rev-parse --show-toplevel) >$(git rev-parse --show-toplevel)<"
-echo "pwd >$(pwd)<"
-echo "GIT_WORK_TREE >${GIT_WORK_TREE}<"
-hook="$(git rev-parse --git-path hooks/post-commit)"
-echo "hook >${hook}<"
-
+BOLD=$(tput -Txterm bold)
+NORMAL=$(tput -Txterm sgr0)
 #       Date and time function ISO 8601
 get_date_stamp() {
 DATE_STAMP=$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
 TEMP=$(date +%Z)
 DATE_STAMP="${DATE_STAMP} (${TEMP})"
 }
-
 #       Fully qualified domain name FQDN hostname
 LOCALHOST=$(hostname -f)
-
 ###
 POST_WORKING_DIRECTORY=$(git rev-parse --show-toplevel)
 POST_FILE_LIST=$(cat "${POST_WORKING_DIRECTORY}"/hooks/FILE_LIST)
@@ -59,7 +43,6 @@ for POST_FILE_NAME in ${POST_FILE_LIST} ; do
 	POST_TMP_DIR=$(echo ${POST_FILE_NAME} | cut -d '/' -f 1 )
 	echo "\${POST_TMP_DIR} >${POST_TMP_DIR}<"
 	echo "\${POST_TMP_DIR}/TEST/\${POST_TMP_FILE} >${POST_TMP_DIR}/TEST/${POST_TMP_FILE}<"
-
 	if [ -d ${POST_TMP_DIR}/TEST/${POST_TMP_FILE} ] ; then
 		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} Located ${POST_TMP_DIR}/TEST/${POST_TMP_FILE} directory in ${POST_WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
 		POST_FVT_TEST_CASES=$(ls -1 ${POST_TMP_DIR}/TEST/${POST_TMP_FILE} | grep -v "\." | grep FVT)
