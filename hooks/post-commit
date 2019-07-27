@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.340.807  2019-07-26T21:53:59.345580-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.339  
+#	   testing post-commit FVT 
 #	hooks/post-commit  3.339.806  2019-07-26T21:50:28.487667-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.338  
 #	   testing post-commit FVT 
 #	hooks/post-commit  3.338.805  2019-07-26T21:47:54.400230-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.337  
@@ -79,6 +81,7 @@ for FILE_NAME in ${FILE_LIST} ; do
 		### >>>	need an if to check is three are FVT test cases <<<   ###
 		#       Run FVT test cases
 		for FVT_TEST_CASE in ${FVT_TEST_CASES} ; do
+			echo "\${TMP_DIR}/TEST/${TMP_FILE}/${FVT_TEST_CASE} >${TMP_DIR}/TEST/${TMP_FILE}/${FVT_TEST_CASE}< \${WORKING_DIRECTORY}/${FILE_NAME} >${WORKING_DIRECTORY}/${FILE_NAME}<"
 			$(${TMP_DIR}/TEST/${TMP_FILE}/${FVT_TEST_CASE} ${WORKING_DIRECTORY}/${FILE_NAME})
 		done
 	else
