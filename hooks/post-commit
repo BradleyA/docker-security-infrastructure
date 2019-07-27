@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.318.785  2019-07-26T19:51:58.563857-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.317  
+#	   testing 
 #	hooks/post-commit  3.317.784  2019-07-26T19:44:37.126097-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.316  
 #	   testing 
 #	hooks/post-commit  3.315.782  2019-07-26T19:34:13.157602-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.314  
@@ -44,18 +46,16 @@ DATE_STAMP="${DATE_STAMP} (${TEMP})"
 LOCALHOST=$(hostname -f)
 ###
 WORKING_DIRECTORY=$(git rev-parse --show-toplevel)
-set -x
 FILE_LIST=$(cat "${WORKING_DIRECTORY}"/hooks/FILE_LIST)
-set +x
 
 echo "\${FILE_LIST} >${FILE_LIST}<"
-echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] AAAAA Create ${WORKING_DIRECTORY}/hooks/FILE_LIST file of files that are being commited by ${GIT_AUTHOR_NAME}."
+
 #       Mark each file
 for FILE_NAME in ${FILE_LIST} ; do
 #		FILE_DIRECTORY=$(sed 's/
-		echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] xxxxx Create ${WORKING_DIRECTORY}/hooks/FILE_LIST file of files that are being commited by ${GIT_AUTHOR_NAME}."
+		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${FILE_NAME}/TEST directory not found in ${WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME}."
 	if [ -d ${FILE_NAME}/TEST ] ; then
-		echo ">>><<<>>><<"
-		echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] yyyyy Create ${WORKING_DIRECTORY}/hooks/FILE_LIST file of files that are being commited by ${GIT_AUTHOR_NAME}."
+		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] Located ${FILE_NAME}/TEST directory in ${WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME}."
+		$(ls -l ${FILE_NAME}/TEST)
 	fi
 done
