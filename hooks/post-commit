@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.316.783  2019-07-26T19:38:34.812509-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.315  
+#	   testing 
 #	hooks/post-commit  3.315.782  2019-07-26T19:34:13.157602-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.314  
 #	   testing 
 #	hooks/post-commit  3.309.776  2019-07-26T15:15:00.108370-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.308  
@@ -43,7 +45,7 @@ LOCALHOST=$(hostname -f)
 ###
 WORKING_DIRECTORY=$(git rev-parse --show-toplevel)
 set -x
-cat "${WORKING_DIRECTORY}"/hooks/FILE_LIST > FILE_LIST
+cat "${WORKING_DIRECTORY}"/hooks/FILE_LIST | FILE_LIST
 set +x
 
 echo "\${FILE_LIST} >${FILE_LIST}<"
