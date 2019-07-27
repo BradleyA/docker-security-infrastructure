@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/pre-commit  3.371.839  2019-07-27T16:46:28.845919-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.370  
+#	   testing .git/hooks/pre-commit 
 #	hooks/pre-commit  3.370.838  2019-07-27T16:42:23.978542-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.369  
 #	   testing .git/hooks/pre-commit 
 #	hooks/pre-commit  3.367.835  2019-07-27T16:09:08.644492-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.366  
@@ -28,5 +30,5 @@ LOCALHOST=$(hostname -f)
 ###
 WORKING_DIRECTORY=$(git rev-parse --show-toplevel)
 ### >>>	do  ${WORKING_DIRECTORY}/hooks/ exist and is it writable I hope so is not go enough .. <<<
-echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO}  ${BOLD}Creating ${WORKING_DIRECTORY}/hooks/COMMIT_FILE_LIST file of files being commited${NORMAL} for ${GIT_AUTHOR_NAME} (${USER})."
+echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO}  ${BOLD}Creating ${WORKING_DIRECTORY}/hooks/COMMIT_FILE_LIST file with files being commited${NORMAL} for ${GIT_AUTHOR_NAME} (${USER})."
 git status -s --untracked-files=no | grep -v '^D  ' | awk '{print $2}' > "${WORKING_DIRECTORY}"/hooks/COMMIT_FILE_LIST
