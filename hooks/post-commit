@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.322.789  2019-07-26T20:19:21.948873-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.321  
+#	   testing 
 #	hooks/post-commit  3.321.788  2019-07-26T20:16:56.435510-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.320  
 #	   testing format of file name 
 #	hooks/post-commit  3.320.787  2019-07-26T19:58:47.273386-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.319  
@@ -46,14 +48,15 @@ LOCALHOST=$(hostname -f)
 WORKING_DIRECTORY=$(git rev-parse --show-toplevel)
 FILE_LIST=$(cat "${WORKING_DIRECTORY}"/hooks/FILE_LIST)
 
-echo "\${FILE_LIST} >${FILE_LIST}<"
+echo -e "\${FILE_LIST} >${FILE_LIST}<\n\n"
 
-ssh/check-user-ssh.sh/TEST
+#	wrong ssh/check-user-ssh.sh/TEST
 #       Mark each file
 for FILE_NAME in ${FILE_LIST} ; do
+	echo "\${FILE_NAME} >${FILE_NAME}<"
 	if [ sed 's/\///' ] ; then 
 		FILE_TMP=$(echo ${FILE_NAME} | rev | cut -d '/' -f 1 | rev)
-		echo i"\${FILE_TMP} >${FILE_TMP}<"
+		echo "\${FILE_TMP} >${FILE_TMP}<"
 	fi
 #		FILE_DIRECTORY=$(sed 's/
 		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${FILE_NAME}/TEST directory not found in ${WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
