@@ -1,0 +1,17 @@
+#!/bin/bash
+#	ssh/TEST/check-user-ssh.sh/FVT-option-help-001  3.360.827  2019-07-27T11:52:07.889394-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.359  
+#	   correct the order of $0 $1 in the output statements 
+
+echo $0 $1
+#
+$1 --help > $0.out
+#
+diff -y $0.expected $0.out
+RETURN_CODE=$?
+if [ ${RETURN_CODE} -eq 0 ] ; then
+	echo "$0 $1 ${RETURN_CODE} - No difference with expected output - PASS"
+elif [ ${RETURN_CODE} -eq 1 ] ; then
+	echo "$0 $1 ${RETURN_CODE} - Differences with expected output - FAIL"
+else 
+	echo "$0 $1 ${RETURN_CODE} - Test script ERROR - FAIL"
+fi
