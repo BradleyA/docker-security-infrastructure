@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/pre-commit  3.367.835  2019-07-27T16:09:08.644492-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.366  
+#	   testing .git/hooks/pre-post-commit FVT 
 #	hooks/pre-commit  3.366.834  2019-07-27T15:52:06.518083-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.365-1-g0b2e3c6  
 #	   testing .git/hooks/pre/post-commti 
 #	hooks/pre-commit  3.363.830  2019-07-27T12:23:11.837447-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.362  
@@ -6,7 +8,7 @@
 #	hooks/pre-commit  3.312.779  2019-07-26T15:28:59.979867-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.311  
 #	   pre-commit add logging information to output / corrected incident with function not being call #57 
 #	hooks/pre-commit  3.307.774  2019-07-26T14:59:48.012839-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.306  
-#	   completed creating ${WORKING_DIRECTORY}/hooks/FILE_LIST of commited files pre commit #57 
+#	   completed creating ${WORKING_DIRECTORY}/hooks/COMMIT_FILE_LIST of commited files pre commit #57 
 ###
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
@@ -23,5 +25,6 @@ DATE_STAMP="${DATE_STAMP} (${TEMP})"
 LOCALHOST=$(hostname -f)
 ###
 WORKING_DIRECTORY=$(git rev-parse --show-toplevel)
-echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} ${BOLD}Create ${WORKING_DIRECTORY}/hooks/FILE_LIST file of files that are being commited by ${GIT_AUTHOR_NAME}.${NORMAL}"
-git status -s --untracked-files=no | grep -v '^D  ' | awk '{print $2}' > "${WORKING_DIRECTORY}"/hooks/FILE_LIST
+### >>>	do  ${WORKING_DIRECTORY}/hooks/ exist and is it writable I hope so is not go enough .. <<<
+echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} ${BOLD}Create ${WORKING_DIRECTORY}/hooks/COMMIT_FILE_LIST file of files being commited by ${GIT_AUTHOR_NAME}.${NORMAL}"
+git status -s --untracked-files=no | grep -v '^D  ' | awk '{print $2}' > "${WORKING_DIRECTORY}"/hooks/COMMIT_FILE_LIST
