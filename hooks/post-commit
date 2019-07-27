@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.373.841  2019-07-27T16:51:05.004313-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.372  
+#	   testing .git/hooks/pre- post- commit FVT 
 #	hooks/post-commit  3.369.837  2019-07-27T16:37:22.167531-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.368  
 #	   testing .git/hooks/post-commit FVT 
 #	hooks/post-commit  3.368.836  2019-07-27T16:27:05.647105-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.367  
@@ -55,6 +57,7 @@ for POST_FILE_NAME in ${POST_COMMIT_FILES} ; do
 		for POST_FVT_TEST_CASE in ${POST_FVT_TEST_CASES} ; do
 			#       Run FVT test cases
 			echo "\${POST_WORKING_DIRECTORY}/\${POST_FILE_DIR}/TEST/\${POST_COMMIT_FILE}/\${POST_FVT_TEST_CASE} >${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE}< \${POST_WORKING_DIRECTORY}/${POST_FILE_NAME} >${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}<"
+			echo "Begin test DONT count ------------------->"
 			/home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/TEST/check-user-ssh.sh/FVT-option-help-001 /home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/check-user-ssh.sh
 			echo "Begin test two ------------------->"
 			echo "${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}"
@@ -63,11 +66,11 @@ for POST_FILE_NAME in ${POST_COMMIT_FILES} ; do
 			echo "${POST_COMMAND}"
 			echo "Begin test four ------------------->"
 			eval $("${POST_COMMAND}")
-			echo "Begin test six ------------------->"
+			echo "Begin test five ------------------->"
 			eval "${POST_COMMAND}"
-			echo "Begin test seven ------------------->"
+			echo "Begin test six ------------------->"
 			eval ${POST_COMMAND}
-			echo "Begin test eight ----------------->"
+			echo "Begin test seven ----------------->"
 			eval $(${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME})
 			exit
 		done
