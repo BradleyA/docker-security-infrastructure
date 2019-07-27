@@ -1,14 +1,8 @@
 #!/bin/bash
+#	hooks/post-commit  3.366.834  2019-07-27T15:52:02.028120-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.365-1-g0b2e3c6  
+#	   testing .git/hooks/pre/post-commti 
 #	hooks/post-commit  3.365.832  2019-07-27T12:37:43.989734-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.364  
 #	   hooks/post-commit cleanup old test code 
-#	hooks/post-commit  3.359.826  2019-07-27T11:15:47.098189-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.358  
-#	   testing .git/hooks/post-commit FVT 
-#	hooks/post-commit  3.358.825  2019-07-27T11:06:46.400886-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.357  
-#	   testing .git/hooks/post-commit FVT 
-#	hooks/post-commit  3.357.824  2019-07-27T10:58:34.614954-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.356  
-#	   testing .git/hooks/post-commit FVT 
-#	hooks/post-commit  3.343.810  2019-07-26T22:12:14.587205-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.342  
-#	   testing post-commit .git/hook for FVT 
 #	hooks/post-commit  3.320.787  2019-07-26T19:58:47.273386-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.319  
 #	   testing hooks pre-commit and post-commit #57 
 #	hooks/post-commit  3.309.776  2019-07-26T15:15:00.108370-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.308  
@@ -30,40 +24,37 @@ DATE_STAMP="${DATE_STAMP} (${TEMP})"
 LOCALHOST=$(hostname -f)
 ###
 POST_WORKING_DIRECTORY=$(git rev-parse --show-toplevel)
+#  >>>	How do I know if there is a directory and file '.../hooks/FILE_LIST'  else exit 
 POST_FILE_LIST=$(cat "${POST_WORKING_DIRECTORY}"/hooks/FILE_LIST)
 
 echo -e "\${POST_FILE_LIST} >${POST_FILE_LIST}<\n\n"
 
-#	wrong ssh/check-user-ssh.sh/TEST
 #       Mark each file
 for POST_FILE_NAME in ${POST_FILE_LIST} ; do
-	echo "\${POST_FILE_NAME} >${POST_FILE_NAME}<"
-	POST_TMP_FILE=$(echo ${POST_FILE_NAME} | rev | cut -d '/' -f 1 | rev)
-	echo "\${POST_TMP_FILE} >${POST_TMP_FILE}<"
-	POST_TMP_DIR=$(echo ${POST_FILE_NAME} | cut -d '/' -f 1 )
-	echo "\${POST_TMP_DIR} >${POST_TMP_DIR}<"
-	echo "\${POST_TMP_DIR}/TEST/\${POST_TMP_FILE} >${POST_TMP_DIR}/TEST/${POST_TMP_FILE}<"
-	if [ -d ${POST_TMP_DIR}/TEST/${POST_TMP_FILE} ] ; then
-		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} Located ${POST_TMP_DIR}/TEST/${POST_TMP_FILE} directory in ${POST_WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
-		POST_FVT_TEST_CASES=$(ls -1 ${POST_TMP_DIR}/TEST/${POST_TMP_FILE} | grep -v "\." | grep FVT)
+	POST_COMMIT_FILE=$(echo ${POST_FILE_NAME} | rev | cut -d '/' -f 1 | rev)
+	POST_FILE_DIR=$(echo ${POST_FILE_NAME} | cut -d '/' -f 1 )
+	if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} ${BOLD}[DEBUG]${NORMAL}  \${POST_FILE_NAME} >${POST_FILE_NAME}< \${POST_COMMIT_FILE} >${POST_COMMIT_FILE}< \${POST_FILE_DIR} >${POST_FILE_DIR}< \${POST_FILE_DIR}/TEST/\${POST_COMMIT_FILE} >${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}<" 1>&2 ; fi
+	if [ -d ${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE} ] ; then
+		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO}  ${BOLD}Test case directory found${NORMAL} (${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}) for ${GIT_AUTHOR_NAME} (${USER})."
+		POST_FVT_TEST_CASES=$(ls -1 ${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE} | grep -v "\." | grep FVT)
 		echo "\${POST_FVT_TEST_CASES} >${POST_FVT_TEST_CASES}<"
-		### >>>	need an if to check is three are FVT test cases <<<   ###
+		### >>>	need an 'if' statement to check if there are any FVT test cases in the TEST directory OR does the for loop just skip all code in loop (Hope this is correct! be neet to test) <<<   ###
 		#       Run FVT test cases
 		for POST_FVT_TEST_CASE in ${POST_FVT_TEST_CASES} ; do
-			echo "\${POST_WORKING_DIRECTORY}/\${POST_TMP_DIR}/TEST/\${POST_TMP_FILE}/\${POST_FVT_TEST_CASE} >${POST_WORKING_DIRECTORY}/${POST_TMP_DIR}/TEST/${POST_TMP_FILE}/${POST_FVT_TEST_CASE}< \${POST_WORKING_DIRECTORY}/${POST_FILE_NAME} >${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}<"
+			echo "\${POST_WORKING_DIRECTORY}/\${POST_FILE_DIR}/TEST/\${POST_COMMIT_FILE}/\${POST_FVT_TEST_CASE} >${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE}< \${POST_WORKING_DIRECTORY}/${POST_FILE_NAME} >${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}<"
 			echo "\${USER_HOME} >${USER_HOME}<"
 			/home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/TEST/check-user-ssh.sh/FVT-option-help-001 /home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/check-user-ssh.sh
-			echo "DONE -------------------->"
-			echo "${POST_WORKING_DIRECTORY}/${POST_TMP_DIR}/TEST/${POST_TMP_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}"
-			echo "Begin test two ------->"
-			POST_COMMAND="${POST_WORKING_DIRECTORY}/${POST_TMP_DIR}/TEST/${POST_TMP_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}"
+			echo "Begin test two ------------------->"
+			echo "${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}"
+			echo "Begin test two ------------------->"
+			POST_COMMAND="${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}"
 			echo "${POST_COMMAND}"
-#			eval $(${POST_WORKING_DIRECTORY}/${POST_TMP_DIR}/TEST/${POST_TMP_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME})
+#			eval $(${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME})
+			echo "Begin test three ----------------->"
+			eval $(${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME})
 			exit
-			echo "><><><><><><><><><><><<"
-			eval $(${POST_WORKING_DIRECTORY}/${POST_TMP_DIR}/TEST/${POST_TMP_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME})
 		done
 	else
-		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} ${POST_TMP_DIR}/TEST/${POST_TMP_FILE} directory not found in ${POST_WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
+		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO}  ${BOLD}No test case directory found${NORMAL} in ${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}, for ${GIT_AUTHOR_NAME} (${USER})."
 	fi
 done
