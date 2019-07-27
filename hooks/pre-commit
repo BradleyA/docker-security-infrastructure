@@ -1,12 +1,8 @@
 #!/bin/bash
+#	hooks/pre-commit  3.363.830  2019-07-27T12:23:11.837447-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.362  
+#	   add BOLD to putout 
 #	hooks/pre-commit  3.312.779  2019-07-26T15:28:59.979867-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.311  
 #	   pre-commit add logging information to output / corrected incident with function not being call #57 
-#	hooks/pre-commit  3.311.778  2019-07-26T15:24:54.721125-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.310  
-#	   pre-commit add logging information to output #57 
-#	hooks/pre-commit  3.310.777  2019-07-26T15:19:17.281992-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.309  
-#	   add script name and PID to echo statement #57 
-#	hooks/pre-commit  3.308.775  2019-07-26T15:04:20.488675-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.307  
-#	   added commiter to message when run #57 
 #	hooks/pre-commit  3.307.774  2019-07-26T14:59:48.012839-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.306  
 #	   completed creating ${WORKING_DIRECTORY}/hooks/FILE_LIST of commited files pre commit #57 
 ###
@@ -15,6 +11,8 @@
 #       Copyright (c) 2019 Bradley Allen
 #       MIT License is in the online DOCUMENTATION
 ###
+BOLD=$(tput -Txterm bold)
+NORMAL=$(tput -Txterm sgr0)
 #       Date and time function ISO 8601
 DATE_STAMP=$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
 TEMP=$(date +%Z)
@@ -23,5 +21,5 @@ DATE_STAMP="${DATE_STAMP} (${TEMP})"
 LOCALHOST=$(hostname -f)
 ###
 WORKING_DIRECTORY=$(git rev-parse --show-toplevel)
-echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] Create ${WORKING_DIRECTORY}/hooks/FILE_LIST file of files that are being commited by ${GIT_AUTHOR_NAME}."
+echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${BOLD}Create ${WORKING_DIRECTORY}/hooks/FILE_LIST file of files that are being commited by ${GIT_AUTHOR_NAME}.${NORMAL}"
 git status -s --untracked-files=no | grep -v '^D  ' | awk '{print $2}' > "${WORKING_DIRECTORY}"/hooks/FILE_LIST
