@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.375.843  2019-07-27T17:00:19.052496-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.374  
+#	   testing .git/hooks/pre- post- commit FVT 
 #	hooks/post-commit  3.374.842  2019-07-27T16:57:27.081338-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.373  
 #	   testing .git/hooks/pre- post- commit FVT #57 
 #	hooks/post-commit  3.309.776  2019-07-26T15:15:00.108370-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.308  
@@ -45,8 +47,8 @@ for POST_FILE_NAME in ${POST_COMMIT_FILES} ; do
 		for POST_FVT_TEST_CASE in ${POST_FVT_TEST_CASES} ; do
 			#       Run FVT test cases
 			echo "\${POST_WORKING_DIRECTORY}/\${POST_FILE_DIR}/TEST/\${POST_COMMIT_FILE}/\${POST_FVT_TEST_CASE} >${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE}< \${POST_WORKING_DIRECTORY}/${POST_FILE_NAME} >${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}<"
-			echo "Begin test DONT count ------------------->"
-			/home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/TEST/check-user-ssh.sh/FVT-option-help-001 /home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/check-user-ssh.sh
+			#	echo "Begin test DONT count ------------------->"
+			#	/home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/TEST/check-user-ssh.sh/FVT-option-help-001 /home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/check-user-ssh.sh
 			#	echo "Begin test two ------------------->"
 			#	echo "${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}"
 			#	echo "Begin test three ------------------->"
@@ -56,8 +58,8 @@ for POST_FILE_NAME in ${POST_COMMIT_FILES} ; do
 			#	eval $("${POST_COMMAND}")
 			echo "Begin test five ------------------->"
 			eval "${POST_COMMAND}"
-			echo "Begin test six ------------------->"
-			eval ${POST_COMMAND}
+			#	echo "Begin test six ------------------->"
+			#	eval ${POST_COMMAND}
 			#	echo "Begin test seven ----------------->"
 			#	eval $(${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME})
 			exit
