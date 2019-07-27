@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.325.792  2019-07-26T20:26:29.478105-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.324  
+#	   testing 
 #	hooks/post-commit  3.324.791  2019-07-26T20:25:19.218220-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.323  
 #	   testing 
 #	hooks/post-commit  3.323.790  2019-07-26T20:20:19.442319-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.322  
@@ -64,10 +66,10 @@ for FILE_NAME in ${FILE_LIST} ; do
 	echo "\${FILE_NAME} >${FILE_NAME}<"
 	FILE_TMP=$(echo ${FILE_NAME} | rev | cut -d '/' -f 1 | rev)
 	echo "\${FILE_TMP} >${FILE_TMP}<"
-	if [[ sed 's/\///' ]] ; then 
-		FILE_TMP=$(echo ${FILE_NAME} | rev | cut -d '/' -f 1 | rev)
-		echo "\${FILE_TMP} >${FILE_TMP}<"
-	fi
+#	if [[ sed 's/\///' ]] ; then 
+#		FILE_TMP=$(echo ${FILE_NAME} | rev | cut -d '/' -f 1 | rev)
+#		echo "\${FILE_TMP} >${FILE_TMP}<"
+#	fi
 #		FILE_DIRECTORY=$(sed 's/
 		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${FILE_NAME}/TEST directory not found in ${WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
 	if [ -d ${FILE_NAME}/TEST ] ; then
