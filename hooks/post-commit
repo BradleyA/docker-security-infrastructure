@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.323.790  2019-07-26T20:20:19.442319-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.322  
+#	   testing 
 #	hooks/post-commit  3.322.789  2019-07-26T20:19:21.948873-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.321  
 #	   testing 
 #	hooks/post-commit  3.321.788  2019-07-26T20:16:56.435510-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.320  
@@ -54,7 +56,7 @@ echo -e "\${FILE_LIST} >${FILE_LIST}<\n\n"
 #       Mark each file
 for FILE_NAME in ${FILE_LIST} ; do
 	echo "\${FILE_NAME} >${FILE_NAME}<"
-	if [ sed 's/\///' ] ; then 
+	if [[ sed 's/\///' ]] ; then 
 		FILE_TMP=$(echo ${FILE_NAME} | rev | cut -d '/' -f 1 | rev)
 		echo "\${FILE_TMP} >${FILE_TMP}<"
 	fi
