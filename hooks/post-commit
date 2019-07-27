@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.369.837  2019-07-27T16:37:22.167531-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.368  
+#	   testing .git/hooks/post-commit FVT 
 #	hooks/post-commit  3.368.836  2019-07-27T16:27:05.647105-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.367  
 #	   testing .git/hooks/pre- post- commit FVT #57 
 #	hooks/post-commit  3.367.835  2019-07-27T16:09:03.566462-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.366  
@@ -56,13 +58,16 @@ for POST_FILE_NAME in ${POST_COMMIT_FILES} ; do
 			/home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/TEST/check-user-ssh.sh/FVT-option-help-001 /home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/check-user-ssh.sh
 			echo "Begin test two ------------------->"
 			echo "${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}"
-			echo "Begin test two ------------------->"
+			echo "Begin test three ------------------->"
 			POST_COMMAND="${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}"
 			echo "${POST_COMMAND}"
+			echo "Begin test four ------------------->"
 			eval $("${POST_COMMAND}")
+			echo "Begin test six ------------------->"
 			eval "${POST_COMMAND}"
+			echo "Begin test seven ------------------->"
 			eval ${POST_COMMAND}
-			echo "Begin test three ----------------->"
+			echo "Begin test eight ----------------->"
 			eval $(${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME})
 			exit
 		done
