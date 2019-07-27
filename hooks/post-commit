@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.337.804  2019-07-26T21:44:10.886698-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.336  
+#	   testing post-commit FVT 
 #	hooks/post-commit  3.336.803  2019-07-26T21:32:34.613725-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.335  
 #	   testing post-commit hook 
 #	hooks/post-commit  3.335.802  2019-07-26T21:30:22.866945-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.334  
@@ -68,9 +70,13 @@ for FILE_NAME in ${FILE_LIST} ; do
 
 	if [ -d ${TMP_DIR}/TEST/${TMP_FILE} ] ; then
 		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} Located ${TMP_DIR}/TEST/${TMP_FILE} directory in ${WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
-		FVT_TEST_CASE=$(ls -1 ${TMP_DIR}/TEST/${TMP_FILE} | grep -v "\." | grep FVT)
-		echo "\${FVT_TEST_CASE} >${FVT_TEST_CASE}<"
-#		$(ls -1 ${TMP_DIR}/TEST/${TMP_FILE}/*)
+		FVT_TEST_CASES=$(ls -1 ${TMP_DIR}/TEST/${TMP_FILE} | grep -v "\." | grep FVT)
+		echo "\${FVT_TEST_CASES} >${FVT_TEST_CASES}<"
+		### >>>	need an if to check is three are FVT test cases <<<   ###
+		#       Run FVT test cases
+		for FVT_TEST_CASE in ${FVT_TEST_CASES} ; do
+			$(${TMP_DIR}/TEST/${TMP_FILE}/${FVT_TEST_CASE})
+		done
 	else
 		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} ${TMP_DIR}/TEST/${TMP_FILE} directory not found in ${WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
 	fi
