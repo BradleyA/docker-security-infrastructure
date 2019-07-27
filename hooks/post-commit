@@ -1,11 +1,5 @@
 #!/bin/bash
-#	hooks/post-commit  3.348.815  2019-07-26T22:45:17.343797-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.347  
-#	   testing post-commit .git/hook for FVT 
-#	hooks/post-commit  3.347.814  2019-07-26T22:42:26.201714-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.346  
-#	   testing post-commit .git/hook for FVT 
-#	hooks/post-commit  3.346.813  2019-07-26T22:39:09.699773-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.345  
-#	   testing post-commit .git/hook for FVT 
-#	hooks/post-commit  3.345.812  2019-07-26T22:24:32.460213-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.344  
+#	hooks/post-commit  3.349.816  2019-07-26T22:53:31.224341-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.348  
 #	   testing post-commit .git/hook for FVT 
 #	hooks/post-commit  3.343.810  2019-07-26T22:12:14.587205-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.342  
 #	   testing post-commit .git/hook for FVT 
@@ -51,35 +45,35 @@ DATE_STAMP="${DATE_STAMP} (${TEMP})"
 LOCALHOST=$(hostname -f)
 
 ###
-WORKING_DIRECTORY=$(git rev-parse --show-toplevel)
-FILE_LIST=$(cat "${WORKING_DIRECTORY}"/hooks/FILE_LIST)
+POST_WORKING_DIRECTORY=$(git rev-parse --show-toplevel)
+POST_FILE_LIST=$(cat "${POST_WORKING_DIRECTORY}"/hooks/FILE_LIST)
 
-echo -e "\${FILE_LIST} >${FILE_LIST}<\n\n"
+echo -e "\${POST_FILE_LIST} >${POST_FILE_LIST}<\n\n"
 
 #	wrong ssh/check-user-ssh.sh/TEST
 #       Mark each file
-for FILE_NAME in ${FILE_LIST} ; do
-	echo "\${FILE_NAME} >${FILE_NAME}<"
-	TMP_FILE=$(echo ${FILE_NAME} | rev | cut -d '/' -f 1 | rev)
-	echo "\${TMP_FILE} >${TMP_FILE}<"
-	TMP_DIR=$(echo ${FILE_NAME} | cut -d '/' -f 1 )
-	echo "\${TMP_DIR} >${TMP_DIR}<"
-	echo "\${TMP_DIR}/TEST/\${TMP_FILE} >${TMP_DIR}/TEST/${TMP_FILE}<"
+for POST_FILE_NAME in ${POST_FILE_LIST} ; do
+	echo "\${POST_FILE_NAME} >${POST_FILE_NAME}<"
+	POST_TMP_FILE=$(echo ${POST_FILE_NAME} | rev | cut -d '/' -f 1 | rev)
+	echo "\${POST_TMP_FILE} >${POST_TMP_FILE}<"
+	POST_TMP_DIR=$(echo ${POST_FILE_NAME} | cut -d '/' -f 1 )
+	echo "\${POST_TMP_DIR} >${POST_TMP_DIR}<"
+	echo "\${POST_TMP_DIR}/TEST/\${POST_TMP_FILE} >${POST_TMP_DIR}/TEST/${POST_TMP_FILE}<"
 
-	if [ -d ${TMP_DIR}/TEST/${TMP_FILE} ] ; then
-		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} Located ${TMP_DIR}/TEST/${TMP_FILE} directory in ${WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
-		FVT_TEST_CASES=$(ls -1 ${TMP_DIR}/TEST/${TMP_FILE} | grep -v "\." | grep FVT)
-		echo "\${FVT_TEST_CASES} >${FVT_TEST_CASES}<"
+	if [ -d ${POST_TMP_DIR}/TEST/${POST_TMP_FILE} ] ; then
+		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} Located ${POST_TMP_DIR}/TEST/${POST_TMP_FILE} directory in ${POST_WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
+		POST_FVT_TEST_CASES=$(ls -1 ${POST_TMP_DIR}/TEST/${POST_TMP_FILE} | grep -v "\." | grep FVT)
+		echo "\${POST_FVT_TEST_CASES} >${POST_FVT_TEST_CASES}<"
 		### >>>	need an if to check is three are FVT test cases <<<   ###
 		#       Run FVT test cases
-		for FVT_TEST_CASE in ${FVT_TEST_CASES} ; do
-			echo "\${WORKING_DIRECTORY}/\${TMP_DIR}/TEST/\${TMP_FILE}/\${FVT_TEST_CASE} >${WORKING_DIRECTORY}/${TMP_DIR}/TEST/${TMP_FILE}/${FVT_TEST_CASE}< \${WORKING_DIRECTORY}/${FILE_NAME} >${WORKING_DIRECTORY}/${FILE_NAME}<"
+		for POST_FVT_TEST_CASE in ${POST_FVT_TEST_CASES} ; do
+			echo "\${POST_WORKING_DIRECTORY}/\${POST_TMP_DIR}/TEST/\${POST_TMP_FILE}/\${POST_FVT_TEST_CASE} >${POST_WORKING_DIRECTORY}/${POST_TMP_DIR}/TEST/${POST_TMP_FILE}/${POST_FVT_TEST_CASE}< \${POST_WORKING_DIRECTORY}/${POST_FILE_NAME} >${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}<"
 			echo "\${USER_HOME} >${USER_HOME}<"
 			eval $(/home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/check-user-ssh.sh /home/uadmin/github/BradleyA/docker-security-infrastructure/ssh/TEST/check-user-ssh.sh/FVT-option-help-001)
 			echo "><><><><><><><><><><><<"
-			eval $(${WORKING_DIRECTORY}/${TMP_DIR}/TEST/${TMP_FILE}/${FVT_TEST_CASE} ${WORKING_DIRECTORY}/${FILE_NAME})
+			eval $(${POST_WORKING_DIRECTORY}/${POST_TMP_DIR}/TEST/${POST_TMP_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME})
 		done
 	else
-		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} ${TMP_DIR}/TEST/${TMP_FILE} directory not found in ${WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
+		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} ${POST_TMP_DIR}/TEST/${POST_TMP_FILE} directory not found in ${POST_WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
 	fi
 done
