@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.333.800  2019-07-26T21:13:36.228508-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.332  
+#	   testing post-commit 
 #	hooks/post-commit  3.332.799  2019-07-26T21:09:18.633178-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.331  
 #	   testing post-commit 
 #	hooks/post-commit  3.320.787  2019-07-26T19:58:47.273386-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.319  
@@ -63,9 +65,9 @@ for FILE_NAME in ${FILE_LIST} ; do
 	echo "\${TMP_DIR}/TEST/\${TMP_FILE} >${TMP_DIR}/TEST/${TMP_FILE}<"
 
 	if [ -d ${TMP_DIR}/TEST/${TMP_FILE} ] ; then
-		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] Located ${TMP_DIR}/TEST/${TMP_FILE} directory in ${WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
-		$(ls -l ${FILE_NAME}/TEST)
+		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} Located ${TMP_DIR}/TEST/${TMP_FILE} directory in ${WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
+		$(ls -l ${TMP_DIR}/TEST/${TMP_FILE})
 	else
-		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${TMP_DIR}/TEST/${TMP_FILE} directory not found in ${WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
+		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO} ${TMP_DIR}/TEST/${TMP_FILE} directory not found in ${WORKING_DIRECTORY} for ${GIT_AUTHOR_NAME} (${USER})."
 	fi
 done
