@@ -1,8 +1,6 @@
 #!/bin/bash
-#	hooks/pre-commit  3.379.847  2019-07-27T17:31:31.759447-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.378  
-#	   testing .git/hooks/pre-commit 
-#	hooks/pre-commit  3.312.779  2019-07-26T15:28:59.979867-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.311  
-#	   pre-commit add logging information to output / corrected incident with function not being call #57 
+#	hooks/pre-commit  3.382.850  2019-07-27T18:48:20.830026-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.381  
+#	   testing .git/hooks/pre- post- commit and FVT-option-help- files 
 ###
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
@@ -21,7 +19,7 @@ DATE_STAMP="${DATE_STAMP} (${TEMP})"
 LOCALHOST=$(hostname -f)
 
 ###
-WORKING_DIRECTORY=$(git rev-parse --show-toplevel)
-if [ ! -d "${WORKING_DIRECTORY}/hooks" ] ; then mkdir "${WORKING_DIRECTORY}/hooks" ; fi
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO}  ${BOLD}Creating ${WORKING_DIRECTORY}/hooks/COMMIT_FILE_LIST file with files being commited${NORMAL} for ${GIT_AUTHOR_NAME} (${USER})." 1>&2 ; fi
-git status -s --untracked-files=no | grep -v '^D  ' | awk '{print $2}' > "${WORKING_DIRECTORY}"/hooks/COMMIT_FILE_LIST
+PRE_WORKING_DIRECTORY=$(git rev-parse --show-toplevel)
+if [ ! -d "${PRE_WORKING_DIRECTORY}/hooks" ] ; then mkdir "${PRE_WORKING_DIRECTORY}/hooks" ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO}  ${BOLD}Creating ${PRE_WORKING_DIRECTORY}/hooks/COMMIT_FILE_LIST file with files being commited${NORMAL} for ${GIT_AUTHOR_NAME} (${USER})." 1>&2 ; fi
+git status -s --untracked-files=no | grep -v '^D  ' | awk '{print $2}' > "${PRE_WORKING_DIRECTORY}"/hooks/COMMIT_FILE_LIST

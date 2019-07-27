@@ -1,0 +1,22 @@
+#!/bin/bash
+#	ssh/TEST/check-user-ssh.sh/FVT-option-help-002  3.382.850  2019-07-27T18:48:44.900137-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.381  
+#	   testing .git/hooks/pre- post- commit and FVT-option-help- files 
+### production standard 3.0 shellcheck
+### production standard 5.1.160 Copyright
+#       Copyright (c) 2019 Bradley Allen
+#       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+BOLD=$(tput -Txterm bold)
+NORMAL=$(tput -Txterm sgr0)
+###
+
+"${1}" -help > "${0}".out
+#
+diff -y "${0}".expected "${0}".out
+RETURN_CODE=${?}
+if [ ${RETURN_CODE} -eq 0 ] ; then
+        echo "${0} ${1} ${RETURN_CODE} - No difference with expected output - ${BOLD}PASS - PASS${NORMAL}"
+elif [ ${RETURN_CODE} -eq 1 ] ; then
+        echo "${0} ${1} ${RETURN_CODE} - Differences with expected output - ${BOLD}FAIL - FAIL${NORMAL}"
+else
+        echo "${0} ${1} ${RETURN_CODE} - Test script ERROR - ${BOLD}FAIL - FAIL${NORMAL}"
+fi

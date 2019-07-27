@@ -1,10 +1,6 @@
 #!/bin/bash
-#	ssh/TEST/check-user-ssh.sh/FVT-option-help-001  3.378.846  2019-07-27T17:12:19.293053-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.377  
-#	   testing .git/hooks/pre- post- commit Test cases FVT 
-#	ssh/TEST/check-user-ssh.sh/FVT-option-help-001  3.362.829  2019-07-27T12:14:25.434232-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.361  
-#	   ssh/TEST/check-user-ssh.sh/FVT-option-help-001 shellcheck 
-#	ssh/TEST/check-user-ssh.sh/FVT-option-help-001  3.360.827  2019-07-27T11:52:07.889394-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.359  
-#	   correct the order of $0 $1 in the output statements 
+#	ssh/TEST/check-user-ssh.sh/FVT-option-help-001  3.382.850  2019-07-27T18:48:39.968879-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.381  
+#	   testing .git/hooks/pre- post- commit and FVT-option-help- files 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -12,8 +8,7 @@
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ###
-echo "${0} ${1}"
-#
+
 "${1}" --help > "${0}".out
 #
 diff -y "${0}".expected "${0}".out
