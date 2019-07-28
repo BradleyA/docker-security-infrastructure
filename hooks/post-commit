@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.420.892  2019-07-28T09:29:25.863950-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.419  
+#	   testing .git/hooks/pre- post- commit #57 
 #	hooks/post-commit  3.419.891  2019-07-28T09:27:08.643842-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.418  
 #	   testing .git/hooks/pre- post- commit #57 
 #	hooks/post-commit  3.418.890  2019-07-28T09:22:36.120815-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.417  
@@ -34,6 +36,14 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 
 #       Commited file loop to determine if TEST case directory for commited file
 for POST_FILE_NAME in ${POST_COMMIT_FILES} ; do
+	echo    "'####:'##::: ##:::::::'########:'########::'######::'########:"
+	echo    ". ##:: ###:: ##:::::::... ##..:: ##.....::'##... ##:... ##..::"
+	echo    ": ##:: ####: ##:::::::::: ##:::: ##::::::: ##:::..::::: ##::::"
+	echo    ": ##:: ## ## ##:::::::::: ##:::: ######:::. ######::::: ##::::"
+	echo    ": ##:: ##. ####:::::::::: ##:::: ##...:::::..... ##:::: ##::::"
+	echo    ": ##:: ##:. ###:::::::::: ##:::: ##:::::::'##::: ##:::: ##::::"
+	echo    "'####: ##::. ##:::::::::: ##:::: ########:. ######::::: ##::::"
+	echo    "....::..::::..:::::::::::..:::::........:::......::::::..:::::"
 	POST_COMMIT_FILE=$(echo ${POST_FILE_NAME} | rev | cut -d '/' -f 1 | rev)
 	POST_FILE_DIR=$(echo ${POST_FILE_NAME} | cut -d '/' -f 1 )
 	if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${BOLD}[DEBUG]${NORMAL}  \${POST_FILE_NAME} >${POST_FILE_NAME}< \${POST_COMMIT_FILE} >${POST_COMMIT_FILE}< \${POST_FILE_DIR} >${POST_FILE_DIR}< \${POST_FILE_DIR}/TEST/\${POST_COMMIT_FILE} >${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}<" 1>&2 ; fi
@@ -48,14 +58,6 @@ for POST_FILE_NAME in ${POST_COMMIT_FILES} ; do
 		#	Loop through test cases
 		for POST_FVT_TEST_CASE in ${POST_FVT_TEST_CASES} ; do
 			#       Run FVT test cases
-			echo    "'####:'##::: ##:::::::'########:'########::'######::'########:"
-			echo    ". ##:: ###:: ##:::::::... ##..:: ##.....::'##... ##:... ##..::"
-			echo    ": ##:: ####: ##:::::::::: ##:::: ##::::::: ##:::..::::: ##::::"
-			echo    ": ##:: ## ## ##:::::::::: ##:::: ######:::. ######::::: ##::::"
-			echo    ": ##:: ##. ####:::::::::: ##:::: ##...:::::..... ##:::: ##::::"
-			echo    ": ##:: ##:. ###:::::::::: ##:::: ##:::::::'##::: ##:::: ##::::"
-			echo    "'####: ##::. ##:::::::::: ##:::: ########:. ######::::: ##::::"
-			echo    "....::..::::..:::::::::::..:::::........:::......::::::..:::::"
 			if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${BOLD}[DEBUG]${NORMAL}  \${POST_WORKING_DIRECTORY}/\${POST_FILE_DIR}/TEST/\${POST_COMMIT_FILE}/\${POST_FVT_TEST_CASE} >${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE}< \${POST_WORKING_DIRECTORY}/${POST_FILE_NAME} >${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}<" 1>&2 ; fi
 			POST_COMMAND="${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}"
 			eval "${POST_COMMAND}"
