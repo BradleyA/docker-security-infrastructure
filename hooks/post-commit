@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.398.866  2019-07-27T22:03:44.468156-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.397  
+#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
 #	hooks/post-commit  3.396.864  2019-07-27T21:56:27.249128-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.395  
 #	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
 #	hooks/post-commit  3.395.863  2019-07-27T21:54:11.858794-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.394  
@@ -56,5 +58,5 @@ for POST_FILE_NAME in ${POST_COMMIT_FILES} ; do
 		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${BOLD}[INFO]  No test case directory found${NORMAL} in ${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}, for ${GIT_AUTHOR_NAME}."
 	fi
 done
-#	rm    "${POST_WORKING_DIRECTORY}"/hooks/COMMIT_FILE_LIST
+rm    "${POST_WORKING_DIRECTORY}"/hooks/COMMIT_FILE_LIST
 ###
