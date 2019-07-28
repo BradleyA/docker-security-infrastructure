@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	ssh/check-user-ssh.sh  3.417.889  2019-07-27T23:47:08.126569-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.416-1-g9f79f7f  
-# 	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
+# 	ssh/check-user-ssh.sh  3.418.890  2019-07-28T09:22:36.250861-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.417  
+# 	   testing .git/hooks/pre- post- commit #57 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen

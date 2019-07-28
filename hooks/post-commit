@@ -1,22 +1,6 @@
 #!/bin/bash
-#	hooks/post-commit  3.415.886  2019-07-27T23:40:19.345414-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.414  
-#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
-#	hooks/post-commit  3.414.885  2019-07-27T23:34:38.904953-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.413  
-#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
-#	hooks/post-commit  3.413.884  2019-07-27T23:30:52.584569-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.412  
-#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
-#	hooks/post-commit  3.411.882  2019-07-27T23:24:21.280743-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.410  
-#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
-#	hooks/post-commit  3.410.881  2019-07-27T23:20:35.722696-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.409  
-#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
-#	hooks/post-commit  3.408.879  2019-07-27T23:12:47.499237-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.407  
-#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
-#	hooks/post-commit  3.396.864  2019-07-27T21:56:27.249128-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.395  
-#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
-#	hooks/post-commit  3.395.863  2019-07-27T21:54:11.858794-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.394  
-#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
-#	hooks/post-commit  3.393.861  2019-07-27T21:48:48.087908-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.392  
-#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
+#	hooks/post-commit  3.418.890  2019-07-28T09:22:36.120815-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.417  
+#	   testing .git/hooks/pre- post- commit #57 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -62,6 +46,14 @@ for POST_FILE_NAME in ${POST_COMMIT_FILES} ; do
 		#	Loop through test cases
 		for POST_FVT_TEST_CASE in ${POST_FVT_TEST_CASES} ; do
 			#       Run FVT test cases
+			echo    " (        )                (            "
+			echo    " )\ )  ( /(     *   )      )\ )  *   )  "
+			echo    "(()/(  )\())  ` )  /( (   (()/(` )  /(  "
+			echo    " /(_))((_)\    ( )(_)))\   /(_))( )(_)) "
+			echo    "(_))   _((_)  (_(_())((_) (_)) (_(_())  "
+			echo    "|_ _| | \| |  |_   _|| __|/ __||_   _|  "
+			echo    " | |  | .` |    | |  | _| \__ \  | |    "
+			echo    "|___| |_|\_|    |_|  |___||___/  |_|"
 			if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${BOLD}[DEBUG]${NORMAL}  \${POST_WORKING_DIRECTORY}/\${POST_FILE_DIR}/TEST/\${POST_COMMIT_FILE}/\${POST_FVT_TEST_CASE} >${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE}< \${POST_WORKING_DIRECTORY}/${POST_FILE_NAME} >${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}<" 1>&2 ; fi
 			POST_COMMAND="${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}"
 			eval "${POST_COMMAND}"
