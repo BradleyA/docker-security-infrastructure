@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	ssh/check-user-ssh.sh  3.423.895  2019-07-28T10:51:04.841704-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.422  
+# 	   update ssh/TEST/check-user-ssh.sh/FVT-option-version-001 and check-user-ssh.sh:  add production standard 9.0 Parse CLI options and arguments #57 
 # 	ssh/check-user-ssh.sh  3.421.893  2019-07-28T09:32:11.105259-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.420  
 # 	   testing .git/hooks/pre- post- commit #57 
 ### production standard 3.0 shellcheck
@@ -124,12 +126,50 @@ get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_
 #       DEBUG
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Name_of_command >${0}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
 
-###
+### production standard 7.0 Default variable value
 #       Order of precedence: CLI argument, environment variable, default code
-if [ $# -ge  1 ]  ; then USER_HOME=${1} ; elif [ "${USER_HOME}" == "" ] ; then USER_HOME="${DEFAULT_USER_HOME}" ; fi
+if [ "${USER_HOME}" == "" ] ; then USER_HOME="${DEFAULT_USER_HOME}" ; fi
 #       Order of precedence: CLI argument, default code
-SSH_USER=${2:-${DEFAULT_SSH_USER}}
+SSH_USER=${DEFAULT_SSH_USER}
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  USER_HOME >${USER_HOME}< SSH_USER >${SSH_USER}<" 1>&2 ; fi
+
+### production standard 9.0 Parse CLI options and arguments
+while [[ "${#}" -gt 0 ]] ; do
+        case "${1}" in
+                -S|--ssh_user)
+                        if [ "${2}" == "" ] ; then      # Check if argument is blank
+                                display_usage
+                                get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Argument for ${1} is not found on command line" 1>&2
+                                exit 1
+                        fi
+                        SSH_USER=${2}
+                        shift 2 # shift past argument and value
+                        ;;
+                -S=*|--ssh_user=*)
+                        SSH_USER=$(echo ${1} | cut -d '=' -f 2)
+                        shift # shift past argument=value
+                        ;;
+                -U|--user_home)                         # USER_HOME="/home/"
+                        if [ "${2}" == "" ] ; then      # Check if argument is blank
+                                display_usage
+                                get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Argument for ${1} is not found on command line" 1>&2
+                                exit 1
+                        fi
+                        USER_HOME=${2}
+                        shift 2 # shift past argument and value
+                        ;;
+                -U=*|--user_home=*)                     # USER_HOME="/home/"
+                        USER_HOME=$(echo ${1} | cut -d '=' -f 2)
+                        shift # shift past argument=value
+                        ;;
+                *)
+                        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Option, ${1}, entered on the command line is not supported." 1>&2
+                        display_usage
+                        exit 1
+                        ;;
+        esac
+done
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... SSH_USER >${SSH_USER}< USER_HOME >${USER_HOME}<" 1>&2 ; fi
 
 #	Root is required to check other users or user can check their own certs
 if ! [ "${USER_ID}" = 0 -o "${USER}" = "${SSH_USER}" ] ; then
@@ -139,8 +179,8 @@ if ! [ "${USER_ID}" = 0 -o "${USER}" = "${SSH_USER}" ] ; then
 	exit 1
 fi
 
-echo -e "\n\t${NORMAL}Verify and correct file and directory permissions for ${USER_HOME}/${SSH_USER}/.ssh"
 ###
+echo -e "\n\t${NORMAL}Verify and correct file and directory permissions for ${USER_HOME}/${SSH_USER}/.ssh"
 #	Check if user has home directory on system
 if [ ! -d "${USER_HOME}"/"${SSH_USER}" ] ; then 
 #       Help hint
@@ -162,7 +202,6 @@ if ! [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}") == 755 ] || [ $(stat -Lc %a "${
 	chmod go-w "${USER_HOME}"/"${SSH_USER}"
 fi
 
-###
 #	Check if .ssh directory exists
 if [ ! -d "${USER_HOME}"/"${SSH_USER}"/.ssh ] ; then 
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${SSH_USER} does not have a .ssh directory" 1>&2
@@ -183,7 +222,6 @@ if [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}/.ssh") != 700 ]; then
 	chmod 0700 "${USER_HOME}"/"${SSH_USER}"/.ssh
 fi
 
-###
 #	Check if user has ${USER_HOME}/${SSH_USER}/.ssh/id_rsa file
 if [ ! -e "${USER_HOME}"/"${SSH_USER}"/.ssh/id_rsa ] ; then 
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${SSH_USER} does not have a .ssh/id_rsa file" 1>&2
@@ -198,7 +236,6 @@ if [ $(stat -Lc %a "${USER_HOME}/${SSH_USER}/.ssh/id_rsa") != 600 ]; then
 	chmod 0600 "${USER_HOME}"/"${SSH_USER}"/.ssh/id_rsa
 fi
 
-###
 #	Check if user has ${USER_HOME}/${SSH_USER}/.ssh/id_rsa.pub file
 if [ ! -e "${USER_HOME}"/"${SSH_USER}"/.ssh/id_rsa.pub ] ; then 
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${SSH_USER} does not have a .ssh/id_rsa.pub file" 1>&2
@@ -248,7 +285,6 @@ fi
 #	file permissions for authorized_keys  644 ?
 #	trouble shooting section, need to test
 #	https://unix.stackexchange.com/questions/37164/ssh-and-home-directory-permissions
-
 
 #	Check if user has ${USER_HOME}/${SSH_USER}/.ssh/authorized_keys file
 if [ -e "${USER_HOME}"/"${SSH_USER}"/.ssh/authorized_keys ] ; then 

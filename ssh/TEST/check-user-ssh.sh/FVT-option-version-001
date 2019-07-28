@@ -1,6 +1,6 @@
 #!/bin/bash
-#	ssh/TEST/check-user-ssh.sh/FVT-option-version-001  3.406.877  2019-07-27T22:59:51.139874-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.405-2-gc5d946c  #
-#	   testing .git/hooks/ #57 #
+#	ssh/TEST/check-user-ssh.sh/FVT-option-version-001  3.423.895  2019-07-28T10:51:04.714857-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.422  
+#	   update ssh/TEST/check-user-ssh.sh/FVT-option-version-001 and check-user-ssh.sh:  add production standard 9.0 Parse CLI options and arguments #57 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -8,6 +8,11 @@
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ###
+
+#       TEST case Version 
+SCRIPT_NAME=$(head -2 "${1}" | awk {'printf $2'})
+SCRIPT_VERSION=$(head -2 "${1}" | awk {'printf $3'})
+echo "${SCRIPT_NAME} ${SCRIPT_VERSION}" > FVT-option-version-001.expected
 
 "${1}" --version > "${0}".out
 #
