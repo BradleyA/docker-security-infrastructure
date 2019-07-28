@@ -1,6 +1,6 @@
 #!/bin/bash
-#	ssh/TEST/check-user-ssh.sh/FVT-option-help-006  3.382.850  2019-07-27T18:49:12.137059-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.381  
-#	   testing .git/hooks/pre- post- commit and FVT-option-help- files 
+#	ssh/TEST/check-user-ssh.sh/FVT-option-help-006  3.383.851  2019-07-27T19:08:04.778359-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.382  
+#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -9,6 +9,7 @@ BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ###
 
+echo    "Begin ${0} . . ."
 "${1}" -? > "${0}".out
 #
 diff -y "${0}".expected "${0}".out
