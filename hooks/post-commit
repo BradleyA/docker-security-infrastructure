@@ -1,8 +1,6 @@
 #!/bin/bash
-#	hooks/post-commit  3.386.854  2019-07-27T19:40:07.151278-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.385  
-#	   testing .git/hooks/pre- post- commit #57 
-#	hooks/post-commit  3.381.849  2019-07-27T17:55:40.516434-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.380  
-#	   testing .git/hooks/pre- post- commit FVT test cases 
+#	hooks/post-commit  3.387.855  2019-07-27T19:46:49.867783-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.386  
+#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
