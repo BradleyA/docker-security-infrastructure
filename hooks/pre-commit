@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/pre-commit  3.393.861  2019-07-27T21:48:51.454761-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.392  
+#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
 #	hooks/pre-commit  3.387.855  2019-07-27T19:47:01.986721-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.386  
 #	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
 ###
@@ -25,6 +27,6 @@ SCRIPT_VERSION=$(head -2 "${0}" | awk {'printf $3'})
 
 ###
 PRE_WORKING_DIRECTORY=$(git rev-parse --show-toplevel)
-if [ ! -d "${PRE_WORKING_DIRECTORY}/hooks" ] ; then mkdir "${PRE_WORKING_DIRECTORY}/hooks" ; fi
+if [ ! -d "${PRE_WORKING_DIRECTORY}/hooks" ] ; then mkdir -p "${PRE_WORKING_DIRECTORY}/hooks" ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${BOLD}[DEBUG]  Creating ${PRE_WORKING_DIRECTORY}/hooks/COMMIT_FILE_LIST file with files being commited${NORMAL} for ${GIT_AUTHOR_NAME} (${USER})." 1>&2 ; fi
 git status -s --untracked-files=no | grep -v '^D  ' | awk '{print $2}' > "${PRE_WORKING_DIRECTORY}"/hooks/COMMIT_FILE_LIST
