@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.396.864  2019-07-27T21:56:27.249128-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.395  
+#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
 #	hooks/post-commit  3.395.863  2019-07-27T21:54:11.858794-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.394  
 #	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
 #	hooks/post-commit  3.393.861  2019-07-27T21:48:48.087908-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.392  
@@ -43,17 +45,13 @@ for POST_FILE_NAME in ${POST_COMMIT_FILES} ; do
 		#	Create list of FVT test cases
 		POST_FVT_TEST_CASES=$(ls -1 ${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE} | grep -v "\." | grep FVT)
 		if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${BOLD}[DEBUG]${NORMAL}  \${POST_FVT_TEST_CASES} >${POST_FVT_TEST_CASES}<" 1>&2 ; fi
-		### >>>	need an 'if' statement to check if there are any FVT test cases in the TEST directory OR does the for loop just skip all code in loop (Hope this is correct! be neet to test) <<<   ###
-		echo "before for loop ${POST_FVT_TEST_CASES}  	>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 		#	Loop through test cases
 		for POST_FVT_TEST_CASE in ${POST_FVT_TEST_CASES} ; do
-			echo "in for loop >>>>>>>>>>>>>>>>>>>>>>>>>>"
 			#       Run FVT test cases
 			if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${BOLD}[DEBUG]${NORMAL}  \${POST_WORKING_DIRECTORY}/\${POST_FILE_DIR}/TEST/\${POST_COMMIT_FILE}/\${POST_FVT_TEST_CASE} >${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE}< \${POST_WORKING_DIRECTORY}/${POST_FILE_NAME} >${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}<" 1>&2 ; fi
 			POST_COMMAND="${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/${POST_FVT_TEST_CASE} ${POST_WORKING_DIRECTORY}/${POST_FILE_NAME}"
 			eval "${POST_COMMAND}"
 		done
-		echo "out of for loop   	>>>>>>>>>>>>>>>>>>>>>>>>>"
 	else
 		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${BOLD}[INFO]  No test case directory found${NORMAL} in ${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}, for ${GIT_AUTHOR_NAME}."
 	fi

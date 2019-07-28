@@ -1,5 +1,5 @@
 #!/bin/bash
-# 	ssh/check-host-ssh.sh  3.395.863  2019-07-27T21:54:12.039163-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.394  
+# 	ssh/check-host-ssh.sh  3.396.864  2019-07-27T21:56:27.432340-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.395  
 # 	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
 # 	ssh/check-host-ssh.sh  3.251.715  2019-06-02T13:56:12.378295-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.250  
 # 	   ready to begin debug 
