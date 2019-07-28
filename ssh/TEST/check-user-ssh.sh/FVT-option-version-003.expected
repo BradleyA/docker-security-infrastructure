@@ -1,1 +1,2 @@
-FVT-option-version-001.expected
+#	ssh/TEST/check-user-ssh.sh/FVT-option-version-003.expected  3.414.885  2019-07-27T23:35:14.415650-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.413  
+#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 

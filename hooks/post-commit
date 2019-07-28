@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.414.885  2019-07-27T23:34:38.904953-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.413  
+#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
 #	hooks/post-commit  3.413.884  2019-07-27T23:30:52.584569-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.412  
 #	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
 #	hooks/post-commit  3.411.882  2019-07-27T23:24:21.280743-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.410  
@@ -55,7 +57,7 @@ for POST_FILE_NAME in ${POST_COMMIT_FILES} ; do
 		if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${BOLD}[DEBUG]${NORMAL}  \${POST_FVT_TEST_CASES} >${POST_FVT_TEST_CASES}<" 1>&2 ; fi
 		#       setup symbolic links
 		pwd
-		$(cd ${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}; pwd; ${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/FVT-setup.sh)
+		$(cd ${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE} ; ${POST_WORKING_DIRECTORY}/${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}/FVT-setup.sh)
 		#	Loop through test cases
 		for POST_FVT_TEST_CASE in ${POST_FVT_TEST_CASES} ; do
 			#       Run FVT test cases
