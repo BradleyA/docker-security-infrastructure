@@ -1,5 +1,5 @@
 #!/bin/bash
-# 	ssh/check-user-ssh.sh  3.387.855  2019-07-27T19:47:02.120103-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.386  
+# 	ssh/check-user-ssh.sh  3.388.856  2019-07-27T19:54:55.783919-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.387  
 # 	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
@@ -18,7 +18,7 @@ DEFAULT_SSH_USER="${USER}"
 ### production standard 8.3.214 --usage
 display_usage() {
 COMMAND_NAME=$(echo $0 | sed 's/^.*\///')
-echo -e "\n${NORMAL}${0}\n   Check user RSA ssh file permissions"
+echo -e "\n${NORMAL}${COMMAND_NAME}\n   Check user RSA ssh file permissions"
 echo -e "\n${BOLD}USAGE${NORMAL}"
 echo -e "   ${COMMAND_NAME} [-U <USER_HOME>] [-S <SSH_USER>]\n"
 echo    "   ${COMMAND_NAME} [--help | -help | help | -h | h | -?]"
