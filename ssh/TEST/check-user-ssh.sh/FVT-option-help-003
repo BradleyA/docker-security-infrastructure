@@ -1,4 +1,6 @@
 #!/bin/bash
+#	ssh/TEST/check-user-ssh.sh/FVT-option-help-003  3.390.858  2019-07-27T20:17:00.946761-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.389  
+#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
 #	ssh/TEST/check-user-ssh.sh/FVT-option-help-003  3.384.852  2019-07-27T19:18:46.632866-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.383  
 #	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases #57 
 ### production standard 3.0 shellcheck
@@ -12,12 +14,13 @@ NORMAL=$(tput -Txterm sgr0)
 echo    "${BOLD}Begin test case --->${NORMAL}  ${0}  . . ."
 "${1}" help > "${0}".out
 #
-diff -y "${0}".expected "${0}".out
+diff "${0}".expected "${0}".out >/dev/null 2>&1
 RETURN_CODE=${?}
 if [ ${RETURN_CODE} -eq 0 ] ; then
         echo "${0} ${1} ${RETURN_CODE} - No difference with expected output - ${BOLD}PASS - PASS${NORMAL}"
 elif [ ${RETURN_CODE} -eq 1 ] ; then
         echo "${0} ${1} ${RETURN_CODE} - Differences with expected output - ${BOLD}FAIL - FAIL${NORMAL}"
+	diff -y "${0}".expected "${0}".out
 else
         echo "${0} ${1} ${RETURN_CODE} - Test script ERROR - ${BOLD}FAIL - FAIL${NORMAL}"
 fi
