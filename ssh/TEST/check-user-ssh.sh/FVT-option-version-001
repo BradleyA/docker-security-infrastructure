@@ -1,4 +1,8 @@
 #!/bin/bash
+#	ssh/TEST/check-user-ssh.sh/FVT-option-version-001  3.425.897  2019-07-28T11:19:43.357998-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.424  
+#	   testing ssh/TEST/check-user-ssh.sh/FVT-option-version-001 
+#	ssh/TEST/check-user-ssh.sh/FVT-option-version-001  3.425.897  2019-07-28T11:15:01.648971-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.424  
+#	   testing ssh/TEST/check-user-ssh.sh/FVT-option-version-001 
 #	ssh/TEST/check-user-ssh.sh/FVT-option-version-001  3.423.895  2019-07-28T10:51:04.714857-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.422  
 #	   update ssh/TEST/check-user-ssh.sh/FVT-option-version-001 and check-user-ssh.sh:  add production standard 9.0 Parse CLI options and arguments #57 
 ### production standard 3.0 shellcheck
@@ -12,7 +16,8 @@ NORMAL=$(tput -Txterm sgr0)
 #       TEST case Version 
 SCRIPT_NAME=$(head -2 "${1}" | awk {'printf $2'})
 SCRIPT_VERSION=$(head -2 "${1}" | awk {'printf $3'})
-echo "${SCRIPT_NAME} ${SCRIPT_VERSION}" > FVT-option-version-001.expected
+echo "${SCRIPT_NAME} ${SCRIPT_VERSION}" > ${0}.expected
+sync
 
 "${1}" --version > "${0}".out
 #
