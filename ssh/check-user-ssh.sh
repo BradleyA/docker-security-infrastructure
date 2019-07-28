@@ -1,5 +1,5 @@
 #!/bin/bash
-# 	ssh/check-user-ssh.sh  3.426.898  2019-07-28T11:20:23.382738-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.425  
+# 	ssh/check-user-ssh.sh  3.427.899  2019-07-28T11:22:23.310576-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.426  
 # 	   testing ssh/TEST/check-user-ssh.sh/FVT-option-version-001 
 # 	ssh/check-user-ssh.sh  3.423.895  2019-07-28T10:51:04.841704-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.422
 # 	   update ssh/TEST/check-user-ssh.sh/FVT-option-version-001 and check-user-ssh.sh:  add production standard 9.0 Parse CLI options and arguments #57 
