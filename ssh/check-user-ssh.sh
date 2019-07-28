@@ -1,5 +1,5 @@
 #!/bin/bash
-# 	ssh/check-user-ssh.sh  3.384.852  2019-07-27T19:18:55.857849-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.383  
+# 	ssh/check-user-ssh.sh  3.385.853  2019-07-27T19:29:05.740630-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.384  
 # 	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases #57 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright

@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/pre-commit  3.385.853  2019-07-27T19:29:05.554265-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.384  
+#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases #57 
 #	hooks/pre-commit  3.382.850  2019-07-27T18:48:20.830026-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.381  
 #	   testing .git/hooks/pre- post- commit and FVT-option-help- files 
 ###
@@ -12,9 +14,11 @@ if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, '
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 #       Date and time function ISO 8601
+get_date_stamp() {
 DATE_STAMP=$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
 TEMP=$(date +%Z)
 DATE_STAMP="${DATE_STAMP} (${TEMP})"
+}
 #       Fully qualified domain name FQDN hostname
 LOCALHOST=$(hostname -f)
 
