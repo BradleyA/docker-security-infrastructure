@@ -1,16 +1,8 @@
 #!/bin/bash
-# 	ssh/check-host-ssh.sh  3.254.721  2019-06-07T20:51:49.767091-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.253-2-gab55146  
-# 	   draft update 
-# 	ssh/check-host-ssh.sh  3.252.717  2019-06-02T20:24:27.971921-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.251-1-gc608054  
-# 	   debugging 
+# 	ssh/check-host-ssh.sh  3.394.862  2019-07-27T21:50:16.214410-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.393  
+# 	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
 # 	ssh/check-host-ssh.sh  3.251.715  2019-06-02T13:56:12.378295-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.250  
 # 	   ready to begin debug 
-# 	ssh/check-hosts-ssh.sh  3.246.703  2019-05-15T23:15:15.068587-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.245  
-# 	   first draft NOT ready for test 
-# 	ssh/check-hosts-ssh.sh  3.246.703  2019-05-15T23:14:06.597644-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.245  
-# 	   first draft NOT ready for test 
-# 	ssh/check-hosts-ssh.sh  3.246.703  2019-05-15T23:12:15.547533-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.245  
-# 	   first draft NOT ready for test 
 echo -e ">>>>   >>>>   IN DEVELOPMENT   IN DEVELOPMENT   IN DEVELOPMENT   <<<<   <<<<"
 echo -e ">>>>   >>>>   IN DEVELOPMENT   IN DEVELOPMENT   IN DEVELOPMENT   <<<<   <<<<"
 echo -e ">>>>   >>>>               NOT READY FOR PRODUCTION               <<<<   <<<<"
