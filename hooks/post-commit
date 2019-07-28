@@ -1,4 +1,6 @@
 #!/bin/bash
+#	hooks/post-commit  3.386.854  2019-07-27T19:40:07.151278-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.385  
+#	   testing .git/hooks/pre- post- commit #57 
 #	hooks/post-commit  3.381.849  2019-07-27T17:55:40.516434-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.380  
 #	   testing .git/hooks/pre- post- commit FVT test cases 
 ### production standard 3.0 shellcheck
@@ -37,7 +39,7 @@ for POST_FILE_NAME in ${POST_COMMIT_FILES} ; do
 	if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${BOLD}[DEBUG]${NORMAL}  \${POST_FILE_NAME} >${POST_FILE_NAME}< \${POST_COMMIT_FILE} >${POST_COMMIT_FILE}< \${POST_FILE_DIR} >${POST_FILE_DIR}< \${POST_FILE_DIR}/TEST/\${POST_COMMIT_FILE} >${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}<" 1>&2 ; fi
 	#	if TEST case directory for commited file
 	if [ -d ${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE} ] ; then
-		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${LINENO}  ${BOLD}Test case directory found${NORMAL} (${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}) for ${GIT_AUTHOR_NAME} (${USER})."
+		get_date_stamp ; echo -e "${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${BOLD}[INFO]  Test case directory found${NORMAL} (${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE}) for ${GIT_AUTHOR_NAME} (${USER})."
 		#	Create list of FVT test cases
 		POST_FVT_TEST_CASES=$(ls -1 ${POST_FILE_DIR}/TEST/${POST_COMMIT_FILE} | grep -v "\." | grep FVT)
 		if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${BOLD}[DEBUG]${NORMAL}  \${POST_FVT_TEST_CASES} >${POST_FVT_TEST_CASES}<" 1>&2 ; fi
