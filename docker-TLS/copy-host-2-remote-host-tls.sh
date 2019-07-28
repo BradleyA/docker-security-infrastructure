@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.422.894  2019-07-28T10:12:44.122518-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.421  
+# 	   change DEFAULT_CERTDIR TO DEFAULT_CERT_DAEMON_DIR AND CERTDIR TO CERT_DAEMON_DIR 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.284.751  2019-06-21T21:17:39.569129-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.283  
 # 	   check-ca-tls.sh draft 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.281.748  2019-06-10T16:46:36.699590-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.280  
@@ -20,14 +22,14 @@ NORMAL=$(tput -Txterm sgr0)
 DEFAULT_REMOTE_HOST="$(hostname -f)"    # local host
 DEFAULT_WORKING_DIRECTORY="$(echo ~/.docker/docker-ca)"
 DEFAULT_CA_CERT="ca.pem"
-DEFAULT_CERTDIR="/etc/docker/certs.d/daemon/"
+DEFAULT_CERT_DAEMON_DIR="/etc/docker/certs.d/daemon/"
 ### production standard 8.0 --usage
 display_usage() {
 echo -e "\n${NORMAL}${0} - Copy public, private keys and CA to remote host"
 echo -e "\nUSAGE"
 echo    "   ${0} [<REMOTE_HOST>]"
 echo    "   ${0}  <REMOTE_HOST> [<WORKING_DIRECTORY>]"
-echo -e "   ${0}  <REMOTE_HOST>  <WORKING_DIRECTORY> [<CERTDIR>]\n"
+echo -e "   ${0}  <REMOTE_HOST>  <WORKING_DIRECTORY> [<CERT_DAEMON_DIR>]\n"
 echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--usage | -usage | -u]"
 echo    "   ${0} [--version | -version | -v]"
@@ -71,8 +73,8 @@ echo    "   REMOTE_HOST       Remote host to copy certificates to"
 echo    "                     (default ${DEFAULT_REMOTE_HOST})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
-echo    "   CERTDIR           dockerd certification directory"
-echo    "                     (default ${DEFAULT_CERTDIR})"
+echo    "   CERT_DAEMON_DIR   dockerd certification directory"
+echo    "                     (default ${DEFAULT_CERT_DAEMON_DIR})"
 ### production standard 6.1.177 Architecture tree
 echo -e "\nARCHITECTURE TREE"   # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
@@ -137,10 +139,10 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 REMOTE_HOST=${1:-${DEFAULT_REMOTE_HOST}}
 #       Order of precedence: CLI argument, environment variable, default code
 if [ $# -ge  2 ]  ; then WORKING_DIRECTORY=${2} ; elif [ "${WORKING_DIRECTORY}" == "" ] ; then WORKING_DIRECTORY="${DEFAULT_WORKING_DIRECTORY}" ; fi
-CERTDIR=${3:-${DEFAULT_CERTDIR}}
+CERT_DAEMON_DIR=${3:-${DEFAULT_CERT_DAEMON_DIR}}
 #       Order of precedence: environment variable, default code
 if [ "${CA_CERT}" == "" ] ; then CA_CERT="${DEFAULT_CA_CERT}" ; fi
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  REMOTE_HOST >${REMOTE_HOST}< WORKING_DIRECTORY >${WORKING_DIRECTORY}< CERTDIR >${CERTDIR}<  CA_CERT >${CA_CERT}<" 1>&2 ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  REMOTE_HOST >${REMOTE_HOST}< WORKING_DIRECTORY >${WORKING_DIRECTORY}< CERT_DAEMON_DIR >${CERT_DAEMON_DIR}<  CA_CERT >${CA_CERT}<" 1>&2 ; fi
 
 #	Check if ${WORKING_DIRECTORY} directory on system
 if [ ! -d "${WORKING_DIRECTORY}" ] ; then
@@ -180,11 +182,11 @@ if $(ssh ${REMOTE_HOST} 'exit' >/dev/null 2>&1 ) ; then
 	mkdir -p "${REMOTE_HOST}"
 	cd "${REMOTE_HOST}"
 
-#	Backup ${REMOTE_HOST}:${CERTDIR}/..
+#	Backup ${REMOTE_HOST}:${CERT_DAEMON_DIR}/..
 	FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%6N%z)
-	echo -e "\n\tBacking up ${REMOTE_HOST}:${CERTDIR}/.."
+	echo -e "\n\tBacking up ${REMOTE_HOST}:${CERT_DAEMON_DIR}/.."
 	echo -e "\tto $(pwd)\n\tRoot access required.\n"
-	ssh -t ${USER}@${REMOTE_HOST} "sudo mkdir -p ${CERTDIR} ;
+	ssh -t ${USER}@${REMOTE_HOST} "sudo mkdir -p ${CERT_DAEMON_DIR} ;
 
 
  cd /etc ; sudo tar -pcf /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon ; sudo chown ${USER}.${USER} /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; chmod 0400 /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
