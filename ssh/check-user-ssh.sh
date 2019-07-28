@@ -1,16 +1,6 @@
 #!/bin/bash
-# 	ssh/check-user-ssh.sh  3.383.851  2019-07-27T19:08:04.944027-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.382  
-# 	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
-# 	ssh/check-user-ssh.sh  3.382.850  2019-07-27T18:49:12.274287-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.381  
-# 	   testing .git/hooks/pre- post- commit and FVT-option-help- files 
-# 	ssh/check-user-ssh.sh  3.354.821  2019-07-27T10:46:57.122255-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.353  
-# 	   Bssh/check-user-ssh.sh  BOLD display_help section titles 
-# 	ssh/check-user-ssh.sh  3.297.764  2019-07-26T13:23:46.474164-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.296  
-# 	   updated production standard 8.3.204 --usage #57 
-# 	ssh/check-user-ssh.sh  3.268.735  2019-06-08T21:10:21.816373-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.267  
-# 	   docker-TLS/c{} - change DEFAULT_USER_HOME="/home/" to ~ #54 
-# 	ssh/check-user-ssh.sh  3.249.712  2019-05-31T23:12:12.939731-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.248  
-# 	   ssh/check-user-ssh.sh testing complete ready for release 
+# 	ssh/check-user-ssh.sh  3.384.852  2019-07-27T19:18:55.857849-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.383  
+# 	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases #57 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
