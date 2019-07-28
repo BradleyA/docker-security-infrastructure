@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	ssh/check-user-ssh.sh  3.428.900  2019-07-28T11:23:11.500480-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.427  
-# 	   testing ssh/TEST/check-user-ssh.sh/FVT-option-version-001 
-# 	ssh/check-user-ssh.sh  3.423.895  2019-07-28T10:51:04.841704-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.422
-# 	   update ssh/TEST/check-user-ssh.sh/FVT-option-version-001 and check-user-ssh.sh:  add production standard 9.0 Parse CLI options and arguments #57 
+# 	ssh/check-user-ssh.sh  3.429.901  2019-07-28T11:24:48.578189-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.428  
+# 	   ssh/check-user-ssh.sh design FVT testing using .git/hooks close #57 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
