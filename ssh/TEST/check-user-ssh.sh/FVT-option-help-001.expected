@@ -1,0 +1,64 @@
+
+(B[mcheck-user-ssh.sh
+   Check user RSA ssh file permissions
+
+[1mUSAGE(B[m
+   check-user-ssh.sh [-U <USER_HOME>] [-S <SSH_USER>]
+
+   check-user-ssh.sh [--help | -help | help | -h | h | -?]
+   check-user-ssh.sh [--usage | -usage | -u]
+   check-user-ssh.sh [--version | -version | -v]
+
+[1mDESCRIPTION(B[m
+This script allows users to make sure that the ssh files and directory
+permissions are correct.  If they are not correct then this script will correct
+the permissions.  Administrators can check other users ssh keys by using:
+	[1msudo check-user-ssh.sh <SSH_USER>(B[m
+To create a new ssh key:
+	[1mssh-keygen -t rsa -b 4096 -o -C "${USER}@$(hostname -f)_[$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)_$(date -d +52weeks +%Y-%m-%dT%H:%M:%S.%6N%:z)]"(B[m
+To copy ssh key to a remote system:
+	[1mssh-copy-id <SSH_USER>@<REMOTE_HOST>(B[m
+Enter the following command to test if public and private key match:
+	[1mssh-keygen -y -f ~/.ssh/id_rsa | diff -s - <(cut -d ' ' -f 1,2 ~/.ssh/id_rsa.pub)(B[m
+
+[1mENVIRONMENT VARIABLES(B[m
+If using the bash shell, enter; 'export DEBUG=1' on the command line to set
+the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the
+command, 'unset DEBUG' to remove the exported information from the DEBUG
+environment variable.  You are on your own defining environment variables if
+you are using other shells.
+   DEBUG       (default off '0')
+   USER_HOME   Location of user home directory (default /home/)
+               Many sites have different home directories (/u/north-office/)
+
+[1mOPTIONS(B[m
+Order of precedence: CLI options, environment variable, default code.
+
+   -U, --user_home, -U=, --user_home=<USER_HOME>
+	Location of user home directory (default /home/)
+
+   -S, --ssh_user, -S=*, --ssh_user=<SSH_USER>
+	User (default uadmin)
+
+[1mARCHITECTURE TREE(B[m
+<USER_HOME>/                               <-- Location of user home directory
+└── <USER-1>/.ssh/                         <-- Secure Socket Shell directory
+    ├── authorized_keys                    <-- SSH keys for logging into account
+    ├── config                             <-- SSH client configuration file
+    ├── id_rsa                             <-- SSH private key
+    ├── id_rsa.pub                         <-- SSH public key
+    └── known_hosts                        <-- Systems previously connected to
+
+[1mDOCUMENTATION(B[m
+   https://github.com/BradleyA/docker-security-infrastructure/tree/master/ssh
+
+[1mEXAMPLES(B[m
+   User checks their ssh file permissions
+	[1mcheck-user-ssh.sh(B[m
+   User sam checks their ssh file permissions in a non-default home directory
+	[1mcheck-user-ssh.sh sam /u/north-office/(B[m
+   Administrator checks user bob ssh file permissions
+	[1msudo check-user-ssh.sh bob(B[m
+   Administrator checks user sally ssh file permissions in a different home
+   directory
+	[1msudo check-user-ssh.sh sally /u/home-office/(B[m
