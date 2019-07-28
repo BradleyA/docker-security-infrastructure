@@ -1,4 +1,6 @@
 #!/bin/bash
+#	ssh/TEST/check-user-ssh.sh/FVT-option-help-001  3.408.879  2019-07-27T23:13:00.486277-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.407  
+#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
 #	ssh/TEST/check-user-ssh.sh/FVT-option-help-001  3.407.878  2019-07-27T23:06:17.331454-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.406  
 #	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
 #	ssh/TEST/check-user-ssh.sh/FVT-option-help-001  3.392.860  2019-07-27T20:59:31.571832-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.391  
@@ -10,9 +12,6 @@
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ###
-
-#	setup symbolic links
-FVT-setup.sh
 
 "${1}" --help > "${0}".out
 #
