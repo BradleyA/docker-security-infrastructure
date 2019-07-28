@@ -1,0 +1,10 @@
+
+(B[mcheck-user-ssh.sh
+   Check user RSA ssh file permissions
+
+[1mUSAGE(B[m
+   check-user-ssh.sh [-U <USER_HOME>] [-S <SSH_USER>]
+
+   check-user-ssh.sh [--help | -help | help | -h | h | -?]
+   check-user-ssh.sh [--usage | -usage | -u]
+   check-user-ssh.sh [--version | -version | -v]
