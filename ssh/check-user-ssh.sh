@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	ssh/check-user-ssh.sh  3.430.902  2019-07-29T13:11:22.883136-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.429  
+# 	   ran shellcheck just a few Double quote changes 
 # 	ssh/check-user-ssh.sh  3.429.901  2019-07-28T11:24:48.578189-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.428  
 # 	   ssh/check-user-ssh.sh design FVT testing using .git/hooks close #57 
 ### production standard 3.0 shellcheck
@@ -13,11 +15,11 @@ if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, '
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ### production standard 7.0 Default variable value
-DEFAULT_USER_HOME=$(echo ~ | sed s/${USER}//)
+DEFAULT_USER_HOME=$(echo ~ | sed s/"${USER}"//)
 DEFAULT_SSH_USER="${USER}"
 ### production standard 8.3.214 --usage
 display_usage() {
-COMMAND_NAME=$(echo $0 | sed 's/^.*\///')
+COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')
 echo -e "\n${NORMAL}${COMMAND_NAME}\n   Check user RSA ssh file permissions"
 echo -e "\n${BOLD}USAGE${NORMAL}"
 echo -e "   ${COMMAND_NAME} [-U <USER_HOME>] [-S <SSH_USER>]\n"
@@ -144,7 +146,7 @@ while [[ "${#}" -gt 0 ]] ; do
                         shift 2 # shift past argument and value
                         ;;
                 -S=*|--ssh_user=*)
-                        SSH_USER=$(echo ${1} | cut -d '=' -f 2)
+                        SSH_USER=$(echo "${1}" | cut -d '=' -f 2)
                         shift # shift past argument=value
                         ;;
                 -U|--user_home)                         # USER_HOME="/home/"
@@ -157,7 +159,7 @@ while [[ "${#}" -gt 0 ]] ; do
                         shift 2 # shift past argument and value
                         ;;
                 -U=*|--user_home=*)                     # USER_HOME="/home/"
-                        USER_HOME=$(echo ${1} | cut -d '=' -f 2)
+                        USER_HOME=$(echo "${1}" | cut -d '=' -f 2)
                         shift # shift past argument=value
                         ;;
                 *)
@@ -211,7 +213,7 @@ fi
 #	Check if .ssh directory is owned by ${SSH_USER}
 if [ $(stat -Lc %U "${USER_HOME}/${SSH_USER}/.ssh") != ${SSH_USER} ]; then
 	get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Directory owner for ${USER_HOME}/${SSH_USER}/.ssh is not owned by ${SSH_USER}.  Correcting $(stat -Lc %U ${USER_HOME}/${SSH_USER}/.ssh) to ${SSH_USER}" 1>&2
-	chown -R ${SSH_USER} "${USER_HOME}"/"${SSH_USER}"/.ssh
+	chown -R "${SSH_USER}" "${USER_HOME}"/"${SSH_USER}"/.ssh
 fi
 
 #	Check ${USER_HOME}/${SSH_USER}/.ssh directory permissions
@@ -303,7 +305,7 @@ fi
 echo -e "\n\tCheck if all files in ${USER_HOME}/${SSH_USER}/.ssh directory are owned\n\tby ${SSH_USER}.  If files are not owned by ${SSH_USER} then list them below:${BOLD}" 1>&2
 find "${USER_HOME}"/"${SSH_USER}"/.ssh ! -user "${SSH_USER}" -exec ls -l {} \;
 echo   "${NORMAL}"
-chown -R ${SSH_USER} "${USER_HOME}"/"${SSH_USER}"/.ssh
+chown -R "${SSH_USER}" "${USER_HOME}"/"${SSH_USER}"/.ssh
 
 #	Check if user private key and user public key are a matched set
 if ! [ "$(id -u)" = 0 ] ; then
