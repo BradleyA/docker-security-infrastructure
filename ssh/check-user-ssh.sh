@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	ssh/check-user-ssh.sh  3.431.903  2019-08-01T11:06:54.134906-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.430  
+# 	   updated comment about crontab 
 # 	ssh/check-user-ssh.sh  3.430.902  2019-07-29T13:11:22.883136-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.429  
 # 	   ran shellcheck just a few Double quote changes 
 # 	ssh/check-user-ssh.sh  3.429.901  2019-07-28T11:24:48.578189-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.428  
@@ -101,7 +103,7 @@ SCRIPT_VERSION=$(head -2 "${0}" | awk {'printf $3'})
 USER_ID=$(id -u)
 GROUP_ID=$(id -g)
 
-#       Added line because USER is not defined in crobtab jobs
+#       Added following code because USER is not defined in crobtab jobs
 if ! [ "${USER}" == "${LOGNAME}" ] ; then  USER=${LOGNAME} ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
 
