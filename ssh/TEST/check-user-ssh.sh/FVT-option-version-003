@@ -1,6 +1,6 @@
 #!/bin/bash
-#	ssh/TEST/check-user-ssh.sh/FVT-option-version-003  3.406.877  2019-07-27T23:00:02.720958-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.405-2-gc5d946c  
-#	   testing .git/hooks/ #57 
+#	ssh/TEST/check-user-ssh.sh/FVT-option-version-003  3.432.907  2019-08-11T08:42:18.755675-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.431-3-gc04328b  
+#	   updated formatting in test cases from prototype to production comments 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -10,7 +10,8 @@ NORMAL=$(tput -Txterm sgr0)
 ###
 
 "${1}" -v > "${0}".out
-#
+
+###
 diff "${0}".expected "${0}".out >/dev/null 2>&1
 RETURN_CODE=${?}
 if [ ${RETURN_CODE} -eq 0 ] ; then
