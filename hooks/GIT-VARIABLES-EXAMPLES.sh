@@ -1,6 +1,6 @@
 #!/bin/bash
-#	hooks/var-git-test.example  3.364.831  2019-07-27T12:28:16.892864-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.363  
-#	   hooks/var-git-test.example shellcheck 
+#	hooks/var-git-test.example  3.220.279  2019-07-28T11:53:29.945983-05:00 (CDT)  https://github.com/BradleyA/user-files.git  uadmin  six-rpi3b.cptx86.com 3.219-1-g54b68ef  
+#	   added hooks directory with pre-commit post-commit examples for TEST cases 
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
