@@ -1,9 +1,17 @@
 #!/bin/bash
-#	hooks/pre-commit  3.393.861  2019-07-27T21:48:51.454761-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.392  
-#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
-#	hooks/pre-commit  3.387.855  2019-07-27T19:47:01.986721-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.386  
-#	   testing .git/hooks/pre- post- commit and FVT-option-help- test cases 
+#	hooks/pre-commit  3.246.471  2019-08-10T20:05:34.480397-05:00 (CDT)  https://github.com/BradleyA/user-files.git  uadmin  one-rpi3b.cptx86.com 3.245-1-g58d7e0e  
+#	   ### production standard 10.0 FVT testing #26 
+#	hooks/pre-commit  3.234.308  2019-08-09T17:22:11.977835-05:00 (CDT)  https://github.com/BradleyA/user-files.git  uadmin  one-rpi3b.cptx86.com 3.233  
+#	   hooks/pre-commit run shellcheck 
+#	hooks/pre-commit  3.233.307  2019-08-09T17:00:35.389959-05:00 (CDT)  https://github.com/BradleyA/user-files.git  uadmin  one-rpi3b.cptx86.com 3.232  
+#	   hooks/(pro,post)-commit Create FVT testing production standard using .git/hooks #26 
+#	hooks/pre-commit  3.232.306  2019-08-09T14:06:50.406753-05:00 (CDT)  https://github.com/BradleyA/user-files.git  uadmin  one-rpi3b.cptx86.com 3.231-3-g55869c9  
+#	   hooks/pre-commit changed text in DEBUG statement 
+#	hooks/pre-commit  3.220.279  2019-07-28T11:53:25.117298-05:00 (CDT)  https://github.com/BradleyA/user-files.git  uadmin  six-rpi3b.cptx86.com 3.219-1-g54b68ef  
+#	   added hooks directory with pre-commit post-commit examples for TEST cases 
 ###
+#	pre-commit - (git hook)  Create ${REPOSITORY_DIR}/hooks/COMMIT_FILE_LIST which includes files being commited
+#
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
 #       Copyright (c) 2019 Bradley Allen
@@ -22,11 +30,12 @@ DATE_STAMP="${DATE_STAMP} (${TEMP})"
 #       Fully qualified domain name FQDN hostname
 LOCALHOST=$(hostname -f)
 #       Version
-SCRIPT_NAME=$(head -2 "${0}" | awk {'printf $2'})
 SCRIPT_VERSION=$(head -2 "${0}" | awk {'printf $3'})
 
+### production standard 10.0 FVT testing
+REPOSITORY_DIR=$(git rev-parse --show-toplevel)
+cd "${REPOSITORY_DIR}"
+if [ ! -d "${REPOSITORY_DIR}/hooks" ] ; then mkdir -p "${REPOSITORY_DIR}/hooks" ; fi
+if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${BOLD}[DEBUG]  Creating ${REPOSITORY_DIR}/hooks/COMMIT_FILE_LIST file includes files being commited${NORMAL} for ${GIT_AUTHOR_NAME} (${USER})." 1>&2 ; fi
+git status -s --untracked-files=no | grep -v '^D  ' | awk '{print $2}' > "${REPOSITORY_DIR}"/hooks/COMMIT_FILE_LIST
 ###
-PRE_WORKING_DIRECTORY=$(git rev-parse --show-toplevel)
-if [ ! -d "${PRE_WORKING_DIRECTORY}/hooks" ] ; then mkdir -p "${PRE_WORKING_DIRECTORY}/hooks" ; fi
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${BOLD}[DEBUG]  Creating ${PRE_WORKING_DIRECTORY}/hooks/COMMIT_FILE_LIST file with files being commited${NORMAL} for ${GIT_AUTHOR_NAME} (${USER})." 1>&2 ; fi
-git status -s --untracked-files=no | grep -v '^D  ' | awk '{print $2}' > "${PRE_WORKING_DIRECTORY}"/hooks/COMMIT_FILE_LIST
