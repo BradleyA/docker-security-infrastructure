@@ -1,24 +1,29 @@
 #!/bin/bash
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.433.911  2019-09-04T14:27:16.374973-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  three-rpi3b.cptx86.com 3.432-3-gfe57a00  
+# 	   docker-TLS/copy-user-2-remote-host-tls.sh docker-TLS/create-host-tls.sh docker-TLS/create-site-private-public-tls.sh upgrade to Production standard 1.3.496 DEBUG variable ; change DEFAULT_WORKING_DIRECTORY ; shellcheck version section corrected 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.295.762  2019-07-21T10:32:24.265636-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.294  
 # 	   updated ARCHITECTURE TREE <USER_HOME>/<USER-1>/.docker/ca.pem 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.281.748  2019-06-10T16:46:36.797714-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.280  
 # 	   trying to reproduce docker-TLS/check-{host,user}-tls.sh - which one should check if the ca.pem match #49 
-### production standard 3.0 shellcheck
-### production standard 5.1.160 Copyright
-#       Copyright (c) 2019 Bradley Allen
-#       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-### production standard 1.0 DEBUG variable
-#       Order of precedence: environment variable, default code
-if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
-#	set -x
-#	set -v
+#86# docker-TLS/copy-user-2-remote-host-tls.sh - Copy user TLS public, private keys & CA to remote host
+###  Production standard 3.0 shellcheck
+###  Production standard 5.1.160 Copyright
+#    Copyright (c) 2019 Bradley Allen
+#    MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+###  Production standard 1.3.496 DEBUG variable
+#    Order of precedence: environment variable, default code
+if [[ "${DEBUG}" == ""  ]] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
+if [[ "${DEBUG}" == "2" ]] ; then set -x    ; fi   # Print trace of simple commands before they are executed
+if [[ "${DEBUG}" == "3" ]] ; then set -v    ; fi   # Print shell input lines as they are read
+if [[ "${DEBUG}" == "4" ]] ; then set -e    ; fi   # Exit command has a non-zero exit status
+#
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
-### production standard 7.0 Default variable value
+###  Production standard 7.0 Default variable value
 DEFAULT_REMOTE_HOST="$(hostname -f)"    # local host
 DEFAULT_TLS_USER="${USER}"
-DEFAULT_WORKING_DIRECTORY="$(echo ~)/.docker/docker-ca"
-### production standard 8.0 --usage
+DEFAULT_WORKING_DIRECTORY=~/.docker/docker-ca
+###  Production standard 8.0 --usage
 display_usage() {
 echo -e "\n${NORMAL}${0} - Copy user TLS public, private keys & CA to remote host"
 echo -e "\nUSAGE"
@@ -29,10 +34,10 @@ echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--usage | -usage | -u]"
 echo    "   ${0} [--version | -version | -v]"
 }
-### production standard 0.1.160 --help
+###  Production standard 0.1.160 --help
 display_help() {
 display_usage
-#       Displaying help DESCRIPTION in English en_US.UTF-8
+#    Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\nDESCRIPTION"
 echo    "A user with administration authority uses this script to copy user TLS CA,"
 echo    "public, and private keys from <WORKING_DIRECTORY> directory on this system to"
@@ -106,8 +111,8 @@ DATE_STAMP="${DATE_STAMP} (${TEMP})"
 LOCALHOST=$(hostname -f)
 
 #       Version
-SCRIPT_NAME=$(head -2 "${0}" | awk {'printf $2'})
-SCRIPT_VERSION=$(head -2 "${0}" | awk {'printf $3'})
+SCRIPT_NAME=$(head -2 "${0}" | awk '{printf $2}')
+SCRIPT_VERSION=$(head -2 "${0}" | awk '{printf $3}')
 
 #       UID and GID
 USER_ID=$(id -u)
