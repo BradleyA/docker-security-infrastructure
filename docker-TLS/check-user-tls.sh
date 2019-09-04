@@ -1,25 +1,30 @@
 #!/bin/bash
+# 	docker-TLS/check-user-tls.sh  3.436.914  2019-09-04T15:13:18.865841-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.435  
+# 	   docker-TLS/check-user-tls.sh  upgrade to Production standard 1.3.496 DEBUG variable ; shellcheck version section corrected ; change DEFAULT_USER_HOME 
 # 	docker-TLS/check-user-tls.sh  3.295.762  2019-07-21T10:32:24.151073-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.294  
 # 	   updated ARCHITECTURE TREE <USER_HOME>/<USER-1>/.docker/ca.pem 
 # 	docker-TLS/check-user-tls.sh  3.257.724  2019-06-07T21:09:59.495428-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.256  
 # 	   docker-TLS/c* - added production standard 8.0 --usage #52 
 # 	docker-TLS/check-user-tls.sh  3.232.677  2019-04-10T23:04:43.671650-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.231  
 # 	   production standard 6.1.177 Architecture tree 
-### production standard 3.0 shellcheck
-### production standard 5.1.160 Copyright
-#       Copyright (c) 2019 Bradley Allen
-#       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-### production standard 1.0 DEBUG variable
-#       Order of precedence: environment variable, default code
-if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
-#	set -x
-#	set -v
+#86# docker-TLS/check-user-tls.sh - Check public, private keys, and CA for a user
+###  Production standard 3.0 shellcheck
+###  Production standard 5.1.160 Copyright
+#    Copyright (c) 2019 Bradley Allen
+#    MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+###  Production standard 1.3.496 DEBUG variable
+#    Order of precedence: environment variable, default code
+if [[ "${DEBUG}" == ""  ]] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
+if [[ "${DEBUG}" == "2" ]] ; then set -x    ; fi   # Print trace of simple commands before they are executed
+if [[ "${DEBUG}" == "3" ]] ; then set -v    ; fi   # Print shell input lines as they are read
+if [[ "${DEBUG}" == "4" ]] ; then set -e    ; fi   # Exit command has a non-zero exit status
+#
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
-### production standard 7.0 Default variable value
+###  Production standard 7.0 Default variable value
 DEFAULT_TLS_USER="${USER}"
-DEFAULT_USER_HOME="/home/"
-### production standard 8.0 --usage
+DEFAULT_USER_HOME=$(dirname "${HOME}")
+###  Production standard 8.0 --usage
 display_usage() {
 echo -e "\n${NORMAL}${0} - Check public, private keys, and CA for a user"
 echo -e "\nUSAGE"
@@ -29,10 +34,10 @@ echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--usage | -usage | -u]"
 echo    "   ${0} [--version | -version | -v]"
 }
-### production standard 0.1.158 --help
+###  Production standard 0.1.158 --help
 display_help() {
 display_usage
-#       Displaying help DESCRIPTION in English en_US.UTF-8
+#    Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\nDESCRIPTION"
 echo    "Users can check their public, private keys, and CA in /home/ or other"
 echo    "non-default home directories.  The file and directory permissions are also"
@@ -100,8 +105,8 @@ DATE_STAMP="${DATE_STAMP} (${TEMP})"
 LOCALHOST=$(hostname -f)
 
 #       Version
-SCRIPT_NAME=$(head -2 "${0}" | awk {'printf $2'})
-SCRIPT_VERSION=$(head -2 "${0}" | awk {'printf $3'})
+SCRIPT_NAME=$(head -2 "${0}" | awk '{printf $2}')
+SCRIPT_VERSION=$(head -2 "${0}" | awk '{printf $3}')
 
 #       UID and GID
 USER_ID=$(id -u)
