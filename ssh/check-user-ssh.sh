@@ -1,25 +1,24 @@
 #!/bin/bash
-# 	ssh/check-user-ssh.sh  3.431.903  2019-08-01T11:06:54.134906-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.430  
-# 	   updated comment about crontab 
-# 	ssh/check-user-ssh.sh  3.430.902  2019-07-29T13:11:22.883136-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.429  
-# 	   ran shellcheck just a few Double quote changes 
-# 	ssh/check-user-ssh.sh  3.429.901  2019-07-28T11:24:48.578189-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.428  
-# 	   ssh/check-user-ssh.sh design FVT testing using .git/hooks close #57 
-### production standard 3.0 shellcheck
-### production standard 5.1.160 Copyright
-#       Copyright (c) 2019 Bradley Allen
-#       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-### production standard 1.0 DEBUG variable
-#       Order of precedence: environment variable, default code
-if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
-#       set -x
-#       set -v
+# 	ssh/check-user-ssh.sh  3.434.912  2019-09-04T15:01:42.221330-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.433  
+# 	   ssh/check-user-ssh.sh  upgrade to Production standard 1.3.496 DEBUG variable ; shellcheck version section corrected ; change DEFAULT_USER_HOME 
+#86# ssh/check-user-ssh.sh - Check user RSA ssh file permissions
+###  Production standard 3.0 shellcheck
+###  Production standard 5.1.160 Copyright
+#    Copyright (c) 2019 Bradley Allen
+#    MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+###  Production standard 1.3.496 DEBUG variable
+#    Order of precedence: environment variable, default code
+if [[ "${DEBUG}" == ""  ]] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
+if [[ "${DEBUG}" == "2" ]] ; then set -x    ; fi   # Print trace of simple commands before they are executed
+if [[ "${DEBUG}" == "3" ]] ; then set -v    ; fi   # Print shell input lines as they are read
+if [[ "${DEBUG}" == "4" ]] ; then set -e    ; fi   # Exit command has a non-zero exit status
+#
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
-### production standard 7.0 Default variable value
+###  Production standard 7.0 Default variable value
 DEFAULT_USER_HOME=$(echo ~ | sed s/"${USER}"//)
 DEFAULT_SSH_USER="${USER}"
-### production standard 8.3.214 --usage
+###  Production standard 8.3.214 --usage
 display_usage() {
 COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')
 echo -e "\n${NORMAL}${COMMAND_NAME}\n   Check user RSA ssh file permissions"
@@ -29,10 +28,10 @@ echo    "   ${COMMAND_NAME} [--help | -help | help | -h | h | -?]"
 echo    "   ${COMMAND_NAME} [--usage | -usage | -u]"
 echo    "   ${COMMAND_NAME} [--version | -version | -v]"
 }
-### production standard 0.3.214 --help
+###  Production standard 0.3.214 --help
 display_help() {
 display_usage
-#       Displaying help DESCRIPTION in English en_US.UTF-8
+#    Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
 echo    "This script allows users to make sure that the ssh files and directory"
 echo    "permissions are correct.  If they are not correct then this script will correct"
@@ -96,8 +95,8 @@ DATE_STAMP="${DATE_STAMP} (${TEMP})"
 LOCALHOST=$(hostname -f)
 
 #       Version
-SCRIPT_NAME=$(head -2 "${0}" | awk {'printf $2'})
-SCRIPT_VERSION=$(head -2 "${0}" | awk {'printf $3'})
+SCRIPT_NAME=$(head -2 "${0}" | awk '{printf $2}')
+SCRIPT_VERSION=$(head -2 "${0}" | awk '{printf $3}')
 
 #       UID and GID
 USER_ID=$(id -u)
