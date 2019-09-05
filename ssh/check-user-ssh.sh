@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	ssh/check-user-ssh.sh  3.434.912  2019-09-04T15:01:42.221330-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.433  
-# 	   ssh/check-user-ssh.sh  upgrade to Production standard 1.3.496 DEBUG variable ; shellcheck version section corrected ; change DEFAULT_USER_HOME 
+# 	ssh/check-user-ssh.sh  3.437.915  2019-09-04T21:30:12.016526-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.436  
+# 	   ssh/check-user-ssh.sh  change DEFAULT_USER_HOME #54 
 #86# ssh/check-user-ssh.sh - Check user RSA ssh file permissions
 ###  Production standard 3.0 shellcheck
 ###  Production standard 5.1.160 Copyright
@@ -16,7 +16,7 @@ if [[ "${DEBUG}" == "4" ]] ; then set -e    ; fi   # Exit command has a non-zero
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 ###  Production standard 7.0 Default variable value
-DEFAULT_USER_HOME=$(echo ~ | sed s/"${USER}"//)
+DEFAULT_USER_HOME=$(dirname "${HOME}")
 DEFAULT_SSH_USER="${USER}"
 ###  Production standard 8.3.214 --usage
 display_usage() {
