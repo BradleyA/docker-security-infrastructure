@@ -1,29 +1,28 @@
 #!/bin/bash
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.422.894  2019-07-28T10:12:44.122518-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.421  
-# 	   change DEFAULT_CERTDIR TO DEFAULT_CERT_DAEMON_DIR AND CERTDIR TO CERT_DAEMON_DIR 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.284.751  2019-06-21T21:17:39.569129-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.283  
-# 	   check-ca-tls.sh draft 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.281.748  2019-06-10T16:46:36.699590-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.280  
-# 	   trying to reproduce docker-TLS/check-{host,user}-tls.sh - which one should check if the ca.pem match #49 
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.438.916  2019-09-04T21:48:43.119624-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.437  
+# 	   docker-TLS/copy-host-2-remote-host-tls.sh  upgraded  Production standard 1.3.496 DEBUG variable 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.280.747  2019-06-10T12:43:31.498537-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.279  
 # 	   update copy-host-2-remote-host-tls.sh while trying to reproduce incident docker-TLS/check-{host,user}-tls.sh - which one should check if the ca.pem match #49 
-### production standard 3.0 shellcheck
-### production standard 5.1.160 Copyright
-#       Copyright (c) 2019 Bradley Allen
-#       MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-### production standard 1.0 DEBUG variable
-#       Order of precedence: environment variable, default code
-if [ "${DEBUG}" == "" ] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
-#	set -x
-#	set -v
+#86# docker-TLS/copy-host-2-remote-host-tls.sh - Copy public, private keys and CA to remote host
+###  Production standard 3.0 shellcheck
+###  Production standard 5.1.160 Copyright
+#    Copyright (c) 2019 Bradley Allen
+#    MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
+###  Production standard 1.3.496 DEBUG variable
+#    Order of precedence: environment variable, default code
+if [[ "${DEBUG}" == ""  ]] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
+if [[ "${DEBUG}" == "2" ]] ; then set -x    ; fi   # Print trace of simple commands before they are executed
+if [[ "${DEBUG}" == "3" ]] ; then set -v    ; fi   # Print shell input lines as they are read
+if [[ "${DEBUG}" == "4" ]] ; then set -e    ; fi   # Exit command has a non-zero exit status
+#
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
-### production standard 7.0 Default variable value
+###  Production standard 7.0 Default variable value
 DEFAULT_REMOTE_HOST="$(hostname -f)"    # local host
-DEFAULT_WORKING_DIRECTORY="$(echo ~/.docker/docker-ca)"
+DEFAULT_WORKING_DIRECTORY=~/.docker/docker-ca
 DEFAULT_CA_CERT="ca.pem"
 DEFAULT_CERT_DAEMON_DIR="/etc/docker/certs.d/daemon/"
-### production standard 8.0 --usage
+###  Production standard 8.0 --usage
 display_usage() {
 echo -e "\n${NORMAL}${0} - Copy public, private keys and CA to remote host"
 echo -e "\nUSAGE"
@@ -34,10 +33,10 @@ echo    "   ${0} [--help | -help | help | -h | h | -?]"
 echo    "   ${0} [--usage | -usage | -u]"
 echo    "   ${0} [--version | -version | -v]"
 }
-### production standard 0.1.158 --help
+###  Production standard 0.1.158 --help
 display_help() {
 display_usage
-#       Displaying help DESCRIPTION in English en_US.UTF-8
+#    Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\nDESCRIPTION"
 echo    "A user with administration authority uses this script to copy host TLS CA,"
 echo    "public, and private keys from <WORKING_DIRECTORY> directory on this"
@@ -104,8 +103,8 @@ DATE_STAMP="${DATE_STAMP} (${TEMP})"
 LOCALHOST=$(hostname -f)
 
 #       Version
-SCRIPT_NAME=$(head -2 "${0}" | awk {'printf $2'})
-SCRIPT_VERSION=$(head -2 "${0}" | awk {'printf $3'})
+SCRIPT_NAME=$(head -2 "${0}" | awk '{printf $2}')
+SCRIPT_VERSION=$(head -2 "${0}" | awk '{printf $3}')
 
 #       UID and GID
 USER_ID=$(id -u)
