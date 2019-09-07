@@ -1,12 +1,8 @@
 #!/bin/bash
+# 	docker-TLS/check-user-tls.sh  3.439.917  2019-09-07T13:52:54.148689-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.438  
+# 	   docker-TLS/check-user-tls.sh  corrected incident with $(dirname "${HOME}") because it does not include an ending / 
 # 	docker-TLS/check-user-tls.sh  3.436.914  2019-09-04T15:13:18.865841-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.435  
 # 	   docker-TLS/check-user-tls.sh  upgrade to Production standard 1.3.496 DEBUG variable ; shellcheck version section corrected ; change DEFAULT_USER_HOME 
-# 	docker-TLS/check-user-tls.sh  3.295.762  2019-07-21T10:32:24.151073-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.294  
-# 	   updated ARCHITECTURE TREE <USER_HOME>/<USER-1>/.docker/ca.pem 
-# 	docker-TLS/check-user-tls.sh  3.257.724  2019-06-07T21:09:59.495428-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.256  
-# 	   docker-TLS/c* - added production standard 8.0 --usage #52 
-# 	docker-TLS/check-user-tls.sh  3.232.677  2019-04-10T23:04:43.671650-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.231  
-# 	   production standard 6.1.177 Architecture tree 
 #86# docker-TLS/check-user-tls.sh - Check public, private keys, and CA for a user
 ###  Production standard 3.0 shellcheck
 ###  Production standard 5.1.160 Copyright
@@ -139,7 +135,7 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 ###
 TLS_USER=${1:-${DEFAULT_TLS_USER}}
 #       Order of precedence: CLI argument, environment variable, default code
-if [ $# -ge  2 ]  ; then USER_HOME=${2} ; elif [ "${USER_HOME}" == "" ] ; then USER_HOME="${DEFAULT_USER_HOME}" ; fi
+if [ $# -ge  2 ]  ; then USER_HOME=${2} ; elif [ "${USER_HOME}" == "" ] ; then USER_HOME="${DEFAULT_USER_HOME}/" ; fi
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  TLS_USER >${TLS_USER}< USER_HOME >${USER_HOME}<" 1>&2 ; fi
 
 #	Root is required to check other users or user can check their own certs
