@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	ssh/check-user-ssh.sh  3.441.919  2019-09-07T14:10:54.778617-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.440  
+# 	   #54  ssh/check-user-ssh.sh  corrected incident with $(dirname "${HOME}") because it does not include an ending / 
 # 	ssh/check-user-ssh.sh  3.437.915  2019-09-04T21:30:12.016526-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.436  
 # 	   ssh/check-user-ssh.sh  change DEFAULT_USER_HOME #54 
 #86# ssh/check-user-ssh.sh - Check user RSA ssh file permissions
@@ -129,7 +131,7 @@ if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP}
 
 ### production standard 7.0 Default variable value
 #       Order of precedence: CLI argument, environment variable, default code
-if [ "${USER_HOME}" == "" ] ; then USER_HOME="${DEFAULT_USER_HOME}" ; fi
+if [ "${USER_HOME}" == "" ] ; then USER_HOME="${DEFAULT_USER_HOME}/" ; fi
 #       Order of precedence: CLI argument, default code
 SSH_USER=${DEFAULT_SSH_USER}
 if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  USER_HOME >${USER_HOME}< SSH_USER >${SSH_USER}<" 1>&2 ; fi
