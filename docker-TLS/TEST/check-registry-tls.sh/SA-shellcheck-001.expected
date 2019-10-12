@@ -1,0 +1,25 @@
+
+In ./check-registry-tls.sh line 245:
+  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  File permissions for /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt are not 400.  Correcting $(stat -Lc %a /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt) to 0400 file permissions." 1>&2
+                                                                                                                                                                                                   ^-- SC2086: Double quote to prevent globbing and word splitting.
+
+
+In ./check-registry-tls.sh line 251:
+  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Directory permissions for /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ are not 700.  Correcting $(stat -Lc %a /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/) to 700 directory permissions." 1>&2
+                                                                                                                                                                                                  ^-- SC2086: Double quote to prevent globbing and word splitting.
+
+
+In ./check-registry-tls.sh line 301:
+    new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  File permissions for ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt are not 400.  Correcting $(stat -Lc %a  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt) to 0400 file permissions." 1>&2
+                                                                                                                                                                                                                                                      ^-- SC2086: Double quote to prevent globbing and word splitting.
+
+
+In ./check-registry-tls.sh line 307:
+    new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  File permissions for ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key are not 400.  Correcting $(stat -Lc %a  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key) to 0400 file permissions." 1>&2
+                                                                                                                                                                                                                                                      ^-- SC2086: Double quote to prevent globbing and word splitting.
+
+
+In ./check-registry-tls.sh line 313:
+    new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Directory permissions for ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/ are not 700.  Correcting $(stat -Lc %a ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/) to 700 directory permissions." 1>&2
+                                                                                                                                                                                                                                                ^-- SC2086: Double quote to prevent globbing and word splitting.
+
