@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-registry-tls.sh  3.447.937  2019-10-12T10:04:03.474050-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.446-2-g728775b  
+# 	   docker-TLS/check-registry-tls.sh   cleanup tabs 
 # 	docker-TLS/check-registry-tls.sh  3.445.932  2019-10-11T23:41:38.864013-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.444-1-gb6310ed  
 # 	   docker-TLS/check-ca-tls.sh docker-TLS/check-host-tls.sh docker-TLS/check-registry-tls.sh #59 #60 
 # 	docker-TLS/check-registry-tls.sh  3.256.723  2019-06-07T21:05:02.596704-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.255  
@@ -123,7 +125,7 @@ echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
 
 echo -e "\n${BOLD}EXAMPLES${NORMAL}"
-echo -e "   Check local host certificates for <REGISTRY_HOST> (two.cptx86.com) using\n   <REGISTRY_PORT> (17313)\n	${BOLD}sudo ${0} two.cptx86.com 17313${NORMAL}"
+echo -e "   Check local host certificates for <REGISTRY_HOST> (two.cptx86.com) using\n   <REGISTRY_PORT> (17313)\n\t${BOLD}sudo ${0} two.cptx86.com 17313${NORMAL}"
 echo -e "   Use cluster-command.sh script to loop through hosts in a cluster."
 echo    "   Check each host certificates for <REGISTRY_HOST> (two.cptx86.com) using"
 echo -e "   <REGISTRY_PORT> (17313)\n\t${BOLD}cluster-command.sh special 'sudo ${0} two.cptx86.com 17313${NORMAL}'"
@@ -280,7 +282,7 @@ if [ "${LOCALHOST}" == "${REGISTRY_HOST}" ] ; then
     exit 1
   fi
 
-#	Get registry certificate expiration date domain.crt
+#    Get registry certificate expiration date domain.crt
   REGISTRY_EXPIRE_DATE=$(openssl x509 -in "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt" -noout -enddate | cut -d '=' -f 2)
   REGISTRY_EXPIRE_SECONDS=$(date -d "${REGISTRY_EXPIRE_DATE}" '+%s')
 
