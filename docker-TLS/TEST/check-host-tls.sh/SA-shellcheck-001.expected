@@ -1,45 +1,20 @@
 
-In SA-shellcheck-001 line 144:
-if ! [ $(id -u) = 0 ] ; then
-       ^-- SC2046: Quote this to prevent word splitting.
+In SA-shellcheck-001 line 229:
+  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  File permissions for ${CERT_DAEMON_DIR}ca.pem are not 444.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/ca.pem) to 0444 file permissions." 1>&2
+                                                                                                                                           ^-- SC2086: Double quote to prevent globbing and word splitting.
 
 
-In SA-shellcheck-001 line 227:
-if [ $(stat -Lc %a "${CERT_DAEMON_DIR}/ca.pem") != 444 ]; then
-     ^-- SC2046: Quote this to prevent word splitting.
+In SA-shellcheck-001 line 235:
+  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  File permissions for ${CERT_DAEMON_DIR}cert.pem are not 444.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/cert.pem) to 0444 file permissions." 1>&2
+                                                                                                                                             ^-- SC2086: Double quote to prevent globbing and word splitting.
 
 
-In SA-shellcheck-001 line 228:
-  get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${CERT_DAEMON_DIR}ca.pem are not 444.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/ca.pem) to 0444 file permissions." 1>&2
-                                                                                                                                                                                                                                                  ^-- SC2086: Double quote to prevent globbing and word splitting.
+In SA-shellcheck-001 line 241:
+  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  File permissions for ${CERT_DAEMON_DIR}key.pem are not 400.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/key.pem) to 0400 file permissions." 1>&2
+                                                                                                                                            ^-- SC2086: Double quote to prevent globbing and word splitting.
 
 
-In SA-shellcheck-001 line 233:
-if [ $(stat -Lc %a "${CERT_DAEMON_DIR}/cert.pem") != 444 ]; then
-     ^-- SC2046: Quote this to prevent word splitting.
-
-
-In SA-shellcheck-001 line 234:
-  get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${CERT_DAEMON_DIR}cert.pem are not 444.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/cert.pem) to 0444 file permissions." 1>&2
-                                                                                                                                                                                                                                                    ^-- SC2086: Double quote to prevent globbing and word splitting.
-
-
-In SA-shellcheck-001 line 239:
-if [ $(stat -Lc %a "${CERT_DAEMON_DIR}/key.pem") != 400 ]; then
-     ^-- SC2046: Quote this to prevent word splitting.
-
-
-In SA-shellcheck-001 line 240:
-  get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${CERT_DAEMON_DIR}key.pem are not 400.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/key.pem) to 0400 file permissions." 1>&2
-                                                                                                                                                                                                                                                   ^-- SC2086: Double quote to prevent globbing and word splitting.
-
-
-In SA-shellcheck-001 line 245:
-if [ $(stat -Lc %a "${CERT_DAEMON_DIR}") != 700 ]; then
-     ^-- SC2046: Quote this to prevent word splitting.
-
-
-In SA-shellcheck-001 line 246:
-  get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Directory permissions for ${CERT_DAEMON_DIR} are not 700.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}) to 700 directory permissions." 1>&2
-                                                                                                                                                                                                                                                 ^-- SC2086: Double quote to prevent globbing and word splitting.
+In SA-shellcheck-001 line 247:
+  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Directory permissions for ${CERT_DAEMON_DIR} are not 700.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}) to 700 directory permissions." 1>&2
+                                                                                                                                          ^-- SC2086: Double quote to prevent globbing and word splitting.
 
