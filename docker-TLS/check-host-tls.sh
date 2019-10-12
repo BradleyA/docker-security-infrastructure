@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-host-tls.sh  3.445.932  2019-10-11T23:41:38.742954-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.444-1-gb6310ed  
+# 	   docker-TLS/check-ca-tls.sh docker-TLS/check-host-tls.sh docker-TLS/check-registry-tls.sh #59 #60 
 # 	docker-TLS/check-host-tls.sh  3.444.930  2019-10-10T22:52:39.829867-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.443-1-g3c76d63  
 # 	   close #60    check-host-tls.sh - upgrade Production standard 
 # 	docker-TLS/check-host-tls.sh  3.422.894  2019-07-28T10:12:43.958202-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.421  
@@ -72,12 +74,12 @@ echo    "about any of the set options, see man bash."
 
 ###  Production standard 4.0 Documentation Language
 #    Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
-if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
-        echo -e "\n--> ${LANG}"
-        echo    "<votre aide va ici>" # your help goes here
-        echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
-elif ! [ "${LANG}" == "en_US.UTF-8" ] ; then
-        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+if [[ "${LANG}" == "fr_CA.UTF-8" ]] || [[ "${LANG}" == "fr_FR.UTF-8" ]] || [[ "${LANG}" == "fr_CH.UTF-8" ]] ; then
+  echo -e "\n--> ${LANG}"
+  echo    "<votre aide va ici>" # your help goes here
+  echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
+elif ! [[ "${LANG}" == "en_US.UTF-8" ]] ; then
+  new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
 
 echo -e "\n${BOLD}ENVIRONMENT VARIABLES${NORMAL}"
@@ -160,11 +162,12 @@ done
 
 ### 
 CERT_DAEMON_DIR=${1:-${DEFAULT_CERT_DAEMON_DIR}}
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  CERT_DAEMON_DIR >${CERT_DAEMON_DIR}<<" 1>&2 ; fi
+if [ "${DEBUG}" == "1" ] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  CERT_DAEMON_DIR >${CERT_DAEMON_DIR}<<" 1>&2 ; fi
+
 #    Must be root to run this script
-if ! [ $(id -u) = 0 ] ; then
+if ! [ "${USER_ID}" = 0 ] ; then
   display_help | more
-  get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Use sudo ${0}" 1>&2
+  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Use sudo ${COMMAND_NAME}" 1>&2
 #    Help hint
   echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT   <<\n${NORMAL}"  1>&2
   exit 1
@@ -172,7 +175,7 @@ fi
 #    Check for ${CERT_DAEMON_DIR} directory
 if [ ! -d "${CERT_DAEMON_DIR}" ] ; then
   display_help | more
-  get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  ${CERT_DAEMON_DIR} does not exist" 1>&2
+  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  ${CERT_DAEMON_DIR} does not exist" 1>&2
   exit 1
 fi
 
@@ -181,12 +184,12 @@ CURRENT_DATE_SECONDS=$(date '+%s')
 
 #    Get currect date in seconds add 30 days
 CURRENT_DATE_SECONDS_PLUS_30_DAYS=$(date '+%s' -d '+30 days')
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... CURRENT_DATE_SECONDS >${CURRENT_DATE_SECONDS}< CURRENT_DATE_SECONDS_PLUS_30_DAYS >${CURRENT_DATE_SECONDS_PLUS_30_DAYS=}<" 1>&2 ; fi
+if [ "${DEBUG}" == "1" ] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Variable... CURRENT_DATE_SECONDS >${CURRENT_DATE_SECONDS}< CURRENT_DATE_SECONDS_PLUS_30_DAYS >${CURRENT_DATE_SECONDS_PLUS_30_DAYS=}<" 1>&2 ; fi
 
 #    View dockerd daemon certificate expiration date of ca.pem file
 HOST_EXPIRE_DATE=$(openssl x509 -in "${CERT_DAEMON_DIR}/ca.pem" -noout -enddate  | cut -d '=' -f 2)
 HOST_EXPIRE_SECONDS=$(date -d "${HOST_EXPIRE_DATE}" '+%s')
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... HOST_EXPIRE_DATE >${HOST_EXPIRE_DATE}< HOST_EXPIRE_SECONDS >${HOST_EXPIRE_SECONDS}<" 1>&2 ; fi
+if [ "${DEBUG}" == "1" ] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Variable... HOST_EXPIRE_DATE >${HOST_EXPIRE_DATE}< HOST_EXPIRE_SECONDS >${HOST_EXPIRE_SECONDS}<" 1>&2 ; fi
 
 #    Check if certificate has expired
 if [ "${HOST_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ] ; then
@@ -195,13 +198,13 @@ if [ "${HOST_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ] ; then
     echo -e "\n\tCertificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/ca.pem, is  ${BOLD}GOOD${NORMAL}  until ${HOST_EXPIRE_DATE}"
   else
     echo -e "\n\tCertificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/ca.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}"
-    get_date_stamp ; echo -e "\n${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Certificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/ca.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
+    new_message "${SCRIPT_NAME}" "${LINENO}" "WARN" "  Certificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/ca.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
 #    Help hint
     echo -e "\n\t${BOLD}Use script  create-site-private-public-tls.sh  to update expired host TLS on your\n\tsite TLS server.${NORMAL}"
   fi
 else
   echo -e "\n\tCertificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/ca.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}"
-  get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Certificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/ca.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
+  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Certificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/ca.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
 #    Help hint
   echo -e "\n\t${BOLD}Use script  create-site-private-public-tls.sh  to update expired host TLS on your\n\tsite TLS server.${NORMAL}"
 fi
@@ -209,7 +212,7 @@ fi
 #    View dockerd daemon certificate expiration date of cert.pem file
 HOST_EXPIRE_DATE=$(openssl x509 -in "${CERT_DAEMON_DIR}/cert.pem" -noout -enddate  | cut -d '=' -f 2)
 HOST_EXPIRE_SECONDS=$(date -d "${HOST_EXPIRE_DATE}" '+%s')
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... HOST_EXPIRE_DATE >${HOST_EXPIRE_DATE}< HOST_EXPIRE_SECONDS >${HOST_EXPIRE_SECONDS}<" 1>&2 ; fi
+if [ "${DEBUG}" == "1" ] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Variable... HOST_EXPIRE_DATE >${HOST_EXPIRE_DATE}< HOST_EXPIRE_SECONDS >${HOST_EXPIRE_SECONDS}<" 1>&2 ; fi
 
 #    Check if certificate has expired
 if [ "${HOST_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ] ; then
@@ -219,13 +222,13 @@ if [ "${HOST_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ] ; then
     echo -e "\n\tCertificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/cert.pem, is  ${BOLD}GOOD${NORMAL}  until ${HOST_EXPIRE_DATE}"
   else
     echo -e "\n\tCertificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/cert.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}"
-    get_date_stamp ; echo -e "\n${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Certificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/cert.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
+    new_message "${SCRIPT_NAME}" "${LINENO}" "WARN" "  Certificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/cert.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
 #    Help hint
     echo -e "\n\t${BOLD}Use script  create-host-tls.sh  to update expired host TLS on your\n\tsite TLS server.${NORMAL}"
   fi
 else
-   echo -e "\n\tCertificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/cert.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}"
-  get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Certificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/cert.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
+  echo -e "\n\tCertificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/cert.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}"
+  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Certificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/cert.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
 #    Help hint
   echo -e "\n\t${BOLD}Use script  create-host-tls.sh  to update expired host TLS on your site\n\tTLS server.${NORMAL}"
 fi
@@ -245,26 +248,26 @@ echo -e "\n\tVerify that dockerd daemon certificate was issued by the CA:\n\t${B
 echo -e "\n\tVerify and correct file permissions."
 
 #    Verify and correct file permissions for ${CERT_DAEMON_DIR}/ca.pem
-if [ $(stat -Lc %a "${CERT_DAEMON_DIR}/ca.pem") != 444 ]; then
-  get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${CERT_DAEMON_DIR}ca.pem are not 444.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/ca.pem) to 0444 file permissions." 1>&2
+if [ "$(stat -Lc %a "${CERT_DAEMON_DIR}/ca.pem")" != 444 ]; then
+  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  File permissions for ${CERT_DAEMON_DIR}ca.pem are not 444.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/ca.pem) to 0444 file permissions." 1>&2
   chmod 0444 "${CERT_DAEMON_DIR}ca.pem"
 fi
 
 #    Verify and correct file permissions for ${CERT_DAEMON_DIR}cert.pem
-if [ $(stat -Lc %a "${CERT_DAEMON_DIR}/cert.pem") != 444 ]; then
-  get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${CERT_DAEMON_DIR}cert.pem are not 444.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/cert.pem) to 0444 file permissions." 1>&2
+if [ "$(stat -Lc %a "${CERT_DAEMON_DIR}/cert.pem")" != 444 ]; then
+  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  File permissions for ${CERT_DAEMON_DIR}cert.pem are not 444.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/cert.pem) to 0444 file permissions." 1>&2
   chmod 0444 "${CERT_DAEMON_DIR}/cert.pem"
 fi
 
 #    Verify and correct file permissions for ${CERT_DAEMON_DIR}/key.pem
-if [ $(stat -Lc %a "${CERT_DAEMON_DIR}/key.pem") != 400 ]; then
-  get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  File permissions for ${CERT_DAEMON_DIR}key.pem are not 400.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/key.pem) to 0400 file permissions." 1>&2
+if [ "$(stat -Lc %a "${CERT_DAEMON_DIR}/key.pem")" != 400 ]; then
+  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  File permissions for ${CERT_DAEMON_DIR}key.pem are not 400.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/key.pem) to 0400 file permissions." 1>&2
   chmod 0400 "${CERT_DAEMON_DIR}/key.pem"
 fi
 
 #    Verify and correct directory permissions for ${CERT_DAEMON_DIR} directory
-if [ $(stat -Lc %a "${CERT_DAEMON_DIR}") != 700 ]; then
-  get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[ERROR]${NORMAL}  Directory permissions for ${CERT_DAEMON_DIR} are not 700.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}) to 700 directory permissions." 1>&2
+if [ "$(stat -Lc %a "${CERT_DAEMON_DIR}")" != 700 ]; then
+  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Directory permissions for ${CERT_DAEMON_DIR} are not 700.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}) to 700 directory permissions." 1>&2
   chmod 700 "${CERT_DAEMON_DIR}"
 fi
 
@@ -276,5 +279,5 @@ echo -e "\n\tUse script ${BOLD}create-host-tls.sh${NORMAL} to update host TLS on
 #    open ticket and remove this comment
 
 #
-get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
+new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  Operation finished..." 1>&2
 ###

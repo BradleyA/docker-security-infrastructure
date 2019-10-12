@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-ca-tls.sh  3.445.932  2019-10-11T23:41:38.580425-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.444-1-gb6310ed  
+# 	   docker-TLS/check-ca-tls.sh docker-TLS/check-host-tls.sh docker-TLS/check-registry-tls.sh #59 #60 
 # 	docker-TLS/check-ca-tls.sh  3.443.928  2019-10-10T22:10:01.344161-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.442-5-gae5a529  
 # 	   close #59   docker-TLS/check-ca-tls.sh - upgrade Production standard #59 
 # 	docker-TLS/check-ca-tls.sh  3.293.760  2019-07-20T19:51:00.914284-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.292  
@@ -66,13 +68,14 @@ echo    "about any of the set options, see man bash."
 
 ###  Production standard 4.0 Documentation Language
 #    Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
-if [ "${LANG}" == "fr_CA.UTF-8" ] || [ "${LANG}" == "fr_FR.UTF-8" ] || [ "${LANG}" == "fr_CH.UTF-8" ] ; then
-        echo -e "\n--> ${LANG}"
-        echo    "<votre aide va ici>" # your help goes here
-        echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
-elif ! [ "${LANG}" == "en_US.UTF-8" ] ; then
-        get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[WARN]${NORMAL}  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+if [[ "${LANG}" == "fr_CA.UTF-8" ]] || [[ "${LANG}" == "fr_FR.UTF-8" ]] || [[ "${LANG}" == "fr_CH.UTF-8" ]] ; then
+  echo -e "\n--> ${LANG}"
+  echo    "<votre aide va ici>" # your help goes here
+  echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
+elif ! [[ "${LANG}" == "en_US.UTF-8" ]] ; then
+  new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
+
 echo -e "\n${BOLD}ENVIRONMENT VARIABLES${NORMAL}"
 echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
 echo    "the environment variable DEBUG to '1' (0 = debug off, 1 = debug on).  Use the"
@@ -172,16 +175,16 @@ while [[ "${#}" -gt 0 ]] ; do
     *)  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Option, ${BOLD}${YELLOW}${1}${NORMAL}, entered on the command line is not supported." 1>&2 ; display_usage ; exit 1 ; ;;
   esac
 done
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Variable... ADMUSER >${ADMUSER}< CLUSTER >${CLUSTER}< DATA_DIR >${DATA_DIR}< FILE_NAME >${FILE_NAME}< SSH_USER >${SSH_USER}< USER_HOME >${USER_HOME}<" 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Variable... CERT_DIR >${CERT_DIR}< CA_CERT >${CA_CERT}<" 1>&2 ; fi
 
 ###  Production standard 7.0 Default variable value
 #    Order of precedence: CLI argument, environment variable, default code
-if [ $# -ge  1 ]  ; then CERT_DIR=${1} ; elif [ "${CERT_DIR}" == "" ] ; then CERT_DIR=${DEFAULT_CERT_DIR} ; fi
-if [ $# -ge  2 ]  ; then CA_CERT=${2}  ; elif [ "${CA_CERT}" == "" ]  ; then CA_CERT=${DEFAULT_CA_CERT}   ; fi
-if [ "${DEBUG}" == "1" ] ; then get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[DEBUG]${NORMAL}  Variable... CERT_DIR >${CERT_DIR}< CA_CERT >${CA_CERT}<" 1>&2 ; fi
+if [[ $# -ge  1 ]]  ; then CERT_DIR=${1} ; elif [[ "${CERT_DIR}" == "" ]] ; then CERT_DIR=${DEFAULT_CERT_DIR} ; fi
+if [[ $# -ge  2 ]]  ; then CA_CERT=${2}  ; elif [[ "${CA_CERT}" == "" ]]  ; then CA_CERT=${DEFAULT_CA_CERT}   ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Variable... CERT_DIR >${CERT_DIR}< CA_CERT >${CA_CERT}<" 1>&2 ; fi
 
 #
-if [ -s "${CERT_DIR}/${CA_CERT}" ] ; then
+if [[ -s "${CERT_DIR}/${CA_CERT}" ]] ; then
   #  Get certificate start and expiration date of ${CA_CERT} file
   CA_CERT_START_DATE=$(openssl x509 -in "${CERT_DIR}/${CA_CERT}" -noout -startdate | cut -d '=' -f 2)
   CA_CERT_START_DATE_2=$(date -u -d"${CA_CERT_START_DATE}" +%g%m%d%H%M.%S)
@@ -191,12 +194,12 @@ if [ -s "${CERT_DIR}/${CA_CERT}" ] ; then
   cp -f -p "${CERT_DIR}/${CA_CERT}" "${CERT_DIR}/${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
   chmod 0400 "${CERT_DIR}/${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
   touch -m -t "${CA_CERT_START_DATE_2}" "${CERT_DIR}/${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}" "${CERT_DIR}/${CA_CERT}"
-  ls -l "${CERT_DIR}/${CA_CERT}*"
+  ls -l "${CERT_DIR}/${CA_CERT}"*
 else
 #    Help hint
   echo "Cannot access ${BOLD}${YELLOW}${CERT_DIR}/${CA_CERT}${NORMAL}: Permission denied or No such file or directory"
 fi
 
 #
-get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
+new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  Operation finished..." 1>&2
 ###
