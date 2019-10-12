@@ -1,12 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-registry-tls.sh  3.447.937  2019-10-12T10:04:03.474050-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.446-2-g728775b  
-# 	   docker-TLS/check-registry-tls.sh   cleanup tabs 
-# 	docker-TLS/check-registry-tls.sh  3.445.932  2019-10-11T23:41:38.864013-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.444-1-gb6310ed  
-# 	   docker-TLS/check-ca-tls.sh docker-TLS/check-host-tls.sh docker-TLS/check-registry-tls.sh #59 #60 
-# 	docker-TLS/check-registry-tls.sh  3.256.723  2019-06-07T21:05:02.596704-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.255  
-# 	   docker-TLS/c* - added production standard 8.0 --usage #52 
-# 	docker-TLS/check-registry-tls.sh  3.232.677  2019-04-10T23:04:43.569614-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.231  
-# 	   production standard 6.1.177 Architecture tree 
+# 	docker-TLS/check-registry-tls.sh  3.451.945  2019-10-12T18:45:13.024119-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.450-1-g7ebe3d6  
+# 	   close #61   docker-TLS/check-registry-tls.sh  - upgrade Production standard 
 #86# docker-TLS/check-registry-tls.sh - Check certifications for private registry
 ###  Production standard 3.0 shellcheck
 ###  Production standard 5.1.160 Copyright
