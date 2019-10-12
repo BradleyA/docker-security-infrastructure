@@ -1,20 +1,12 @@
 #!/bin/bash
-# 	docker-TLS/check-host-tls.sh  3.445.932  2019-10-11T23:41:38.742954-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.444-1-gb6310ed  
-# 	   docker-TLS/check-ca-tls.sh docker-TLS/check-host-tls.sh docker-TLS/check-registry-tls.sh #59 #60 
+# 	docker-TLS/check-host-tls.sh  3.446.934  2019-10-12T08:30:00.675630-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.445-1-gd1e2a78  
+# 	   docker-TLS/check-host-tls.sh  testing SA-shellcheck-001 #35 
 # 	docker-TLS/check-host-tls.sh  3.444.930  2019-10-10T22:52:39.829867-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.443-1-g3c76d63  
 # 	   close #60    check-host-tls.sh - upgrade Production standard 
-# 	docker-TLS/check-host-tls.sh  3.422.894  2019-07-28T10:12:43.958202-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.421  
-# 	   change DEFAULT_CERTDIR TO DEFAULT_CERT_DAEMON_DIR AND CERTDIR TO CERT_DAEMON_DIR 
-# 	docker-TLS/check-host-tls.sh  3.284.751  2019-06-21T21:17:39.403875-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.283  
-# 	   check-ca-tls.sh draft 
 # 	docker-TLS/check-host-tls.sh  3.283.750  2019-06-10T23:51:10.800496-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.282  
 # 	   docker-TLS/check-ca-tls.sh - complete design - in development #56 
-# 	docker-TLS/check-host-tls.sh  3.255.722  2019-06-07T21:01:25.687206-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.254  
-# 	   docker-TLS/c* - added production standard 8.0 --usage #52 
 # 	docker-TLS/check-host-tls.sh  3.245.702  2019-05-07T20:58:06.966364-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.244  
 # 	   docker-TLS/check-host-tls.sh - modify output: add user message about cert expires close #50 
-# 	docker-TLS/check-host-tls.sh  3.232.677  2019-04-10T23:04:43.449464-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.231  
-# 	   production standard 6.1.177 Architecture tree 
 #86# docker-TLS/check-host-tls.sh - Check public, private keys, and CA for host
 ###  Production standard 3.0 shellcheck
 ###  Pproduction standard 5.1.160 Copyright
