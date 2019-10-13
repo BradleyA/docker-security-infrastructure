@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.453.950  2019-10-12T19:34:44.666354-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.452-1-ga890bdc  
+# 	   docker-TLS/copy-user-2-remote-host-tls.sh  shellcheck updates  #64 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.452.948  2019-10-12T19:26:58.916776-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.451-2-g6faccee  
 # 	   close #64   docker-TLS/copy-user-2-remote-host-tls.sh  - upgrade Production standard 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.281.748  2019-06-10T16:46:36.797714-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.280  
@@ -204,7 +206,7 @@ echo -e "\tfrom ${REMOTE_HOST}.  Running"
 echo -e "\t${BOLD}ssh-copy-id ${USER}@${REMOTE_HOST}${NORMAL}"
 echo -e "\tmay stop some of the prompts.\n"
 if $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
-  ssh -t ${REMOTE_HOST} " cd ~${TLS_USER} " || { new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  ${TLS_USER} user does not have home directory on ${REMOTE_HOST}"  ; exit 1; }
+  ssh -t "${REMOTE_HOST}" " cd ~${TLS_USER} " || { new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  ${TLS_USER} user does not have home directory on ${REMOTE_HOST}"  ; exit 1; }
   echo -e "\tCreate directory, change file permissions, and copy TLS keys to ${TLS_USER}@${REMOTE_HOST}." 1>&2
   mkdir -p "${TLS_USER}/.docker"
   chmod 0755 "${TLS_USER}"
@@ -219,14 +221,14 @@ if $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
   cd ..
   tar -pcf "./${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" .docker
   echo -e "\tTransfer TLS keys to ${TLS_USER}@${REMOTE_HOST}." 1>&2
-  scp -p "./${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" ${REMOTE_HOST}:/tmp
+  scp -p "./${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" "${REMOTE_HOST}:/tmp"
 
 #    Check if ${TLS_USER} == ${USER} because sudo is not required for user copying their certs
   if [[ "${TLS_USER}" == "${USER}" ]] ; then
-    ssh -t ${REMOTE_HOST} " cd ~${TLS_USER} ; tar -xf /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; rm /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; chown -R ${TLS_USER}.${TLS_USER} .docker "
+    ssh -t "${REMOTE_HOST}" " cd ~${TLS_USER} ; tar -xf /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; rm /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; chown -R ${TLS_USER}.${TLS_USER} .docker "
   else
     new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  ${USER}, sudo password is required to install other user, ${TLS_USER}, certs on host, ${REMOTE_HOST}." 1>&2
-    ssh -t ${REMOTE_HOST} "cd ~${TLS_USER}/.. ; sudo tar -pxf /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar -C ${TLS_USER} ; sudo rm /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; sudo chown -R ${TLS_USER}.${TLS_USER} ${TLS_USER}/.docker "
+    ssh -t "${REMOTE_HOST}" "cd ~${TLS_USER}/.. ; sudo tar -pxf /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar -C ${TLS_USER} ; sudo rm /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; sudo chown -R ${TLS_USER}.${TLS_USER} ${TLS_USER}/.docker "
   fi
   cd ..
   rm -rf "${TLS_USER}"
