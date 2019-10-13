@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-registry-tls.sh  3.454.951  2019-10-13T15:24:56.778776-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.453  
+# 	   docker-TLS/check-ca-tls.sh docker-TLS/check-registry-tls.sh  #59 #61  updated Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
 # 	docker-TLS/check-registry-tls.sh  3.451.945  2019-10-12T18:45:13.024119-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.450-1-g7ebe3d6  
 # 	   close #61   docker-TLS/check-registry-tls.sh  - upgrade Production standard 
 #86# docker-TLS/check-registry-tls.sh - Check certifications for private registry
@@ -6,12 +8,13 @@
 ###  Production standard 5.1.160 Copyright
 #    Copyright (c) 2019 Bradley Allen
 #    MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-###  Production standard 1.3.516 DEBUG variable
+###  Production standard 1.3.531 DEBUG variable
 #    Order of precedence: environment variable, default code
 if [[ "${DEBUG}" == ""  ]] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 if [[ "${DEBUG}" == "2" ]] ; then set -x    ; fi   # Print trace of simple commands before they are executed
 if [[ "${DEBUG}" == "3" ]] ; then set -v    ; fi   # Print shell input lines as they are read
 if [[ "${DEBUG}" == "4" ]] ; then set -e    ; fi   # Exit immediately if non-zero exit status
+if [[ "${DEBUG}" == "5" ]] ; then set -e -o pipefail ; fi   # Exit immediately if non-zero exit status and exit if any command in a pipeline errors
 #
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
@@ -23,11 +26,12 @@ DEFAULT_REGISTRY_PORT="5000"
 DEFAULT_CLUSTER="us-tx-cluster-1/"
 DEFAULT_DATA_DIR="/usr/local/data/"
 
-###  Production standard 8.3.214 --usage
+###  Production standard 8.3.530 --usage
 display_usage() {
 COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')
 echo -e "\n${NORMAL}${COMMAND_NAME}\n   - Check certifications for private registry"
 echo -e "\n${BOLD}USAGE${NORMAL}"
+echo    "   ${YELLOW}Positional Arguments${NORMAL}"
 echo    "   ${COMMAND_NAME} [<REGISTRY_HOST>]"
 echo    "   ${COMMAND_NAME}  <REGISTRY_HOST> [<REGISTRY_PORT>]"
 echo    "   ${COMMAND_NAME}  <REGISTRY_HOST>  <REGISTRY_PORT> [<CLUSTER>]"
@@ -57,15 +61,17 @@ echo    "To loop through a list of hosts in the cluster use,"
 echo    "https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
 echo -e "\t${BOLD}cluster-command.sh special 'sudo check-registry-tls.sh two.cptx86.com 17313'${NORMAL}"
 
-###  Production standard 1.3.516 DEBUG variable
-echo -e "\nThe DEBUG environment variable can be set to '', '0', '1', '2', '3', or '4'."
-echo    "The setting '' or '0' will turn off all DEBUG messages during execution of this"
-echo    "script.  The setting '1' will print all DEBUG messages during execution of this"
-echo    "script.  The setting '2' (set -x) will print a trace of simple commands before"
-echo    "they are executed in this script.  The setting '3' (set -v) will print shell"
-echo    "input lines as they are read.  The setting '4' (set -e) will exit immediately"
-echo    "if non-zero exit status is recieved with some exceptions.  For more information"
-echo    "about any of the set options, see man bash."
+###  Production standard 1.3.531 DEBUG variable
+echo -e "\nThe DEBUG environment variable can be set to '', '0', '1', '2', '3', '4' or"
+echo    "'5'.  The setting '' or '0' will turn off all DEBUG messages during execution of"
+echo    "this script.  The setting '1' will print all DEBUG messages during execution of"
+echo    "this script.  The setting '2' (set -x) will print a trace of simple commands"
+echo    "before they are executed in this script.  The setting '3' (set -v) will print"
+echo    "shell input lines as they are read.  The setting '4' (set -e) will exit"
+echo    "immediately if non-zero exit status is recieved with some exceptions.  The"
+echo    "setting '5' (set -e -o pipefail) will do setting '4' and exit if any command in"
+echo    "a pipeline errors.  For more information about any of the set options, see"
+echo    "man bash."
 
 ###  Production standard 4.0 Documentation Language
 #    Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
@@ -74,7 +80,7 @@ if [[ "${LANG}" == "fr_CA.UTF-8" ]] || [[ "${LANG}" == "fr_FR.UTF-8" ]] || [[ "$
   echo    "<votre aide va ici>" # your help goes here
   echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
 elif ! [[ "${LANG}" == "en_US.UTF-8" ]] ; then
-  new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+  new_message "${LINENO}" "INFO" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
 
 echo -e "\n${BOLD}ENVIRONMENT VARIABLES${NORMAL}"
@@ -144,25 +150,24 @@ SCRIPT_VERSION=$(head -2 "${0}" | awk '{printf $3}')
 if [[ "${SCRIPT_NAME}" == "" ]] ; then SCRIPT_NAME="${0}" ; fi
 if [[ "${SCRIPT_VERSION}" == "" ]] ; then SCRIPT_VERSION="v?.?" ; fi
 
-#    UID and GID
-USER_ID=$(id -u)
+#    GID
 GROUP_ID=$(id -g)
 
-###  Production standard 2.3.512 log format (WHEN WHERE WHAT Version Line WHO UID:GID [TYPE] Message)
-new_message() {  #  $1="${SCRIPT_NAME}"  $2="${LINENO}"  $3="DEBUG INFO ERROR WARN"  $4="message"
+###  Production standard 2.3.529 log format (WHEN WHERE WHAT Version Line WHO UID:GID [TYPE] Message)
+new_message() {  #  $1="${LINENO}"  $2="DEBUG INFO ERROR WARN"  $3="message"
   get_date_stamp
-  echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${1}[$$] ${SCRIPT_VERSION} ${2} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[${3}]${NORMAL}  ${4}"
+  echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${SCRIPT_NAME}[$$] ${SCRIPT_VERSION} ${1} ${USER} ${UID}:${GROUP_ID} ${BOLD}[${2}]${NORMAL}  ${3}"
 }
 
 #    INFO
-new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  Started..." 1>&2
+new_message "${LINENO}" "INFO" "  Started..." 1>&2
 
 #    Added following code because USER is not defined in crobtab jobs
 if ! [[ "${USER}" == "${LOGNAME}" ]] ; then  USER=${LOGNAME} ; fi
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
 
 #    DEBUG
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Name_of_command >${SCRIPT_NAME}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Name_of_command >${SCRIPT_NAME}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
 
 ###  Production standard 9.3.513 Parse CLI options and arguments
 while [[ "${#}" -gt 0 ]] ; do
@@ -170,15 +175,15 @@ while [[ "${#}" -gt 0 ]] ; do
     --help|-help|help|-h|h|-\?)  display_help | more ; exit 0 ;;
     --usage|-usage|usage|-u)  display_usage ; exit 0  ;;
     --version|-version|version|-v)  echo "${SCRIPT_NAME} ${SCRIPT_VERSION}" ; exit 0  ;;
-    *)  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Option, ${BOLD}${YELLOW}${1}${NORMAL}, entered on the command line is not supported." 1>&2 ; display_usage ; exit 1 ; ;;
+    *)  new_message "${LINENO}" "ERROR" "  Option, ${BOLD}${YELLOW}${1}${NORMAL}, entered on the command line is not supported." 1>&2 ; display_usage ; exit 1 ; ;;
   esac
 done
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Variable... ADMUSER >${ADMUSER}< CLUSTER >${CLUSTER}< DATA_DIR >${DATA_DIR}< FILE_NAME >${FILE_NAME}< SSH_USER >${SSH_USER}< USER_HOME >${USER_HOME}<" 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable... ADMUSER >${ADMUSER}< CLUSTER >${CLUSTER}< DATA_DIR >${DATA_DIR}< FILE_NAME >${FILE_NAME}< SSH_USER >${SSH_USER}< USER_HOME >${USER_HOME}<" 1>&2 ; fi
 
 #    Root is required to copy certs
 if ! [[ "$(id -u)" = 0 ]] ; then
   display_help | more
-  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Use sudo ${0}" 1>&2
+  new_message "${LINENO}" "ERROR" "  Use sudo ${0}" 1>&2
 #    Help hint
   echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT   <<\n${NORMAL}"  1>&2
   exit 1
@@ -188,48 +193,48 @@ fi
 
 ###  Production standard 7.0 Default variable value
 #    Order of precedence: CLI argument, environment variable, default code
-if [ $# -ge  1 ]  ; then REGISTRY_HOST=${1} ; elif [ "${REGISTRY_HOST}" == "" ] ; then REGISTRY_HOST=${DEFAULT_REGISTRY_HOST} ; fi
-if [ $# -ge  2 ]  ; then REGISTRY_PORT=${2} ; elif [ "${REGISTRY_PORT}" == "" ] ; then REGISTRY_PORT=${DEFAULT_REGISTRY_PORT} ; fi
-if [ $# -ge  3 ]  ; then CLUSTER=${3} ; elif [ "${CLUSTER}" == "" ] ; then CLUSTER=${DEFAULT_CLUSTER} ; fi
-if [ $# -ge  4 ]  ; then DATA_DIR=${4} ; elif [ "${DATA_DIR}" == "" ] ; then DATA_DIR=${DEFAULT_DATA_DIR} ; fi
-if [ "${DEBUG}" == "1" ] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_PORT >${REGISTRY_PORT}< CLUSTER >${CLUSTER}< DATA_DIR >${DATA_DIR}<" 1>&2 ; fi
+if [[ $# -ge  1 ]]  ; then REGISTRY_HOST=${1} ; elif [[ "${REGISTRY_HOST}" == "" ]] ; then REGISTRY_HOST=${DEFAULT_REGISTRY_HOST} ; fi
+if [[ $# -ge  2 ]]  ; then REGISTRY_PORT=${2} ; elif [[ "${REGISTRY_PORT}" == "" ]] ; then REGISTRY_PORT=${DEFAULT_REGISTRY_PORT} ; fi
+if [[ $# -ge  3 ]]  ; then CLUSTER=${3} ; elif [[ "${CLUSTER}" == "" ]] ; then CLUSTER=${DEFAULT_CLUSTER} ; fi
+if [[ $# -ge  4 ]]  ; then DATA_DIR=${4} ; elif [[ "${DATA_DIR}" == "" ]] ; then DATA_DIR=${DEFAULT_DATA_DIR} ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_PORT >${REGISTRY_PORT}< CLUSTER >${CLUSTER}< DATA_DIR >${DATA_DIR}<" 1>&2 ; fi
 
 #    Get currect date in seconds
 CURRENT_DATE_SECONDS=$(date '+%s')
 
 #    Get currect date in seconds add 30 days
 CURRENT_DATE_SECONDS_PLUS_30_DAYS=$(date '+%s' -d '+30 days')
-if [ "${DEBUG}" == "1" ] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Variable... CURRENT_DATE_SECONDS >${CURRENT_DATE_SECONDS}< CURRENT_DATE_SECONDS_PLUS_30_DAYS >${CURRENT_DATE_SECONDS_PLUS_30_DAYS=}<" 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable... CURRENT_DATE_SECONDS >${CURRENT_DATE_SECONDS}< CURRENT_DATE_SECONDS_PLUS_30_DAYS >${CURRENT_DATE_SECONDS_PLUS_30_DAYS=}<" 1>&2 ; fi
 
 #    Set REGISTRY_HOST_CERT variable to host entered during the creation of certificates
 REGISTRY_HOST_CERT=$(openssl x509 -in "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt" -noout -issuer | cut -d '/' -f 7 | cut -d '=' -f 2)
-if [ "${DEBUG}" == "1" ] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_HOST_CERT >${REGISTRY_HOST_CERT}<" 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_HOST_CERT >${REGISTRY_HOST_CERT}<" 1>&2 ; fi
 
 #    Get registry certificate expiration date from ca.crt
 REGISTRY_EXPIRE_DATE=$(openssl x509 -in "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt" -noout -enddate | cut -d '=' -f 2)
 REGISTRY_EXPIRE_SECONDS=$(date -d "${REGISTRY_EXPIRE_DATE}" '+%s')
-if [ "${DEBUG}" == "1" ] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Variable... REGISTRY_EXPIRE_DATE >${REGISTRY_EXPIRE_DATE}< REGISTRY_EXPIRE_SECONDS >${REGISTRY_EXPIRE_SECONDS}<" 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable... REGISTRY_EXPIRE_DATE >${REGISTRY_EXPIRE_DATE}< REGISTRY_EXPIRE_SECONDS >${REGISTRY_EXPIRE_SECONDS}<" 1>&2 ; fi
 
 #    Check if ${REGISTRY_HOST_CERT} is NOT ${REGISTRY_HOST}
-if ! [ "${REGISTRY_HOST_CERT}" == "${REGISTRY_HOST}" ] ; then
-  new_message "${SCRIPT_NAME}" "${LINENO}" "WARN" "  Certificate (/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt) is for ${REGISTRY_HOST_CERT}  NOT  ${REGISTRY_HOST} " 1>&2
+if ! [[ "${REGISTRY_HOST_CERT}" == "${REGISTRY_HOST}" ]] ; then
+  new_message "${LINENO}" "WARN" "  Certificate (/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt) is for ${REGISTRY_HOST_CERT}  NOT  ${REGISTRY_HOST} " 1>&2
 #    Help hint
   echo -e "\n\t${BOLD}Use script create-registry-tls.sh to correct registry TLS.${NORMAL}"
 fi
 
 #    Check if certificate has expired
-if [ "${REGISTRY_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ] ; then
+if [[ "${REGISTRY_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ]] ; then
 
 #    Check if certificate will expire in the next 30 day
-  if [ "${REGISTRY_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS_PLUS_30_DAYS}" ] ; then
+  if [[ "${REGISTRY_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS_PLUS_30_DAYS}" ]] ; then
     echo -e "\n\tCertificate on ${LOCALHOST}, /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt, is ${BOLD}GOOD${NORMAL} until ${REGISTRY_EXPIRE_DATE}"
   else
-    new_message "${SCRIPT_NAME}" "${LINENO}" "WARN" "  Certificate on ${LOCALHOST}, /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt, ${BOLD}EXPIRES${NORMAL} on ${REGISTRY_EXPIRE_DATE}" 1>&2
+    new_message "${LINENO}" "WARN" "  Certificate on ${LOCALHOST}, /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt, ${BOLD}EXPIRES${NORMAL} on ${REGISTRY_EXPIRE_DATE}" 1>&2
 #    Help hint
     echo -e "\n\t${BOLD}Use script create-registry-tls.sh to update expired registry TLS.${NORMAL}"
   fi
 else
-  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Certificate on ${LOCALHOST}, /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt, ${BOLD}HAS EXPIRED${NORMAL} on ${REGISTRY_EXPIRE_DATE}" 1>&2
+  new_message "${LINENO}" "ERROR" "  Certificate on ${LOCALHOST}, /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt, ${BOLD}HAS EXPIRED${NORMAL} on ${REGISTRY_EXPIRE_DATE}" 1>&2
 #    Help hint
   echo -e "\n\t${BOLD}Use script create-registry-tls.sh to update expired registry TLS.${NORMAL}"
 fi
@@ -237,30 +242,30 @@ fi
 echo -e "\n\tVerify and correct file permissions."
 
 #    Verify and correct file permissions for /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt
-if [ "$(stat -Lc %a "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt")" != 400 ] ; then
-  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  File permissions for /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt are not 400.  Correcting $(stat -Lc %a /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt) to 0400 file permissions." 1>&2
+if [[ "$(stat -Lc %a "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt")" != 400 ]] ; then
+  new_message "${LINENO}" "ERROR" "  File permissions for /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt are not 400.  Correcting $(stat -Lc %a /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt) to 0400 file permissions." 1>&2
   chmod 0400 "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt"
 fi
 
 #    Verify and correct directory permissions for /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ directory
-if [ "$(stat -Lc %a "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/")" != 700 ] ; then
-  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Directory permissions for /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ are not 700.  Correcting $(stat -Lc %a /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/) to 700 directory permissions." 1>&2
+if [[ "$(stat -Lc %a "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/")" != 700 ]] ; then
+  new_message "${LINENO}" "ERROR" "  Directory permissions for /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ are not 700.  Correcting $(stat -Lc %a /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/) to 700 directory permissions." 1>&2
   chmod 700 "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/"
 fi
 
 ###  ${REGISTRY_HOST}
 #    Check if ${LOCALHOST} is ${REGISTRY_HOST} running the private registry
-if [ "${LOCALHOST}" == "${REGISTRY_HOST}" ] ; then
+if [[ "${LOCALHOST}" == "${REGISTRY_HOST}" ]] ; then
 
 #    Check if private registry certificate directory
-  if [ ! -d "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/" ] ; then
-    new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Directory ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/ NOT found${NORMAL}" 1>&2
+  if [[ ! -d "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/" ]] ; then
+    new_message "${LINENO}" "ERROR" "  Directory ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/ NOT found${NORMAL}" 1>&2
     exit 1
   fi
 
 #    Check if domain.crt registry certificate exists and has size greater than zero
-  if [ ! -s "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt" ] ; then
-    new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  File ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt does NOT exist or has file size equal to zero.${NORMAL}" 1>&2
+  if [[ ! -s "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt" ]] ; then
+    new_message "${LINENO}" "ERROR" "  File ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt does NOT exist or has file size equal to zero.${NORMAL}" 1>&2
 #    Help hint
     echo -e "\n\t${BOLD}Use script create-registry-tls.sh to correct registry TLS.${NORMAL}"
     exit 1
@@ -268,9 +273,9 @@ if [ "${LOCALHOST}" == "${REGISTRY_HOST}" ] ; then
 
 #    Set REGISTRY_HOST_CERT variable to host entered during the creation of certificates
   REGISTRY_HOST_CERT=$(openssl x509 -in "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt" -noout -issuer | cut -d '/' -f 7 | cut -d '=' -f 2)
-  if [ "${DEBUG}" == "1" ] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_HOST_CERT >${REGISTRY_HOST_CERT}<" 1>&2 ; fi
-  if [ ! "${REGISTRY_HOST_CERT}" == "${REGISTRY_HOST}" ] ; then
-    new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  The certificate, ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt, is for host ${REGISTRY_HOST_CERT} not ${REGISTRY_HOST}" 1>&2
+  if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_HOST_CERT >${REGISTRY_HOST_CERT}<" 1>&2 ; fi
+  if [[ ! "${REGISTRY_HOST_CERT}" == "${REGISTRY_HOST}" ]] ; then
+    new_message "${LINENO}" "ERROR" "  The certificate, ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt, is for host ${REGISTRY_HOST_CERT} not ${REGISTRY_HOST}" 1>&2
 #    Help hint
     echo -e "\n\t${BOLD}Use script create-registry-tls.sh to correct registry TLS.${NORMAL}"
     exit 1
@@ -281,11 +286,11 @@ if [ "${LOCALHOST}" == "${REGISTRY_HOST}" ] ; then
   REGISTRY_EXPIRE_SECONDS=$(date -d "${REGISTRY_EXPIRE_DATE}" '+%s')
 
 #    Check if certificate has expired
-  if [ "${DEBUG}" == "1" ] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  REGISTRY_EXPIRE_DATE  >${REGISTRY_EXPIRE_DATE}<  REGISTRY_EXPIRE_SECONDS > CURRENT_DATE_SECONDS ${REGISTRY_EXPIRE_SECONDS} -gt ${CURRENT_DATE_SECONDS}" 1>&2 ; fi
-  if [ "${REGISTRY_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ] ; then
+  if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  REGISTRY_EXPIRE_DATE  >${REGISTRY_EXPIRE_DATE}<  REGISTRY_EXPIRE_SECONDS > CURRENT_DATE_SECONDS ${REGISTRY_EXPIRE_SECONDS} -gt ${CURRENT_DATE_SECONDS}" 1>&2 ; fi
+  if [[ "${REGISTRY_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ]] ; then
     echo -e "\n\tCertificate on ${LOCALHOST}, ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt, is ${BOLD}GOOD${NORMAL} until ${REGISTRY_EXPIRE_DATE}"
   else
-    new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Certificate on ${LOCALHOST}, ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt, ${BOLD}HAS EXPIRED${NORMAL} on ${REGISTRY_EXPIRE_DATE}" 1>&2
+    new_message "${LINENO}" "ERROR" "  Certificate on ${LOCALHOST}, ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt, ${BOLD}HAS EXPIRED${NORMAL} on ${REGISTRY_EXPIRE_DATE}" 1>&2
 #    Help hint
     echo -e "\n\t${BOLD}Use script create-registry-tls.sh to update expired registry TLS.${NORMAL}"
   fi
@@ -293,24 +298,24 @@ if [ "${LOCALHOST}" == "${REGISTRY_HOST}" ] ; then
   echo -e "\n\tVerify and correct file permissions."
 
 #    Verify and correct file permissions for ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt
-  if [ "$(stat -Lc %a "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt")" != 400 ] ; then
-    new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  File permissions for ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt are not 400.  Correcting $(stat -Lc %a  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt) to 0400 file permissions." 1>&2
+  if [[ "$(stat -Lc %a "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt")" != 400 ]] ; then
+    new_message "${LINENO}" "ERROR" "  File permissions for ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt are not 400.  Correcting $(stat -Lc %a  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt) to 0400 file permissions." 1>&2
     chmod 0400 "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt"
   fi
 
 #    Verify and correct file permissions for ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key
-  if [ "$(stat -Lc %a "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key")" != 400 ] ; then
-    new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  File permissions for ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key are not 400.  Correcting $(stat -Lc %a  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key) to 0400 file permissions." 1>&2
+  if [[ "$(stat -Lc %a "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key")" != 400 ]] ; then
+    new_message "${LINENO}" "ERROR" "  File permissions for ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key are not 400.  Correcting $(stat -Lc %a  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key) to 0400 file permissions." 1>&2
     chmod 0400 "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key"
   fi
 
 #    Verify and correct directory permissions for ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/ directory
-  if [ "$(stat -Lc %a "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/")" != 700 ] ; then
-    new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Directory permissions for ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/ are not 700.  Correcting $(stat -Lc %a ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/) to 700 directory permissions." 1>&2
+  if [[ "$(stat -Lc %a "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/")" != 700 ]] ; then
+    new_message "${LINENO}" "ERROR" "  Directory permissions for ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/ are not 700.  Correcting $(stat -Lc %a ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/) to 700 directory permissions." 1>&2
     chmod 700 "${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/"
   fi
 fi
 
 #
-new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  Operation finished..." 1>&2
+new_message "${LINENO}" "INFO" "  Operation finished..." 1>&2
 ###

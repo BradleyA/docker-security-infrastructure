@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-ca-tls.sh  3.445.932  2019-10-11T23:41:38.580425-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.444-1-gb6310ed  
-# 	   docker-TLS/check-ca-tls.sh docker-TLS/check-host-tls.sh docker-TLS/check-registry-tls.sh #59 #60 
-# 	docker-TLS/check-ca-tls.sh  3.443.928  2019-10-10T22:10:01.344161-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.442-5-gae5a529  
-# 	   close #59   docker-TLS/check-ca-tls.sh - upgrade Production standard #59 
+# 	docker-TLS/check-ca-tls.sh  3.454.951  2019-10-13T15:24:56.576980-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.453  
+# 	   docker-TLS/check-ca-tls.sh docker-TLS/check-registry-tls.sh  #59 #61  updated Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
 # 	docker-TLS/check-ca-tls.sh  3.293.760  2019-07-20T19:51:00.914284-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.292  
 # 	   complete, release to production close #56 
 #86# docker-TLS/check-ca-tls.sh - shell script start and end dates of ${DEFAULT_CERT_DIR}/${DEFAULT_CA_CERT}
@@ -10,12 +8,13 @@
 ###  Production standard 5.1.160 Copyright
 #    Copyright (c) 2019 Bradley Allen
 #    MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-###  Production standard 1.3.516 DEBUG variable
+###  Production standard 1.3.531 DEBUG variable
 #    Order of precedence: environment variable, default code
 if [[ "${DEBUG}" == ""  ]] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 if [[ "${DEBUG}" == "2" ]] ; then set -x    ; fi   # Print trace of simple commands before they are executed
 if [[ "${DEBUG}" == "3" ]] ; then set -v    ; fi   # Print shell input lines as they are read
 if [[ "${DEBUG}" == "4" ]] ; then set -e    ; fi   # Exit immediately if non-zero exit status
+if [[ "${DEBUG}" == "5" ]] ; then set -e -o pipefail ; fi   # Exit immediately if non-zero exit status and exit if any command in a pipeline errors
 #
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
@@ -25,11 +24,12 @@ YELLOW=$(tput setaf 3)
 DEFAULT_CERT_DIR="${HOME}/.docker"
 DEFAULT_CA_CERT="ca.pem"
 
-###  Production standard 8.3.214 --usage
+###  Production standard 8.3.530 --usage
 display_usage() {
 COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')
 echo -e "\n${NORMAL}${COMMAND_NAME}\n   start and end dates of ${DEFAULT_CERT_DIR}/${DEFAULT_CA_CERT}"
 echo -e "\n${BOLD}USAGE${NORMAL}"
+echo    "   ${YELLOW}Positional Arguments${NORMAL}"
 echo    "   ${COMMAND_NAME} [<CERT_DIR>]"
 echo -e "   ${COMMAND_NAME}  <CERT_DIR> [<CA_CERT>]\n"
 echo    "   ${COMMAND_NAME} [--help | -help | help | -h | h | -?]"
@@ -56,15 +56,17 @@ echo    "ssh-agent and ssh-add before entering the following in a terminal windo
 echo -e "\t${BOLD}eval \$(ssh-agent)${NORMAL}"
 echo -e "\t${BOLD}ssh-add${NORMAL}"
 
-###  Production standard 1.3.516 DEBUG variable
-echo -e "\nThe DEBUG environment variable can be set to '', '0', '1', '2', '3', or '4'."
-echo    "The setting '' or '0' will turn off all DEBUG messages during execution of this"
-echo    "script.  The setting '1' will print all DEBUG messages during execution of this"
-echo    "script.  The setting '2' (set -x) will print a trace of simple commands before"
-echo    "they are executed in this script.  The setting '3' (set -v) will print shell"
-echo    "input lines as they are read.  The setting '4' (set -e) will exit immediately"
-echo    "if non-zero exit status is recieved with some exceptions.  For more information"
-echo    "about any of the set options, see man bash."
+###  Production standard 1.3.531 DEBUG variable
+echo -e "\nThe DEBUG environment variable can be set to '', '0', '1', '2', '3', '4' or"
+echo    "'5'.  The setting '' or '0' will turn off all DEBUG messages during execution of"
+echo    "this script.  The setting '1' will print all DEBUG messages during execution of"
+echo    "this script.  The setting '2' (set -x) will print a trace of simple commands"
+echo    "before they are executed in this script.  The setting '3' (set -v) will print"
+echo    "shell input lines as they are read.  The setting '4' (set -e) will exit"
+echo    "immediately if non-zero exit status is recieved with some exceptions.  The"
+echo    "setting '5' (set -e -o pipefail) will do setting '4' and exit if any command in"
+echo    "a pipeline errors.  For more information about any of the set options, see"
+echo    "man bash."
 
 ###  Production standard 4.0 Documentation Language
 #    Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
@@ -73,7 +75,7 @@ if [[ "${LANG}" == "fr_CA.UTF-8" ]] || [[ "${LANG}" == "fr_FR.UTF-8" ]] || [[ "$
   echo    "<votre aide va ici>" # your help goes here
   echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
 elif ! [[ "${LANG}" == "en_US.UTF-8" ]] ; then
-  new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+  new_message "${LINENO}" "INFO" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
 
 echo -e "\n${BOLD}ENVIRONMENT VARIABLES${NORMAL}"
@@ -146,25 +148,24 @@ SCRIPT_VERSION=$(head -2 "${0}" | awk '{printf $3}')
 if [[ "${SCRIPT_NAME}" == "" ]] ; then SCRIPT_NAME="${0}" ; fi
 if [[ "${SCRIPT_VERSION}" == "" ]] ; then SCRIPT_VERSION="v?.?" ; fi
 
-#    UID and GID
-USER_ID=$(id -u)
+#    GID
 GROUP_ID=$(id -g)
 
-###  Production standard 2.3.512 log format (WHEN WHERE WHAT Version Line WHO UID:GID [TYPE] Message)
-new_message() {  #  $1="${SCRIPT_NAME}"  $2="${LINENO}"  $3="DEBUG INFO ERROR WARN"  $4="message"
+###  Production standard 2.3.529 log format (WHEN WHERE WHAT Version Line WHO UID:GID [TYPE] Message)
+new_message() {  #  $1="${LINENO}"  $2="DEBUG INFO ERROR WARN"  $3="message"
   get_date_stamp
-  echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${1}[$$] ${SCRIPT_VERSION} ${2} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[${3}]${NORMAL}  ${4}"
+  echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${SCRIPT_NAME}[$$] ${SCRIPT_VERSION} ${1} ${USER} ${UID}:${GROUP_ID} ${BOLD}[${2}]${NORMAL}  ${3}"
 }
 
 #    INFO
-new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  Started..." 1>&2
+new_message "${LINENO}" "INFO" "  Started..." 1>&2
 
 #    Added following code because USER is not defined in crobtab jobs
 if ! [[ "${USER}" == "${LOGNAME}" ]] ; then  USER=${LOGNAME} ; fi
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
 
 #    DEBUG
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Name_of_command >${SCRIPT_NAME}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Name_of_command >${SCRIPT_NAME}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
 
 ###  Production standard 9.3.513 Parse CLI options and arguments
 while [[ "${#}" -gt 0 ]] ; do
@@ -172,16 +173,16 @@ while [[ "${#}" -gt 0 ]] ; do
     --help|-help|help|-h|h|-\?)  display_help | more ; exit 0 ;;
     --usage|-usage|usage|-u)  display_usage ; exit 0  ;;
     --version|-version|version|-v)  echo "${SCRIPT_NAME} ${SCRIPT_VERSION}" ; exit 0  ;;
-    *)  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Option, ${BOLD}${YELLOW}${1}${NORMAL}, entered on the command line is not supported." 1>&2 ; display_usage ; exit 1 ; ;;
+    *)  new_message "${LINENO}" "ERROR" "  Option, ${BOLD}${YELLOW}${1}${NORMAL}, entered on the command line is not supported." 1>&2 ; display_usage ; exit 1 ; ;;
   esac
 done
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Variable... CERT_DIR >${CERT_DIR}< CA_CERT >${CA_CERT}<" 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable... CERT_DIR >${CERT_DIR}< CA_CERT >${CA_CERT}<" 1>&2 ; fi
 
 ###  Production standard 7.0 Default variable value
 #    Order of precedence: CLI argument, environment variable, default code
 if [[ $# -ge  1 ]]  ; then CERT_DIR=${1} ; elif [[ "${CERT_DIR}" == "" ]] ; then CERT_DIR=${DEFAULT_CERT_DIR} ; fi
 if [[ $# -ge  2 ]]  ; then CA_CERT=${2}  ; elif [[ "${CA_CERT}" == "" ]]  ; then CA_CERT=${DEFAULT_CA_CERT}   ; fi
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Variable... CERT_DIR >${CERT_DIR}< CA_CERT >${CA_CERT}<" 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable... CERT_DIR >${CERT_DIR}< CA_CERT >${CA_CERT}<" 1>&2 ; fi
 
 #
 if [[ -s "${CERT_DIR}/${CA_CERT}" ]] ; then
@@ -201,5 +202,5 @@ else
 fi
 
 #
-new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  Operation finished..." 1>&2
+new_message "${LINENO}" "INFO" "  Operation finished..." 1>&2
 ###
