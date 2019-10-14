@@ -15,16 +15,16 @@ In SA-shellcheck-001 line 203:
 
 
 In SA-shellcheck-001 line 209:
-  ssh -t "${USER}@${REMOTE_HOST}" "sudo mkdir -p ${CERT_DAEMON_DIR} ;
+  ssh -t "${USER}@${REMOTE_HOST}" "sudo mkdir -p ${CERT_DAEMON_DIR} ; cd /etc ; sudo tar -pcf /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon ; sudo chown ${USER}.${USER} /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; chmod 0400 /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
                                                  ^-- SC2029: Note that, unescaped, this expands on the client side.
 
 
-In SA-shellcheck-001 line 212:
+In SA-shellcheck-001 line 211:
   ssh -t "${USER}@${REMOTE_HOST}" "rm -f /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
                                               ^-- SC2029: Note that, unescaped, this expands on the client side.
 
 
-In SA-shellcheck-001 line 244:
+In SA-shellcheck-001 line 243:
   ssh -t "${USER}@${REMOTE_HOST}" "cd /etc ; sudo tar -pxf /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; sudo chmod 0700 /etc/docker ; sudo chmod 0700 /etc/docker/certs.d ; sudo chown -R root.root ./docker ; rm /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
                                                                 ^-- SC2029: Note that, unescaped, this expands on the client side.
 
