@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.457.961  2019-10-13T21:15:58.035732-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.456-2-g59e591e  
+# 	   #64 docker-TLS/copy-user-2-remote-host-tls.sh   Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.456.958  2019-10-13T20:56:21.738318-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.455-2-gd3bc5e6  
 # 	   docker-TLS/copy-host-2-remote-host-tls.sh   close #65  Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.280.747  2019-06-10T12:43:31.498537-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.279  
@@ -217,8 +219,7 @@ if $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
   FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%6N%z)
   echo -e "\n\tBacking up ${REMOTE_HOST}:${CERT_DAEMON_DIR}/.."
   echo -e "\tto $(pwd)\n\tRoot access required.\n"
-  ssh -t "${USER}@${REMOTE_HOST}" "sudo mkdir -p ${CERT_DAEMON_DIR} ;
-  cd /etc ; sudo tar -pcf /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon ; sudo chown ${USER}.${USER} /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; chmod 0400 /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
+  ssh -t "${USER}@${REMOTE_HOST}" "sudo mkdir -p ${CERT_DAEMON_DIR} ; cd /etc ; sudo tar -pcf /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon ; sudo chown ${USER}.${USER} /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; chmod 0400 /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
   scp -p "${USER}@${REMOTE_HOST}:/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" .
   ssh -t "${USER}@${REMOTE_HOST}" "rm -f /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
   tar -pxf "${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"

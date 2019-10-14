@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.453.950  2019-10-12T19:34:44.666354-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.452-1-ga890bdc  
-# 	   docker-TLS/copy-user-2-remote-host-tls.sh  shellcheck updates  #64 
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.452.948  2019-10-12T19:26:58.916776-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.451-2-g6faccee  
-# 	   close #64   docker-TLS/copy-user-2-remote-host-tls.sh  - upgrade Production standard 
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.457.961  2019-10-13T21:15:58.193914-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.456-2-g59e591e  
+# 	   #64 docker-TLS/copy-user-2-remote-host-tls.sh   Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.281.748  2019-06-10T16:46:36.797714-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.280  
 # 	   trying to reproduce docker-TLS/check-{host,user}-tls.sh - which one should check if the ca.pem match #49 
 #86# docker-TLS/copy-user-2-remote-host-tls.sh - Copy user TLS public, private keys & CA to remote host
@@ -10,12 +8,13 @@
 ###  Production standard 5.1.160 Copyright
 #    Copyright (c) 2019 Bradley Allen
 #    MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-###  Production standard 1.3.516 DEBUG variable
+###  Production standard 1.3.531 DEBUG variable
 #    Order of precedence: environment variable, default code
 if [[ "${DEBUG}" == ""  ]] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 if [[ "${DEBUG}" == "2" ]] ; then set -x    ; fi   # Print trace of simple commands before they are executed
 if [[ "${DEBUG}" == "3" ]] ; then set -v    ; fi   # Print shell input lines as they are read
 if [[ "${DEBUG}" == "4" ]] ; then set -e    ; fi   # Exit immediately if non-zero exit status
+if [[ "${DEBUG}" == "5" ]] ; then set -e -o pipefail ; fi   # Exit immediately if non-zero exit status and exit if any command in a pipeline errors
 #
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
@@ -26,11 +25,12 @@ DEFAULT_REMOTE_HOST="$(hostname -f)"    # local host
 DEFAULT_TLS_USER="${USER}"
 DEFAULT_WORKING_DIRECTORY=~/.docker/docker-ca
 
-###  Production standard 8.3.214 --usage
+###  Production standard 8.3.530 --usage
 display_usage() {
 COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')
 echo -e "\n${NORMAL}${COMMAND_NAME}\n   Copy user TLS public, private keys & CA to remote host"
 echo -e "\n${BOLD}USAGE${NORMAL}"
+echo    "   ${YELLOW}Positional Arguments${NORMAL}"
 echo    "   ${COMMAND_NAME} [<TLS_USER>]"
 echo    "   ${COMMAND_NAME}  <TLS_USER> [<REMOTE_HOST>]"
 echo -e "   ${COMMAND_NAME}  <TLS_USER>  <REMOTE_HOST> [<WORKING_DIRECTORY>]\n"
@@ -55,15 +55,17 @@ echo -e "\t${BOLD}ssh-copy-id <TLS_USER>@<REMOTE_HOST>${NORMAL}"
 echo    "or"
 echo -e "\t${BOLD}ssh-copy-id <TLS_USER>@<x.x.x.x>${NORMAL}"
 
-###  Production standard 1.3.516 DEBUG variable
-echo -e "\nThe DEBUG environment variable can be set to '', '0', '1', '2', '3', or '4'."
-echo    "The setting '' or '0' will turn off all DEBUG messages during execution of this"
-echo    "script.  The setting '1' will print all DEBUG messages during execution of this"
-echo    "script.  The setting '2' (set -x) will print a trace of simple commands before"
-echo    "they are executed in this script.  The setting '3' (set -v) will print shell"
-echo    "input lines as they are read.  The setting '4' (set -e) will exit immediately"
-echo    "if non-zero exit status is recieved with some exceptions.  For more information"
-echo    "about any of the set options, see man bash."
+###  Production standard 1.3.531 DEBUG variable
+echo -e "\nThe DEBUG environment variable can be set to '', '0', '1', '2', '3', '4' or"
+echo    "'5'.  The setting '' or '0' will turn off all DEBUG messages during execution of"
+echo    "this script.  The setting '1' will print all DEBUG messages during execution of"
+echo    "this script.  The setting '2' (set -x) will print a trace of simple commands"
+echo    "before they are executed in this script.  The setting '3' (set -v) will print"
+echo    "shell input lines as they are read.  The setting '4' (set -e) will exit"
+echo    "immediately if non-zero exit status is recieved with some exceptions.  The"
+echo    "setting '5' (set -e -o pipefail) will do setting '4' and exit if any command in"
+echo    "a pipeline errors.  For more information about any of the set options, see"
+echo    "man bash."
 
 ###  Production standard 4.0 Documentation Language
 #    Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
@@ -72,7 +74,7 @@ if [[ "${LANG}" == "fr_CA.UTF-8" ]] || [[ "${LANG}" == "fr_FR.UTF-8" ]] || [[ "$
   echo    "<votre aide va ici>" # your help goes here
   echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
 elif ! [[ "${LANG}" == "en_US.UTF-8" ]] ; then
-  new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+  new_message "${LINENO}" "INFO" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
 
 echo -e "\n${BOLD}ENVIRONMENT VARIABLES${NORMAL}"
@@ -141,25 +143,24 @@ SCRIPT_VERSION=$(head -2 "${0}" | awk '{printf $3}')
 if [[ "${SCRIPT_NAME}" == "" ]] ; then SCRIPT_NAME="${0}" ; fi
 if [[ "${SCRIPT_VERSION}" == "" ]] ; then SCRIPT_VERSION="v?.?" ; fi
 
-#    UID and GID
-USER_ID=$(id -u)
+#    GID
 GROUP_ID=$(id -g)
 
-###  Production standard 2.3.512 log format (WHEN WHERE WHAT Version Line WHO UID:GID [TYPE] Message)
-new_message() {  #  $1="${SCRIPT_NAME}"  $2="${LINENO}"  $3="DEBUG INFO ERROR WARN"  $4="message"
+###  Production standard 2.3.529 log format (WHEN WHERE WHAT Version Line WHO UID:GID [TYPE] Message)
+new_message() {  #  $1="${LINENO}"  $2="DEBUG INFO ERROR WARN"  $3="message"
   get_date_stamp
-  echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${1}[$$] ${SCRIPT_VERSION} ${2} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[${3}]${NORMAL}  ${4}"
+  echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${SCRIPT_NAME}[$$] ${SCRIPT_VERSION} ${1} ${USER} ${UID}:${GROUP_ID} ${BOLD}[${2}]${NORMAL}  ${3}"
 }
 
 #    INFO
-new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  Started..." 1>&2
+new_message "${LINENO}" "INFO" "  Started..." 1>&2
 
 #    Added following code because USER is not defined in crobtab jobs
 if ! [[ "${USER}" == "${LOGNAME}" ]] ; then  USER=${LOGNAME} ; fi
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
 
 #    DEBUG
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Name_of_command >${SCRIPT_NAME}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Name_of_command >${SCRIPT_NAME}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
 
 ###  Production standard 9.3.513 Parse CLI options and arguments
 while [[ "${#}" -gt 0 ]] ; do
@@ -167,7 +168,7 @@ while [[ "${#}" -gt 0 ]] ; do
     --help|-help|help|-h|h|-\?)  display_help | more ; exit 0 ;;
     --usage|-usage|usage|-u)  display_usage ; exit 0  ;;
     --version|-version|version|-v)  echo "${SCRIPT_NAME} ${SCRIPT_VERSION}" ; exit 0  ;;
-    *)  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Option, ${BOLD}${YELLOW}${1}${NORMAL}, entered on the command line is not supported." 1>&2 ; display_usage ; exit 1 ; ;;
+    *)  new_message "${LINENO}" "ERROR" "  Option, ${BOLD}${YELLOW}${1}${NORMAL}, entered on the command line is not supported." 1>&2 ; display_usage ; exit 1 ; ;;
   esac
 done
 
@@ -177,12 +178,12 @@ TLS_USER=${1:-${DEFAULT_TLS_USER}}
 REMOTE_HOST=${2:-${DEFAULT_REMOTE_HOST}}
 #    Order of precedence: CLI argument, environment variable, default code
 if [[ $# -ge  3 ]]  ; then WORKING_DIRECTORY=${3} ; elif [[ "${WORKING_DIRECTORY}" == "" ]] ; then WORKING_DIRECTORY="${DEFAULT_WORKING_DIRECTORY}" ; fi
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  TLS_USER >${TLS_USER}< REMOTE_HOST >${REMOTE_HOST}< WORKING_DIRECTORY >${WORKING_DIRECTORY}<" 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  TLS_USER >${TLS_USER}< REMOTE_HOST >${REMOTE_HOST}< WORKING_DIRECTORY >${WORKING_DIRECTORY}<" 1>&2 ; fi
 
 #    Check if ${WORKING_DIRECTORY} directory on system
 if [[ ! -d "${WORKING_DIRECTORY}" ]] ; then
   display_help | more
-  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Default directory, ${BOLD}${WORKING_DIRECTORY}${NORMAL}, not on system." 1>&2
+  new_message "${LINENO}" "ERROR" "  Default directory, ${BOLD}${WORKING_DIRECTORY}${NORMAL}, not on system." 1>&2
 #    Help hint
   echo -e "\n\tRunning create-site-private-public-tls.sh will create directories"
   echo -e "\tand site private and public keys.  Then run sudo"
@@ -193,7 +194,7 @@ fi
 
 #    Check if ${TLS_USER}-user-priv-key.pem file on system
 if ! [[ -e "${WORKING_DIRECTORY}/${TLS_USER}-user-priv-key.pem" ]] ; then
-  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  The ${TLS_USER}-user-priv-key.pem file was not found in ${WORKING_DIRECTORY}" 1>&2
+  new_message "${LINENO}" "ERROR" "  The ${TLS_USER}-user-priv-key.pem file was not found in ${WORKING_DIRECTORY}" 1>&2
 #    Help hint
   echo -e "\n\tRunning ${BOLD}create-user-tls.sh${NORMAL} will create public and private keys."
   exit 1
@@ -206,7 +207,7 @@ echo -e "\tfrom ${REMOTE_HOST}.  Running"
 echo -e "\t${BOLD}ssh-copy-id ${USER}@${REMOTE_HOST}${NORMAL}"
 echo -e "\tmay stop some of the prompts.\n"
 if $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
-  ssh -t "${REMOTE_HOST}" " cd ~${TLS_USER} " || { new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  ${TLS_USER} user does not have home directory on ${REMOTE_HOST}"  ; exit 1; }
+  ssh -t "${REMOTE_HOST}" " cd ~${TLS_USER} " || { new_message "${LINENO}" "ERROR" "  ${TLS_USER} user does not have home directory on ${REMOTE_HOST}"  ; exit 1; }
   echo -e "\tCreate directory, change file permissions, and copy TLS keys to ${TLS_USER}@${REMOTE_HOST}." 1>&2
   mkdir -p "${TLS_USER}/.docker"
   chmod 0755 "${TLS_USER}"
@@ -227,7 +228,7 @@ if $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
   if [[ "${TLS_USER}" == "${USER}" ]] ; then
     ssh -t "${REMOTE_HOST}" " cd ~${TLS_USER} ; tar -xf /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; rm /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; chown -R ${TLS_USER}.${TLS_USER} .docker "
   else
-    new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  ${USER}, sudo password is required to install other user, ${TLS_USER}, certs on host, ${REMOTE_HOST}." 1>&2
+    new_message "${LINENO}" "INFO" "  ${USER}, sudo password is required to install other user, ${TLS_USER}, certs on host, ${REMOTE_HOST}." 1>&2
     ssh -t "${REMOTE_HOST}" "cd ~${TLS_USER}/.. ; sudo tar -pxf /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar -C ${TLS_USER} ; sudo rm /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; sudo chown -R ${TLS_USER}.${TLS_USER} ${TLS_USER}/.docker "
   fi
   cd ..
@@ -242,14 +243,14 @@ if $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
   echo -e "\texport DOCKER_HOST=tcp://$(hostname -f):2376"
   echo -e "\texport DOCKER_TLS_VERIFY=1"
 #
-  new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  Operation finished..." 1>&2
+  new_message "${LINENO}" "INFO" "  Operation finished..." 1>&2
   exit 0
 else
   display_help | more
-  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  ${REMOTE_HOST} not responding on ssh port." 1>&2
+  new_message "${LINENO}" "ERROR" "  ${REMOTE_HOST} not responding on ssh port." 1>&2
   exit 1
 fi
 
 #
-new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  Operation finished....." 1>&2
+new_message "${LINENO}" "INFO" "  Operation finished....." 1>&2
 ###
