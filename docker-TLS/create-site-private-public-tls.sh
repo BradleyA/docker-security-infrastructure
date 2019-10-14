@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-site-private-public-tls.sh  3.461.971  2019-10-13T23:28:11.915718-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.460-1-g12b7ce8  
-# 	   close #60  docker-TLS/create-site-private-public-tls.sh  Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
+# 	docker-TLS/create-site-private-public-tls.sh  3.461.972  2019-10-13T23:33:12.762617-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.461  
+# 	   close #69   docker-TLS/create-site-private-public-tls.sh  Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
 # 	docker-TLS/create-site-private-public-tls.sh  3.281.748  2019-06-10T16:46:36.898604-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.280  
 # 	   trying to reproduce docker-TLS/check-{host,user}-tls.sh - which one should check if the ca.pem match #49 
 #86# docker-TLS/create-site-private-public-tls.sh - Create site private and CA keys
