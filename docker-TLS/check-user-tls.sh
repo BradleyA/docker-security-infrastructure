@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-user-tls.sh  3.464.977  2019-10-16T22:28:28.323070-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.463  
+# 	   docker-TLS/check-user-tls.sh    - upgrade Production standard #62 
 # 	docker-TLS/check-user-tls.sh  3.455.955  2019-10-13T20:32:00.191462-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.454-3-g6f32d2b  
 # 	   docker-TLS/check-user-tls.sh   #62  Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
 # 	docker-TLS/check-user-tls.sh  3.448.938  2019-10-12T14:56:00.146490-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.447  
@@ -22,6 +24,8 @@ if [[ "${DEBUG}" == "5" ]] ; then set -e -o pipefail ; fi   # Exit immediately i
 #
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
+RED=$(tput    setaf 1)
+GREEN=$(tput  setaf 2)
 YELLOW=$(tput setaf 3)
 
 ###  Production standard 7.0 Default variable value
@@ -48,13 +52,15 @@ display_usage
 echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
 echo    "Users can check their public, private keys, and CA in /home/ or other"
 echo    "non-default home directories.  The file and directory permissions are also"
-echo    "checked.  Administrators can check other users certificates by using"
-echo -e "\t${BOLD}sudo ${0} <user-name>${NORMAL}"
-echo    "To loop through a list of hosts in the cluster a user could use,"
+echo    "checked."
+echo -e "\t${BOLD}${COMMAND_NAME}${NORMAL}"
+echo -e "\nTo loop through a list of hosts in a cluster a user could use,"
 echo    "https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
-echo -e "\t${BOLD}cluster-command.sh special '${0}'${NORMAL}"
-echo    "or and administrators could use,"
-echo -e "\t${BOLD}cluster-command.sh special 'sudo ${0} <user-name>'${NORMAL}"
+echo -e "\t${BOLD}cluster-command.sh special '${COMMAND_NAME}'${NORMAL}"
+echo -e "\nAdministrators can check other users certificates by using"
+echo -e "\t${BOLD}sudo ${COMMAND_NAME} <user-name>${NORMAL}"
+echo -e "\nTo loop through a list of hosts in a cluster an administrators could use,"
+echo -e "\t${BOLD}cluster-command.sh special 'sudo ${COMMAND_NAME} <user-name>'${NORMAL}"
 
 ###  Production standard 1.3.531 DEBUG variable
 echo -e "\nThe DEBUG environment variable can be set to '', '0', '1', '2', '3', '4' or"
@@ -75,7 +81,7 @@ if [[ "${LANG}" == "fr_CA.UTF-8" ]] || [[ "${LANG}" == "fr_FR.UTF-8" ]] || [[ "$
   echo    "<votre aide va ici>" # your help goes here
   echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
 elif ! [[ "${LANG}" == "en_US.UTF-8" ]] ; then
-  new_message "${LINENO}" "INFO" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+  new_message "${LINENO}" "${YELLOW}${BOLD}INFO${NORMAL}" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
 
 echo -e "\n${BOLD}ENVIRONMENT VARIABLES${NORMAL}"
@@ -113,10 +119,10 @@ echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
 
 echo -e "\n${BOLD}EXAMPLES${NORMAL}"
-echo -e "   User checking their certificates\n\t${BOLD}${0}${NORMAL}"
-echo -e "   User sam checking their certificates in a non-default home directory\n\t${BOLD}${0} sam /u/north-office/${NORMAL}"
-echo -e "   Administrator checks user bob certificates\n\t${BOLD}sudo ${0} bob${NORMAL}"
-echo -e "   Administrator checks user sam certificates in a different home directory\n\t${BOLD}sudo ${0} sam /u/north-office/${NORMAL}"
+echo -e "   User checking their certificates\n\t${BOLD}${COMMAND_NAME}${NORMAL}"
+echo -e "   User sam checking their certificates in a non-default home directory\n\t${BOLD}${COMMAND_NAME} sam /u/north-office/${NORMAL}"
+echo -e "   Administrator checks user bob certificates\n\t${BOLD}sudo ${COMMAND_NAME} bob${NORMAL}"
+echo -e "   Administrator checks user sam certificates in a different home directory\n\t${BOLD}sudo ${COMMAND_NAME} sam /u/north-office/${NORMAL}"
 }
 
 #    Date and time function ISO 8601
@@ -148,7 +154,7 @@ new_message() {  #  $1="${LINENO}"  $2="DEBUG INFO ERROR WARN"  $3="message"
 }
 
 #    INFO
-new_message "${LINENO}" "INFO" "  Started..." 1>&2
+new_message "${LINENO}" "${YELLOW}${BOLD}INFO${NORMAL}" "  Started..." 1>&2
 
 #    Added following code because USER is not defined in crobtab jobs
 if ! [[ "${USER}" == "${LOGNAME}" ]] ; then  USER=${LOGNAME} ; fi
@@ -163,41 +169,41 @@ while [[ "${#}" -gt 0 ]] ; do
     --help|-help|help|-h|h|-\?)  display_help | more ; exit 0 ;;
     --usage|-usage|usage|-u)  display_usage ; exit 0  ;;
     --version|-version|version|-v)  echo "${SCRIPT_NAME} ${SCRIPT_VERSION}" ; exit 0  ;;
-    *)  new_message "${LINENO}" "ERROR" "  Option, ${BOLD}${YELLOW}${1}${NORMAL}, entered on the command line is not supported." 1>&2 ; display_usage ; exit 1 ; ;;
+    *) break ;;
   esac
 done
 
 ###
-
-#    Root is required to copy certs
-if ! [[ "${USER_ID}"  = 0 ]] ; then
-  display_help | more
-  new_message "${LINENO}" "ERROR" "  Use sudo ${COMMAND_NAME}" 1>&2
-#    Help hint
-  echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT   <<\n${NORMAL}"  1>&2
-  exit 1
-fi
 
 TLS_USER=${1:-${DEFAULT_TLS_USER}}
 #    Order of precedence: CLI argument, environment variable, default code
 if [[ $# -ge  2 ]]  ; then USER_HOME=${2} ; elif [[ "${USER_HOME}" == "" ]] ; then USER_HOME="${DEFAULT_USER_HOME}/" ; fi
 if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  TLS_USER >${TLS_USER}< USER_HOME >${USER_HOME}<" 1>&2 ; fi
 
+#    Root is required to check other user certs
+if [[ "${USER}" != "${TLS_USER}" ]] && [[ "${UID}" != 0 ]] ; then
+  display_help | more
+  new_message "${LINENO}" "${RED}ERROR${NORMAL}" "  Use ${YELLOW}${BOLD}sudo ${0} ${TLS_USER}${NORMAL}" 1>&2
+#    Help hint
+  echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT TO CHECK A DIFFERENT USER  <<\n${NORMAL}"  1>&2
+  exit 1
+fi
+
 #    Check if user has home directory on system
 if [[ ! -d "${USER_HOME}${TLS_USER}" ]] ; then 
-  new_message "${LINENO}" "ERROR" "  ${TLS_USER} does not have a home directory on this system, ${LOCALHOST}, or ${TLS_USER} home directory is not ${USER_HOME}${TLS_USER}." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${NORMAL}" "  ${TLS_USER} does not have a home directory on this system, ${LOCALHOST}, or ${TLS_USER} home directory is not ${USER_HOME}${TLS_USER}." 1>&2
   exit 1
 fi
 
 #    Check if user has .docker directory
 if [[ ! -d "${USER_HOME}${TLS_USER}/.docker" ]] ; then 
-  new_message "${LINENO}" "ERROR" "  ${TLS_USER} does not have a .docker directory on this system, ${LOCALHOST}." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${NORMAL}" "  ${TLS_USER} does not have a .docker directory on this system, ${LOCALHOST}." 1>&2
   exit 1
 fi
 
 #    Check if user has .docker ca.pem file
 if [[ ! -e "${USER_HOME}${TLS_USER}/.docker/ca.pem" ]] ; then 
-  new_message "${LINENO}" "ERROR" "  ${TLS_USER} does not have a .docker/ca.pem file." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${NORMAL}" "  ${TLS_USER} does not have a .docker/ca.pem file." 1>&2
 #    Help hint
   echo -e "\n\tRunning create-user-tls.sh will create public and private keys."
   exit 1
@@ -205,7 +211,7 @@ fi
 
 #    Check if user has .docker cert.pem file
 if [[ ! -e "${USER_HOME}${TLS_USER}/.docker/cert.pem" ]] ; then 
-  new_message "${LINENO}" "ERROR" "  ${TLS_USER} does not have a .docker/cert.pem file." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${NORMAL}" "  ${TLS_USER} does not have a .docker/cert.pem file." 1>&2
 #    Help hint
   echo -e "\n\tRunning create-user-tls.sh will create public and private keys."
   exit 1
@@ -213,7 +219,7 @@ fi
 
 #    Check if user has .docker key.pem file
 if [[ ! -e "${USER_HOME}${TLS_USER}/.docker/key.pem" ]] ; then 
-  new_message "${LINENO}" "ERROR" "  ${TLS_USER} does not have a .docker/key.pem file." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${NORMAL}" "  ${TLS_USER} does not have a .docker/key.pem file." 1>&2
 #    Help hint
   echo -e "\n\tRunning create-user-tls.sh will create public and private keys."
   exit 1
@@ -236,14 +242,14 @@ if [[ "${USER_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ]] ; then
 
 #    Check if certificate will expire in the next 30 day
   if [[ "${USER_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS_PLUS_30_DAYS}" ]] ; then
-    echo -e "\n\tCertificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/ca.pem, is  ${BOLD}GOOD${NORMAL}  until ${USER_EXPIRE_DATE}"
+    echo -e "\n\tCertificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/${YELLOW}ca.pem${NORMAL}, is  ${BOLD}${GREEN}GOOD${NORMAL}  until ${YELLOW}${USER_EXPIRE_DATE}${NORMAL}"
   else
-    new_message "${LINENO}" "WARN" "  Certificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/ca.pem,  ${BOLD}EXPIRES${NORMAL}  on ${USER_EXPIRE_DATE}" 1>&2
+    new_message "${LINENO}" "${YELLOW}WARN${NORMAL}" "  Certificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/ca.pem,  ${BOLD}${YELLOW}EXPIRES${NORMAL}  on ${BOLD}${RED}${USER_EXPIRE_DATE}${NORMAL}" 1>&2
 #    Help hint
     echo -e "\n\t${BOLD}Use script  create-user-tls.sh  to update expired user TLS.${NORMAL}"
   fi
 else
-  new_message "${LINENO}" "ERROR" "  Certificate on ${LOCALHOST},  ${USER_HOME}${TLS_USER}/.docker/ca.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${USER_EXPIRE_DATE}" 1>&2
+  new_message "${LINENO}" "${RED}ERROR${NORMAL}" "  Certificate on ${LOCALHOST},  ${USER_HOME}${TLS_USER}/.docker/ca.pem,  ${BOLD}${RED}HAS EXPIRED${NORMAL}  on ${USER_EXPIRE_DATE}" 1>&2
 #    Help hint
   echo -e "\n\t${BOLD}Use script  create-user-tls.sh  to update expired user TLS.${NORMAL}"
 fi
@@ -260,12 +266,12 @@ if [[ "${USER_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ]] ; then
   if [[ "${USER_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS_PLUS_30_DAYS}" ]] ; then
     echo -e "\n\tCertificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/cert.pem, is  ${BOLD}GOOD${NORMAL}  until ${USER_EXPIRE_DATE}"
   else
-    new_message "${LINENO}" "WARN" "  Certificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/cert.pem,  ${BOLD}EXPIRES${NORMAL}  on ${USER_EXPIRE_DATE}" 1>&2
+    new_message "${LINENO}" "${YELLOW}WARN${NORMAL}" "  Certificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/cert.pem,  ${BOLD}${RED}EXPIRES${NORMAL}  on ${USER_EXPIRE_DATE}" 1>&2
 #    Help hint
     echo -e "\n\t${BOLD}Use script  create-user-tls.sh  to update expired user TLS.${NORMAL}"
   fi
 else
-    new_message "${LINENO}" "ERROR" "  Certificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/cert.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${USER_EXPIRE_DATE}" 1>&2
+    new_message "${LINENO}" "${RED}ERROR${NORMAL}" "  Certificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/cert.pem,  ${BOLD}${RED}HAS EXPIRED${NORMAL}  on ${USER_EXPIRE_DATE}" 1>&2
 #    Help hint
     echo -e "\n\t${BOLD}Use script  create-user-tls.sh  to update expired user TLS.${NORMAL}"
 fi
@@ -281,34 +287,34 @@ echo -e "\n\tView ${USER_HOME}${TLS_USER}/.docker certificate ${BOLD}issuer data
 #    Verify that user public key in your certificate matches the public portion of your private key.
 echo -e "\n\tVerify that user public key in your certificate matches the public portion\n\tof your private key."
 (cd "${USER_HOME}${TLS_USER}/.docker" ; openssl x509 -noout -modulus -in cert.pem | openssl md5 ; openssl rsa -noout -modulus -in key.pem | openssl md5) | uniq
-echo -e "\t${BOLD}[WARN]${NORMAL}  -> If ONLY ONE line of output is returned then the public key\n\tmatches the public portion of your private key.\n"
+echo -e "\t${BOLD}[${YELLOW}WARN]${NORMAL}  -> If ONLY ONE line of output is returned then the public key\n\tmatches the public portion of your private key.\n"
 
 #    Verify that user certificate was issued by the CA.
 echo -e "\t${NORMAL}Verify that user certificate was issued by the CA:${BOLD}\t"
-openssl verify -verbose -CAfile "${USER_HOME}${TLS_USER}/.docker/ca.pem" "${USER_HOME}${TLS_USER}/.docker/cert.pem"  || { new_message "${LINENO}" "ERROR" "  User certificate for ${TLS_USER} on ${LOCALHOST} was NOT issued by CA." ; exit 1; }
+openssl verify -verbose -CAfile "${USER_HOME}${TLS_USER}/.docker/ca.pem" "${USER_HOME}${TLS_USER}/.docker/cert.pem"  || { new_message "${LINENO}" "${RED}ERROR${NORMAL}" "  User certificate for ${TLS_USER} on ${LOCALHOST} was NOT issued by CA." ; exit 1; }
 
 #    Verify and correct file permissions for ${USER_HOME}${TLS_USER}/.docker/ca.pem
 echo -e "\n\t${NORMAL}Verify and correct file permissions for ${USER_HOME}${TLS_USER}/.docker"
 if [[ $(stat -Lc %a "${USER_HOME}${TLS_USER}/.docker/ca.pem") != 444 ]] ; then
-  new_message "${LINENO}" "ERROR" "  File permissions for ${USER_HOME}${TLS_USER}/.docker/ca.pem are not 444.  Correcting $(stat -Lc %a ${USER_HOME}${TLS_USER}/.docker/ca.pem) to 0444 file permissions" 1>&2
+  new_message "${LINENO}" "${RED}ERROR${NORMAL}" "  File permissions for ${USER_HOME}${TLS_USER}/.docker/ca.pem are not 444.  Correcting $(stat -Lc %a ${USER_HOME}${TLS_USER}/.docker/ca.pem) to 0444 file permissions" 1>&2
   chmod 0444 "${USER_HOME}${TLS_USER}/.docker/ca.pem"
 fi
 
 #    Verify and correct file permissions for ${USER_HOME}${TLS_USER}/.docker/cert.pem
 if [[ $(stat -Lc %a "${USER_HOME}${TLS_USER}/.docker/cert.pem") != 444 ]] ; then
-  new_message "${LINENO}" "ERROR" "  File permissions for ${USER_HOME}${TLS_USER}/.docker/cert.pem are not 444.  Correcting $(stat -Lc %a ${USER_HOME}${TLS_USER}/.docker/cert.pem) to 0444 file permissions" 1>&2
+  new_message "${LINENO}" "${RED}ERROR${NORMAL}" "  File permissions for ${USER_HOME}${TLS_USER}/.docker/cert.pem are not 444.  Correcting $(stat -Lc %a ${USER_HOME}${TLS_USER}/.docker/cert.pem) to 0444 file permissions" 1>&2
   chmod 0444 "${USER_HOME}${TLS_USER}/.docker/cert.pem"
 fi
 
 #    Verify and correct file permissions for ${USER_HOME}${TLS_USER}/.docker/key.pem
 if [[ $(stat -Lc %a "${USER_HOME}${TLS_USER}/.docker/key.pem") != 400 ]] ; then
-  new_message "${LINENO}" "ERROR" "  File permissions for ${USER_HOME}${TLS_USER}/.docker/key.pem are not 400.  Correcting $(stat -Lc %a ${USER_HOME}${TLS_USER}/.docker/key.pem) to 0400 file permissions" 1>&2
+  new_message "${LINENO}" "${RED}ERROR${NORMAL}" "  File permissions for ${USER_HOME}${TLS_USER}/.docker/key.pem are not 400.  Correcting $(stat -Lc %a ${USER_HOME}${TLS_USER}/.docker/key.pem) to 0400 file permissions" 1>&2
   chmod 0400 "${USER_HOME}${TLS_USER}/.docker/key.pem"
 fi
 
 #    Verify and correct directory permissions for ${USER_HOME}${TLS_USER}/.docker directory
 if [[ $(stat -Lc %a "${USER_HOME}${TLS_USER}/.docker") != 700 ]] ; then
-  new_message "${LINENO}" "ERROR" "  Directory permissions for ${USER_HOME}${TLS_USER}/.docker\n\tare not 700.  Correcting $(stat -Lc %a ${USER_HOME}${TLS_USER}/.docker) to 700 directory permissions" 1>&2
+  new_message "${LINENO}" "${RED}ERROR${NORMAL}" "  Directory permissions for ${USER_HOME}${TLS_USER}/.docker\n\tare not 700.  Correcting $(stat -Lc %a ${USER_HOME}${TLS_USER}/.docker) to 700 directory permissions" 1>&2
   chmod 700 "${USER_HOME}${TLS_USER}/.docker"
 fi
 
@@ -320,5 +326,5 @@ echo -e "\n\tUse script ${BOLD}create-user-tls.sh${NORMAL} to update user TLS if
 # >>>	open ticket and remove this comment
 
 #
-new_message "${LINENO}" "INFO" "  Operation finished..." 1>&2
+new_message "${LINENO}" "${YELLOW}${BOLD}INFO${NORMAL}" "  Operation finished..." 1>&2
 ###
