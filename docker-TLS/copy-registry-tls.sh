@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-registry-tls.sh  3.470.989  2019-10-21T22:45:38.330337-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.469-2-gd8380ad  
+# 	   docker-TLS/copy-registry-tls.sh   added color output ; updated Production standard 1.3.531 DEBUG variable, 8.3.530 --usage, 4.3.534 Documentation Language 
 # 	docker-TLS/copy-registry-tls.sh  3.450.943  2019-10-12T18:38:29.108939-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.449-3-g62f64c7  
 # 	   close #41   copy-registry-tls.sh    - upgrade Production standard 
 #86# docker-TLS/copy-registry-tls.sh - Copy certs for Private Registry V2
@@ -6,16 +8,19 @@
 ###  Production standard 5.1.160 Copyright
 #    Copyright (c) 2019 Bradley Allen
 #    MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-###  Production standard 1.3.516 DEBUG variable
+###  Production standard 1.3.531 DEBUG variable
 #    Order of precedence: environment variable, default code
 if [[ "${DEBUG}" == ""  ]] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 if [[ "${DEBUG}" == "2" ]] ; then set -x    ; fi   # Print trace of simple commands before they are executed
 if [[ "${DEBUG}" == "3" ]] ; then set -v    ; fi   # Print shell input lines as they are read
 if [[ "${DEBUG}" == "4" ]] ; then set -e    ; fi   # Exit immediately if non-zero exit status
+if [[ "${DEBUG}" == "5" ]] ; then set -e -o pipefail ; fi   # Exit immediately if non-zero exit status and exit if any command in a pipeline errors
 #
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
+RED=$(tput    setaf 1)
 YELLOW=$(tput setaf 3)
+WHITE=$(tput  setaf 7)
 
 ### production standard 7.0 Default variable value
 DEFAULT_REGISTRY_HOST=$(hostname -f)	# local host
@@ -24,11 +29,12 @@ DEFAULT_CLUSTER="us-tx-cluster-1/"
 DEFAULT_DATA_DIR="/usr/local/data/"
 DEFAULT_SYSTEMS_FILE="SYSTEMS"
 
-###  Production standard 8.3.214 --usage
+###  Production standard 8.3.530 --usage
 display_usage() {
 COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')
 echo -e "\n${NORMAL}${COMMAND_NAME}\n   Copy certs for Private Registry V2"
 echo -e "\n${BOLD}USAGE${NORMAL}"
+echo    "   ${YELLOW}Positional Arguments${NORMAL}"
 echo    "   ${COMMAND_NAME} [<REGISTRY_HOST>]" 
 echo    "   ${COMMAND_NAME}  <REGISTRY_HOST> [<REGISTRY_PORT>]" 
 echo    "   ${COMMAND_NAME}  <REGISTRY_HOST>  <REGISTRY_PORT> [<CLUSTER>]" 
@@ -67,24 +73,26 @@ echo    "pi-display/create-message/create-display-message.sh, and other scripts.
 echo    "different <SYSTEMS_FILE> can be entered on the command line or environment"
 echo    "variable."
 
-###  Production standard 1.3.516 DEBUG variable
-echo -e "\nThe DEBUG environment variable can be set to '', '0', '1', '2', '3', or '4'."
-echo    "The setting '' or '0' will turn off all DEBUG messages during execution of this"
-echo    "script.  The setting '1' will print all DEBUG messages during execution of this"
-echo    "script.  The setting '2' (set -x) will print a trace of simple commands before"
-echo    "they are executed in this script.  The setting '3' (set -v) will print shell"
-echo    "input lines as they are read.  The setting '4' (set -e) will exit immediately"
-echo    "if non-zero exit status is recieved with some exceptions.  For more information"
-echo    "about any of the set options, see man bash."
+###  Production standard 1.3.531 DEBUG variable
+echo -e "\nThe DEBUG environment variable can be set to '', '0', '1', '2', '3', '4' or"
+echo    "'5'.  The setting '' or '0' will turn off all DEBUG messages during execution of"
+echo    "this script.  The setting '1' will print all DEBUG messages during execution of"
+echo    "this script.  The setting '2' (set -x) will print a trace of simple commands"
+echo    "before they are executed in this script.  The setting '3' (set -v) will print"
+echo    "shell input lines as they are read.  The setting '4' (set -e) will exit"
+echo    "immediately if non-zero exit status is recieved with some exceptions.  The"
+echo    "setting '5' (set -e -o pipefail) will do setting '4' and exit if any command in"
+echo    "a pipeline errors.  For more information about any of the set options, see"
+echo    "man bash."
 
-###  Production standard 4.0 Documentation Language
+###  Production standard 4.3.534 Documentation Language
 #    Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [[ "${LANG}" == "fr_CA.UTF-8" ]] || [[ "${LANG}" == "fr_FR.UTF-8" ]] || [[ "${LANG}" == "fr_CH.UTF-8" ]] ; then
   echo -e "\n--> ${LANG}"
   echo    "<votre aide va ici>" # your help goes here
   echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
 elif ! [[ "${LANG}" == "en_US.UTF-8" ]] ; then
-  new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+  new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
 
 echo -e "\n${BOLD}ENVIRONMENT VARIABLES${NORMAL}"
@@ -180,7 +188,7 @@ new_message() {  #  $1="${SCRIPT_NAME}"  $2="${LINENO}"  $3="DEBUG INFO ERROR WA
 }
 
 #    INFO
-new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  Started..." 1>&2
+new_message "${SCRIPT_NAME}" "${LINENO}" "${YELLOW}INFO${WHITE}" "  Started..." 1>&2
 
 #    Added following code because USER is not defined in crobtab jobs
 if ! [[ "${USER}" == "${LOGNAME}" ]] ; then  USER=${LOGNAME} ; fi
@@ -195,7 +203,7 @@ while [[ "${#}" -gt 0 ]] ; do
     --help|-help|help|-h|h|-\?)  display_help | more ; exit 0 ;;
     --usage|-usage|usage|-u)  display_usage ; exit 0  ;;
     --version|-version|version|-v)  echo "${SCRIPT_NAME} ${SCRIPT_VERSION}" ; exit 0  ;;
-    *)  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  Option, ${BOLD}${YELLOW}${1}${NORMAL}, entered on the command line is not supported." 1>&2 ; display_usage ; exit 1 ; ;;
+    *) break ;;
   esac
 done
 
@@ -212,7 +220,7 @@ if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBU
 #    Check if user has home directory on system
 if [[ ! -d "${HOME}" ]] ; then
   display_help | more
-  new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  ${USER} does not have a home directory on this system or ${USER} home directory is not ${HOME}" 1>&2
+  new_message "${SCRIPT_NAME}" "${LINENO}" "${RED}ERROR${WHITE}" "  ${USER} does not have a home directory on this system or ${USER} home directory is not ${HOME}" 1>&2
   exit 1
 fi
 
@@ -258,7 +266,7 @@ rm -rf          ./"${REGISTRY_HOST}:${REGISTRY_PORT}"
 
 #    Check if ${SYSTEMS_FILE} file is on system, one FQDN or IP address per line for all hosts in cluster
 if ! [[ -s "${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}" ]] ; then
-  new_message "${SCRIPT_NAME}" "${LINENO}" "WARN" "  ${BOLD}${SYSTEMS_FILE} file missing or empty, creating ${SYSTEMS_FILE} file with local host.  Edit ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE} file and add additional hosts that are in the cluster.${NORMAL}" 1>&2
+  new_message "${SCRIPT_NAME}" "${LINENO}" "${YELLOW}WARN${WHITE}" "  ${BOLD}${SYSTEMS_FILE} file missing or empty, creating ${SYSTEMS_FILE} file with local host.  Edit ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE} file and add additional hosts that are in the cluster.${NORMAL}" 1>&2
   mkdir -p "${DATA_DIR}/${CLUSTER}"
   echo -e "#\n# "  > ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}
   echo -e "### ${SYSTEMS_FILE}"  >> ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}
@@ -292,7 +300,7 @@ for NODE in $(cat "${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}" | grep -v "#" ) ; do
         TEMP="sudo mkdir -p /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT} ; if sudo [[ -s /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt ]] ; then echo -e '\n\t${BOLD}ca.crt${NORMAL} already exists, renaming existing keys so new keys can be copied.' ; sudo mv /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt-$(date +%Y-%m-%dT%H:%M:%S%:z); fi ; sudo tar -xf /tmp/${REGISTRY_HOST}.${REGISTRY_PORT}.tar --owner=root --group=root --directory /etc/docker/certs.d ; sudo rm -f /tmp/${REGISTRY_HOST}.${REGISTRY_PORT}.tar"
         ssh -q -t -i ~/.ssh/id_rsa "${USER}@${NODE}" "${TEMP}"
       else
-        new_message "${SCRIPT_NAME}" "${LINENO}" "WARN" "  ${NODE} found in ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE} file is not responding to ${LOCALHOST} on ssh port." 1>&2
+        new_message "${SCRIPT_NAME}" "${LINENO}" "${YELLOW}WARN${WHITE}" "  ${NODE} found in ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE} file is not responding to ${LOCALHOST} on ssh port." 1>&2
       fi
     else
       echo -e "\n\tCopy ~/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/ca.crt"
@@ -330,7 +338,7 @@ if [[ "${LOCALHOST}" != "${REGISTRY_HOST}" ]] ; then
     TEMP="sudo mkdir -p  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; sudo chmod 0700 ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; if sudo [[ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ]] ; then echo -e '\n\t${BOLD}domain.crt${NORMAL} already exists, renaming existing keys so new keys can be copied.' ; sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z) ; fi ; if sudo [[ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ]] ; then echo -e '\n\t${BOLD}domain.key${NORMAL} already exists, renaming existing keys so new keys can be copied.' ; sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z) ; fi ; sudo mv ~/.docker/domain.{crt,key} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; if [[ ${REMAP} -ge 3 ]] ; then  sudo chown -R ${REMAPUID}.${REMAPUID} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; fi"
     ssh -q -t -i ~/.ssh/id_rsa "${USER}@${REGISTRY_HOST}" "${TEMP}"
   else
-    new_message "${SCRIPT_NAME}" "${LINENO}" "ERROR" "  ${REGISTRY_HOST} is not responding to ${LOCALHOST} on ssh port. " 1>&2
+    new_message "${SCRIPT_NAME}" "${LINENO}" "${RED}ERROR${WHITE}" "  ${REGISTRY_HOST} is not responding to ${LOCALHOST} on ssh port. " 1>&2
     exit 1
   fi
 else
@@ -362,5 +370,5 @@ else
 fi
 
 #
-new_message "${SCRIPT_NAME}" "${LINENO}" "INFO" "  Operation finished..." 1>&2
+new_message "${SCRIPT_NAME}" "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished..." 1>&2
 ###
