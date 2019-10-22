@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-host-tls.sh  3.467.982  2019-10-21T21:56:59.079438-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.466  
+# 	   docker-TLS/check-host-tls.sh   add color output ; upgrade Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/check-host-tls.sh  3.454.953  2019-10-13T16:00:06.942880-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.454-1-g4d6f510  
 # 	   docker-TLS/check-host-tls.sh - upgrade Production standard #60 
 # 	docker-TLS/check-host-tls.sh  3.444.930  2019-10-10T22:52:39.829867-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.443-1-g3c76d63  
@@ -20,7 +22,9 @@ if [[ "${DEBUG}" == "5" ]] ; then set -e -o pipefail ; fi   # Exit immediately i
 #
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
+RED=$(tput    setaf 1)
 YELLOW=$(tput setaf 3)
+WHITE=$(tput  setaf 7)
 
 ###  Production standard 7.0 Default variable value
 DEFAULT_CERT_DAEMON_DIR="/etc/docker/certs.d/daemon/"
@@ -65,14 +69,14 @@ echo    "setting '5' (set -e -o pipefail) will do setting '4' and exit if any co
 echo    "a pipeline errors.  For more information about any of the set options, see"
 echo    "man bash."
 
-###  Production standard 4.0 Documentation Language
+###  Production standard 4.3.534 Documentation Language
 #    Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [[ "${LANG}" == "fr_CA.UTF-8" ]] || [[ "${LANG}" == "fr_FR.UTF-8" ]] || [[ "${LANG}" == "fr_CH.UTF-8" ]] ; then
   echo -e "\n--> ${LANG}"
   echo    "<votre aide va ici>" # your help goes here
   echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
 elif ! [[ "${LANG}" == "en_US.UTF-8" ]] ; then
-  new_message "${LINENO}" "INFO" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+  new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
 
 echo -e "\n${BOLD}ENVIRONMENT VARIABLES${NORMAL}"
@@ -133,7 +137,7 @@ new_message() {  #  $1="${LINENO}"  $2="DEBUG INFO ERROR WARN"  $3="message"
 }
 
 #    INFO
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "INFO" "  Started..." 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Started..." 1>&2 ; fi
 
 #    Added following code because USER is not defined in crobtab jobs
 if ! [[ "${USER}" == "${LOGNAME}" ]] ; then  USER=${LOGNAME} ; fi
@@ -148,7 +152,7 @@ while [[ "${#}" -gt 0 ]] ; do
     --help|-help|help|-h|h|-\?)  display_help | more ; exit 0 ;;
     --usage|-usage|usage|-u)  display_usage ; exit 0  ;;
     --version|-version|version|-v)  echo "${SCRIPT_NAME} ${SCRIPT_VERSION}" ; exit 0  ;;
-    *)  new_message "${LINENO}" "ERROR" "  Option, ${BOLD}${YELLOW}${1}${NORMAL}, entered on the command line is not supported." 1>&2 ; display_usage ; exit 1 ; ;;
+    *) break ;;
   esac
 done
 
@@ -159,7 +163,7 @@ if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  CERT_DAEMON
 #    Root is required to copy certs
 if ! [[ "${UID}"  = 0 ]] ; then
   display_help | more
-  new_message "${LINENO}" "ERROR" "  Use sudo ${COMMAND_NAME}" 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Use sudo ${COMMAND_NAME}" 1>&2
 #    Help hint
   echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT   <<\n${NORMAL}"  1>&2
   exit 1
@@ -168,7 +172,7 @@ fi
 #    Check for ${CERT_DAEMON_DIR} directory
 if [[ ! -d "${CERT_DAEMON_DIR}" ]] ; then
   display_help | more
-  new_message "${LINENO}" "ERROR" "  ${CERT_DAEMON_DIR} does not exist" 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${CERT_DAEMON_DIR} does not exist" 1>&2
   exit 1
 fi
 
@@ -191,13 +195,13 @@ if [[ "${HOST_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ]] ; then
     echo -e "\n\tCertificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/ca.pem, is  ${BOLD}GOOD${NORMAL}  until ${HOST_EXPIRE_DATE}"
   else
     echo -e "\n\tCertificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/ca.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}"
-    new_message "${LINENO}" "WARN" "  Certificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/ca.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
+    new_message "${LINENO}" "${YELLOW}WARN${WHITE}" "  Certificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/ca.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
 #    Help hint
     echo -e "\n\t${BOLD}Use script  create-site-private-public-tls.sh  to update expired host TLS on your\n\tsite TLS server.${NORMAL}"
   fi
 else
   echo -e "\n\tCertificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/ca.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}"
-  new_message "${LINENO}" "ERROR" "  Certificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/ca.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Certificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/ca.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
 #    Help hint
   echo -e "\n\t${BOLD}Use script  create-site-private-public-tls.sh  to update expired host TLS on your\n\tsite TLS server.${NORMAL}"
 fi
@@ -215,13 +219,13 @@ if [[ "${HOST_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ]] ; then
     echo -e "\n\tCertificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/cert.pem, is  ${BOLD}GOOD${NORMAL}  until ${HOST_EXPIRE_DATE}"
   else
     echo -e "\n\tCertificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/cert.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}"
-    new_message "${LINENO}" "WARN" "  Certificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/cert.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
+    new_message "${LINENO}" "${YELLOW}WARN${WHITE}" "  Certificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/cert.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
 #    Help hint
     echo -e "\n\t${BOLD}Use script  create-host-tls.sh  to update expired host TLS on your\n\tsite TLS server.${NORMAL}"
   fi
 else
   echo -e "\n\tCertificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/cert.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}"
-  new_message "${LINENO}" "ERROR" "  Certificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/cert.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Certificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/cert.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
 #    Help hint
   echo -e "\n\t${BOLD}Use script  create-host-tls.sh  to update expired host TLS on your site\n\tTLS server.${NORMAL}"
 fi
@@ -242,25 +246,25 @@ echo -e "\n\tVerify and correct file permissions."
 
 #    Verify and correct file permissions for ${CERT_DAEMON_DIR}/ca.pem
 if [[ "$(stat -Lc %a "${CERT_DAEMON_DIR}/ca.pem")" != 444 ]] ; then
-  new_message "${LINENO}" "ERROR" "  File permissions for ${CERT_DAEMON_DIR}ca.pem are not 444.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/ca.pem) to 0444 file permissions." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  File permissions for ${CERT_DAEMON_DIR}ca.pem are not 444.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/ca.pem) to 0444 file permissions." 1>&2
   chmod 0444 "${CERT_DAEMON_DIR}ca.pem"
 fi
 
 #    Verify and correct file permissions for ${CERT_DAEMON_DIR}cert.pem
 if [[ "$(stat -Lc %a "${CERT_DAEMON_DIR}/cert.pem")" != 444 ]] ; then
-  new_message "${LINENO}" "ERROR" "  File permissions for ${CERT_DAEMON_DIR}cert.pem are not 444.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/cert.pem) to 0444 file permissions." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  File permissions for ${CERT_DAEMON_DIR}cert.pem are not 444.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/cert.pem) to 0444 file permissions." 1>&2
   chmod 0444 "${CERT_DAEMON_DIR}/cert.pem"
 fi
 
 #    Verify and correct file permissions for ${CERT_DAEMON_DIR}/key.pem
 if [[ "$(stat -Lc %a "${CERT_DAEMON_DIR}/key.pem")" != 400 ]] ; then
-  new_message "${LINENO}" "ERROR" "  File permissions for ${CERT_DAEMON_DIR}key.pem are not 400.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/key.pem) to 0400 file permissions." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  File permissions for ${CERT_DAEMON_DIR}key.pem are not 400.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/key.pem) to 0400 file permissions." 1>&2
   chmod 0400 "${CERT_DAEMON_DIR}/key.pem"
 fi
 
 #    Verify and correct directory permissions for ${CERT_DAEMON_DIR} directory
 if [[ "$(stat -Lc %a "${CERT_DAEMON_DIR}")" != 700 ]] ; then
-  new_message "${LINENO}" "ERROR" "  Directory permissions for ${CERT_DAEMON_DIR} are not 700.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}) to 700 directory permissions." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Directory permissions for ${CERT_DAEMON_DIR} are not 700.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}) to 700 directory permissions." 1>&2
   chmod 700 "${CERT_DAEMON_DIR}"
 fi
 
@@ -272,5 +276,5 @@ echo -e "\n\tUse script ${BOLD}create-host-tls.sh${NORMAL} to update host TLS on
 #    open ticket and remove this comment
 
 #
-new_message "${LINENO}" "INFO" "  Operation finished..." 1>&2
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished..." 1>&2
 ###
