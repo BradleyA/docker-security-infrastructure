@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.471.991  2019-10-21T22:56:42.389870-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.470-1-g13b465f  
+# 	   docker-TLS/copy-user-2-remote-host-tls.sh   added color output ; updated Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.457.961  2019-10-13T21:15:58.193914-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.456-2-g59e591e  
 # 	   #64 docker-TLS/copy-user-2-remote-host-tls.sh   Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.281.748  2019-06-10T16:46:36.797714-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.280  
@@ -18,7 +20,9 @@ if [[ "${DEBUG}" == "5" ]] ; then set -e -o pipefail ; fi   # Exit immediately i
 #
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
+RED=$(tput    setaf 1)
 YELLOW=$(tput setaf 3)
+WHITE=$(tput  setaf 7)
 
 ###  Production standard 7.0 Default variable value
 DEFAULT_REMOTE_HOST="$(hostname -f)"    # local host
@@ -67,14 +71,14 @@ echo    "setting '5' (set -e -o pipefail) will do setting '4' and exit if any co
 echo    "a pipeline errors.  For more information about any of the set options, see"
 echo    "man bash."
 
-###  Production standard 4.0 Documentation Language
+###  Production standard 4.3.534 Documentation Language
 #    Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [[ "${LANG}" == "fr_CA.UTF-8" ]] || [[ "${LANG}" == "fr_FR.UTF-8" ]] || [[ "${LANG}" == "fr_CH.UTF-8" ]] ; then
   echo -e "\n--> ${LANG}"
   echo    "<votre aide va ici>" # your help goes here
   echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
 elif ! [[ "${LANG}" == "en_US.UTF-8" ]] ; then
-  new_message "${LINENO}" "INFO" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+  new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
 
 echo -e "\n${BOLD}ENVIRONMENT VARIABLES${NORMAL}"
@@ -153,7 +157,7 @@ new_message() {  #  $1="${LINENO}"  $2="DEBUG INFO ERROR WARN"  $3="message"
 }
 
 #    INFO
-new_message "${LINENO}" "INFO" "  Started..." 1>&2
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Started..." 1>&2
 
 #    Added following code because USER is not defined in crobtab jobs
 if ! [[ "${USER}" == "${LOGNAME}" ]] ; then  USER=${LOGNAME} ; fi
@@ -168,7 +172,7 @@ while [[ "${#}" -gt 0 ]] ; do
     --help|-help|help|-h|h|-\?)  display_help | more ; exit 0 ;;
     --usage|-usage|usage|-u)  display_usage ; exit 0  ;;
     --version|-version|version|-v)  echo "${SCRIPT_NAME} ${SCRIPT_VERSION}" ; exit 0  ;;
-    *)  new_message "${LINENO}" "ERROR" "  Option, ${BOLD}${YELLOW}${1}${NORMAL}, entered on the command line is not supported." 1>&2 ; display_usage ; exit 1 ; ;;
+    *) break ;;
   esac
 done
 
@@ -183,7 +187,7 @@ if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  TLS_USER >$
 #    Check if ${WORKING_DIRECTORY} directory on system
 if [[ ! -d "${WORKING_DIRECTORY}" ]] ; then
   display_help | more
-  new_message "${LINENO}" "ERROR" "  Default directory, ${BOLD}${WORKING_DIRECTORY}${NORMAL}, not on system." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Default directory, ${BOLD}${WORKING_DIRECTORY}${NORMAL}, not on system." 1>&2
 #    Help hint
   echo -e "\n\tRunning create-site-private-public-tls.sh will create directories"
   echo -e "\tand site private and public keys.  Then run sudo"
@@ -194,7 +198,7 @@ fi
 
 #    Check if ${TLS_USER}-user-priv-key.pem file on system
 if ! [[ -e "${WORKING_DIRECTORY}/${TLS_USER}-user-priv-key.pem" ]] ; then
-  new_message "${LINENO}" "ERROR" "  The ${TLS_USER}-user-priv-key.pem file was not found in ${WORKING_DIRECTORY}" 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  The ${TLS_USER}-user-priv-key.pem file was not found in ${WORKING_DIRECTORY}" 1>&2
 #    Help hint
   echo -e "\n\tRunning ${BOLD}create-user-tls.sh${NORMAL} will create public and private keys."
   exit 1
@@ -207,7 +211,7 @@ echo -e "\tfrom ${REMOTE_HOST}.  Running"
 echo -e "\t${BOLD}ssh-copy-id ${USER}@${REMOTE_HOST}${NORMAL}"
 echo -e "\tmay stop some of the prompts.\n"
 if $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
-  ssh -t "${REMOTE_HOST}" " cd ~${TLS_USER} " || { new_message "${LINENO}" "ERROR" "  ${TLS_USER} user does not have home directory on ${REMOTE_HOST}"  ; exit 1; }
+  ssh -t "${REMOTE_HOST}" " cd ~${TLS_USER} " || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${TLS_USER} user does not have home directory on ${REMOTE_HOST}"  ; exit 1; }
   echo -e "\tCreate directory, change file permissions, and copy TLS keys to ${TLS_USER}@${REMOTE_HOST}." 1>&2
   mkdir -p "${TLS_USER}/.docker"
   chmod 0755 "${TLS_USER}"
@@ -228,7 +232,7 @@ if $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
   if [[ "${TLS_USER}" == "${USER}" ]] ; then
     ssh -t "${REMOTE_HOST}" " cd ~${TLS_USER} ; tar -xf /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; rm /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; chown -R ${TLS_USER}.${TLS_USER} .docker "
   else
-    new_message "${LINENO}" "INFO" "  ${USER}, sudo password is required to install other user, ${TLS_USER}, certs on host, ${REMOTE_HOST}." 1>&2
+    new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  ${USER}, sudo password is required to install other user, ${TLS_USER}, certs on host, ${REMOTE_HOST}." 1>&2
     ssh -t "${REMOTE_HOST}" "cd ~${TLS_USER}/.. ; sudo tar -pxf /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar -C ${TLS_USER} ; sudo rm /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; sudo chown -R ${TLS_USER}.${TLS_USER} ${TLS_USER}/.docker "
   fi
   cd ..
@@ -243,14 +247,14 @@ if $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
   echo -e "\texport DOCKER_HOST=tcp://$(hostname -f):2376"
   echo -e "\texport DOCKER_TLS_VERIFY=1"
 #
-  new_message "${LINENO}" "INFO" "  Operation finished..." 1>&2
+  new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished..." 1>&2
   exit 0
 else
   display_help | more
-  new_message "${LINENO}" "ERROR" "  ${REMOTE_HOST} not responding on ssh port." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${REMOTE_HOST} not responding on ssh port." 1>&2
   exit 1
 fi
 
 #
-new_message "${LINENO}" "INFO" "  Operation finished....." 1>&2
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished....." 1>&2
 ###
