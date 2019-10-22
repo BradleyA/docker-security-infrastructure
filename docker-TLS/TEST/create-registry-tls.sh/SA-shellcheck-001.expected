@@ -1,5 +1,5 @@
 
-In SA-shellcheck-001 line 36:
+In SA-shellcheck-001 line 38:
 echo    "~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>.  The <REGISTRY_PORT>"
          ^-- SC2088: Note that ~ does not expand in quotes.
 
