@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-user-tls.sh  3.476.997  2019-10-21T23:32:14.906593-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.475  
+# 	   docker-TLS/create-user-tls.sh    add color output ; upgraded Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/create-user-tls.sh  3.462.974  2019-10-15T14:41:43.959971-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.461-2-g62bc2de  
 # 	   close #70   docker-TLS/create-user-tls.sh   - upgrade Production standard 
 #86# docker-TLS/create-user-tls.sh - Create user public and private key and CA
@@ -16,7 +18,9 @@ if [[ "${DEBUG}" == "5" ]] ; then set -e -o pipefail ; fi   # Exit immediately i
 #
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
+RED=$(tput    setaf 1)
 YELLOW=$(tput setaf 3)
+WHITE=$(tput  setaf 7)
 
 ###  Production standard 7.0 Default variable value
 DEFAULT_TLS_USER="${USER}"
@@ -63,14 +67,14 @@ echo    "setting '5' (set -e -o pipefail) will do setting '4' and exit if any co
 echo    "a pipeline errors.  For more information about any of the set options, see"
 echo    "man bash."
 
-###  Production standard 4.0 Documentation Language
+###  Production standard 4.3.534 Documentation Language
 #    Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [[ "${LANG}" == "fr_CA.UTF-8" ]] || [[ "${LANG}" == "fr_FR.UTF-8" ]] || [[ "${LANG}" == "fr_CH.UTF-8" ]] ; then
   echo -e "\n--> ${LANG}"
   echo    "<votre aide va ici>" # your help goes here
   echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
 elif ! [[ "${LANG}" == "en_US.UTF-8" ]] ; then
-  new_message "${LINENO}" "INFO" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+  new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
 
 echo -e "\n${BOLD}ENVIRONMENT VARIABLES${NORMAL}"
@@ -136,7 +140,7 @@ new_message() {  #  $1="${LINENO}"  $2="DEBUG INFO ERROR WARN"  $3="message"
 }
 
 #    INFO
-new_message "${LINENO}" "INFO" "  Started..." 1>&2
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Started..." 1>&2
 
 #    Added following code because USER is not defined in crobtab jobs
 if ! [[ "${USER}" == "${LOGNAME}" ]] ; then  USER=${LOGNAME} ; fi
@@ -151,7 +155,7 @@ while [[ "${#}" -gt 0 ]] ; do
     --help|-help|help|-h|h|-\?)  display_help | more ; exit 0 ;;
     --usage|-usage|usage|-u)  display_usage ; exit 0  ;;
     --version|-version|version|-v)  echo "${SCRIPT_NAME} ${SCRIPT_VERSION}" ; exit 0  ;;
-    *)  new_message "${LINENO}" "ERROR" "  Option, ${BOLD}${YELLOW}${1}${NORMAL}, entered on the command line is not supported." 1>&2 ; display_usage ; exit 1 ; ;;
+    *) break ;;
   esac
 done
 
@@ -166,13 +170,13 @@ if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  TLS_USER >$
 
 #    Check if admin user has home directory on system
 if [[ ! -d "${USER_HOME}${ADM_TLS_USER}" ]] ; then
-  new_message "${LINENO}" "ERROR" "  ${ADM_TLS_USER} does not have a home directory on this system or ${ADM_TLS_USER} home directory is not ${USER_HOME}${ADM_TLS_USER}" 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${ADM_TLS_USER} does not have a home directory on this system or ${ADM_TLS_USER} home directory is not ${USER_HOME}${ADM_TLS_USER}" 1>&2
   exit 1
 fi
 
 #    Check if site CA directory on system
 if [[ ! -d "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private" ]] ; then
-  new_message "${LINENO}" "ERROR" "  Default directory, ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private, not on system." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Default directory, ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private, not on system." 1>&2
 #    Help hint
   echo -e "\n\tRunning create-site-private-public-tls.sh will create directories"
   echo -e "\tand site private and public keys.  Then run sudo"
@@ -185,7 +189,7 @@ cd "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca"
 #    Check if ca-priv-key.pem file on system
 if ! [[ -e "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem" ]] ; then
   display_help | more
-  new_message "${LINENO}" "ERROR" "  Site private key ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem is not in this location." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Site private key ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem is not in this location." 1>&2
 #    Help hint
   echo -e "\n\tEither move it from your site secure location to"
   echo -e "\t${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/"
@@ -196,25 +200,25 @@ fi
 
 #    Check if ${TLS_USER}-user-priv-key.pem file on system
 if [[ -e "${TLS_USER}-user-priv-key.pem" ]] ; then
-  new_message "${LINENO}" "WARN" "  ${TLS_USER}-user-priv-key.pem already exists, renaming existing keys so new keys can be created." 1>&2
+  new_message "${LINENO}" "${YELLOW}WARN${WHITE}" "  ${TLS_USER}-user-priv-key.pem already exists, renaming existing keys so new keys can be created." 1>&2
   mv "${TLS_USER}-user-priv-key.pem"  "${TLS_USER}-user-priv-key.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)"
   mv "${TLS_USER}-user-cert.pem"      "${TLS_USER}-user-cert.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)"
 fi
 
 #    Creating private key for user ${TLS_USER}
-new_message "${LINENO}" "INFO" "  Creating private key for user ${TLS_USER}." 1>&2
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Creating private key for user ${TLS_USER}." 1>&2
 openssl genrsa -out "${TLS_USER}-user-priv-key.pem" 2048
 
 #    Generate a Certificate Signing Request (CSR)
-new_message "${LINENO}" "INFO" "  Generate a Certificate Signing Request (CSR) for user ${TLS_USER}." 1>&2
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Generate a Certificate Signing Request (CSR) for user ${TLS_USER}." 1>&2
 openssl req -subj '/subjectAltName=client' -new -key "${TLS_USER}-user-priv-key.pem" -out "${TLS_USER}-user.csr"
 
 #    Create and sign a ${NUMBER_DAYS} day certificate
-new_message "${LINENO}" "INFO" "  Create and sign a ${NUMBER_DAYS} day certificate for user ${TLS_USER}." 1>&2
-openssl x509 -req -days "${NUMBER_DAYS}" -sha256 -in "${TLS_USER}-user.csr" -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out "${TLS_USER}-user-cert.pem" || { new_message "${LINENO}" "ERROR" "  Wrong pass phrase for .private/ca-priv-key.pem:" ; exit 1; }
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Create and sign a ${NUMBER_DAYS} day certificate for user ${TLS_USER}." 1>&2
+openssl x509 -req -days "${NUMBER_DAYS}" -sha256 -in "${TLS_USER}-user.csr" -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out "${TLS_USER}-user-cert.pem" || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Wrong pass phrase for .private/ca-priv-key.pem:" ; exit 1; }
 
 #    Removing certificate signing requests (CSR)
-new_message "${LINENO}" "INFO" "  Removing certificate signing requests (CSR) and set file permissions for ${TLS_USER} key pairs." 1>&2
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Removing certificate signing requests (CSR) and set file permissions for ${TLS_USER} key pairs." 1>&2
 rm    "${TLS_USER}-user.csr"
 chmod 0400  "${TLS_USER}-user-priv-key.pem"
 chmod 0444  "${TLS_USER}-user-cert.pem"
@@ -223,5 +227,5 @@ chmod 0444  "${TLS_USER}-user-cert.pem"
 echo -e "\nUse script ${BOLD}copy-user-2-remote-host-tls.sh${NORMAL} to update remote host."
 
 #
-new_message "${LINENO}" "INFO" "  Operation finished..." 1>&2
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished..." 1>&2
 ###
