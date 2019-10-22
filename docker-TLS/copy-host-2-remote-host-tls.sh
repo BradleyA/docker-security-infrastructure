@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.469.986  2019-10-21T22:21:12.852432-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.468-1-g4bdbb55  
+# 	   docker-TLS/copy-host-2-remote-host-tls.sh   added color output ; upgraded Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.463.976  2019-10-15T23:31:11.161027-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.462-1-g2ea495b  
 # 	   docker-TLS/copy-host-2-remote-host-tls.sh  - add code so localhost does not use scp & ssh #48 first pass 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.457.961  2019-10-13T21:15:58.035732-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.456-2-g59e591e
@@ -22,7 +24,9 @@ if [[ "${DEBUG}" == "5" ]] ; then set -e -o pipefail ; fi   # Exit immediately i
 #
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
+RED=$(tput    setaf 1)
 YELLOW=$(tput setaf 3)
+WHITE=$(tput  setaf 7)
 
 ###  Production standard 7.0 Default variable value
 DEFAULT_REMOTE_HOST="$(hostname -f)"    # local host
@@ -73,14 +77,14 @@ echo    "setting '5' (set -e -o pipefail) will do setting '4' and exit if any co
 echo    "a pipeline errors.  For more information about any of the set options, see"
 echo    "man bash."
 
-###  Production standard 4.0 Documentation Language
+###  Production standard 4.3.534 Documentation Language
 #    Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [[ "${LANG}" == "fr_CA.UTF-8" ]] || [[ "${LANG}" == "fr_FR.UTF-8" ]] || [[ "${LANG}" == "fr_CH.UTF-8" ]] ; then
   echo -e "\n--> ${LANG}"
   echo    "<votre aide va ici>" # your help goes here
   echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
 elif ! [[ "${LANG}" == "en_US.UTF-8" ]] ; then
-  new_message "${LINENO}" "INFO" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+  new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
 
 echo -e "\n${BOLD}ENVIRONMENT VARIABLES${NORMAL}"
@@ -150,7 +154,7 @@ new_message() {  #  $1="${LINENO}"  $2="DEBUG INFO ERROR WARN"  $3="message"
 }
 
 #    INFO
-new_message "${LINENO}" "INFO" "  Started..." 1>&2
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Started..." 1>&2
 
 #    Added following code because USER is not defined in crobtab jobs
 if ! [[ "${USER}" == "${LOGNAME}" ]] ; then  USER=${LOGNAME} ; fi
@@ -165,7 +169,7 @@ while [[ "${#}" -gt 0 ]] ; do
     --help|-help|help|-h|h|-\?)  display_help | more ; exit 0 ;;
     --usage|-usage|usage|-u)  display_usage ; exit 0  ;;
     --version|-version|version|-v)  echo "${SCRIPT_NAME} ${SCRIPT_VERSION}" ; exit 0  ;;
-    *)  new_message "${LINENO}" "ERROR" "  Option, ${BOLD}${YELLOW}${1}${NORMAL}, entered on the command line is not supported." 1>&2 ; display_usage ; exit 1 ; ;;
+    *) break ;;
   esac
 done
 
@@ -182,7 +186,7 @@ if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  REMOTE_HOST
 #    Check if ${WORKING_DIRECTORY} directory on system
 if [[ ! -d "${WORKING_DIRECTORY}" ]] ; then
   display_help | more
-  new_message "${LINENO}" "ERROR" "  Default directory, ${BOLD}${WORKING_DIRECTORY}${NORMAL}, not on system." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Default directory, ${BOLD}${WORKING_DIRECTORY}${NORMAL}, not on system." 1>&2
 #    Help hint
   echo -e "\n\tRunning create-site-private-public-tls.sh will create directories"
   echo -e "\tand site private and public keys.  Then run sudo"
@@ -194,7 +198,7 @@ fi
 #    Check if ${REMOTE_HOST}-priv-key.pem file on system
 if ! [[ -e "${WORKING_DIRECTORY}/${REMOTE_HOST}-priv-key.pem" ]] ; then
   display_help | more
-  new_message "${LINENO}" "ERROR" "  The ${REMOTE_HOST}-priv-key.pem file was not found in ${WORKING_DIRECTORY}" 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  The ${REMOTE_HOST}-priv-key.pem file was not found in ${WORKING_DIRECTORY}" 1>&2
 #    Help hint
   echo -e "\tRunning create-host-tls.sh will create public and private keys."
   exit 1
@@ -209,18 +213,18 @@ echo -e "\tmay stop some of the prompts.\n"
 if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}"
   if ! $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
     display_help | more
-    new_message "${LINENO}" "ERROR" "  ${REMOTE_HOST} not responding on ssh port." 1>&2
+    new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${REMOTE_HOST} not responding on ssh port." 1>&2
     exit 1
   fi
   #    Check if /etc/docker directory on ${REMOTE_HOST}
   if ! $(ssh -t "${REMOTE_HOST}" "test -d /etc/docker") ; then
-    new_message "${LINENO}" "ERROR" "  /etc/docker directory missing, is docker installed on ${REMOTE_HOST}." 1>&2
+    new_message "${LINENO}" "${RED}ERROR${WHITE}" "  /etc/docker directory missing, is docker installed on ${REMOTE_HOST}." 1>&2
     exit 1
   fi
 else
   #    Check if /etc/docker directory on ${LOCALHOST}
   if ! [[ -d "/etc/docker" ]] ; then
-    new_message "${LINENO}" "ERROR" "  /etc/docker directory missing, is docker installed on ${REMOTE_HOST}." 1>&2
+    new_message "${LINENO}" "${RED}ERROR${WHITE}" "  /etc/docker directory missing, is docker installed on ${REMOTE_HOST}." 1>&2
     exit 1
   fi
 fi
@@ -317,5 +321,5 @@ echo -e "\tUbuntu 14.04 (Upstart) ${BOLD}ssh -t ${REMOTE_HOST} 'sudo service doc
 # >>>	open ticket and remove this comment
 
 #
-new_message "${LINENO}" "INFO" "  Operation finished....." 1>&2
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished....." 1>&2
 ###
