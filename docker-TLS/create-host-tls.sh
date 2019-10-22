@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.472.992  2019-10-21T23:04:58.809525-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.471  
+# 	   docker-TLS/create-host-tls.sh   added color output ; upgraded Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/create-host-tls.sh  3.458.964  2019-10-13T21:54:25.970261-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.457-2-gecd5acb  
 # 	   close #66  docker-TLS/create-host-tls.sh   upgrade Production standard 
 #86# docker-TLS/create-host-tls.sh - Create host public, private keys and CA
@@ -16,7 +18,9 @@ if [[ "${DEBUG}" == "5" ]] ; then set -e -o pipefail ; fi   # Exit immediately i
 #
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
+RED=$(tput    setaf 1)
 YELLOW=$(tput setaf 3)
+WHITE=$(tput  setaf 7)
 
 ###  Production standard 7.0 Default variable value
 DEFAULT_FQDN=$(hostname -f)    # local host
@@ -62,14 +66,14 @@ echo    "setting '5' (set -e -o pipefail) will do setting '4' and exit if any co
 echo    "a pipeline errors.  For more information about any of the set options, see"
 echo    "man bash."
 
-###  Production standard 4.0 Documentation Language
+###  Production standard 4.3.534 Documentation Language
 #    Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [[ "${LANG}" == "fr_CA.UTF-8" ]] || [[ "${LANG}" == "fr_FR.UTF-8" ]] || [[ "${LANG}" == "fr_CH.UTF-8" ]] ; then
   echo -e "\n--> ${LANG}"
   echo    "<votre aide va ici>" # your help goes here
   echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
 elif ! [[ "${LANG}" == "en_US.UTF-8" ]] ; then
-  new_message "${LINENO}" "INFO" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+  new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
 
 echo -e "\n${BOLD}ENVIRONMENT VARIABLES${NORMAL}"
@@ -137,7 +141,7 @@ new_message() {  #  $1="${LINENO}"  $2="DEBUG INFO ERROR WARN"  $3="message"
 }
 
 #    INFO
-new_message "${LINENO}" "INFO" "  Started..." 1>&2
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Started..." 1>&2
 
 #    Added following code because USER is not defined in crobtab jobs
 if ! [[ "${USER}" == "${LOGNAME}" ]] ; then  USER=${LOGNAME} ; fi
@@ -152,7 +156,7 @@ while [[ "${#}" -gt 0 ]] ; do
     --help|-help|help|-h|h|-\?)  display_help | more ; exit 0 ;;
     --usage|-usage|usage|-u)  display_usage ; exit 0  ;;
     --version|-version|version|-v)  echo "${SCRIPT_NAME} ${SCRIPT_VERSION}" ; exit 0  ;;
-    *)  new_message "${LINENO}" "ERROR" "  Option, ${BOLD}${YELLOW}${1}${NORMAL}, entered on the command line is not supported." 1>&2 ; display_usage ; exit 1 ; ;;
+    *) break ;;
   esac
 done
 
@@ -170,13 +174,13 @@ if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  FQDN >${FQD
 #    Check if ${WORKING_DIRECTORY} is on system
 if [[ ! -d "${WORKING_DIRECTORY}" ]] ; then
   display_help | more
-  new_message "${LINENO}" "ERROR" "  ${WORKING_DIRECTORY} does not exist on this system" 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${WORKING_DIRECTORY} does not exist on this system" 1>&2
   exit 1
 fi
 
 #    Check if site CA directory on system
 if [[ ! -d "${WORKING_DIRECTORY}/.private" ]] ; then
-  new_message "${LINENO}" "ERROR" "  Default directory, ${WORKING_DIRECTORY}/.private, not on system." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Default directory, ${WORKING_DIRECTORY}/.private, not on system." 1>&2
 #    Help hint
   echo -e "\n\tRunning create-site-private-public-tls.sh will create directories"
   echo -e "\tand site private and public keys.  Then run sudo"
@@ -189,7 +193,7 @@ cd "${WORKING_DIRECTORY}"
 #    Check if ${CA_PRIVATE_CERT} file on system
 if ! [[ -e "${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}" ]] ; then
   display_help | more
-  new_message "${LINENO}" "ERROR" "  Site private key ${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT} is not in this location." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Site private key ${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT} is not in this location." 1>&2
 #    Help hint
   echo -e "\n\tEither move it from your site secure location to"
   echo -e "\t${WORKING_DIRECTORY}/.private/"
@@ -207,7 +211,7 @@ fi
 #    Check if ${FQDN} string length is zero
 if [[ -z "${FQDN}" ]] ; then
   display_help | more
-  new_message "${LINENO}" "ERROR" "  A Fully Qualified Domain Name (FQDN) is required to create new host TLS keys." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  A Fully Qualified Domain Name (FQDN) is required to create new host TLS keys." 1>&2
   exit 1
 fi
 
@@ -231,7 +235,7 @@ openssl req -sha256 -new -key "${FQDN}-priv-key.pem" -subj "/CN=${FQDN}/subjectA
 #    Create and sign certificate for host ${FQDN}
 echo -e "\n\tCreate and sign a ${BOLD}${NUMBER_DAYS}${NORMAL} day certificate for host"
 echo -e "\t${BOLD}${FQDN}${NORMAL}"
-openssl x509 -req -days "${NUMBER_DAYS}" -sha256 -in "${FQDN}.csr" -CA ${CA_CERT} -CAkey .private/${CA_PRIVATE_CERT} -CAcreateserial -out "${FQDN}-cert.pem" -extensions v3_req -extfile /usr/lib/ssl/openssl.cnf || { new_message "${LINENO}" "ERROR" "  Wrong pass phrase for .private/${CA_PRIVATE_CERT}: " ; exit 1; }
+openssl x509 -req -days "${NUMBER_DAYS}" -sha256 -in "${FQDN}.csr" -CA ${CA_CERT} -CAkey .private/${CA_PRIVATE_CERT} -CAcreateserial -out "${FQDN}-cert.pem" -extensions v3_req -extfile /usr/lib/ssl/openssl.cnf || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Wrong pass phrase for .private/${CA_PRIVATE_CERT}: " ; exit 1; }
 openssl rsa -in "${FQDN}-priv-key.pem" -out "${FQDN}-priv-key.pem"
 echo -e "\n\tRemoving certificate signing requests (CSR) and set file permissions"
 echo -e "\tfor host ${BOLD}${FQDN}${NORMAL} key pairs."
@@ -240,5 +244,5 @@ chmod 0400 "${FQDN}-priv-key.pem"
 chmod 0444 "${FQDN}-cert.pem"
 
 #
-new_message "${LINENO}" "INFO" "  Operation finished..." 1>&2
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished..." 1>&2
 ###
