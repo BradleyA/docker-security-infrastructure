@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-site-private-public-tls.sh  3.475.996  2019-10-21T23:23:50.476627-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.474-1-g4dc5d21  
+# 	   docker-TLS/create-site-private-public-tls.sh   added color output ; upgraded Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/create-site-private-public-tls.sh  3.461.972  2019-10-13T23:33:12.762617-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.461  
 # 	   close #69   docker-TLS/create-site-private-public-tls.sh  Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
 # 	docker-TLS/create-site-private-public-tls.sh  3.281.748  2019-06-10T16:46:36.898604-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.280  
@@ -18,7 +20,9 @@ if [[ "${DEBUG}" == "5" ]] ; then set -e -o pipefail ; fi   # Exit immediately i
 #
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
+RED=$(tput    setaf 1)
 YELLOW=$(tput setaf 3)
+WHITE=$(tput  setaf 7)
 
 ###  Production standard 7.0 Default variable value
 DEFAULT_NUMBER_DAYS="730"
@@ -67,14 +71,14 @@ echo    "setting '5' (set -e -o pipefail) will do setting '4' and exit if any co
 echo    "a pipeline errors.  For more information about any of the set options, see"
 echo    "man bash."
 
-###  Production standard 4.0 Documentation Language
+###  Production standard 4.3.534 Documentation Language
 #    Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [[ "${LANG}" == "fr_CA.UTF-8" ]] || [[ "${LANG}" == "fr_FR.UTF-8" ]] || [[ "${LANG}" == "fr_CH.UTF-8" ]] ; then
   echo -e "\n--> ${LANG}"
   echo    "<votre aide va ici>" # your help goes here
   echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
 elif ! [[ "${LANG}" == "en_US.UTF-8" ]] ; then
-  new_message "${LINENO}" "INFO" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
+  new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
 
 echo -e "\n${BOLD}ENVIRONMENT VARIABLES${NORMAL}"
@@ -138,7 +142,7 @@ new_message() {  #  $1="${LINENO}"  $2="DEBUG INFO ERROR WARN"  $3="message"
 }
 
 #    INFO
-new_message "${LINENO}" "INFO" "  Started..." 1>&2
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Started..." 1>&2
 
 #    Added following code because USER is not defined in crobtab jobs
 if ! [[ "${USER}" == "${LOGNAME}" ]] ; then  USER=${LOGNAME} ; fi
@@ -153,7 +157,7 @@ while [[ "${#}" -gt 0 ]] ; do
     --help|-help|help|-h|h|-\?)  display_help | more ; exit 0 ;;
     --usage|-usage|usage|-u)  display_usage ; exit 0  ;;
     --version|-version|version|-v)  echo "${SCRIPT_NAME} ${SCRIPT_VERSION}" ; exit 0  ;;
-    *)  new_message "${LINENO}" "ERROR" "  Option, ${BOLD}${YELLOW}${1}${NORMAL}, entered on the command line is not supported." 1>&2 ; display_usage ; exit 1 ; ;;
+    *) break ;;
   esac
 done
 
@@ -169,7 +173,7 @@ if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  NUMBER_DAYS
 
 #    Check if working directory is on system
 if [[ ! -d "${WORKING_DIRECTORY}" ]] ; then
-  new_message "${LINENO}" "ERROR" "  ${WORKING_DIRECTORY} does not exist on this system" 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${WORKING_DIRECTORY} does not exist on this system" 1>&2
   exit 1
 fi
 mkdir -p   "${WORKING_DIRECTORY}/docker-ca/.private"
@@ -186,7 +190,7 @@ fi
 
 #    Create site private key
 echo -e "\tCreating private key and prompting for a passphrase in ${WORKING_DIRECTORY}/docker-ca/.private" 1>&2
-openssl genrsa -aes256 -out ${CA_PRIVATE_CERT} 4096  || { new_message "${LINENO}" "ERROR" "  Pass phrase does not match." ; exit 1; }
+openssl genrsa -aes256 -out ${CA_PRIVATE_CERT} 4096  || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Pass phrase does not match." ; exit 1; }
 chmod 0400 "${WORKING_DIRECTORY}/docker-ca/.private/${CA_PRIVATE_CERT}"
 
 #    Check if ${CA_CERT} file exists
@@ -222,7 +226,7 @@ echo -e "\tOrganizational Unit Name (IT - SRE Team Central US)"
 echo -e "\tCommon Name (two.cptx86.com)"
 echo -e "\tEmail Address ()\n"
 echo -e "\n\tCreating public key good for ${NUMBER_DAYS} days in ${WORKING_DIRECTORY}/docker-ca\n"	1>&2
-openssl req -x509 -days "${NUMBER_DAYS}" -sha256 -new -key .private/${CA_PRIVATE_CERT} -out ${CA_CERT} || { new_message "${LINENO}" "ERROR" "  Incorrect pass phrase for .private/${CA_PRIVATE_CERT}" ; exit 1; }
+openssl req -x509 -days "${NUMBER_DAYS}" -sha256 -new -key .private/${CA_PRIVATE_CERT} -out ${CA_CERT} || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Incorrect pass phrase for .private/${CA_PRIVATE_CERT}" ; exit 1; }
 
 #    Get certificate start and expiration date of ${CA_CERT} file
 CA_CERT_START_DATE=$(openssl x509 -in "${CA_CERT}" -noout -startdate | cut -d '=' -f 2)
@@ -245,5 +249,5 @@ echo -e "\tset an operations or project management calendar entry about 15 days 
 echo -e "\trenewal as a reminder to schedule a new site certificate or open a work\n\tticket."
 
 #
-new_message "${LINENO}" "INFO" "  Operation finished..." 1>&2
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished..." 1>&2
 ###
