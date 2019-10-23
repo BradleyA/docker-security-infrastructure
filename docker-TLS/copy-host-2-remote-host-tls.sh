@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.479.1002  2019-10-23T13:59:01.326766-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.478  
+# 	   docker-TLS/copy-user-2-remote-host-tls.sh docker-TLS/copy-host-2-remote-host-tls.sh   changes for #5 #48  localhost does not use scp & ssh 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.469.986  2019-10-21T22:21:12.852432-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.468-1-g4bdbb55  
 # 	   docker-TLS/copy-host-2-remote-host-tls.sh   added color output ; upgraded Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.463.976  2019-10-15T23:31:11.161027-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.462-1-g2ea495b  
@@ -205,14 +207,14 @@ if ! [[ -e "${WORKING_DIRECTORY}/${REMOTE_HOST}-priv-key.pem" ]] ; then
 fi
 
 cd "${WORKING_DIRECTORY}"
-#    Check if ${REMOTE_HOST} is available on ssh port
 echo -e "\n\t${BOLD}${USER}${NORMAL} user may receive password and passphrase prompts"
 echo -e "\tfrom ${REMOTE_HOST}.  Running"
 echo -e "\t${BOLD}ssh-copy-id ${USER}@${REMOTE_HOST}${NORMAL}"
 echo -e "\tmay stop some of the prompts.\n"
+
 if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}"
+#    Check if ${REMOTE_HOST} is available on ssh port
   if ! $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
-    display_help | more
     new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${REMOTE_HOST} not responding on ssh port." 1>&2
     exit 1
   fi
