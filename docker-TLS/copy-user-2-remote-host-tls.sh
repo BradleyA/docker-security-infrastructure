@@ -1,10 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.479.1002  2019-10-23T13:59:01.478903-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.478  
-# 	   docker-TLS/copy-user-2-remote-host-tls.sh docker-TLS/copy-host-2-remote-host-tls.sh   changes for #5 #48  localhost does not use scp & ssh 
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.471.991  2019-10-21T22:56:42.389870-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.470-1-g13b465f  
-# 	   docker-TLS/copy-user-2-remote-host-tls.sh   added color output ; updated Production standard 4.3.534 Documentation Language 
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.457.961  2019-10-13T21:15:58.193914-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.456-2-g59e591e  
-# 	   #64 docker-TLS/copy-user-2-remote-host-tls.sh   Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.480.1004  2019-10-23T14:25:07.419786-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.479-1-g5ac129d  
+# 	   docker-TLS/copy-user-2-remote-host-tls.sh   update code for #5 localhost does not use scp & ssh 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.281.748  2019-06-10T16:46:36.797714-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.280  
 # 	   trying to reproduce docker-TLS/check-{host,user}-tls.sh - which one should check if the ca.pem match #49 
 #86# docker-TLS/copy-user-2-remote-host-tls.sh - Copy user TLS public, private keys & CA to remote host
@@ -245,20 +241,20 @@ if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #5 Not "${LOCALHOST}"
     exit 1
   fi
 else
-  cp -p "./${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" /tmp
+  cp -p ./"${TLS_USER}"-"${REMOTE_HOST}"-"${FILE_DATE_STAMP}".tar /tmp
 
 #    Check if ${TLS_USER} == ${USER} because sudo is not required for user copying their certs
   if [[ "${TLS_USER}" == "${USER}" ]] ; then
-    cd ~${TLS_USER} || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${TLS_USER} user does not have home directory on ${LOCALHOST}"  ; exit 1; }
-    tar -xf /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar
-    chown -R ${TLS_USER}.${TLS_USER} .docker
+    cd ~"${TLS_USER}" || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${TLS_USER} user does not have home directory on ${LOCALHOST}"  ; exit 1; }
+    tar -xf /tmp/"${TLS_USER}"-"${REMOTE_HOST}"-"${FILE_DATE_STAMP}".tar
+    chown -R "${TLS_USER}"."${TLS_USER}" .docker
   else
     new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  ${USER}, sudo password is required to install other user, ${TLS_USER}, certs on host, ${REMOTE_HOST}." 1>&2
-    cd ~${TLS_USER}/..
-    sudo tar -pxf /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar -C ${TLS_USER}
-    sudo chown -R ${TLS_USER}.${TLS_USER} ${TLS_USER}/.docker
+    cd ~"${TLS_USER}"/..
+    sudo tar -pxf /tmp/"${TLS_USER}"-"${REMOTE_HOST}"-"${FILE_DATE_STAMP}".tar -C "${TLS_USER}"
+    sudo chown -R "${TLS_USER}"."${TLS_USER}" "${TLS_USER}"/.docker
   fi
-  rm /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar
+  rm /tmp/"${TLS_USER}"-"${REMOTE_HOST}"-"${FILE_DATE_STAMP}".tar
 fi
 cd ..
 rm -rf "${TLS_USER}"
