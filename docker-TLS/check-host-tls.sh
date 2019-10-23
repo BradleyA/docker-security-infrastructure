@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-host-tls.sh  3.477.998  2019-10-22T22:15:34.622024-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.476  
+# 	   docker-TLS/check-user-tls.sh docker-TLS/check-host-tls.sh   add color output   testing #49 
 # 	docker-TLS/check-host-tls.sh  3.467.982  2019-10-21T21:56:59.079438-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.466  
 # 	   docker-TLS/check-host-tls.sh   add color output ; upgrade Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/check-host-tls.sh  3.454.953  2019-10-13T16:00:06.942880-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.454-1-g4d6f510  
@@ -23,6 +25,7 @@ if [[ "${DEBUG}" == "5" ]] ; then set -e -o pipefail ; fi   # Exit immediately i
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 RED=$(tput    setaf 1)
+GREEN=$(tput  setaf 2)
 YELLOW=$(tput setaf 3)
 WHITE=$(tput  setaf 7)
 
@@ -137,7 +140,7 @@ new_message() {  #  $1="${LINENO}"  $2="DEBUG INFO ERROR WARN"  $3="message"
 }
 
 #    INFO
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Started..." 1>&2 ; fi
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Started..." 1>&2
 
 #    Added following code because USER is not defined in crobtab jobs
 if ! [[ "${USER}" == "${LOGNAME}" ]] ; then  USER=${LOGNAME} ; fi
@@ -157,15 +160,16 @@ while [[ "${#}" -gt 0 ]] ; do
 done
 
 ### 
+
 CERT_DAEMON_DIR=${1:-${DEFAULT_CERT_DAEMON_DIR}}
 if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  CERT_DAEMON_DIR >${CERT_DAEMON_DIR}<<" 1>&2 ; fi
 
 #    Root is required to copy certs
 if ! [[ "${UID}"  = 0 ]] ; then
-  display_help | more
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Use sudo ${COMMAND_NAME}" 1>&2
+  display_usage | more
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Use sudo ${SCRIPT_NAME}" 1>&2
 #    Help hint
-  echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT   <<\n${NORMAL}"  1>&2
+  echo -e "\n\t${BOLD}>>   ${YELLOW}SCRIPT MUST BE RUN AS ROOT${WHITE}   <<\n${NORMAL}"  1>&2
   exit 1
 fi
 
@@ -192,18 +196,12 @@ if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable...
 if [[ "${HOST_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ]] ; then
 #    Check if certificate will expire in the next 30 day
   if [[ "${HOST_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS_PLUS_30_DAYS}" ]] ; then
-    echo -e "\n\tCertificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/ca.pem, is  ${BOLD}GOOD${NORMAL}  until ${HOST_EXPIRE_DATE}"
+    echo -e "\n\tCertificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/${YELLOW}ca.pem${NORMAL}: ${BOLD}${GREEN}PASS${NORMAL}  until ${BOLD}${YELLOW}${HOST_EXPIRE_DATE}${NORMAL}"
   else
-    echo -e "\n\tCertificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/ca.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}"
-    new_message "${LINENO}" "${YELLOW}WARN${WHITE}" "  Certificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/ca.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
-#    Help hint
-    echo -e "\n\t${BOLD}Use script  create-site-private-public-tls.sh  to update expired host TLS on your\n\tsite TLS server.${NORMAL}"
+    new_message "${LINENO}" "${YELLOW}WARN${WHITE}" "  Certificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/${YELLOW}ca.pem${NORMAL}:  ${BOLD}${YELLOW}EXPIRES${NORMAL}  on ${BOLD}${YELLOW}${HOST_EXPIRE_DATE}${NORMAL}" 1>&2
   fi
 else
-  echo -e "\n\tCertificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/ca.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}"
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Certificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/ca.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
-#    Help hint
-  echo -e "\n\t${BOLD}Use script  create-site-private-public-tls.sh  to update expired host TLS on your\n\tsite TLS server.${NORMAL}"
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Certificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/${YELLOW}ca.pem${NORMAL}:  ${BOLD}${RED}HAS EXPIRED${NORMAL}  on ${BOLD}${YELLOW}${HOST_EXPIRE_DATE}${NORMAL}" 1>&2
 fi
 
 #    View dockerd daemon certificate expiration date of cert.pem file
@@ -216,18 +214,12 @@ if [[ "${HOST_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ]] ; then
 
 #    Check if certificate will expire in the next 30 day
   if [[ "${HOST_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS_PLUS_30_DAYS}" ]] ; then
-    echo -e "\n\tCertificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/cert.pem, is  ${BOLD}GOOD${NORMAL}  until ${HOST_EXPIRE_DATE}"
+    echo -e "\n\tCertificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/${YELLOW}cert.pem${NORMAL}: ${BOLD}${GREEN}PASS${NORMAL}  until ${BOLD}${YELLOW}${HOST_EXPIRE_DATE}${NORMAL}"
   else
-    echo -e "\n\tCertificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/cert.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}"
-    new_message "${LINENO}" "${YELLOW}WARN${WHITE}" "  Certificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/cert.pem,  ${BOLD}EXPIRES${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
-#    Help hint
-    echo -e "\n\t${BOLD}Use script  create-host-tls.sh  to update expired host TLS on your\n\tsite TLS server.${NORMAL}"
+    new_message "${LINENO}" "${YELLOW}WARN${WHITE}" "  Certificate on ${LOCALHOST}, ${CERT_DAEMON_DIR}/${YELLOW}cert.pem${NORMAL}:  ${BOLD}${YELLOW}EXPIRES${NORMAL}  on ${BOLD}${YELLOW}${HOST_EXPIRE_DATE}${NORMAL}" 1>&2
   fi
 else
-  echo -e "\n\tCertificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/cert.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}"
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Certificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/cert.pem,  ${BOLD}HAS EXPIRED${NORMAL}  on ${HOST_EXPIRE_DATE}" 1>&2
-#    Help hint
-  echo -e "\n\t${BOLD}Use script  create-host-tls.sh  to update expired host TLS on your site\n\tTLS server.${NORMAL}"
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Certificate on ${LOCALHOST},  ${CERT_DAEMON_DIR}/${YELLOW}cert.pem${NORMAL}:  ${BOLD}${RED}HAS EXPIRED${NORMAL}  on ${BOLD}${YELLOW}${HOST_EXPIRE_DATE}${NORMAL}" 1>&2
 fi
 
 #    View dockerd daemon certificate issuer data of the ca.pem file
@@ -240,7 +232,7 @@ echo -e "\n\tView dockerd daemon certificate issuer data of the cert.pem file:\n
 
 #    Verify that dockerd daemon certificate was issued by the CA.
 TEMP=$(openssl verify -verbose -CAfile "${CERT_DAEMON_DIR}/ca.pem" "${CERT_DAEMON_DIR}cert.pem")
-echo -e "\n\tVerify that dockerd daemon certificate was issued by the CA:\n\t${BOLD}${TEMP}${NORMAL}"
+echo -e "\n\tVerify that dockerd daemon certificate was issued by the CA:\n\t${BOLD}${YELLOW}${TEMP}${NORMAL}"
 
 echo -e "\n\tVerify and correct file permissions."
 
@@ -269,12 +261,12 @@ if [[ "$(stat -Lc %a "${CERT_DAEMON_DIR}")" != 700 ]] ; then
 fi
 
 #    Help hint
-echo -e "\n\tUse script ${BOLD}create-host-tls.sh${NORMAL} to update host TLS on your\n\tsite TLS server.\n"
+echo -e "\n\t${BOLD}Use script  ${YELLOW}create-host-tls.sh${WHITE}  to update host TLS on your\n\tsite TLS server.\n${NORMAL}"
  
 #    May want to create a version of this script that automates this process for SRE tools,
 #    but keep this script for users to run manually,
 #    open ticket and remove this comment
 
 #
-new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished..." 1>&2
+new_message "${LINENO}" "${YELLOW}INFO${NORMAL}" "  Operation finished..." 1>&2
 ###

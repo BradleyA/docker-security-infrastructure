@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/check-user-tls.sh  3.465.979  2019-10-21T21:31:10.499339-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.464-1-gd600682  
-# 	   docker-TLS/check-user-tls.sh   edit color output ; upgrade Production standard 4.3.534 Documentation Language 
+# 	docker-TLS/check-user-tls.sh  3.477.998  2019-10-22T22:15:34.735240-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.476  
+# 	   docker-TLS/check-user-tls.sh docker-TLS/check-host-tls.sh   add color output   testing #49 
 # 	docker-TLS/check-user-tls.sh  3.464.977  2019-10-16T22:28:28.323070-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.463  
 # 	   docker-TLS/check-user-tls.sh    - upgrade Production standard #62 
 # 	docker-TLS/check-user-tls.sh  3.455.955  2019-10-13T20:32:00.191462-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.454-3-g6f32d2b  
@@ -246,16 +246,12 @@ if [[ "${USER_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ]] ; then
 
 #    Check if certificate will expire in the next 30 day
   if [[ "${USER_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS_PLUS_30_DAYS}" ]] ; then
-    echo -e "\n\tCertificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/${YELLOW}ca.pem${NORMAL}, is  ${BOLD}${GREEN}GOOD${NORMAL}  until ${YELLOW}${USER_EXPIRE_DATE}${NORMAL}"
+    echo -e "\n\tCertificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/${YELLOW}ca.pem${WHITE}: ${BOLD}${GREEN}PASS${NORMAL}  until ${BOLD}${YELLOW}${USER_EXPIRE_DATE}${NORMAL}"
   else
-    new_message "${LINENO}" "${YELLOW}WARN${WHITE}" "  Certificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/ca.pem,  ${BOLD}${YELLOW}EXPIRES${NORMAL}  on ${BOLD}${RED}${USER_EXPIRE_DATE}${NORMAL}" 1>&2
-#    Help hint
-    echo -e "\n\t${BOLD}Use script  create-user-tls.sh  to update expired user TLS.${NORMAL}"
+    new_message "${LINENO}" "${YELLOW}WARN${WHITE}" "  Certificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/${YELLOW}ca.pem${WHITE},  ${BOLD}${YELLOW}EXPIRES${NORMAL}  on ${BOLD}${RED}${USER_EXPIRE_DATE}${NORMAL}" 1>&2
   fi
 else
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Certificate on ${LOCALHOST},  ${USER_HOME}${TLS_USER}/.docker/ca.pem,  ${BOLD}${RED}HAS EXPIRED${NORMAL}  on ${USER_EXPIRE_DATE}" 1>&2
-#    Help hint
-  echo -e "\n\t${BOLD}Use script  create-user-tls.sh  to update expired user TLS.${NORMAL}"
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Certificate on ${LOCALHOST},  ${USER_HOME}${TLS_USER}/.docker/${YELLOW}ca.pem${WHITE},  ${BOLD}${RED}HAS EXPIRED${NORMAL}  on ${BOLD}${YELLOW}${USER_EXPIRE_DATE}${NORMAL}" 1>&2
 fi
 
 #    View user certificate expiration date of cert.pem file
@@ -268,16 +264,13 @@ if [[ "${USER_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ]] ; then
 
 #    Check if certificate will expire in the next 30 day
   if [[ "${USER_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS_PLUS_30_DAYS}" ]] ; then
-    echo -e "\n\tCertificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/cert.pem, is  ${BOLD}GOOD${NORMAL}  until ${USER_EXPIRE_DATE}"
+    echo -e "\n\tCertificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/${YELLOW}cert.pem${WHITE}: ${BOLD}${GREEN}PASS${NORMAL}  until ${BOLD}${YELLOW}${USER_EXPIRE_DATE}${NORMAL}"
   else
-    new_message "${LINENO}" "${YELLOW}WARN${WHITE}" "  Certificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/cert.pem,  ${BOLD}${RED}EXPIRES${NORMAL}  on ${USER_EXPIRE_DATE}" 1>&2
-#    Help hint
-    echo -e "\n\t${BOLD}Use script  create-user-tls.sh  to update expired user TLS.${NORMAL}"
+    echo    " "  #  skip line
+    new_message "${LINENO}" "${YELLOW}WARN${WHITE}" "  Certificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/${YELLOW}cert.pem${WHITE},  ${BOLD}${RED}EXPIRES${NORMAL}  on ${BOLD}${YELLOW}${USER_EXPIRE_DATE}${NORMAL}" 1>&2
   fi
 else
-    new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Certificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/cert.pem,  ${BOLD}${RED}HAS EXPIRED${NORMAL}  on ${USER_EXPIRE_DATE}" 1>&2
-#    Help hint
-    echo -e "\n\t${BOLD}Use script  create-user-tls.sh  to update expired user TLS.${NORMAL}"
+    new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Certificate on ${LOCALHOST}, ${USER_HOME}${TLS_USER}/.docker/${YELLOW}cert.pem${WHITE},  ${BOLD}${RED}HAS EXPIRED${NORMAL}  on ${BOLD}${YELLOW}${USER_EXPIRE_DATE}${NORMAL}" 1>&2
 fi
 
 #    View user certificate issuer data of the ca.pem file.
@@ -290,12 +283,18 @@ echo -e "\n\tView ${USER_HOME}${TLS_USER}/.docker certificate ${BOLD}issuer data
 
 #    Verify that user public key in your certificate matches the public portion of your private key.
 echo -e "\n\tVerify that user public key in your certificate matches the public portion\n\tof your private key."
-(cd "${USER_HOME}${TLS_USER}/.docker" ; openssl x509 -noout -modulus -in cert.pem | openssl md5 ; openssl rsa -noout -modulus -in key.pem | openssl md5) | uniq
-echo -e "\t[${BOLD}${YELLOW}WARN${NORMAL}]  -> If ONLY ONE line of output is returned then the public key\n\tmatches the public portion of your private key.\n"
+(cd "${USER_HOME}${TLS_USER}"/.docker ; openssl x509 -noout -modulus -in cert.pem | openssl md5 ; openssl rsa -noout -modulus -in key.pem | openssl md5 ) | uniq | wc -l > /tmp/foo
+MATCH_KEY=$(cat /tmp/foo)
+if [[ "${MATCH_KEY}" == 1 ]] ; then
+  echo -e "\t[${BOLD}${GREEN}PASS${NORMAL}]  -> Public key does matches the public portion of private key.\n"
+else
+  echo -e "\t[${BOLD}${RED}ERROR${NORMAL}]  -> Public key does NOT matches the public portion of private key.\n"
+fi
 
 #    Verify that user certificate was issued by the CA.
-echo -e "\t${NORMAL}Verify that user certificate was issued by the CA:${BOLD}\t"
+echo -e "\t${NORMAL}Verify that user certificate was issued by the CA:${BOLD}${YELLOW}"
 openssl verify -verbose -CAfile "${USER_HOME}${TLS_USER}/.docker/ca.pem" "${USER_HOME}${TLS_USER}/.docker/cert.pem"  || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  User certificate for ${TLS_USER} on ${LOCALHOST} was NOT issued by CA." ; exit 1; }
+echo -n "${WHITE}"
 
 #    Verify and correct file permissions for ${USER_HOME}${TLS_USER}/.docker/ca.pem
 echo -e "\n\t${NORMAL}Verify and correct file permissions for ${USER_HOME}${TLS_USER}/.docker"
@@ -323,7 +322,7 @@ if [[ $(stat -Lc %a "${USER_HOME}${TLS_USER}/.docker") != 700 ]] ; then
 fi
 
 #    Help hint
-echo -e "\n\tUse script ${BOLD}create-user-tls.sh${NORMAL} to update user TLS if user TLS certificate\n\thas expired."
+echo -e "\n\tUse script ${BOLD}${YELLOW}create-user-tls.sh${NORMAL} to update user TLS if user TLS certificate\n\thas expired."
  
 # >>>	May want to create a version of this script that automates this process for SRE tools,
 # >>>		but keep this script for users to run manually,
