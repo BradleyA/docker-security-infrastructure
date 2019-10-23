@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-user-tls.sh  3.478.1001  2019-10-23T11:06:01.848338-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.477-2-ga08fb75  
+# 	   docker-TLS/create-user-tls.sh   change some messages to DEBUG messages and modify output text 
 # 	docker-TLS/create-user-tls.sh  3.476.997  2019-10-21T23:32:14.906593-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.475  
 # 	   docker-TLS/create-user-tls.sh    add color output ; upgraded Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/create-user-tls.sh  3.462.974  2019-10-15T14:41:43.959971-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.461-2-g62bc2de  
@@ -34,13 +36,13 @@ COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')
 echo -e "\n${NORMAL}${COMMAND_NAME}\n   Create user public and private key and CA"
 echo -e "\n${BOLD}USAGE${NORMAL}"
 echo    "   ${YELLOW}Positional Arguments${NORMAL}"
-echo    "   ${0} [<TLS_USER>]"
-echo    "   ${0}  <TLS_USER> [<NUMBER_DAYS>]"
-echo    "   ${0}  <TLS_USER>  <NUMBER_DAYS> [<USER_HOME>]"
-echo -e "   ${0}  <TLS_USER>  <NUMBER_DAYS>  <USER_HOME> [<ADM_TLS_USER>]\n"
-echo    "   ${0} [--help | -help | help | -h | h | -?]"
-echo    "   ${0} [--usage | -usage | -u]"
-echo    "   ${0} [--version | -version | -v]"
+echo    "   ${COMMAND_NAME} [<TLS_USER>]"
+echo    "   ${COMMAND_NAME}  <TLS_USER> [<NUMBER_DAYS>]"
+echo    "   ${COMMAND_NAME}  <TLS_USER>  <NUMBER_DAYS> [<USER_HOME>]"
+echo -e "   ${COMMAND_NAME}  <TLS_USER>  <NUMBER_DAYS>  <USER_HOME> [<ADM_TLS_USER>]\n"
+echo    "   ${COMMAND_NAME} [--help | -help | help | -h | h | -?]"
+echo    "   ${COMMAND_NAME} [--usage | -usage | -u]"
+echo    "   ${COMMAND_NAME} [--version | -version | -v]"
 }
 
 ###  Production standard 0.3.214 --help
@@ -206,25 +208,27 @@ if [[ -e "${TLS_USER}-user-priv-key.pem" ]] ; then
 fi
 
 #    Creating private key for user ${TLS_USER}
-new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Creating private key for user ${TLS_USER}." 1>&2
+echo "${YELLOW}"
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Creating private key for user ${TLS_USER}." 1>&2 ; fi
 openssl genrsa -out "${TLS_USER}-user-priv-key.pem" 2048
 
 #    Generate a Certificate Signing Request (CSR)
-new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Generate a Certificate Signing Request (CSR) for user ${TLS_USER}." 1>&2
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Generate a Certificate Signing Request (CSR) for user ${TLS_USER}." 1>&2 ; fi
 openssl req -subj '/subjectAltName=client' -new -key "${TLS_USER}-user-priv-key.pem" -out "${TLS_USER}-user.csr"
 
 #    Create and sign a ${NUMBER_DAYS} day certificate
-new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Create and sign a ${NUMBER_DAYS} day certificate for user ${TLS_USER}." 1>&2
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Create and sign a ${NUMBER_DAYS} day certificate for user ${TLS_USER}." 1>&2 ; fi
 openssl x509 -req -days "${NUMBER_DAYS}" -sha256 -in "${TLS_USER}-user.csr" -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out "${TLS_USER}-user-cert.pem" || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Wrong pass phrase for .private/ca-priv-key.pem:" ; exit 1; }
+echo "${WHITE}"
 
 #    Removing certificate signing requests (CSR)
-new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Removing certificate signing requests (CSR) and set file permissions for ${TLS_USER} key pairs." 1>&2
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Removing certificate signing requests (CSR) and set file permissions for ${TLS_USER} key pairs." 1>&2 ; fi
 rm    "${TLS_USER}-user.csr"
 chmod 0400  "${TLS_USER}-user-priv-key.pem"
 chmod 0444  "${TLS_USER}-user-cert.pem"
 
 #    Help hint
-echo -e "\nUse script ${BOLD}copy-user-2-remote-host-tls.sh${NORMAL} to update remote host."
+echo -e "\nUse script ${BOLD}${YELLOW}copy-user-2-remote-host-tls.sh${NORMAL} to update remote host."
 
 #
 new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished..." 1>&2
