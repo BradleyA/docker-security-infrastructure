@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.481.1005  2019-10-23T21:49:25.037778-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.480  
+# 	   docker-TLS/copy-user-2-remote-host-tls.sh   needs MORE testing before fixing rm -rf incident on ZERO 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.480.1004  2019-10-23T14:25:07.419786-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.479-1-g5ac129d  
 # 	   docker-TLS/copy-user-2-remote-host-tls.sh   update code for #5 localhost does not use scp & ssh 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.281.748  2019-06-10T16:46:36.797714-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.280  
@@ -245,19 +247,26 @@ else
 
 #    Check if ${TLS_USER} == ${USER} because sudo is not required for user copying their certs
   if [[ "${TLS_USER}" == "${USER}" ]] ; then
-    cd ~"${TLS_USER}" || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${TLS_USER} user does not have home directory on ${LOCALHOST}"  ; exit 1; }
+    cd ${HOME}
     tar -xf /tmp/"${TLS_USER}"-"${REMOTE_HOST}"-"${FILE_DATE_STAMP}".tar
     chown -R "${TLS_USER}"."${TLS_USER}" .docker
   else
     new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  ${USER}, sudo password is required to install other user, ${TLS_USER}, certs on host, ${REMOTE_HOST}." 1>&2
-    cd ~"${TLS_USER}"/..
+    cd $(dirname $(eval echo "~${TLS_USER}"))
+pwd
+pwd
     sudo tar -pxf /tmp/"${TLS_USER}"-"${REMOTE_HOST}"-"${FILE_DATE_STAMP}".tar -C "${TLS_USER}"
     sudo chown -R "${TLS_USER}"."${TLS_USER}" "${TLS_USER}"/.docker
   fi
   rm /tmp/"${TLS_USER}"-"${REMOTE_HOST}"-"${FILE_DATE_STAMP}".tar
 fi
 cd ..
-rm -rf "${TLS_USER}"
+# >>>
+echo    ">>> >>> >>> >>> >>> MUST fix rm -rf to complete <<< <<< <<< <<<"
+# >>>		DELETED ALL FILE ON ZERO ~bradley
+# >>> >>>>  deleted home directory rm -rf "${TLS_USER}"
+# >>>
+# >>>
 
 #    Display instructions about cert environment variables
 #    Help hint
