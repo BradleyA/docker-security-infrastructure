@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.482.1006  2019-10-24T21:35:12.026886-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.481  
+# 	   docker-TLS/copy-user-2-remote-host-tls.sh docker-TLS/copy-host-2-remote-host-tls.sh  testing #5 #48 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.481.1005  2019-10-23T21:49:25.037778-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.480  
 # 	   docker-TLS/copy-user-2-remote-host-tls.sh   needs MORE testing before fixing rm -rf incident on ZERO 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.480.1004  2019-10-23T14:25:07.419786-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.479-1-g5ac129d  
@@ -253,25 +255,16 @@ else
   else
     new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  ${USER}, sudo password is required to install other user, ${TLS_USER}, certs on host, ${REMOTE_HOST}." 1>&2
     cd $(dirname $(eval echo "~${TLS_USER}"))
-pwd
-pwd
     sudo tar -pxf /tmp/"${TLS_USER}"-"${REMOTE_HOST}"-"${FILE_DATE_STAMP}".tar -C "${TLS_USER}"
     sudo chown -R "${TLS_USER}"."${TLS_USER}" "${TLS_USER}"/.docker
   fi
   rm /tmp/"${TLS_USER}"-"${REMOTE_HOST}"-"${FILE_DATE_STAMP}".tar
 fi
-cd ..
-# >>>
-echo    ">>> >>> >>> >>> >>> MUST fix rm -rf to complete <<< <<< <<< <<<"
-# >>>		DELETED ALL FILE ON ZERO ~bradley
-# >>> >>>>  deleted home directory rm -rf "${TLS_USER}"
-# >>>
-# >>>
 
 #    Display instructions about cert environment variables
 #    Help hint
-echo -e "\nTo set environment variables permanently, add them to the user's"
-echo -e "\t.bashrc.  These environment variables will be set each time the user"
+echo -e "\n\tTo set environment variables permanently, add them to the user's"
+echo -e "\t.bashrc  These environment variables will be set each time the user"
 echo -e "\tlogs into the computer system.  Edit your .bashrc file (or the"
 echo -e "\tcorrect shell if different) and prepend the following two lines."
 echo -e "\t  ${YELLOW}export DOCKER_HOST=tcp://$(hostname -f):2376"

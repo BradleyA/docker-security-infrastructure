@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.482.1006  2019-10-24T21:35:11.849647-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.481  
+# 	   docker-TLS/copy-user-2-remote-host-tls.sh docker-TLS/copy-host-2-remote-host-tls.sh  testing #5 #48 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.479.1002  2019-10-23T13:59:01.326766-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.478  
 # 	   docker-TLS/copy-user-2-remote-host-tls.sh docker-TLS/copy-host-2-remote-host-tls.sh   changes for #5 #48  localhost does not use scp & ssh 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.469.986  2019-10-21T22:21:12.852432-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.468-1-g4bdbb55  
@@ -187,29 +189,27 @@ if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  REMOTE_HOST
 
 #    Check if ${WORKING_DIRECTORY} directory on system
 if [[ ! -d "${WORKING_DIRECTORY}" ]] ; then
-  display_help | more
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Default directory, ${BOLD}${WORKING_DIRECTORY}${NORMAL}, not on system." 1>&2
 #    Help hint
   echo -e "\n\tRunning create-site-private-public-tls.sh will create directories"
   echo -e "\tand site private and public keys.  Then run sudo"
   echo -e "\tcreate-new-openssl.cnf-tls.sh to modify openssl.cnf file."
-  echo -e "\t${BOLD}See DOCUMENTATION link in '${0} --help' for more information.${NORMAL}"
+  echo -e "\t${BOLD}See DOCUMENTATION link in '${SCRIPT_NAME} --help' for more information.${NORMAL}"
   exit 1
 fi
 
 #    Check if ${REMOTE_HOST}-priv-key.pem file on system
 if ! [[ -e "${WORKING_DIRECTORY}/${REMOTE_HOST}-priv-key.pem" ]] ; then
-  display_help | more
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  The ${REMOTE_HOST}-priv-key.pem file was not found in ${WORKING_DIRECTORY}" 1>&2
 #    Help hint
-  echo -e "\tRunning create-host-tls.sh will create public and private keys."
+  echo -e "\tRunning ${BOLD}${YELLOW}create-host-tls.sh${NORMAL} will create public and private keys."
   exit 1
 fi
 
 cd "${WORKING_DIRECTORY}"
-echo -e "\n\t${BOLD}${USER}${NORMAL} user may receive password and passphrase prompts"
+echo -e "\n\t${BOLD}${YELLOW}${USER}${NORMAL} user may receive password and passphrase prompts"
 echo -e "\tfrom ${REMOTE_HOST}.  Running"
-echo -e "\t${BOLD}ssh-copy-id ${USER}@${REMOTE_HOST}${NORMAL}"
+echo -e "\t  ${BOLD}${YELLOW}ssh-copy-id ${USER}@${REMOTE_HOST}${NORMAL}"
 echo -e "\tmay stop some of the prompts.\n"
 
 if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}"
@@ -299,24 +299,25 @@ else
   sudo chown -R root.root ./docker
   rm "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
 fi
-cd ..
+# >>>	cd ..
 
 #    Remove working directory ${WORKING_DIRECTORY}/${REMOTE_HOST}
-rm -rf "${REMOTE_HOST}"
+echo    ">>> >>> >>> >>> whereis the backup ? <<< <<< <<<"
+# >>>	rm -rf "${REMOTE_HOST}"
 
 #    Display instructions about certification environment variables
 echo -e "\n\tAdd TLS flags to dockerd so it will know to use TLS certifications"
 echo -e "\t(--tlsverify, --tlscacert, --tlscert, --tlskey).  Scripts that will"
 echo -e "\thelp with setup and operations of Docker using TLS can be found:"
 echo    "https://github.com/BradleyA/docker-security-infrastructure/tree/master/dockerd-configuration-options"
-echo -e "\tThe dockerd-configuration-options scripts will help with configuration"
+echo -e "\tThe ${YELLOW}dockerd-configuration-options${WHITE} scripts will help with configuration"
 echo -e "\tof dockerd on systems running Ubuntu 16.04 (systemd) and Ubuntu 14.04"
 echo -e "\t(Upstart)."
 #
 echo -e "\n\tIf dockerd is already using TLS certifications then entering one of the"
 echo -e "\tfollowing will restart dockerd with the new certifications.\n"
-echo -e "\tUbuntu 16.04 (Systemd) ${BOLD}ssh -t ${REMOTE_HOST} 'sudo systemctl restart docker'${NORMAL}"
-echo -e "\tUbuntu 14.04 (Upstart) ${BOLD}ssh -t ${REMOTE_HOST} 'sudo service docker restart'${NORMAL}"
+echo -e "\tUbuntu 16.04 (Systemd) ${BOLD}${YELLOW}ssh -t ${REMOTE_HOST} 'sudo systemctl restart docker'${NORMAL}"
+echo -e "\tUbuntu 14.04 (Upstart) ${BOLD}${YELLOW}ssh -t ${REMOTE_HOST} 'sudo service docker restart'${NORMAL}"
 
 # >>>	May want to create a version of this script that automates this process for SRE tools,
 # >>>	but keep this script for users to run manually,
