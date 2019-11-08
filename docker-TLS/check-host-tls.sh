@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-host-tls.sh  3.483.1007  2019-11-07T20:30:57.657697-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.482  
+# 	   docker-TLS/check-host-tls.sh  remove display_usage from message requiring script to be run as root 
 # 	docker-TLS/check-host-tls.sh  3.477.998  2019-10-22T22:15:34.622024-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.476  
 # 	   docker-TLS/check-user-tls.sh docker-TLS/check-host-tls.sh   add color output   testing #49 
 # 	docker-TLS/check-host-tls.sh  3.467.982  2019-10-21T21:56:59.079438-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.466  
@@ -166,7 +168,6 @@ if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  CERT_DAEMON
 
 #    Root is required to copy certs
 if ! [[ "${UID}"  = 0 ]] ; then
-  display_usage | more
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Use sudo ${SCRIPT_NAME}" 1>&2
 #    Help hint
   echo -e "\n\t${BOLD}>>   ${YELLOW}SCRIPT MUST BE RUN AS ROOT${WHITE}   <<\n${NORMAL}"  1>&2
