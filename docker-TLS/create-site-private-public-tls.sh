@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-site-private-public-tls.sh  3.485.1010  2019-11-10T21:43:14.080120-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.484  
+# 	   docker-TLS/create-site-private-public-tls.sh  testing site ca.pem 
 # 	docker-TLS/create-site-private-public-tls.sh  3.475.996  2019-10-21T23:23:50.476627-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.474-1-g4dc5d21  
 # 	   docker-TLS/create-site-private-public-tls.sh   added color output ; upgraded Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/create-site-private-public-tls.sh  3.461.972  2019-10-13T23:33:12.762617-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.461  
@@ -223,7 +225,7 @@ echo -e "\tState or Province Name (Texas)"
 echo -e "\tLocality Name (Cedar Park)"
 echo -e "\tOrganization Name (Company Name)"
 echo -e "\tOrganizational Unit Name (IT - SRE Team Central US)"
-echo -e "\tCommon Name (two.cptx86.com)"
+echo -e "\tCommon Name (${LOCALHOST})"
 echo -e "\tEmail Address ()\n"
 echo -e "\n\tCreating public key good for ${NUMBER_DAYS} days in ${WORKING_DIRECTORY}/docker-ca\n"	1>&2
 openssl req -x509 -days "${NUMBER_DAYS}" -sha256 -new -key .private/${CA_PRIVATE_CERT} -out ${CA_CERT} || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Incorrect pass phrase for .private/${CA_PRIVATE_CERT}" ; exit 1; }
@@ -239,11 +241,9 @@ chmod 0444 "${CA_CERT}" "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}
 touch -m -t "${CA_CERT_START_DATE_2}" "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
 
 cp -f -p ".private/${CA_PRIVATE_CERT}" ".private/${CA_PRIVATE_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
-touch 0400 ".private/${CA_PRIVATE_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
 
 #	Help hint
-
-echo -e "\n\t${BOLD}These certificates are valid for ${NUMBER_DAYS} days or until ${CA_CERT_EXPIRE_DATE}${NORMAL}\n"
+echo -e "\n\t${BOLD}These certificates are valid for ${YELLOW}${NUMBER_DAYS}${NORMAL}${BOLD} days or until ${YELLOW}${CA_CERT_EXPIRE_DATE}${NORMAL}\n"
 echo -e "\tIt would be prudent to document the date when to renew these certificates and"
 echo -e "\tset an operations or project management calendar entry about 15 days before"
 echo -e "\trenewal as a reminder to schedule a new site certificate or open a work\n\tticket."
