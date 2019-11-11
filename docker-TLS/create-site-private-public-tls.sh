@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-site-private-public-tls.sh  3.487.1012  2019-11-11T00:42:45.416412-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.486  
+# 	   docker-TLS/create-site-private-public-tls.sh  added design change notes .. need to create a function for it 
 # 	docker-TLS/create-site-private-public-tls.sh  3.485.1010  2019-11-10T21:43:14.080120-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.484  
 # 	   docker-TLS/create-site-private-public-tls.sh  testing site ca.pem 
 # 	docker-TLS/create-site-private-public-tls.sh  3.475.996  2019-10-21T23:23:50.476627-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.474-1-g4dc5d21  
@@ -187,7 +189,11 @@ cd         "${WORKING_DIRECTORY}/docker-ca/.private"
 #    Check if ${CA_PRIVATE_CERT}  file exists
 if [[ -e "${WORKING_DIRECTORY}/docker-ca/.private/${CA_PRIVATE_CERT}" ]] ; then
   echo -e "\tSite private key ${WORKING_DIRECTORY}/docker-ca/.private/${CA_PRIVATE_CERT}\n\talready exists, renaming existing site private key to ${CA_PRIVATE_CERT}_$(date +%Y-%m-%dT%H:%M%:z)_backup" 1>&2
+# >>>	paste here #1 
+# >>>	Goal is to name the cert so it can be copied
+# >>>	think about removing next line
   mv "${WORKING_DIRECTORY}/docker-ca/.private/${CA_PRIVATE_CERT}"  "${WORKING_DIRECTORY}/docker-ca/.private/${CA_PRIVATE_CERT}_$(date +%Y-%m-%dT%H:%M%:z)_backup"
+# >>>	think about checking if file is already in current directory or just force it ?    less logic ... faster ... is it more or less secure
 fi
 
 #    Create site private key
@@ -200,6 +206,7 @@ cd "${WORKING_DIRECTORY}/docker-ca"
 if [[ -e "${CA_CERT}" ]] ; then
   echo -e "\tSite CA ${WORKING_DIRECTORY}/docker-ca/${CA_CERT} already exists, renaming existing site CA" 1>&2
 
+# >>>	copy from here #1 
 #    Get certificate start and expiration date of ${CA_CERT} file
   CA_CERT_START_DATE=$(openssl x509 -in "${CA_CERT}" -noout -startdate | cut -d '=' -f 2)
   CA_CERT_START_DATE_2=$(date -u -d"${CA_CERT_START_DATE}" +%g%m%d%H%M.%S)
@@ -209,6 +216,7 @@ if [[ -e "${CA_CERT}" ]] ; then
   mv -f "${CA_CERT}" "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
   chmod 0444 "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
   touch -m -t "${CA_CERT_START_DATE_2}" "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
+# >>>	copy end here #1 
 fi
 
 #    Create site public key
