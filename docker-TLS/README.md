@@ -107,7 +107,7 @@ Run this script second on your host that will be used to create all your certifi
     This script will make changes to /etc/ssl/openssl.cnf file.
     These changes are required before creating user and host TLS keys for Docker.
     Run this script before running the user and host TLS scripts.  It is not
-    required to be run on hosts not creating tTLS keys.
+    required to be run on hosts not creating TLS keys.
     
     Creating backup file of /etc/ssl/openssl.cnf and naming it /etc/ssl/openssl.cnf-2018-02-04_13:23:04_CST
     
