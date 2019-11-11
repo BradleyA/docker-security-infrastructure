@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.486.1011  2019-11-10T21:51:01.001852-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.485  
+# 	   docker-TLS/create-new-openssl.cnf-tls.sh  improve output by adding color 
 # 	docker-TLS/create-new-openssl.cnf-tls.sh  3.473.993  2019-10-21T23:10:48.852953-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.472  
 # 	   docker-TLS/create-new-openssl.cnf-tls.sh   added color output ; upgraded Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/create-new-openssl.cnf-tls.sh  3.459.966  2019-10-13T22:29:12.511725-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.458-1-g0f0c76f  
@@ -157,7 +159,7 @@ if ! grep -Fxq 'extendedKeyUsage = clientAuth,serverAuth' ${ORIGINAL_FILE} ; the
   echo -e "\tThese changes are required before creating user and host TLS keys for Docker."
   echo -e "\tRun this script before running the user and host TLS scripts.  It is not"
   echo -e "\trequired to be run on hosts not creating TLS keys."
-  echo -e "\n\tCreating backup file of ${ORIGINAL_FILE} and naming it ${BACKUP_FILE}"
+  echo -e "\n\tCreating ${YELLOW}backup${NORMAL} file of ${ORIGINAL_FILE} and naming it ${YELLOW}${BACKUP_FILE}${NORMAL}"
   cp "${ORIGINAL_FILE}"  "${BACKUP_FILE}"
   new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Adding the extended KeyUsage at the beginning of [ v3_ca ] section." 1>&2
   sed '/\[ v3_ca \]/a extendedKeyUsage = clientAuth,serverAuth' "${BACKUP_FILE}" > ${ORIGINAL_FILE}
