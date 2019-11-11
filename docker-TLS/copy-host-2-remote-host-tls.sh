@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.484.1009  2019-11-10T21:24:32.955755-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.483-1-gde9da68  
+# 	   docker-TLS/copy-host-2-remote-host-tls.sh  debuging copy to local host 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.482.1006  2019-10-24T21:35:11.849647-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.481  
 # 	   docker-TLS/copy-user-2-remote-host-tls.sh docker-TLS/copy-host-2-remote-host-tls.sh  testing #5 #48 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.479.1002  2019-10-23T13:59:01.326766-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.478  
@@ -222,12 +224,18 @@ if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}
   if ! $(ssh -t "${REMOTE_HOST}" "test -d /etc/docker") ; then
     new_message "${LINENO}" "${RED}ERROR${WHITE}" "  /etc/docker directory missing, is docker installed on ${REMOTE_HOST}." 1>&2
     exit 1
+# >>>	Is this one of those chicken or the egg came first
+# >>>	see below
   fi
 else
   #    Check if /etc/docker directory on ${LOCALHOST}
   if ! [[ -d "/etc/docker" ]] ; then
     new_message "${LINENO}" "${RED}ERROR${WHITE}" "  /etc/docker directory missing, is docker installed on ${REMOTE_HOST}." 1>&2
     exit 1
+# >>>	Is this one of those chicken or the egg came first
+# >>>	Copy the docker certs before installing docker .. ... ..
+# >>>	I would think that it is NOT and ERROR exit 1 , just a preference
+# >>>	if so need to open a ticket and change this
   fi
 fi
 
@@ -248,10 +256,10 @@ else
   sudo mkdir -p "${CERT_DAEMON_DIR}"
   cd /etc
   sudo tar -pcf "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" ./docker/certs.d/daemon
-  sudo chown "${USER}"."${USER}"  "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
   chmod 0400 "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
   cp -p      "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" .
   rm -f      "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
+  cd ${WORKING_DIRECTORY}/${REMOTE_HOST}
 fi
 
 tar -pxf "${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
@@ -259,7 +267,7 @@ tar -pxf "${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
 #    Check if /etc/docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem file exists
 if [[ -e "./docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem" ]] ; then
   echo -e "\n\t/etc/docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem"
-  echo -e "\talready exists, ${BOLD}renaming existing keys${NORMAL} so new keys can be installed.\n"
+  echo -e "\talready exists, ${BOLD}${YELLOW}renaming existing keys${NORMAL} so new keys can be installed.\n"
   mv "./docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem" "./docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem_${FILE_DATE_STAMP}"
   mv "./docker/certs.d/daemon/${REMOTE_HOST}-cert.pem" "./docker/certs.d/daemon/${REMOTE_HOST}-cert.pem_${FILE_DATE_STAMP}"
   mv "./docker/certs.d/daemon/${CA_CERT}" "./docker/certs.d/daemon/${CA_CERT}_${FILE_DATE_STAMP}"
@@ -299,11 +307,6 @@ else
   sudo chown -R root.root ./docker
   rm "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
 fi
-# >>>	cd ..
-
-#    Remove working directory ${WORKING_DIRECTORY}/${REMOTE_HOST}
-echo    ">>> >>> >>> >>> whereis the backup ? <<< <<< <<<"
-# >>>	rm -rf "${REMOTE_HOST}"
 
 #    Display instructions about certification environment variables
 echo -e "\n\tAdd TLS flags to dockerd so it will know to use TLS certifications"
