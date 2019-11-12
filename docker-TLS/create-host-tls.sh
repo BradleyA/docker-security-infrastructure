@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.488.1013  2019-11-12T00:10:10.813803-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.487  
+# 	   docker-TLS/create-host-tls.sh  move key into ${WORKING_DIRECTORY}/${FQDN} directory 
 # 	docker-TLS/create-host-tls.sh  3.472.992  2019-10-21T23:04:58.809525-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.471  
 # 	   docker-TLS/create-host-tls.sh   added color output ; upgraded Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/create-host-tls.sh  3.458.964  2019-10-13T21:54:25.970261-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.457-2-gecd5acb  
@@ -182,7 +184,7 @@ fi
 if [[ ! -d "${WORKING_DIRECTORY}/.private" ]] ; then
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Default directory, ${WORKING_DIRECTORY}/.private, not on system." 1>&2
 #    Help hint
-  echo -e "\n\tRunning create-site-private-public-tls.sh will create directories"
+  echo -e "\n\tRunning ${YELLOW}create-site-private-public-tls.sh${WHITE} will create directories"
   echo -e "\tand site private and public keys.  Then run sudo"
   echo -e "\tcreate-new-openssl.cnf-tls.sh to modify openssl.cnf file.  Then run"
   echo -e "\tcreate-host-tls.sh or create-user-tls.sh as many times as you want."
@@ -214,13 +216,11 @@ if [[ -z "${FQDN}" ]] ; then
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  A Fully Qualified Domain Name (FQDN) is required to create new host TLS keys." 1>&2
   exit 1
 fi
+mkdir -p ${FQDN}
 
-#    Check if ${FQDN}-priv-key.pem file exists
 if [[ -e "${FQDN}-priv-key.pem" ]] ; then
-  echo -e "\n\t${FQDN}-priv-key.pem already exists,"
-  echo -e "\trenaming existing keys so new keys can be created."
-  mv "${FQDN}-priv-key.pem"  "${FQDN}-priv-key.pem_$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)"
-  mv "${FQDN}-cert.pem"  "${FQDN}-cert.pem_$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)"
+  rm  "${FQDN}-priv-key.pem"
+  rm  "${FQDN}-cert.pem"
 fi
 
 #    Creating private key for host ${FQDN}
@@ -242,6 +242,12 @@ echo -e "\tfor host ${BOLD}${FQDN}${NORMAL} key pairs."
 rm "${FQDN}.csr"
 chmod 0400 "${FQDN}-priv-key.pem"
 chmod 0444 "${FQDN}-cert.pem"
+
+#    Place a copy in ${WORKING_DIRECTORY}/${FQDN} directory
+EXPIRE_DATE=$(openssl x509 -in "${CA_CERT}" -noout -enddate  | cut -d '=' -f 2)
+cp -p ${CA_CERT}              "${FQDN}/${CA_CERT}-$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)-${EXPIRE_DATE}"
+mv -p "${FQDN}-priv-key.pem"  "${FQDN}/${FQDN}-priv-key.pem-$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)-${NUMBER_DAYS}"
+mv -p "${FQDN}-cert.pem"      "${FQDN}/${FQDN}-cert.pem-$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)-${NUMBER_DAYS}"
 
 #
 new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished..." 1>&2
