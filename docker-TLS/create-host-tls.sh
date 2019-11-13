@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.489.1014  2019-11-13T00:12:30.568287-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.488  
+# 	   docker-TLS/create-host-tls.sh   change file name in docker-ca/<host> directory 
 # 	docker-TLS/create-host-tls.sh  3.488.1013  2019-11-12T00:10:10.813803-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.487  
 # 	   docker-TLS/create-host-tls.sh  move key into ${WORKING_DIRECTORY}/${FQDN} directory 
 # 	docker-TLS/create-host-tls.sh  3.472.992  2019-10-21T23:04:58.809525-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.471  
@@ -219,8 +221,8 @@ fi
 mkdir -p ${FQDN}
 
 if [[ -e "${FQDN}-priv-key.pem" ]] ; then
-  rm  "${FQDN}-priv-key.pem"
-  rm  "${FQDN}-cert.pem"
+  rm  -f "${FQDN}-priv-key.pem"
+  rm  -f "${FQDN}-cert.pem"
 fi
 
 #    Creating private key for host ${FQDN}
@@ -244,10 +246,15 @@ chmod 0400 "${FQDN}-priv-key.pem"
 chmod 0444 "${FQDN}-cert.pem"
 
 #    Place a copy in ${WORKING_DIRECTORY}/${FQDN} directory
-EXPIRE_DATE=$(openssl x509 -in "${CA_CERT}" -noout -enddate  | cut -d '=' -f 2)
-cp -p ${CA_CERT}              "${FQDN}/${CA_CERT}-$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)-${EXPIRE_DATE}"
-mv -p "${FQDN}-priv-key.pem"  "${FQDN}/${FQDN}-priv-key.pem-$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)-${NUMBER_DAYS}"
-mv -p "${FQDN}-cert.pem"      "${FQDN}/${FQDN}-cert.pem-$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)-${NUMBER_DAYS}"
+CA_CERT_START_DATE_TEMP=$(openssl x509 -in "${CA_CERT}" -noout -startdate | cut -d '=' -f 2)
+CA_CERT_START_DATE=$(date -u -d"${CA_CERT_START_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S%z)
+CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${CA_CERT}" -noout -enddate  | cut -d '=' -f 2)
+CA_CERT_EXPIRE_DATE=$(date -u -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S%z)
+cp -p ${CA_CERT}              "${FQDN}/${CA_CERT}-$(date +%Y-%m-%dT%H:%M:%S%z)-${CA_CERT_START_DATE}-${CA_CERT_EXPIRE_DATE}"
+CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${FQDN}-cert.pem" -noout -enddate  | cut -d '=' -f 2)
+CA_CERT_EXPIRE_DATE=$(date -u -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S%z)
+mv   "${FQDN}-cert.pem"       "${FQDN}/${FQDN}-cert.pem-$(date +%Y-%m-%dT%H:%M:%S%z)-${CA_CERT_EXPIRE_DATE}"
+mv   "${FQDN}-priv-key.pem"   "${FQDN}/${FQDN}-priv-key.pem-$(date +%Y-%m-%dT%H:%M:%S%z)-${CA_CERT_EXPIRE_DATE}"
 
 #
 new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished..." 1>&2
