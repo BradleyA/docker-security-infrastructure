@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.490.1015  2019-11-13T19:39:37.084838-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.489  
+# 	   docker-TLS/create-host-tls.sh   change output to make it more readable and change the location of where ~/.docker/docker-ca/<hostname> 
 # 	docker-TLS/create-host-tls.sh  3.489.1014  2019-11-13T00:12:30.568287-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.488  
 # 	   docker-TLS/create-host-tls.sh   change file name in docker-ca/<host> directory 
 # 	docker-TLS/create-host-tls.sh  3.488.1013  2019-11-12T00:10:10.813803-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.487  
@@ -24,6 +26,7 @@ BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 RED=$(tput    setaf 1)
 YELLOW=$(tput setaf 3)
+CYAN=$(tput   setaf 6)
 WHITE=$(tput  setaf 7)
 
 ###  Production standard 7.0 Default variable value
@@ -226,7 +229,7 @@ if [[ -e "${FQDN}-priv-key.pem" ]] ; then
 fi
 
 #    Creating private key for host ${FQDN}
-echo -e "\n\tCreating private key for host ${BOLD}${FQDN}${NORMAL}"
+echo -e "\n\tCreating private key for host ${BOLD}${YELLOW}${FQDN}${NORMAL}"
 openssl genrsa -out "${FQDN}-priv-key.pem" 2048
 
 #    Create CSR for host ${FQDN}
@@ -235,7 +238,7 @@ echo -e "\thost ${BOLD}${FQDN}${NORMAL}"
 openssl req -sha256 -new -key "${FQDN}-priv-key.pem" -subj "/CN=${FQDN}/subjectAltName=${FQDN}" -out "${FQDN}.csr"
 
 #    Create and sign certificate for host ${FQDN}
-echo -e "\n\tCreate and sign a ${BOLD}${NUMBER_DAYS}${NORMAL} day certificate for host"
+echo -e "\n\tCreate and sign a  ${BOLD}${YELLOW}${NUMBER_DAYS}${NORMAL}  day certificate for host"
 echo -e "\t${BOLD}${FQDN}${NORMAL}"
 openssl x509 -req -days "${NUMBER_DAYS}" -sha256 -in "${FQDN}.csr" -CA ${CA_CERT} -CAkey .private/${CA_PRIVATE_CERT} -CAcreateserial -out "${FQDN}-cert.pem" -extensions v3_req -extfile /usr/lib/ssl/openssl.cnf || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Wrong pass phrase for .private/${CA_PRIVATE_CERT}: " ; exit 1; }
 openssl rsa -in "${FQDN}-priv-key.pem" -out "${FQDN}-priv-key.pem"
@@ -246,15 +249,18 @@ chmod 0400 "${FQDN}-priv-key.pem"
 chmod 0444 "${FQDN}-cert.pem"
 
 #    Place a copy in ${WORKING_DIRECTORY}/${FQDN} directory
+CERT_CREATE_DATE=$(date +%Y-%m-%dT%H:%M:%S-%Z)
 CA_CERT_START_DATE_TEMP=$(openssl x509 -in "${CA_CERT}" -noout -startdate | cut -d '=' -f 2)
-CA_CERT_START_DATE=$(date -u -d"${CA_CERT_START_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S%z)
+CA_CERT_START_DATE=$(date -d"${CA_CERT_START_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
 CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${CA_CERT}" -noout -enddate  | cut -d '=' -f 2)
-CA_CERT_EXPIRE_DATE=$(date -u -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S%z)
-cp -p ${CA_CERT}              "${FQDN}/${CA_CERT}-$(date +%Y-%m-%dT%H:%M:%S%z)-${CA_CERT_START_DATE}-${CA_CERT_EXPIRE_DATE}"
+CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
+cp -p ${CA_CERT}              "${FQDN}/${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"
 CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${FQDN}-cert.pem" -noout -enddate  | cut -d '=' -f 2)
-CA_CERT_EXPIRE_DATE=$(date -u -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S%z)
-mv   "${FQDN}-cert.pem"       "${FQDN}/${FQDN}-cert.pem-$(date +%Y-%m-%dT%H:%M:%S%z)-${CA_CERT_EXPIRE_DATE}"
-mv   "${FQDN}-priv-key.pem"   "${FQDN}/${FQDN}-priv-key.pem-$(date +%Y-%m-%dT%H:%M:%S%z)-${CA_CERT_EXPIRE_DATE}"
+CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
+mv   "${FQDN}-cert.pem"       "${FQDN}/${FQDN}-cert.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
+mv   "${FQDN}-priv-key.pem"   "${FQDN}/${FQDN}-priv-key.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
+echo   "${BOLD}${CYAN}"
+ls -1 "${FQDN}" | grep "${CERT_CREATE_DATE}"
 
 #
 new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished..." 1>&2
