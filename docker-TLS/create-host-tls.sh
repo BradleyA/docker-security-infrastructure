@@ -1,12 +1,8 @@
 #!/bin/bash
-# 	docker-TLS/create-host-tls.sh  3.490.1015  2019-11-13T19:39:37.084838-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.489  
-# 	   docker-TLS/create-host-tls.sh   change output to make it more readable and change the location of where ~/.docker/docker-ca/<hostname> 
-# 	docker-TLS/create-host-tls.sh  3.489.1014  2019-11-13T00:12:30.568287-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.488  
-# 	   docker-TLS/create-host-tls.sh   change file name in docker-ca/<host> directory 
+# 	docker-TLS/create-host-tls.sh  3.491.1016  2019-11-14T19:47:55.749368-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.490  
+# 	   docker-TLS/create-host-tls.sh   Production standard 6.3.539 Architecture tree and display_help 
 # 	docker-TLS/create-host-tls.sh  3.488.1013  2019-11-12T00:10:10.813803-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.487  
 # 	   docker-TLS/create-host-tls.sh  move key into ${WORKING_DIRECTORY}/${FQDN} directory 
-# 	docker-TLS/create-host-tls.sh  3.472.992  2019-10-21T23:04:58.809525-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.471  
-# 	   docker-TLS/create-host-tls.sh   added color output ; upgraded Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/create-host-tls.sh  3.458.964  2019-10-13T21:54:25.970261-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.457-2-gecd5acb  
 # 	   close #66  docker-TLS/create-host-tls.sh   upgrade Production standard 
 #86# docker-TLS/create-host-tls.sh - Create host public, private keys and CA
@@ -55,8 +51,8 @@ display_help() {
 display_usage
 #    Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
-echo    "An administration user runs this script to create host public, private keys and"
-echo    "CA into the working directory (<WORKING_DIRECTORY>) on the site TLS server."
+echo    "An administration user runs this script to create host public and private keys"
+echo    "in the working directory (<WORKING_DIRECTORY>) on the site TLS server."
 echo -e "\nThe scripts create-site-private-public-tls.sh and create-new-openssl.cnf-tls.sh"
 echo    "are required to create a site TLS server.  Review the DOCUMENTATION for a"
 echo    "complete understanding."
@@ -105,11 +101,21 @@ echo    "                     (default ${DEFAULT_NUMBER_DAYS})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
-###  Production standard 6.1.177 Architecture tree
+###  Production standard 6.3.539 Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
 echo    "    └── docker-ca/                         <-- Working directory to create certs"
+echo    "        ├── .private/                      "                                       # 3.539
+echo    "        │   └── ca-priv-key.pem            <-- Current site private key"           # 3.539
+echo    "        ├── ca.pem                         <-- Current site cert"                  # 3.539
+echo    "        ├── hosts/                         <-- Directory for hostnames"            # 3.539
+echo    "        │   └── <HOST>/                    <-- Directory to store host certs"      # 3.539
+echo    "        ├── site/                          <-- Directory to store site certs"      # 3.539
+echo    "        │   ├── ca.pem_20xx-...            <-- Cert"                               # 3.539
+echo    "        │   └── ca-priv-key.pem_20xx-...   <-- Private key"                        # 3.539
+echo    "        └── users/                         <-- Directory for users"                # 3.539
+echo    "            └── <USER>/                    <-- Directory to store user certs"      # 3.539
 
 echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
@@ -245,6 +251,7 @@ openssl rsa -in "${FQDN}-priv-key.pem" -out "${FQDN}-priv-key.pem"
 echo -e "\n\tRemoving certificate signing requests (CSR) and set file permissions"
 echo -e "\tfor host ${BOLD}${FQDN}${NORMAL} key pairs."
 rm "${FQDN}.csr"
+rm ca.srl
 chmod 0400 "${FQDN}-priv-key.pem"
 chmod 0444 "${FQDN}-cert.pem"
 
