@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.492.1018  2019-11-14T20:11:30.308368-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.491-1-gc49246c  
+# 	   docker-TLS/create-host-tls.sh  completed testing changes 
 # 	docker-TLS/create-host-tls.sh  3.491.1016  2019-11-14T19:47:55.749368-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.490  
 # 	   docker-TLS/create-host-tls.sh   Production standard 6.3.539 Architecture tree and display_help 
 # 	docker-TLS/create-host-tls.sh  3.488.1013  2019-11-12T00:10:10.813803-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.487  
@@ -227,7 +229,7 @@ if [[ -z "${FQDN}" ]] ; then
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  A Fully Qualified Domain Name (FQDN) is required to create new host TLS keys." 1>&2
   exit 1
 fi
-mkdir -p ${FQDN}
+mkdir -p "${FQDN}"
 
 if [[ -e "${FQDN}-priv-key.pem" ]] ; then
   rm  -f "${FQDN}-priv-key.pem"
