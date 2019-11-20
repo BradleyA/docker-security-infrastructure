@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-user-tls.sh  3.495.1026  2019-11-20T16:46:39.115558-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.494-4-gb93c13e  
+# 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh  update user prompts and continue testing 
 # 	docker-TLS/create-user-tls.sh  3.493.1019  2019-11-20T12:05:22.876283-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.492  
 # 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh   update display_help EXAMPLES  Architecture tree  OPTIONS  display_usage 
 # 	docker-TLS/create-user-tls.sh  3.462.974  2019-10-15T14:41:43.959971-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.461-2-g62bc2de  
@@ -181,69 +183,85 @@ done
 TLS_USER=${1:-${DEFAULT_TLS_USER}}
 NUMBER_DAYS=${2:-${DEFAULT_NUMBER_DAYS}}
 #    Order of precedence: CLI argument, environment variable, default code
-if [[ $# -ge  3 ]]  ; then USER_HOME=${3} ; elif [[ "${USER_HOME}" == "" ]] ; then USER_HOME="${DEFAULT_USER_HOME}/" ; fi
-ADM_TLS_USER=${4:-${DEFAULT_ADM_TLS_USER}}
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  TLS_USER >${TLS_USER}< NUMBER_DAYS >${NUMBER_DAYS}< USER_HOME >${USER_HOME}< ADM_TLS_USER >${ADM_TLS_USER}<" 1>&2 ; fi
+if [[ $# -ge  3 ]]  ; then WORKING_DIRECTORY=${3} ; elif [[ "${WORKING_DIRECTORY}" == "" ]] ; then WORKING_DIRECTORY="${DEFAULT_WORKING_DIRECTORY}" ; fi
+#    Order of precedence: environment variable, default code
+if [[ "${CA_CERT}" == "" ]] ; then CA_CERT="${DEFAULT_CA_CERT}" ; fi
+if [[ "${CA_PRIVATE_CERT}" == "" ]] ; then CA_PRIVATE_CERT="${DEFAULT_CA_PRIVATE_CERT}" ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  TLS_USER >${TLS_USER}< NUMBER_DAYS >${NUMBER_DAYS}< WORKING_DIRECTORY >${WORKING_DIRECTORY}< CA_CERT >${CA_CERT}< CA_PRIVATE_CERT >${CA_PRIVATE_CERT}<" 1>&2 ; fi
 
-#    Check if admin user has home directory on system
-if [[ ! -d "${USER_HOME}${ADM_TLS_USER}" ]] ; then
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${ADM_TLS_USER} does not have a home directory on this system or ${ADM_TLS_USER} home directory is not ${USER_HOME}${ADM_TLS_USER}" 1>&2
+#    Check if ${WORKING_DIRECTORY} is on system
+if [[ ! -d "${WORKING_DIRECTORY}" ]] ; then
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${WORKING_DIRECTORY} does not exist on this system.\n  Enter ${0} --help for more information." 1>&2
   exit 1
 fi
 
 #    Check if site CA directory on system
-if [[ ! -d "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private" ]] ; then
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Default directory, ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private, not on system." 1>&2
+if [[ ! -d "${WORKING_DIRECTORY}/.private" ]] ; then
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Default directory, ${WORKING_DIRECTORY}/.private, not on system." 1>&2
 #    Help hint
-  echo -e "\n\tRunning create-site-private-public-tls.sh will create directories"
+  echo -e "\n\tRunning ${YELLOW}create-site-private-public-tls.sh${WHITE} will create directories"
   echo -e "\tand site private and public keys.  Then run sudo"
-  echo -e "\tcreate-new-openssl.cnf-tls.sh to modify openssl.cnf file.  Then run"
-  echo -e "\tcreate-host-tls.sh or create-user-tls.sh as many times as you want."
+  echo -e "\t${YELLOW}create-new-openssl.cnf-tls.sh${WHITE} to modify openssl.cnf file.  Then run"
+  echo -e "\t${YELLOW}create-host-tls.sh${WHITE} or ${YELLOW}create-user-tls.sh${WHITE} as many times as you want."
   exit 1
 fi
-cd "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca"
+cd "${WORKING_DIRECTORY}"
 
-#    Check if ca-priv-key.pem file on system
-if ! [[ -e "${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem" ]] ; then
-  display_help | more
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Site private key ${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/ca-priv-key.pem is not in this location." 1>&2
+#    Check if ${CA_PRIVATE_CERT} file on system
+if ! [[ -e "${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}" ]] ; then
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Site private key ${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}\n  is not in this location.\n  Enter ${0} --help for more information." 1>&2
 #    Help hint
   echo -e "\n\tEither move it from your site secure location to"
-  echo -e "\t${USER_HOME}${ADM_TLS_USER}/.docker/docker-ca/.private/"
-  echo -e "\tOr run create-site-private-public-tls.sh and sudo"
-  echo -e "\tcreate-new-openssl.cnf-tls.sh to create a new one."
+  echo -e "\t${WORKING_DIRECTORY}/.private/"
+  echo -e "\tor run ${YELLOW}create-site-private-public-tls.sh${WHITE} and sudo"
+  echo -e "\t${YELLOW}create-new-openssl.cnf-tls.sh${WHITE} to create a new one."
   exit 1
 fi
 
+mkdir -p "${TLS_USER}"
 #    Check if ${TLS_USER}-user-priv-key.pem file on system
 if [[ -e "${TLS_USER}-user-priv-key.pem" ]] ; then
-  new_message "${LINENO}" "${YELLOW}WARN${WHITE}" "  ${TLS_USER}-user-priv-key.pem already exists, renaming existing keys so new keys can be created." 1>&2
-  mv "${TLS_USER}-user-priv-key.pem"  "${TLS_USER}-user-priv-key.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)"
-  mv "${TLS_USER}-user-cert.pem"      "${TLS_USER}-user-cert.pem$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)"
+  rm  -f "${TLS_USER}-user-priv-key.pem"
+  rm  -f "${TLS_USER}-user-cert.pem"
 fi
 
 #    Creating private key for user ${TLS_USER}
-echo "${YELLOW}"
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Creating private key for user ${TLS_USER}." 1>&2 ; fi
+echo -e "\n\tCreating private key for user ${BOLD}${YELLOW}${TLS_USER}${NORMAL}"
 openssl genrsa -out "${TLS_USER}-user-priv-key.pem" 2048
 
-#    Generate a Certificate Signing Request (CSR)
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Generate a Certificate Signing Request (CSR) for user ${TLS_USER}." 1>&2 ; fi
+#    Create CSR (Certificate Signing Request) for user ${TLS_USER}
+echo -e "\n\tGenerate a Certificate Signing Request (CSR) for"
+echo -e "\tuser ${BOLD}${TLS_USER}${NORMAL}"
 openssl req -subj '/subjectAltName=client' -new -key "${TLS_USER}-user-priv-key.pem" -out "${TLS_USER}-user.csr"
 
-#    Create and sign a ${NUMBER_DAYS} day certificate
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Create and sign a ${NUMBER_DAYS} day certificate for user ${TLS_USER}." 1>&2 ; fi
+#    Create and sign a ${NUMBER_DAYS} day certificate for user ${TLS_USER}
+echo -e "\n\tCreate and sign a  ${BOLD}${YELLOW}${NUMBER_DAYS}${NORMAL}  day certificate for user ${TLS_USER}."
 openssl x509 -req -days "${NUMBER_DAYS}" -sha256 -in "${TLS_USER}-user.csr" -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out "${TLS_USER}-user-cert.pem" || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Wrong pass phrase for .private/ca-priv-key.pem:" ; exit 1; }
-echo "${WHITE}"
 
 #    Removing certificate signing requests (CSR)
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Removing certificate signing requests (CSR) and set file permissions for ${TLS_USER} key pairs." 1>&2 ; fi
+echo -e "\n\tRemoving certificate signing requests (CSR) and set file permissions"
+echo -e "\tfor user ${BOLD}${TLS_USER}${NORMAL} key pairs."
 rm    "${TLS_USER}-user.csr"
+rm    ca.srl
 chmod 0400  "${TLS_USER}-user-priv-key.pem"
 chmod 0444  "${TLS_USER}-user-cert.pem"
 
+#    Place a copy in ${WORKING_DIRECTORY}/${TLS_USER} directory
+CERT_CREATE_DATE=$(date +%Y-%m-%dT%H:%M:%S-%Z)
+CA_CERT_START_DATE_TEMP=$(openssl x509 -in "${CA_CERT}" -noout -startdate | cut -d '=' -f 2)
+CA_CERT_START_DATE=$(date -d"${CA_CERT_START_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
+CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${CA_CERT}" -noout -enddate  | cut -d '=' -f 2)
+CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
+cp -p ${CA_CERT}              "${TLS_USER}/${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"
+CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${TLS_USER}-user-cert.pem" -noout -enddate  | cut -d '=' -f 2)
+CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
+mv   "${TLS_USER}-user-cert.pem"       "${TLS_USER}/${TLS_USER}-user-cert.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
+mv   "${TLS_USER}-user-priv-key.pem"   "${TLS_USER}/${TLS_USER}-user-priv-key.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
+echo   "${BOLD}${CYAN}"
+ls -1 "${TLS_USER}" | grep "${CERT_CREATE_DATE}"
+
 #    Help hint
-echo -e "\nUse script ${BOLD}${YELLOW}copy-user-2-remote-host-tls.sh${NORMAL} to update remote host."
+echo -e "\n\t${NORMAL}Use script ${BOLD}${YELLOW}copy-user-2-remote-host-tls.sh${NORMAL} to update remote host.\n"
 
 #
 new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished..." 1>&2

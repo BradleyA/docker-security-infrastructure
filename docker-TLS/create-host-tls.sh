@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.495.1026  2019-11-20T16:46:38.927248-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.494-4-gb93c13e  
+# 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh  update user prompts and continue testing 
 # 	docker-TLS/create-host-tls.sh  3.494.1021  2019-11-20T12:16:04.215483-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.493-1-g90c497f  
 # 	   docker-TLS/create-host-tls.sh   run FVT tests 
 # 	docker-TLS/create-host-tls.sh  3.493.1019  2019-11-20T12:05:22.740331-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.492  
@@ -31,7 +33,7 @@ WHITE=$(tput  setaf 7)
 
 ###  Production standard 7.0 Default variable value
 DEFAULT_FQDN=$(hostname -f)    # local host
-DEFAULT_NUMBER_DAYS="185"
+DEFAULT_NUMBER_DAYS="180"
 DEFAULT_WORKING_DIRECTORY=~/.docker/docker-ca
 DEFAULT_CA_CERT="ca.pem"
 DEFAULT_CA_PRIVATE_CERT="ca-priv-key.pem"
@@ -202,21 +204,20 @@ if [[ ! -d "${WORKING_DIRECTORY}/.private" ]] ; then
 #    Help hint
   echo -e "\n\tRunning ${YELLOW}create-site-private-public-tls.sh${WHITE} will create directories"
   echo -e "\tand site private and public keys.  Then run sudo"
-  echo -e "\tcreate-new-openssl.cnf-tls.sh to modify openssl.cnf file.  Then run"
-  echo -e "\tcreate-host-tls.sh or create-user-tls.sh as many times as you want."
+  echo -e "\t${YELLOW}create-new-openssl.cnf-tls.sh${WHITE} to modify openssl.cnf file.  Then run"
+  echo -e "\t${YELLOW}create-host-tls.sh${WHITE} or ${YELLOW}create-user-tls.sh${WHITE} as many times as you want."
   exit 1
 fi
 cd "${WORKING_DIRECTORY}"
 
 #    Check if ${CA_PRIVATE_CERT} file on system
 if ! [[ -e "${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}" ]] ; then
-  display_help | more
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Site private key ${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT} is not in this location." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Site private key ${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}\n  is not in this location.\n  Enter ${0} --help for more information." 1>&2
 #    Help hint
   echo -e "\n\tEither move it from your site secure location to"
   echo -e "\t${WORKING_DIRECTORY}/.private/"
-  echo -e "\tOr run create-site-private-public-tls.sh and sudo"
-  echo -e "\tcreate-new-openssl.cnf-tls.sh to create a new one."
+  echo -e "\tor run ${YELLOW}create-site-private-public-tls.sh${WHITE} and sudo"
+  echo -e "\t${YELLOW}create-new-openssl.cnf-tls.sh${WHITE} to create a new one."
   exit 1
 fi
 
@@ -243,20 +244,22 @@ fi
 echo -e "\n\tCreating private key for host ${BOLD}${YELLOW}${FQDN}${NORMAL}"
 openssl genrsa -out "${FQDN}-priv-key.pem" 2048
 
-#    Create CSR for host ${FQDN}
+#    Create CSR (Certificate Signing Request) for host ${FQDN}
 echo -e "\n\tGenerate a Certificate Signing Request (CSR) for"
 echo -e "\thost ${BOLD}${FQDN}${NORMAL}"
 openssl req -sha256 -new -key "${FQDN}-priv-key.pem" -subj "/CN=${FQDN}/subjectAltName=${FQDN}" -out "${FQDN}.csr"
 
-#    Create and sign certificate for host ${FQDN}
-echo -e "\n\tCreate and sign a  ${BOLD}${YELLOW}${NUMBER_DAYS}${NORMAL}  day certificate for host"
+#    Create and sign a ${NUMBER_DAYS} day certificate for host ${FQDN}
+echo -e "\n\tCreate and sign a  ${BOLD}${YELLOW}${NUMBER_DAYS}${NORMAL}  day certificate for host ${FQDN}."
 echo -e "\t${BOLD}${FQDN}${NORMAL}"
 openssl x509 -req -days "${NUMBER_DAYS}" -sha256 -in "${FQDN}.csr" -CA ${CA_CERT} -CAkey .private/${CA_PRIVATE_CERT} -CAcreateserial -out "${FQDN}-cert.pem" -extensions v3_req -extfile /usr/lib/ssl/openssl.cnf || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Wrong pass phrase for .private/${CA_PRIVATE_CERT}: " ; exit 1; }
 openssl rsa -in "${FQDN}-priv-key.pem" -out "${FQDN}-priv-key.pem"
+
+#    Removing certificate signing requests (CSR)
 echo -e "\n\tRemoving certificate signing requests (CSR) and set file permissions"
 echo -e "\tfor host ${BOLD}${FQDN}${NORMAL} key pairs."
-rm "${FQDN}.csr"
-rm ca.srl
+rm    "${FQDN}.csr"
+rm    ca.srl
 chmod 0400 "${FQDN}-priv-key.pem"
 chmod 0444 "${FQDN}-cert.pem"
 
@@ -273,6 +276,9 @@ mv   "${FQDN}-cert.pem"       "${FQDN}/${FQDN}-cert.pem---${CERT_CREATE_DATE}--$
 mv   "${FQDN}-priv-key.pem"   "${FQDN}/${FQDN}-priv-key.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
 echo   "${BOLD}${CYAN}"
 ls -1 "${FQDN}" | grep "${CERT_CREATE_DATE}"
+
+#    Help hint
+echo -e "\n\t${NORMAL}Use script ${BOLD}${YELLOW}copy-host-2-remote-host-tls.sh${NORMAL} to update remote host.\n"
 
 #
 new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished..." 1>&2
