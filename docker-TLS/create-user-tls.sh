@@ -1,10 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-user-tls.sh  3.495.1026  2019-11-20T16:46:39.115558-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.494-4-gb93c13e  
-# 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh  update user prompts and continue testing 
-# 	docker-TLS/create-user-tls.sh  3.493.1019  2019-11-20T12:05:22.876283-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.492  
-# 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh   update display_help EXAMPLES  Architecture tree  OPTIONS  display_usage 
-# 	docker-TLS/create-user-tls.sh  3.462.974  2019-10-15T14:41:43.959971-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.461-2-g62bc2de  
-# 	   close #70   docker-TLS/create-user-tls.sh   - upgrade Production standard 
+# 	docker-TLS/create-user-tls.sh  3.496.1027  2019-11-20T16:49:38.566820-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.495  
+# 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh   testing 
 #86# docker-TLS/create-user-tls.sh - Create user public and private key and CA
 ###  Production standard 3.0 shellcheck
 ###  Production standard 5.1.160 Copyright

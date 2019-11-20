@@ -1,16 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-host-tls.sh  3.495.1026  2019-11-20T16:46:38.927248-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.494-4-gb93c13e  
-# 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh  update user prompts and continue testing 
-# 	docker-TLS/create-host-tls.sh  3.494.1021  2019-11-20T12:16:04.215483-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.493-1-g90c497f  
-# 	   docker-TLS/create-host-tls.sh   run FVT tests 
-# 	docker-TLS/create-host-tls.sh  3.493.1019  2019-11-20T12:05:22.740331-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.492  
-# 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh   update display_help EXAMPLES  Architecture tree  OPTIONS  display_usage 
-# 	docker-TLS/create-host-tls.sh  3.491.1016  2019-11-14T19:47:55.749368-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.490  
-# 	   docker-TLS/create-host-tls.sh   Production standard 6.3.539 Architecture tree and display_help 
-# 	docker-TLS/create-host-tls.sh  3.488.1013  2019-11-12T00:10:10.813803-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.487  
-# 	   docker-TLS/create-host-tls.sh  move key into ${WORKING_DIRECTORY}/${FQDN} directory 
-# 	docker-TLS/create-host-tls.sh  3.458.964  2019-10-13T21:54:25.970261-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.457-2-gecd5acb  
-# 	   close #66  docker-TLS/create-host-tls.sh   upgrade Production standard 
+# 	docker-TLS/create-host-tls.sh  3.496.1027  2019-11-20T16:49:38.448604-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.495  
+# 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh   testing 
 #86# docker-TLS/create-host-tls.sh - Create host public, private keys and CA
 ###  Production standard 3.0 shellcheck
 ###  Production standard 5.1.160 Copyright
