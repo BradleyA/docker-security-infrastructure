@@ -192,8 +192,7 @@ if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  FQDN >${FQD
 
 #    Check if ${WORKING_DIRECTORY} is on system
 if [[ ! -d "${WORKING_DIRECTORY}" ]] ; then
-  display_help | more
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${WORKING_DIRECTORY} does not exist on this system" 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${WORKING_DIRECTORY} does not exist on this system.\n  Enter ${0} --help for more information." 1>&2
   exit 1
 fi
 
