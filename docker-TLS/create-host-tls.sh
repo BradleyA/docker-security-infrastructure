@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.493.1019  2019-11-20T12:05:22.740331-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.492  
+# 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh   update display_help EXAMPLES  Architecture tree  OPTIONS  display_usage 
 # 	docker-TLS/create-host-tls.sh  3.492.1018  2019-11-14T20:11:30.308368-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.491-1-gc49246c  
 # 	   docker-TLS/create-host-tls.sh  completed testing changes 
 # 	docker-TLS/create-host-tls.sh  3.491.1016  2019-11-14T19:47:55.749368-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.490  
@@ -54,7 +56,8 @@ display_usage
 #    Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
 echo    "An administration user runs this script to create host public and private keys"
-echo    "in the working directory (<WORKING_DIRECTORY>) on the site TLS server."
+echo    "in the working directory (${DEFAULT_WORKING_DIRECTORY})"
+echo    "on the site TLS server."
 echo -e "\nThe scripts create-site-private-public-tls.sh and create-new-openssl.cnf-tls.sh"
 echo    "are required to create a site TLS server.  Review the DOCUMENTATION for a"
 echo    "complete understanding."
@@ -98,7 +101,7 @@ echo -e "\n${BOLD}OPTIONS${NORMAL}"
 echo -e "Order of precedence: CLI options, environment variable, default code.\n"
 echo    "   FQDN              Fully qualified domain name of host requiring new TLS keys"
 echo    "                     (default ${DEFAULT_FQDN})"
-echo    "   NUMBER_DAYS       Number of days host CA is valid"
+echo    "   NUMBER_DAYS       Number of days host keys are valid"
 echo    "                     (default ${DEFAULT_NUMBER_DAYS})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
@@ -109,13 +112,13 @@ echo    "<USER_HOME>/                               <-- Location of user home di
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
 echo    "    └── docker-ca/                         <-- Working directory to create certs"
 echo    "        ├── .private/                      "                                       # 3.539
-echo    "        │   └── ca-priv-key.pem            <-- Current site private key"           # 3.539
-echo    "        ├── ca.pem                         <-- Current site cert"                  # 3.539
+echo    "        │   └── ca-priv-key.pem            <-- Current site CA Private Key"        # 3.539
+echo    "        ├── ca.pem                         <-- Current site CA cert"               # 3.539
 echo    "        ├── hosts/                         <-- Directory for hostnames"            # 3.539
 echo    "        │   └── <HOST>/                    <-- Directory to store host certs"      # 3.539
 echo    "        ├── site/                          <-- Directory to store site certs"      # 3.539
-echo    "        │   ├── ca.pem_20xx-...            <-- Cert"                               # 3.539
-echo    "        │   └── ca-priv-key.pem_20xx-...   <-- Private key"                        # 3.539
+echo    "        │   ├── ca.pem_20xx-...            <-- CA Cert"                            # 3.539
+echo    "        │   └── ca-priv-key.pem_20xx-...   <-- CA Private Key"                     # 3.539
 echo    "        └── users/                         <-- Directory for users"                # 3.539
 echo    "            └── <USER>/                    <-- Directory to store user certs"      # 3.539
 
@@ -123,8 +126,9 @@ echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
 
 echo -e "\n${BOLD}EXAMPLES${NORMAL}"
-echo    "   /usr/local/north-office/certs"
-echo -e "\t${BOLD}${0} two.cptx86.com 180 /usr/local/north-office/certs${NORMAL}"
+echo -e "   Create TLS keys for host three.cptx86.com for 30 days in /u/north-office/uadmin/.docker/docker-ca\n\t${BOLD}${0} three.cptx86.com 30 /u/north-office/uadmin/.docker/docker-ca${NORMAL}"
+echo -e "   Create TLS keys for host zero.cptx86.com for 5 days in default working directory\n\t${BOLD}${0} zero.cptx86.com 5${NORMAL}"
+echo -e "   Create TLS keys for host two.cptx86.com for default number of days in default working directory\n\t${BOLD}${0} two.cptx86.com${NORMAL}"
 }
 
 #    Date and time function ISO 8601

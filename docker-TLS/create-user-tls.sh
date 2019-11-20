@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-user-tls.sh  3.478.1001  2019-10-23T11:06:01.848338-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.477-2-ga08fb75  
-# 	   docker-TLS/create-user-tls.sh   change some messages to DEBUG messages and modify output text 
-# 	docker-TLS/create-user-tls.sh  3.476.997  2019-10-21T23:32:14.906593-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.475  
-# 	   docker-TLS/create-user-tls.sh    add color output ; upgraded Production standard 4.3.534 Documentation Language 
+# 	docker-TLS/create-user-tls.sh  3.493.1019  2019-11-20T12:05:22.876283-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.492  
+# 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh   update display_help EXAMPLES  Architecture tree  OPTIONS  display_usage 
 # 	docker-TLS/create-user-tls.sh  3.462.974  2019-10-15T14:41:43.959971-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.461-2-g62bc2de  
 # 	   close #70   docker-TLS/create-user-tls.sh   - upgrade Production standard 
 #86# docker-TLS/create-user-tls.sh - Create user public and private key and CA
@@ -22,13 +20,15 @@ BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 RED=$(tput    setaf 1)
 YELLOW=$(tput setaf 3)
+CYAN=$(tput   setaf 6)
 WHITE=$(tput  setaf 7)
 
 ###  Production standard 7.0 Default variable value
 DEFAULT_TLS_USER="${USER}"
 DEFAULT_NUMBER_DAYS="90"
-DEFAULT_USER_HOME=$(dirname "${HOME}")
-DEFAULT_ADM_TLS_USER="${USER}"
+DEFAULT_WORKING_DIRECTORY=~/.docker/docker-ca
+DEFAULT_CA_CERT="ca.pem"
+DEFAULT_CA_PRIVATE_CERT="ca-priv-key.pem"
 
 ###  Production standard 8.3.530 --usage
 display_usage() {
@@ -38,8 +38,7 @@ echo -e "\n${BOLD}USAGE${NORMAL}"
 echo    "   ${YELLOW}Positional Arguments${NORMAL}"
 echo    "   ${COMMAND_NAME} [<TLS_USER>]"
 echo    "   ${COMMAND_NAME}  <TLS_USER> [<NUMBER_DAYS>]"
-echo    "   ${COMMAND_NAME}  <TLS_USER>  <NUMBER_DAYS> [<USER_HOME>]"
-echo -e "   ${COMMAND_NAME}  <TLS_USER>  <NUMBER_DAYS>  <USER_HOME> [<ADM_TLS_USER>]\n"
+echo -e "   ${COMMAND_NAME}  <TLS_USER>  <NUMBER_DAYS> [<WORKING_DIRECTORY>]\n"
 echo    "   ${COMMAND_NAME} [--help | -help | help | -h | h | -?]"
 echo    "   ${COMMAND_NAME} [--usage | -usage | -u]"
 echo    "   ${COMMAND_NAME} [--version | -version | -v]"
@@ -50,9 +49,9 @@ display_help() {
 display_usage
 #    Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
-echo    "An administration user runs this script to create user public, private keys and"
-echo    "CA in the working directory (<USER_HOME>/<ADM_TLS_USER>/.docker/docker-ca).  If"
-echo    "the directory is not found the script will create the working directory."
+echo    "An administration user runs this script to create user public and private keys"
+echo    "in the working directory (${DEFAULT_WORKING_DIRECTORY})."
+echo    "on the site TLS server."
 echo -e "\nThe scripts create-site-private-public-tls.sh and"
 echo    "create-new-openssl.cnf-tls.sh are required to be run once on a system before"
 echo    "using this script.  Review the documentation for a complete understanding."
@@ -86,18 +85,22 @@ echo    "command, 'unset DEBUG' to remove the exported information from the envi
 echo    "variable DEBUG.  You are on your own defining environment variables if"
 echo    "you are using other shells."
 echo    "   DEBUG       (default off '0')"
-echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
+echo    "   CA_CERT           File name of certificate (default ${DEFAULT_CA_CERT})"
+echo    "   CA_PRIVATE_CERT   File name of private certificate"
+echo    "                     (default ${DEFAULT_CA_PRIVATE_CERT})"
+echo    "   WORKING_DIRECTORY Absolute path for working directory"
+echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
 echo -e "\n${BOLD}OPTIONS${NORMAL}"
 echo -e "Order of precedence: CLI options, environment variable, default code.\n"
-echo    "   TLS_USER    User requiring new TLS keys (default ${DEFAULT_TLS_USER})"
-echo    "   TLS_USER    Administration user (default ${DEFAULT_TLS_USER})"
-echo    "   NUMBER_DAYS Number of days host CA is valid (default ${DEFAULT_NUMBER_DAYS})"
-echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
-echo    "               sites have different home directories (/u/north-office/)"
-echo    "   ADM_TLS_USER Administrator user creating TLS keys (default ${DEFAULT_ADM_TLS_USER})"
+echo    "   TLS_USER          User login requiring new TLS keys"
+echo    "                     (default ${DEFAULT_TLS_USER})"
+echo    "   NUMBER_DAYS       Number of days user keys are valid"
+echo    "                     (default ${DEFAULT_NUMBER_DAYS})"
+echo    "   WORKING_DIRECTORY Absolute path for working directory"
+echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
-###  Production standard 6.1.177 Architecture tree
+###  Production standard 6.3.539  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
@@ -105,12 +108,24 @@ echo    "    ├── ca.pem                             <-- User tlscacert or 
 echo    "    ├── cert.pem                           <-- Symbolic link to user tlscert"
 echo    "    ├── key.pem                            <-- Symbolic link to user tlskey"
 echo    "    └── docker-ca/                         <-- Working directory to create certs"
+echo    "        ├── .private/                      "                                       # 3.539
+echo    "        │   └── ca-priv-key.pem            <-- Current site CA Private Key"        # 3.539
+echo    "        ├── ca.pem                         <-- Current site CA cert"               # 3.539
+echo    "        ├── hosts/                         <-- Directory for hostnames"            # 3.539
+echo    "        │   └── <HOST>/                    <-- Directory to store host certs"      # 3.539
+echo    "        ├── site/                          <-- Directory to store site certs"      # 3.539
+echo    "        │   ├── ca.pem_20xx-...            <-- CA Cert"                            # 3.539
+echo    "        │   └── ca-priv-key.pem_20xx-...   <-- CA Private Key"                     # 3.539
+echo    "        └── users/                         <-- Directory for users"                # 3.539
+echo    "            └── <USER>/                    <-- Directory to store user certs"      # 3.539
 
 echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
 
 echo -e "\n${BOLD}EXAMPLES${NORMAL}"
-echo -e "   Create TLS keys for user bob for 30 days in /u/north-office/ uadmin\n\t${BOLD}${0} bob 30 /u/north-office/ uadmin${NORMAL}"
+echo -e "   Create TLS keys for user bob for 30 days in /u/north-office/uadmin/.docker/docker-ca\n\t${BOLD}${0} bob 30 /u/north-office/uadmin/.docker/docker-ca${NORMAL}"
+echo -e "   Create TLS keys for user sam for 5 days in default working directory\n\t${BOLD}${0} sam 5${NORMAL}"
+echo -e "   Create TLS keys for user chris for default number of days in default working directory\n\t${BOLD}${0} chris${NORMAL}"
 }
 
 #    Date and time function ISO 8601
