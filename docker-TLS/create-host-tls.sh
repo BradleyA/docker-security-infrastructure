@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-host-tls.sh  3.499.1031  2019-11-20T23:08:14.105777-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.498  
-# 	   testing 
+# 	docker-TLS/create-host-tls.sh  3.500.1032  2019-11-20T23:28:48.002225-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.499  
+# 	   docker-TLS/create-host-tls.sh docker-TLS/create-registry-tls.sh   testing 
 # 	docker-TLS/create-host-tls.sh  3.497.1029  2019-11-20T16:54:53.261783-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.496-1-g39a5ece  
 # 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh   testing 
 #86# docker-TLS/create-host-tls.sh - Create host public, private keys and CA
@@ -186,7 +186,7 @@ if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  FQDN >${FQD
 
 #    Check if ${WORKING_DIRECTORY} is on system
 if [[ ! -d "${WORKING_DIRECTORY}" ]] ; then
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${WORKING_DIRECTORY} does not exist on this system.\n  Enter ${0} --help for more information." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${WORKING_DIRECTORY} does not exist on this system.\n  Enter ${COMMAND_NAME} --help for more information." 1>&2
   exit 1
 fi
 

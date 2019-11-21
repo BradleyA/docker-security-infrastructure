@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.499.1031  2019-11-20T23:08:14.290843-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.498  
-# 	   testing 
+# 	docker-TLS/create-registry-tls.sh  3.500.1032  2019-11-20T23:28:48.187518-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.499  
+# 	   docker-TLS/create-host-tls.sh docker-TLS/create-registry-tls.sh   testing 
 # 	docker-TLS/create-registry-tls.sh  3.234.679  2019-04-10T23:30:18.738262-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.233  
 # 	   production standard 6.1.177 Architecture tree 
 #86# docker-TLS/create-registry-tls.sh - Create TLS for Private Registry V2
@@ -170,7 +170,9 @@ done
 #    Order of precedence: CLI argument, environment variable, default code
 if [[ $# -ge  1 ]]  ; then REGISTRY_PORT=${1} ; elif [[ "${REGISTRY_PORT}" == "" ]] ; then REGISTRY_PORT=${DEFAULT_REGISTRY_PORT} ; fi
 if [[ $# -ge  2 ]]  ; then NUMBER_DAYS=${2} ; elif [[ "${NUMBER_DAYS}" == "" ]] ; then NUMBER_DAYS=${DEFAULT_NUMBER_DAYS} ; fi
-if [ "${DEBUG}" == "1" ] ; then new_message "${LINENO}" "DEBUG" "  Variable... REGISTRY_PORT >${REGISTRY_PORT}<" 1>&2 ; fi
+#    Order of precedence: CLI argument, environment variable, default code
+if [[ $# -ge  3 ]]  ; then WORKING_DIRECTORY=${3} ; elif [[ "${WORKING_DIRECTORY}" == "" ]] ; then WORKING_DIRECTORY="${DEFAULT_WORKING_DIRECTORY}" ; fi
+if [ "${DEBUG}" == "1" ] ; then new_message "${LINENO}" "DEBUG" "  Variable... REGISTRY_PORT >${REGISTRY_PORT}< NUMBER_DAYS >${NUMBER_DAYS}< WORKING_DIRECTORY >${WORKING_DIRECTORY}<" 1>&2 ; fi
 
 #    Test <REGISTRY_PORT> for integer
 #    if ! [[ "${REGISTRY_PORT}" =~ ^[0-9]+$ ]]
@@ -187,22 +189,12 @@ if ! [[ "${NUMBER_DAYS}" =~ ^[0-9]+$ ]] ; then
   exit 1
 fi
 
-#    Check if user has home directory on system
-if [[ ! -d "${HOME}" ]] ; then
-  display_help | more
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${USER} does not have a home directory on this system or ${USER} home directory is not ${HOME}" 1>&2
-  exit 1
-fi
-
-#    Check if .docker directory in $HOME
-if [[ ! -d "${HOME}/.docker" ]] ; then
-  mkdir -p "${HOME}/.docker"
-  chmod 700 "${HOME}/.docker"
-fi
+mkdir -p "${WORKING_DIRECTORY}"
+chmod 700 "${WORKING_DIRECTORY}"
 
 #    Create tmp working directory
-mkdir "${HOME}/.docker/tmp-${REGISTRY_PORT}"
-cd "${HOME}/.docker/tmp-${REGISTRY_PORT}"
+mkdir "${WORKING_DIRECTORY}/tmp-${REGISTRY_PORT}"
+cd    "${WORKING_DIRECTORY}/tmp-${REGISTRY_PORT}"
 
 #    Create Self-Signed Certificate Keys
 echo -e "\n\t${BOLD}Create Self-Signed Certificate Keys in $(pwd) ${NORMAL}\n" 
@@ -213,13 +205,13 @@ REGISTRY_HOST=$(openssl x509 -in domain.crt -noout -issuer | cut -d '/' -f 7 | c
 if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable... REGISTRY_HOST >${REGISTRY_HOST}<" 1>&2 ; fi
 
 #    Check if site directory on system
-if [[ ! -d "${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}" ]] ; then
-  mkdir -p "${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}"
-  chmod 700 "${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}"
+if [[ ! -d  "${WORKING_DIRECTORY}/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}" ]] ; then
+  mkdir -p  "${WORKING_DIRECTORY}/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}"
+  chmod 700 "${WORKING_DIRECTORY}/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}"
 fi
 
 #    Change into registry cert directory
-cd "${HOME}/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}"
+cd   "${WORKING_DIRECTORY}/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}"
 echo -e "\n\t${BOLD}Move Self-Signed Certificate Keys into $(pwd) ${NORMAL}\n" 
 
 #    Check if domain.crt already exist
