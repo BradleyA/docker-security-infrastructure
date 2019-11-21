@@ -1,14 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-site-private-public-tls.sh  3.487.1012  2019-11-11T00:42:45.416412-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.486  
-# 	   docker-TLS/create-site-private-public-tls.sh  added design change notes .. need to create a function for it 
-# 	docker-TLS/create-site-private-public-tls.sh  3.485.1010  2019-11-10T21:43:14.080120-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.484  
-# 	   docker-TLS/create-site-private-public-tls.sh  testing site ca.pem 
-# 	docker-TLS/create-site-private-public-tls.sh  3.475.996  2019-10-21T23:23:50.476627-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.474-1-g4dc5d21  
-# 	   docker-TLS/create-site-private-public-tls.sh   added color output ; upgraded Production standard 4.3.534 Documentation Language 
-# 	docker-TLS/create-site-private-public-tls.sh  3.461.972  2019-10-13T23:33:12.762617-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.461  
-# 	   close #69   docker-TLS/create-site-private-public-tls.sh  Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
-# 	docker-TLS/create-site-private-public-tls.sh  3.281.748  2019-06-10T16:46:36.898604-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.280  
-# 	   trying to reproduce docker-TLS/check-{host,user}-tls.sh - which one should check if the ca.pem match #49 
+# 	docker-TLS/create-site-private-public-tls.sh  3.498.1030  2019-11-20T22:56:23.878278-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.497  
+# 	   testing 
 #86# docker-TLS/create-site-private-public-tls.sh - Create site private and CA keys
 ###  Production standard 3.0 shellcheck
 ###  Production standard 5.1.160 Copyright
@@ -32,12 +24,12 @@ WHITE=$(tput  setaf 7)
 DEFAULT_NUMBER_DAYS="730"
 DEFAULT_CA_CERT="ca.pem"
 DEFAULT_CA_PRIVATE_CERT="ca-priv-key.pem"
-DEFAULT_WORKING_DIRECTORY=~/.docker
+DEFAULT_WORKING_DIRECTORY=~/.docker/docker-ca
 
 ###  Production standard 8.3.530 --usage
 display_usage() {
 COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')
-echo -e "\n${NORMAL}${COMMAND_NAME}\n   Create site private and CA keys"
+echo -e "\n${NORMAL}${COMMAND_NAME}\n   Create site CA and private keys"
 echo -e "\n${BOLD}USAGE${NORMAL}"
 echo    "   ${YELLOW}Positional Arguments${NORMAL}"
 echo    "   ${COMMAND_NAME} [<NUMBER_DAYS>]"
@@ -55,13 +47,11 @@ display_usage
 echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
 echo    "An administration user can run this script to create site private and CA"
 echo    "keys.  Run this script first on your host that will be creating all your TLS"
-echo    "keys for your site.  It creates the working directories"
-echo    "<WORKING_DIRECTORY>/docker-ca and <WORKING_DIRECTORY>/docker-ca/.private"
-echo -e "for your site private and CA keys. \n"
+echo    "keys for your site.  It creates the working directories <WORKING_DIRECTORY>"
+echo -e "(${DEFAULT_WORKING_DIRECTORY}) for your site.\n"
 echo    "If you later choose to use a different host to continue creating your user"
-echo    "and host TLS keys, cp the <WORKING_DIRECTORY>/docker-ca and"
-echo    "<WORKING_DIRECTORY>/docker-ca/.private to the new host and run"
-echo -e "\t${BOLD}create-new-openssl.cnf-tls.sh scipt.${NORMAL}"
+echo    "and host TLS keys, cp the <WORKING_DIRECTORY> and .private to the new host and run"
+echo -e "\t${BOLD}${YELLOW}create-new-openssl.cnf-tls.sh scipt.${NORMAL}"
 
 ###  Production standard 1.3.531 DEBUG variable
 echo -e "\nThe DEBUG environment variable can be set to '', '0', '1', '2', '3', '4' or"
@@ -93,22 +83,34 @@ echo    "variable DEBUG.  You are on your own defining environment variables if"
 echo    "you are using other shells."
 echo    "   DEBUG             (default off '0')"
 echo    "   CA_CERT           File name of certificate (default ${DEFAULT_CA_CERT})"
-echo    "   CA_PRIVATE_CERT   File name of private certificate (default ${DEFAULT_CA_PRIVATE_CERT})"
+echo    "   CA_PRIVATE_CERT   File name of private certificate"
+echo    "                     (default ${DEFAULT_CA_PRIVATE_CERT})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
 echo -e "\n${BOLD}OPTIONS${NORMAL}"
 echo -e "Order of precedence: CLI options, environment variable, default code.\n"
-echo    "   NUMBER_DAYS       Number of days host CA is valid (default ${DEFAULT_NUMBER_DAYS})"
+echo    "   NUMBER_DAYS       Number of days host CA is valid"
+echo    "                     (default ${DEFAULT_NUMBER_DAYS})"
 echo    "   CA_CERT           File name of certificate (default ${DEFAULT_CA_CERT})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
-###  Production standard 6.1.177 Architecture tree
+###  Production standard 6.3.539 Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
 echo    "    └── docker-ca/                         <-- Working directory to create certs"
+echo    "        ├── .private/                      "                                       # 3.539
+echo    "        │   └── ca-priv-key.pem            <-- Current site CA Private Key"        # 3.539
+echo    "        ├── ca.pem                         <-- Current site CA cert"               # 3.539
+echo    "        ├── hosts/                         <-- Directory for hostnames"            # 3.539
+echo    "        │   └── <HOST>/                    <-- Directory to store host certs"      # 3.539
+echo    "        ├── site/                          <-- Directory to store site certs"      # 3.539
+echo    "        │   ├── ca.pem_20xx-...            <-- CA Cert"                            # 3.539
+echo    "        │   └── ca-priv-key.pem_20xx-...   <-- CA Private Key"                     # 3.539
+echo    "        └── users/                         <-- Directory for users"                # 3.539
+echo    "            └── <USER>/                    <-- Directory to store user certs"      # 3.539
 
 echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
@@ -180,14 +182,17 @@ if [[ ! -d "${WORKING_DIRECTORY}" ]] ; then
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${WORKING_DIRECTORY} does not exist on this system" 1>&2
   exit 1
 fi
-mkdir -p   "${WORKING_DIRECTORY}/docker-ca/.private"
-chmod 0700 "${WORKING_DIRECTORY}/docker-ca/.private"
-chmod 0700 "${WORKING_DIRECTORY}/docker-ca"
+mkdir -p   "${WORKING_DIRECTORY}/.private"
+chmod 0700 "${WORKING_DIRECTORY}/.private"
 chmod 0700 "${WORKING_DIRECTORY}"
-cd         "${WORKING_DIRECTORY}/docker-ca/.private"
+cd         "${WORKING_DIRECTORY}/.private"
 
 #    Check if ${CA_PRIVATE_CERT}  file exists
-if [[ -e "${WORKING_DIRECTORY}/docker-ca/.private/${CA_PRIVATE_CERT}" ]] ; then
+if [[ -e "${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}" ]] ; then
+
+
+
+
   echo -e "\tSite private key ${WORKING_DIRECTORY}/docker-ca/.private/${CA_PRIVATE_CERT}\n\talready exists, renaming existing site private key to ${CA_PRIVATE_CERT}_$(date +%Y-%m-%dT%H:%M%:z)_backup" 1>&2
 # >>>	paste here #1 
 # >>>	Goal is to name the cert so it can be copied

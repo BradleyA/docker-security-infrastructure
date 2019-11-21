@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.474.994  2019-10-21T23:16:25.849310-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.473  
-# 	   docker-TLS/create-registry-tls.sh   added color output ; updated Production standard 4.3.534 Documentation Language 
+# 	docker-TLS/create-registry-tls.sh  3.498.1030  2019-11-20T22:56:23.692173-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.497  
+# 	   testing 
 # 	docker-TLS/create-registry-tls.sh  3.460.969  2019-10-13T23:02:54.182134-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.459-2-g8b8bcb3  
 # 	   close #68  docker-TLS/create-registry-tls.sh  - upgrade Production standard 
 # 	docker-TLS/create-registry-tls.sh  3.234.679  2019-04-10T23:30:18.738262-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.233  
@@ -27,6 +27,7 @@ WHITE=$(tput  setaf 7)
 ### production standard 7.0 Default variable value
 DEFAULT_REGISTRY_PORT="17313"
 DEFAULT_NUMBER_DAYS='365'
+DEFAULT_WORKING_DIRECTORY=~/.docker
 
 ###  Production standard 8.3.530 --usage
 display_usage() {
@@ -47,11 +48,11 @@ display_usage
 #    Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
 echo    "Run this script to create Docker private registry certificates on any host in"
-echo    "the directory; ~/.docker/.  It will create a working directory,"
-echo    "~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>.  The <REGISTRY_PORT>"
-echo    "number is not required when creating a private registry certificates.  It is"
-echo    "used to keep track of multiple certificates for multiple private registries on"
-echo    "the same host."
+echo    "the <WORKING_DIRECTORY> (default ${DEFAULT_WORKING_DIRECTORY}).  It will create"
+echo    "a directory, ~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>."
+echo    "The <REGISTRY_PORT> number is not required when creating a private registry"
+echo    "certificates.  It is used to keep track of multiple certificates for multiple"
+echo    "private registries on the same host."
 echo -e "\nThe scripts create-site-private-public-tls.sh and"
 echo    "create-new-openssl.cnf-tls.sh are NOT required for a private registry."
 
@@ -83,14 +84,17 @@ echo    "the environment variable DEBUG to '1' (0 = debug off, 1 = debug on).  U
 echo    "command, 'unset DEBUG' to remove the exported information from the environment"
 echo    "variable DEBUG.  You are on your own defining environment variables if"
 echo    "you are using other shells."
-echo    "   DEBUG           (default off '0')"
-echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
-echo    "   NUMBER_DAYS     Number of days certificate valid (default '${DEFAULT_NUMBER_DAYS}')" 
+echo    "   DEBUG             (default off '0')"
+echo    "   REGISTRY_PORT     Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
+echo    "   NUMBER_DAYS       Number of days certificate valid"
+echo    "                     (default '${DEFAULT_NUMBER_DAYS}')" 
+echo    "   WORKING_DIRECTORY Absolute path for working directory"
+echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
 echo -e "\n${BOLD}OPTIONS${NORMAL}"
 echo -e "Order of precedence: CLI options, environment variable, default code.\n"
-echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
-echo    "   NUMBER_DAYS     Number of days certificate valid (default '${DEFAULT_NUMBER_DAYS}')" 
+echo    "   REGISTRY_PORT    Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
+echo    "   NUMBER_DAYS      Number of days certificate valid (default '${DEFAULT_NUMBER_DAYS}')" 
 
 ###  Production standard 6.1.177 Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
@@ -101,8 +105,6 @@ echo    "    │   │                                      to create registory 
 echo    "    │   ├── ca.crt                         <-- Daemon registry domain cert"
 echo    "    │   ├── domain.crt                     <-- Registry cert"
 echo    "    │   └── domain.key                     <-- Registry private key"
-echo    "    ├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"
-echo    "    │                                          to create registory certs"
 echo    "    └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"
 echo -e "                                               to create registory certs\n"
 
@@ -110,8 +112,8 @@ echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
 
 echo -e "\n${BOLD}EXAMPLES${NORMAL}"
-echo -e "   Create new certificates with 17315 port number\n\t${BOLD}${0} 17315${NORMAL}"
-echo -e "   Create new certificates with 17315 port number valid for 90 days\n\t${BOLD}${0} 17315 90${NORMAL}"
+echo -e "   Create new certificates with 17315 port number\n\t${BOLD}${COMMAND_NAME} 17315${NORMAL}"
+echo -e "   Create new certificates with 17315 port number valid for 90 days\n\t${BOLD}${COMMAND_NAME} 17315 90${NORMAL}"
 }
 
 #    Date and time function ISO 8601

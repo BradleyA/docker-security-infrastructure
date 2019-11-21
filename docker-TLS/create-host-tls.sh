@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.498.1030  2019-11-20T22:56:23.527836-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.497  
+# 	   testing 
 # 	docker-TLS/create-host-tls.sh  3.497.1029  2019-11-20T16:54:53.261783-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.496-1-g39a5ece  
 # 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh   testing 
 #86# docker-TLS/create-host-tls.sh - Create host public, private keys and CA
@@ -48,7 +50,7 @@ display_usage
 #    Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
 echo    "An administration user runs this script to create host public and private keys"
-echo    "in the working directory (${DEFAULT_WORKING_DIRECTORY})"
+echo    "in the <WORKING_DIRECTORY> (default ${DEFAULT_WORKING_DIRECTORY})"
 echo    "on the site TLS server."
 echo -e "\nThe scripts create-site-private-public-tls.sh and create-new-openssl.cnf-tls.sh"
 echo    "are required to create a site TLS server.  Review the DOCUMENTATION for a"
@@ -118,9 +120,9 @@ echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
 
 echo -e "\n${BOLD}EXAMPLES${NORMAL}"
-echo -e "   Create TLS keys for host three.cptx86.com for 30 days in /u/north-office/uadmin/.docker/docker-ca\n\t${BOLD}${0} three.cptx86.com 30 /u/north-office/uadmin/.docker/docker-ca${NORMAL}"
-echo -e "   Create TLS keys for host zero.cptx86.com for 5 days in default working directory\n\t${BOLD}${0} zero.cptx86.com 5${NORMAL}"
-echo -e "   Create TLS keys for host two.cptx86.com for default number of days in default working directory\n\t${BOLD}${0} two.cptx86.com${NORMAL}"
+echo -e "   Create TLS keys for host three.cptx86.com for 30 days in /u/north-office/uadmin/.docker/docker-ca\n\t${BOLD}${COMMAND_NAME} three.cptx86.com 30 /u/north-office/uadmin/.docker/docker-ca${NORMAL}"
+echo -e "   Create TLS keys for host zero.cptx86.com for 5 days in default working directory\n\t${BOLD}${COMMAND_NAME} zero.cptx86.com 5${NORMAL}"
+echo -e "   Create TLS keys for host two.cptx86.com for default number of days in default working directory\n\t${BOLD}${COMMAND_NAME} two.cptx86.com${NORMAL}"
 }
 
 #    Date and time function ISO 8601
@@ -238,6 +240,13 @@ openssl genrsa -out "${FQDN}-priv-key.pem" 2048
 echo -e "\n\tGenerate a Certificate Signing Request (CSR) for"
 echo -e "\thost ${BOLD}${FQDN}${NORMAL}"
 openssl req -sha256 -new -key "${FQDN}-priv-key.pem" -subj "/CN=${FQDN}/subjectAltName=${FQDN}" -out "${FQDN}.csr"
+
+#    Test <NUMBER_DAYS> for integer
+if ! [[ "${NUMBER_DAYS}" =~ ^[0-9]+$ ]] ; then
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  <NUMBER_DAYS> is not an interger.  <NUMBER_DAYS> is set to '${NUMBER_DAYS}'" 1>&2
+  display_usage
+  exit 1
+fi
 
 #    Create and sign a ${NUMBER_DAYS} day certificate for host ${FQDN}
 echo -e "\n\tCreate and sign a  ${BOLD}${YELLOW}${NUMBER_DAYS}${NORMAL}  day certificate for host ${FQDN}."

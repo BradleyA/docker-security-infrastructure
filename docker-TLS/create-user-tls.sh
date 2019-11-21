@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-user-tls.sh  3.498.1030  2019-11-20T22:56:24.074290-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.497  
+# 	   testing 
 # 	docker-TLS/create-user-tls.sh  3.497.1029  2019-11-20T16:54:53.398945-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.496-1-g39a5ece  
 # 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh   testing 
 #86# docker-TLS/create-user-tls.sh - Create user public and private key and CA
@@ -48,7 +50,7 @@ display_usage
 #    Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
 echo    "An administration user runs this script to create user public and private keys"
-echo    "in the working directory (${DEFAULT_WORKING_DIRECTORY})."
+echo    "in the <WORKING_DIRECTORY> (default ${DEFAULT_WORKING_DIRECTORY})"
 echo    "on the site TLS server."
 echo -e "\nThe scripts create-site-private-public-tls.sh and"
 echo    "create-new-openssl.cnf-tls.sh are required to be run once on a system before"
@@ -121,9 +123,9 @@ echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
 
 echo -e "\n${BOLD}EXAMPLES${NORMAL}"
-echo -e "   Create TLS keys for user bob for 30 days in /u/north-office/uadmin/.docker/docker-ca\n\t${BOLD}${0} bob 30 /u/north-office/uadmin/.docker/docker-ca${NORMAL}"
-echo -e "   Create TLS keys for user sam for 5 days in default working directory\n\t${BOLD}${0} sam 5${NORMAL}"
-echo -e "   Create TLS keys for user chris for default number of days in default working directory\n\t${BOLD}${0} chris${NORMAL}"
+echo -e "   Create TLS keys for user bob for 30 days in /u/north-office/uadmin/.docker/docker-ca\n\t${BOLD}${COMMAND_NAME} bob 30 /u/north-office/uadmin/.docker/docker-ca${NORMAL}"
+echo -e "   Create TLS keys for user sam for 5 days in default working directory\n\t${BOLD}${COMMAND_NAME} sam 5${NORMAL}"
+echo -e "   Create TLS keys for user chris for default number of days in default working directory\n\t${BOLD}${COMMAND_NAME} chris${NORMAL}"
 }
 
 #    Date and time function ISO 8601
