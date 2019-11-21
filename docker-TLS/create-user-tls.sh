@@ -1,5 +1,5 @@
 #!/bin/bash
-# 	docker-TLS/create-user-tls.sh  3.498.1030  2019-11-20T22:56:24.074290-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.497  
+# 	docker-TLS/create-user-tls.sh  3.499.1031  2019-11-20T23:08:14.411876-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.498  
 # 	   testing 
 # 	docker-TLS/create-user-tls.sh  3.497.1029  2019-11-20T16:54:53.398945-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.496-1-g39a5ece  
 # 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh   testing 
@@ -231,6 +231,13 @@ openssl genrsa -out "${TLS_USER}-user-priv-key.pem" 2048
 echo -e "\n\tGenerate a Certificate Signing Request (CSR) for"
 echo -e "\tuser ${BOLD}${TLS_USER}${NORMAL}"
 openssl req -subj '/subjectAltName=client' -new -key "${TLS_USER}-user-priv-key.pem" -out "${TLS_USER}-user.csr"
+
+#    Test <NUMBER_DAYS> for integer
+if ! [[ "${NUMBER_DAYS}" =~ ^[0-9]+$ ]] ; then
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  <NUMBER_DAYS> is not an interger.  <NUMBER_DAYS> is set to '${NUMBER_DAYS}'" 1>&2
+  display_usage
+  exit 1
+fi
 
 #    Create and sign a ${NUMBER_DAYS} day certificate for user ${TLS_USER}
 echo -e "\n\tCreate and sign a  ${BOLD}${YELLOW}${NUMBER_DAYS}${NORMAL}  day certificate for user ${TLS_USER}."

@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.498.1030  2019-11-20T22:56:23.692173-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.497  
+# 	docker-TLS/create-registry-tls.sh  3.499.1031  2019-11-20T23:08:14.290843-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.498  
 # 	   testing 
-# 	docker-TLS/create-registry-tls.sh  3.460.969  2019-10-13T23:02:54.182134-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.459-2-g8b8bcb3  
-# 	   close #68  docker-TLS/create-registry-tls.sh  - upgrade Production standard 
 # 	docker-TLS/create-registry-tls.sh  3.234.679  2019-04-10T23:30:18.738262-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.233  
 # 	   production standard 6.1.177 Architecture tree 
 #86# docker-TLS/create-registry-tls.sh - Create TLS for Private Registry V2
@@ -36,7 +34,8 @@ echo -e "\n${NORMAL}${COMMAND_NAME}\n   Create TLS for Private Registry V2"
 echo -e "\n${BOLD}USAGE${NORMAL}"
 echo    "   ${YELLOW}Positional Arguments${NORMAL}"
 echo    "   ${COMMAND_NAME} [<REGISTRY_PORT>]" 
-echo -e "   ${COMMAND_NAME}  <REGISTRY_PORT> [<NUMBER_DAYS>]\n"
+echo    "   ${COMMAND_NAME}  <REGISTRY_PORT> [<NUMBER_DAYS>]"
+echo -e "   ${COMMAND_NAME}  <REGISTRY_PORT>  <NUMBER_DAYS> [<WORKING_DIRECTORY>]\n"
 echo    "   ${COMMAND_NAME} [--help | -help | help | -h | h | -?]"
 echo    "   ${COMMAND_NAME} [--usage | -usage | -u]"
 echo    "   ${COMMAND_NAME} [--version | -version | -v]"
@@ -93,8 +92,10 @@ echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
 echo -e "\n${BOLD}OPTIONS${NORMAL}"
 echo -e "Order of precedence: CLI options, environment variable, default code.\n"
-echo    "   REGISTRY_PORT    Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
-echo    "   NUMBER_DAYS      Number of days certificate valid (default '${DEFAULT_NUMBER_DAYS}')" 
+echo    "   REGISTRY_PORT     Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
+echo    "   NUMBER_DAYS       Number of days certificate valid (default '${DEFAULT_NUMBER_DAYS}')" 
+echo    "   WORKING_DIRECTORY Absolute path for working directory"
+echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
 ###  Production standard 6.1.177 Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION

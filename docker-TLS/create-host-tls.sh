@@ -1,5 +1,5 @@
 #!/bin/bash
-# 	docker-TLS/create-host-tls.sh  3.498.1030  2019-11-20T22:56:23.527836-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.497  
+# 	docker-TLS/create-host-tls.sh  3.499.1031  2019-11-20T23:08:14.105777-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.498  
 # 	   testing 
 # 	docker-TLS/create-host-tls.sh  3.497.1029  2019-11-20T16:54:53.261783-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.496-1-g39a5ece  
 # 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh   testing 
