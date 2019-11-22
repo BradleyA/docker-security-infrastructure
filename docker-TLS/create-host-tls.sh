@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-host-tls.sh  3.500.1032  2019-11-20T23:28:48.002225-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.499  
-# 	   docker-TLS/create-host-tls.sh docker-TLS/create-registry-tls.sh   testing 
-# 	docker-TLS/create-host-tls.sh  3.497.1029  2019-11-20T16:54:53.261783-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.496-1-g39a5ece  
-# 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh   testing 
+# 	docker-TLS/create-host-tls.sh  3.503.1036  2019-11-21T23:06:50.555337-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.502  
+# 	   docker-TLS/create-host-tls.sh    create symbolic link to the current keys just made 
 #86# docker-TLS/create-host-tls.sh - Create host public, private keys and CA
 ###  Production standard 3.0 shellcheck
 ###  Production standard 5.1.160 Copyright
@@ -269,10 +267,13 @@ CA_CERT_START_DATE=$(date -d"${CA_CERT_START_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
 CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${CA_CERT}" -noout -enddate  | cut -d '=' -f 2)
 CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
 cp -p ${CA_CERT}              "${FQDN}/${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"
+ln -sf "${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"  "${FQDN}/${CA_CERT}"
 CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${FQDN}-cert.pem" -noout -enddate  | cut -d '=' -f 2)
 CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
 mv   "${FQDN}-cert.pem"       "${FQDN}/${FQDN}-cert.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
 mv   "${FQDN}-priv-key.pem"   "${FQDN}/${FQDN}-priv-key.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
+ln -sf "${FQDN}-cert.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"     "${FQDN}/${FQDN}-cert.pem"
+ln -sf "${FQDN}-priv-key.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}" "${FQDN}/${FQDN}-priv-key.pem"
 echo   "${BOLD}${CYAN}"
 ls -1 "${FQDN}" | grep "${CERT_CREATE_DATE}"
 
