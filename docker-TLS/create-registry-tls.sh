@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.500.1032  2019-11-20T23:28:48.187518-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.499  
-# 	   docker-TLS/create-host-tls.sh docker-TLS/create-registry-tls.sh   testing 
-# 	docker-TLS/create-registry-tls.sh  3.234.679  2019-04-10T23:30:18.738262-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.233  
-# 	   production standard 6.1.177 Architecture tree 
+# 	docker-TLS/create-registry-tls.sh  3.505.1039  2019-11-22T15:01:23.269771-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.504  
+# 	   Production standard 8.3.541 --usage 
 #86# docker-TLS/create-registry-tls.sh - Create TLS for Private Registry V2
 ###  Production standard 3.0 shellcheck
 ###  Production standard 5.1.160 Copyright
@@ -27,9 +25,9 @@ DEFAULT_REGISTRY_PORT="17313"
 DEFAULT_NUMBER_DAYS='365'
 DEFAULT_WORKING_DIRECTORY=~/.docker
 
-###  Production standard 8.3.530 --usage
+###  Production standard 8.3.541 --usage
+COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')   # 3.541
 display_usage() {
-COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')
 echo -e "\n${NORMAL}${COMMAND_NAME}\n   Create TLS for Private Registry V2"
 echo -e "\n${BOLD}USAGE${NORMAL}"
 echo    "   ${YELLOW}Positional Arguments${NORMAL}"

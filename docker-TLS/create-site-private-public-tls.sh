@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-site-private-public-tls.sh  3.498.1030  2019-11-20T22:56:23.878278-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.497  
-# 	   testing 
+# 	docker-TLS/create-site-private-public-tls.sh  3.505.1039  2019-11-22T15:01:23.390104-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.504  
+# 	   Production standard 8.3.541 --usage 
 #86# docker-TLS/create-site-private-public-tls.sh - Create site private and CA keys
 ###  Production standard 3.0 shellcheck
 ###  Production standard 5.1.160 Copyright
@@ -26,9 +26,9 @@ DEFAULT_CA_CERT="ca.pem"
 DEFAULT_CA_PRIVATE_CERT="ca-priv-key.pem"
 DEFAULT_WORKING_DIRECTORY=~/.docker/docker-ca
 
-###  Production standard 8.3.530 --usage
+###  Production standard 8.3.541 --usage
+COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')   # 3.541
 display_usage() {
-COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')
 echo -e "\n${NORMAL}${COMMAND_NAME}\n   Create site CA and private keys"
 echo -e "\n${BOLD}USAGE${NORMAL}"
 echo    "   ${YELLOW}Positional Arguments${NORMAL}"

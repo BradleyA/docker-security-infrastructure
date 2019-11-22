@@ -1,12 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.486.1011  2019-11-10T21:51:01.001852-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.485  
-# 	   docker-TLS/create-new-openssl.cnf-tls.sh  improve output by adding color 
-# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.473.993  2019-10-21T23:10:48.852953-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.472  
-# 	   docker-TLS/create-new-openssl.cnf-tls.sh   added color output ; upgraded Production standard 4.3.534 Documentation Language 
-# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.459.966  2019-10-13T22:29:12.511725-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.458-1-g0f0c76f  
-# 	   close #67  docker-TLS/create-new-openssl.cnf-tls.sh  Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
-# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.234.679  2019-04-10T23:30:18.635712-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.233  
-# 	   production standard 6.1.177 Architecture tree 
+# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.505.1039  2019-11-22T15:01:23.150102-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.504  
+# 	   Production standard 8.3.541 --usage 
 #86# docker-TLS/create-new-openssl.cnf-tls.sh - Modify /etc/ssl/openssl.conf file
 ### production standard 3.0 shellcheck
 ### production standard 5.1.160 Copyright
@@ -30,9 +24,9 @@ WHITE=$(tput  setaf 7)
 BACKUP_FILE="/etc/ssl/openssl.cnf-$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)"
 ORIGINAL_FILE="/etc/ssl/openssl.cnf"
 
-###  Production standard 8.3.530 --usage
+###  Production standard 8.3.541 --usage
+COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')   # 3.541
 display_usage() {
-COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')
 echo -e "\n${NORMAL}${COMMAND_NAME}\n   Modify /etc/ssl/openssl.conf file"
 echo -e "\n${BOLD}USAGE${NORMAL}"
 echo -e "   sudo ${COMMAND_NAME}\n"
@@ -88,7 +82,7 @@ echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
 
 echo -e "\n${BOLD}EXAMPLES${NORMAL}"
-echo -e "   Modify /etc/ssl/openssl.conf file\n\t${BOLD}sudo ${0}${NORMAL}"
+echo -e "   Modify /etc/ssl/openssl.conf file\n\t${BOLD}sudo ${COMMAND_NAME}${NORMAL}"
 }
 
 #    Date and time function ISO 8601
