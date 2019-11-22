@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-host-tls.sh  3.503.1036  2019-11-21T23:06:50.555337-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.502  
-# 	   docker-TLS/create-host-tls.sh    create symbolic link to the current keys just made 
+# 	docker-TLS/create-host-tls.sh  3.504.1038  2019-11-21T23:08:50.340284-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.503-1-g1de16d1  
+# 	   docker-TLS/create-host-tls.sh    create symbolic link to the current keys just made, testing 
 #86# docker-TLS/create-host-tls.sh - Create host public, private keys and CA
 ###  Production standard 3.0 shellcheck
 ###  Production standard 5.1.160 Copyright
