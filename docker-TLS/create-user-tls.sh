@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-user-tls.sh  3.499.1031  2019-11-20T23:08:14.411876-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.498  
-# 	   testing 
+# 	docker-TLS/create-user-tls.sh  3.501.1033  2019-11-21T22:47:42.884188-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.500  
+# 	   docker-TLS/create-user-tls.sh  create symbolic link to the current keys just made 
 # 	docker-TLS/create-user-tls.sh  3.497.1029  2019-11-20T16:54:53.398945-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.496-1-g39a5ece  
 # 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh   testing 
 #86# docker-TLS/create-user-tls.sh - Create user public and private key and CA
@@ -258,10 +258,13 @@ CA_CERT_START_DATE=$(date -d"${CA_CERT_START_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
 CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${CA_CERT}" -noout -enddate  | cut -d '=' -f 2)
 CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
 cp -p ${CA_CERT}              "${TLS_USER}/${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"
+ln -sf "${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"  "${TLS_USER}/${CA_CERT}"
 CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${TLS_USER}-user-cert.pem" -noout -enddate  | cut -d '=' -f 2)
 CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
-mv   "${TLS_USER}-user-cert.pem"       "${TLS_USER}/${TLS_USER}-user-cert.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
-mv   "${TLS_USER}-user-priv-key.pem"   "${TLS_USER}/${TLS_USER}-user-priv-key.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
+mv    "${TLS_USER}-user-cert.pem"       "${TLS_USER}/${TLS_USER}-user-cert.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
+mv    "${TLS_USER}-user-priv-key.pem"   "${TLS_USER}/${TLS_USER}-user-priv-key.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
+ln -sf "${TLS_USER}-user-cert.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"     "${TLS_USER}/${TLS_USER}-user-cert.pem"
+ln -sf "${TLS_USER}-user-priv-key.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}" "${TLS_USER}/${TLS_USER}-user-priv-key.pem"
 echo   "${BOLD}${CYAN}"
 ls -1 "${TLS_USER}" | grep "${CERT_CREATE_DATE}"
 
