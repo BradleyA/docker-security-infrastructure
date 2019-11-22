@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-user-tls.sh  3.501.1033  2019-11-21T22:47:42.884188-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.500  
-# 	   docker-TLS/create-user-tls.sh  create symbolic link to the current keys just made 
+# 	docker-TLS/create-user-tls.sh  3.502.1035  2019-11-21T22:50:33.719049-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.501-1-g216b2ba  
+# 	   docker-TLS/create-user-tls.sh  create symbolic link to the current keys just made, fixed test case 
 # 	docker-TLS/create-user-tls.sh  3.497.1029  2019-11-20T16:54:53.398945-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.496-1-g39a5ece  
 # 	   docker-TLS/create-host-tls.sh docker-TLS/create-user-tls.sh   testing 
 #86# docker-TLS/create-user-tls.sh - Create user public and private key and CA
