@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.506.1040  2019-11-22T22:27:34.292738-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.505  
+# 	   docker-TLS/create-registry-tls.sh   updated display_help, added cert duration dates & cert symbolic links 
 # 	docker-TLS/create-registry-tls.sh  3.505.1039  2019-11-22T15:01:23.269771-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.504  
 # 	   Production standard 8.3.541 --usage 
 #86# docker-TLS/create-registry-tls.sh - Create TLS for Private Registry V2
@@ -18,11 +20,12 @@ BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 RED=$(tput    setaf 1)
 YELLOW=$(tput setaf 3)
+CYAN=$(tput   setaf 6)
 WHITE=$(tput  setaf 7)
 
 ### production standard 7.0 Default variable value
 DEFAULT_REGISTRY_PORT="17313"
-DEFAULT_NUMBER_DAYS='365'
+DEFAULT_NUMBER_DAYS='180'
 DEFAULT_WORKING_DIRECTORY=~/.docker
 
 ###  Production standard 8.3.541 --usage
@@ -46,12 +49,14 @@ display_usage
 echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
 echo    "Run this script to create Docker private registry certificates on any host in"
 echo    "the <WORKING_DIRECTORY> (default ${DEFAULT_WORKING_DIRECTORY}).  It will create"
-echo    "a directory, ~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>."
-echo    "The <REGISTRY_PORT> number is not required when creating a private registry"
-echo    "certificates.  It is used to keep track of multiple certificates for multiple"
-echo    "private registries on the same host."
+echo    "a directory, ${DEFAULT_WORKING_DIRECTORY}/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>."
+echo    "You will be prompted to enter the registory hostname during the creation of"
+echo    "the certificates.  The <REGISTRY_PORT> number is not required when creating a"
+echo    "private registry certificates.  It is used to keep track of multiple"
+echo    "certificates for multiple private registries on the same host."
 echo -e "\nThe scripts create-site-private-public-tls.sh and"
-echo    "create-new-openssl.cnf-tls.sh are NOT required for a private registry."
+echo    "create-new-openssl.cnf-tls.sh are NOT required for private registry"
+echo    "certificates."
 
 ###  Production standard 1.3.531 DEBUG variable
 echo -e "\nThe DEBUG environment variable can be set to '', '0', '1', '2', '3', '4' or"
@@ -91,7 +96,8 @@ echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 echo -e "\n${BOLD}OPTIONS${NORMAL}"
 echo -e "Order of precedence: CLI options, environment variable, default code.\n"
 echo    "   REGISTRY_PORT     Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
-echo    "   NUMBER_DAYS       Number of days certificate valid (default '${DEFAULT_NUMBER_DAYS}')" 
+echo    "   NUMBER_DAYS       Number of days certificate valid"
+echo    "                     (default '${DEFAULT_NUMBER_DAYS}')" 
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
@@ -159,7 +165,7 @@ while [[ "${#}" -gt 0 ]] ; do
     --help|-help|help|-h|h|-\?)  display_help | more ; exit 0 ;;
     --usage|-usage|usage|-u)  display_usage ; exit 0  ;;
     --version|-version|version|-v)  echo "${SCRIPT_NAME} ${SCRIPT_VERSION}" ; exit 0  ;;
-    *)  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Option, ${BOLD}${YELLOW}${1}${NORMAL}, entered on the command line is not supported." 1>&2 ; display_usage ; exit 1 ; ;;
+    *) break ;;
   esac
 done
 
@@ -195,11 +201,14 @@ mkdir "${WORKING_DIRECTORY}/tmp-${REGISTRY_PORT}"
 cd    "${WORKING_DIRECTORY}/tmp-${REGISTRY_PORT}"
 
 #    Create Self-Signed Certificate Keys
-echo -e "\n\t${BOLD}Create Self-Signed Certificate Keys in $(pwd) ${NORMAL}\n" 
+#	NOTE: User is prompted for the registory hostname during the creation of the keys
+echo -e "\n\t${BOLD}Create Self-Signed Certificate Keys${NORMAL}\n" 
 openssl req -newkey rsa:4096 -nodes -sha256 -keyout domain.key -x509 -days "${NUMBER_DAYS}" -out domain.crt
+CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "domain.crt" -noout -enddate  | cut -d '=' -f 2)
+CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
 
 #    Set REGISTRY_HOST variable to host entered during the creation of certificates
-REGISTRY_HOST=$(openssl x509 -in domain.crt -noout -issuer | cut -d '/' -f 7 | cut -d '=' -f 2)
+REGISTRY_HOST=$(openssl x509 -in "domain.crt" -noout -issuer | cut -d '/' -f 7 | cut -d '=' -f 2)
 if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable... REGISTRY_HOST >${REGISTRY_HOST}<" 1>&2 ; fi
 
 #    Check if site directory on system
@@ -210,31 +219,23 @@ fi
 
 #    Change into registry cert directory
 cd   "${WORKING_DIRECTORY}/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}"
-echo -e "\n\t${BOLD}Move Self-Signed Certificate Keys into $(pwd) ${NORMAL}\n" 
-
-#    Check if domain.crt already exist
-if [[ -e domain.crt ]] ; then
-  echo -e "\n\t${BOLD}domain.crt${NORMAL} already exists, renaming existing keys so new keys can be created.\n"
-  mv domain.crt "domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)"
-fi
-
-#    Check if domain.key already exist
-if [[ -e domain.key ]] ; then
-  echo -e "\n\t${BOLD}domain.key${NORMAL} already exists, renaming existing keys so new keys can be created.\n"
-  mv domain.key "domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z)"
-fi
-
-#    Check if ca.crt already exist
-if [[ -e ca.crt ]] ; then
-  echo -e "\n\t${BOLD}ca.crt${NORMAL} already exists, renaming existing keys so new keys can be created.\n"
-  mv ca.crt "ca.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)"
-fi
+echo -e "\n\t${BOLD}Move Self-Signed Certificate Keys into ${YELLOW} $(pwd) ${NORMAL}\n" 
+rm -f domain.crt
+rm -f domain.key
+rm -f ca.crt
 
 #    Copy Self-Signed Certificate Keys
-cp -p ../tmp-${REGISTRY_PORT}/domain.{crt,key} .
-cp -p domain.crt ca.crt
-chmod 0400 ca.crt domain.crt domain.key 
+CERT_CREATE_DATE=$(date +%Y-%m-%dT%H:%M:%S-%Z)
+cp -p ../tmp-${REGISTRY_PORT}/domain.crt domain.crt---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}
+cp -p ../tmp-${REGISTRY_PORT}/domain.key domain.key---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}
+chmod 0400 domain.???---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}
+ln -s domain.crt---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}  ca.crt
+ln -s domain.crt---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}  domain.crt
+ln -s domain.key---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}  domain.key
 rm -rf ../tmp-${REGISTRY_PORT}
+echo   "${BOLD}${CYAN}"
+ls -1 | grep "${CERT_CREATE_DATE}"
+echo -e "\n${NORMAL}"
 
 #
 new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished..." 1>&2
