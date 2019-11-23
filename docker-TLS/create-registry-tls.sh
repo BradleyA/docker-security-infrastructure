@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.508.1044  2019-11-22T23:19:47.188883-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.507-2-gc1f97dc  
+# 	   docker-TLS/create-registry-tls.sh   debug shellcheck incidents 
 # 	docker-TLS/create-registry-tls.sh  3.507.1041  2019-11-22T23:00:12.959309-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.506  
 # 	   docker-TLS/create-registry-tls.sh   Production standard 6.3.539   added number of days in output message 
 # 	docker-TLS/create-registry-tls.sh  3.506.1040  2019-11-22T22:27:34.292738-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.505  
@@ -228,13 +230,13 @@ rm -f ca.crt
 
 #    Copy Self-Signed Certificate Keys
 CERT_CREATE_DATE=$(date +%Y-%m-%dT%H:%M:%S-%Z)
-cp -p ../tmp-${REGISTRY_PORT}/domain.crt domain.crt---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}
-cp -p ../tmp-${REGISTRY_PORT}/domain.key domain.key---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}
-chmod 0400 domain.???---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}
-ln -s domain.crt---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}  ca.crt
-ln -s domain.crt---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}  domain.crt
-ln -s domain.key---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}  domain.key
-rm -rf ../tmp-${REGISTRY_PORT}
+cp -p  "../tmp-${REGISTRY_PORT}/domain.crt"  "domain.crt---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
+cp -p  "../tmp-${REGISTRY_PORT}/domain.key"  "domain.key---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
+chmod 0400  "domain.???---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
+ln -s  "domain.crt---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"  ca.crt
+ln -s  "domain.crt---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"  domain.crt
+ln -s  "domain.key---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"  domain.key
+rm -rf "../tmp-${REGISTRY_PORT}"
 echo   "${BOLD}${CYAN}"
 ls -1 | grep "${CERT_CREATE_DATE}"
 echo -e "\n${NORMAL}"
