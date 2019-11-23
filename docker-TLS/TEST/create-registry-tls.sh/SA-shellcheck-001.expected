@@ -1,5 +1,5 @@
 
-In SA-shellcheck-001 line 38:
-echo    "~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>.  The <REGISTRY_PORT>"
-         ^-- SC2088: Note that ~ does not expand in quotes.
+In SA-shellcheck-001 line 226:
+ls -1 | grep "${CERT_CREATE_DATE}"
+^-- SC2010: Don't use ls | grep. Use a glob or a for loop with a condition to allow non-alphanumeric filenames.
 
