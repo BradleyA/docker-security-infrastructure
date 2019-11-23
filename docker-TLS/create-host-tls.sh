@@ -202,7 +202,7 @@ cd "${WORKING_DIRECTORY}"
 
 #    Check if ${CA_PRIVATE_CERT} file on system
 if ! [[ -e "${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}" ]] ; then
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Site private key ${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}\n  is not in this location.\n  Enter ${0} --help for more information." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Site private key ${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}\n  is not in this location.\n  Enter ${COMMAND_NAME} --help for more information." 1>&2
 #    Help hint
   echo -e "\n\tEither move it from your site secure location to"
   echo -e "\t${WORKING_DIRECTORY}/.private/"
@@ -210,6 +210,8 @@ if ! [[ -e "${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}" ]] ; then
   echo -e "\t${YELLOW}create-new-openssl.cnf-tls.sh${WHITE} to create a new one."
   exit 1
 fi
+
+# >>>	need to add check for ${CA_CERT}
 
 #    Prompt for ${FQDN} if argement not entered
 if [[ -z "${FQDN}" ]] ; then
