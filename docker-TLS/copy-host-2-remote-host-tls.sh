@@ -1,20 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.484.1009  2019-11-10T21:24:32.955755-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.483-1-gde9da68  
-# 	   docker-TLS/copy-host-2-remote-host-tls.sh  debuging copy to local host 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.482.1006  2019-10-24T21:35:11.849647-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.481  
-# 	   docker-TLS/copy-user-2-remote-host-tls.sh docker-TLS/copy-host-2-remote-host-tls.sh  testing #5 #48 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.479.1002  2019-10-23T13:59:01.326766-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.478  
-# 	   docker-TLS/copy-user-2-remote-host-tls.sh docker-TLS/copy-host-2-remote-host-tls.sh   changes for #5 #48  localhost does not use scp & ssh 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.469.986  2019-10-21T22:21:12.852432-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.468-1-g4bdbb55  
-# 	   docker-TLS/copy-host-2-remote-host-tls.sh   added color output ; upgraded Production standard 4.3.534 Documentation Language 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.463.976  2019-10-15T23:31:11.161027-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.462-1-g2ea495b  
-# 	   docker-TLS/copy-host-2-remote-host-tls.sh  - add code so localhost does not use scp & ssh #48 first pass 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.457.961  2019-10-13T21:15:58.035732-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.456-2-g59e591e
-# 	   #64 docker-TLS/copy-user-2-remote-host-tls.sh   Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.456.958  2019-10-13T20:56:21.738318-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.455-2-gd3bc5e6
-# 	   docker-TLS/copy-host-2-remote-host-tls.sh   close #65  Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.280.747  2019-06-10T12:43:31.498537-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.279
-# 	   update copy-host-2-remote-host-tls.sh while trying to reproduce incident docker-TLS/check-{host,user}-tls.sh - which one should check if the ca.pem match #49
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.509.1045  2019-11-23T09:57:09.237685-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.508  
+# 	   Production standard 8.3.541 --usage 
 #86# docker-TLS/copy-host-2-remote-host-tls.sh - Copy public, private keys and CA to remote host
 ###  Production standard 3.0 shellcheck
 ###  Production standard 5.1.160 Copyright
@@ -40,9 +26,9 @@ DEFAULT_WORKING_DIRECTORY=~/.docker/docker-ca
 DEFAULT_CA_CERT="ca.pem"
 DEFAULT_CERT_DAEMON_DIR="/etc/docker/certs.d/daemon/"
 
-###  Production standard 8.3.530 --usage
+###  Production standard 8.3.541 --usage
+COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')   # 3.541
 display_usage() {
-COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')
 echo -e "\n${NORMAL}${COMMAND_NAME}\n   Copy public, private keys and CA to remote host"
 echo -e "\n${BOLD}USAGE${NORMAL}"
 echo    "   ${YELLOW}Positional Arguments${NORMAL}"
@@ -103,6 +89,8 @@ echo    "   DEBUG             (default off '0')"
 echo    "   CA_CERT           File name of certificate (default ${DEFAULT_CA_CERT})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
+echo    "   CERT_DAEMON_DIR   dockerd certification directory"
+echo    "                     (default ${DEFAULT_CERT_DAEMON_DIR})"
 echo -e "\n${BOLD}OPTIONS${NORMAL}"
 echo    "   REMOTE_HOST       Remote host to copy certificates to"
 echo    "                     (default ${DEFAULT_REMOTE_HOST})"
@@ -128,7 +116,7 @@ echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
 
 echo -e "\n${BOLD}EXAMPLES${NORMAL}"
-echo -e "   Administration user copies TLS keys and CA to remote host, two.cptx86.com.\n\t${BOLD}${0} two.cptx86.com${NORMAL}"
+echo -e "   Administration user copies TLS keys and CA to remote host, two.cptx86.com.\n\t${BOLD}${COMMAND_NAME} two.cptx86.com${NORMAL}"
 }
 
 #    Date and time function ISO 8601
@@ -184,7 +172,7 @@ done
 REMOTE_HOST=${1:-${DEFAULT_REMOTE_HOST}}
 #    Order of precedence: CLI argument, environment variable, default code
 if [[ $# -ge  2 ]]  ; then WORKING_DIRECTORY=${2} ; elif [[ "${WORKING_DIRECTORY}" == "" ]] ; then WORKING_DIRECTORY="${DEFAULT_WORKING_DIRECTORY}" ; fi
-CERT_DAEMON_DIR=${3:-${DEFAULT_CERT_DAEMON_DIR}}
+if [[ $# -ge  3 ]]  ; then CERT_DAEMON_DIR=${3} ; elif [[ "${CERT_DAEMON_DIR}" == "" ]] ; then CERT_DAEMON_DIR="${DEFAULT_CERT_DAEMON_DIR}" ; fi
 #    Order of precedence: environment variable, default code
 if [[ "${CA_CERT}" == "" ]] ; then CA_CERT="${DEFAULT_CA_CERT}" ; fi
 if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  REMOTE_HOST >${REMOTE_HOST}< WORKING_DIRECTORY >${WORKING_DIRECTORY}< CERT_DAEMON_DIR >${CERT_DAEMON_DIR}<  CA_CERT >${CA_CERT}<" 1>&2 ; fi
@@ -193,10 +181,10 @@ if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  REMOTE_HOST
 if [[ ! -d "${WORKING_DIRECTORY}" ]] ; then
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Default directory, ${BOLD}${WORKING_DIRECTORY}${NORMAL}, not on system." 1>&2
 #    Help hint
-  echo -e "\n\tRunning create-site-private-public-tls.sh will create directories"
+  echo -e "\n\tRunning ${YELLOW}create-site-private-public-tls.sh${WHITE} will create directories"
   echo -e "\tand site private and public keys.  Then run sudo"
-  echo -e "\tcreate-new-openssl.cnf-tls.sh to modify openssl.cnf file."
-  echo -e "\t${BOLD}See DOCUMENTATION link in '${SCRIPT_NAME} --help' for more information.${NORMAL}"
+  echo -e "\t${YELLOW}create-new-openssl.cnf-tls.sh${WHITE} to modify openssl.cnf file."
+  echo -e "\t${BOLD}See DOCUMENTATION link in '${YELLOW}${COMMAND_NAME} --help${WHITE}' for more information.${NORMAL}"
   exit 1
 fi
 

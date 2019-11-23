@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-registry-tls.sh  3.509.1045  2019-11-23T09:57:09.363268-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.508  
+# 	   Production standard 8.3.541 --usage 
 # 	docker-TLS/copy-registry-tls.sh  3.470.989  2019-10-21T22:45:38.330337-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.469-2-gd8380ad  
 # 	   docker-TLS/copy-registry-tls.sh   added color output ; updated Production standard 1.3.531 DEBUG variable, 8.3.530 --usage, 4.3.534 Documentation Language 
 # 	docker-TLS/copy-registry-tls.sh  3.450.943  2019-10-12T18:38:29.108939-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.449-3-g62f64c7  
@@ -29,9 +31,9 @@ DEFAULT_CLUSTER="us-tx-cluster-1/"
 DEFAULT_DATA_DIR="/usr/local/data/"
 DEFAULT_SYSTEMS_FILE="SYSTEMS"
 
-###  Production standard 8.3.530 --usage
+###  Production standard 8.3.541 --usage
+COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')   # 3.541
 display_usage() {
-COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')
 echo -e "\n${NORMAL}${COMMAND_NAME}\n   Copy certs for Private Registry V2"
 echo -e "\n${BOLD}USAGE${NORMAL}"
 echo    "   ${YELLOW}Positional Arguments${NORMAL}"

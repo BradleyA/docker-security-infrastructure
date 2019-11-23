@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.509.1045  2019-11-23T09:57:09.484459-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.508  
+# 	   Production standard 8.3.541 --usage 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.482.1006  2019-10-24T21:35:12.026886-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.481  
 # 	   docker-TLS/copy-user-2-remote-host-tls.sh docker-TLS/copy-host-2-remote-host-tls.sh  testing #5 #48 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.481.1005  2019-10-23T21:49:25.037778-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.480  
@@ -31,9 +33,9 @@ DEFAULT_REMOTE_HOST="$(hostname -f)"    # local host
 DEFAULT_TLS_USER="${USER}"
 DEFAULT_WORKING_DIRECTORY=~/.docker/docker-ca
 
-###  Production standard 8.3.530 --usage
+###  Production standard 8.3.541 --usage
+COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')   # 3.541
 display_usage() {
-COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')
 echo -e "\n${NORMAL}${COMMAND_NAME}\n   Copy user TLS public, private keys & CA to remote host"
 echo -e "\n${BOLD}USAGE${NORMAL}"
 echo    "   ${YELLOW}Positional Arguments${NORMAL}"
