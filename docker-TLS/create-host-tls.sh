@@ -211,7 +211,7 @@ if ! [[ -e "${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}" ]] ; then
   exit 1
 fi
 
-# >>>	need to add check for ${CA_CERT}
+# >>>	need to add check for ${CA_CERT} file is in ${WORKING_DIRECTORY}
 
 #    Prompt for ${FQDN} if argement not entered
 if [[ -z "${FQDN}" ]] ; then
