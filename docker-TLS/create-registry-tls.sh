@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.507.1041  2019-11-22T23:00:12.959309-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.506  
+# 	   docker-TLS/create-registry-tls.sh   Production standard 6.3.539   added number of days in output message 
 # 	docker-TLS/create-registry-tls.sh  3.506.1040  2019-11-22T22:27:34.292738-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.505  
 # 	   docker-TLS/create-registry-tls.sh   updated display_help, added cert duration dates & cert symbolic links 
 # 	docker-TLS/create-registry-tls.sh  3.505.1039  2019-11-22T15:01:23.269771-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.504  
@@ -101,7 +103,7 @@ echo    "                     (default '${DEFAULT_NUMBER_DAYS}')"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
-###  Production standard 6.1.177 Architecture tree
+###  Production standard 6.3.539  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
@@ -219,7 +221,7 @@ fi
 
 #    Change into registry cert directory
 cd   "${WORKING_DIRECTORY}/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}"
-echo -e "\n\t${BOLD}Move Self-Signed Certificate Keys into ${YELLOW} $(pwd) ${NORMAL}\n" 
+echo -e "\n\t${BOLD}Move ${YELLOW}${NUMBER_DAYS}${WHITE} day Self-Signed Certificate Keys into ${YELLOW} $(pwd) ${NORMAL}\n" 
 rm -f domain.crt
 rm -f domain.key
 rm -f ca.crt
