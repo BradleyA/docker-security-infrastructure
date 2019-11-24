@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-site-private-public-tls.sh  3.510.1050  2019-11-23T22:12:36.068581-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.509-4-g51ba3d2  
+# 	   docker-TLS/create-site-private-public-tls.sh    debug file format 
 # 	docker-TLS/create-site-private-public-tls.sh  3.505.1039  2019-11-22T15:01:23.390104-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.504  
 # 	   Production standard 8.3.541 --usage 
 #86# docker-TLS/create-site-private-public-tls.sh - Create site private and CA keys
@@ -18,6 +20,7 @@ BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 RED=$(tput    setaf 1)
 YELLOW=$(tput setaf 3)
+CYAN=$(tput   setaf 6)
 WHITE=$(tput  setaf 7)
 
 ###  Production standard 7.0 Default variable value
@@ -50,7 +53,7 @@ echo    "keys.  Run this script first on your host that will be creating all you
 echo    "keys for your site.  It creates the working directories <WORKING_DIRECTORY>"
 echo -e "(${DEFAULT_WORKING_DIRECTORY}) for your site.\n"
 echo    "If you later choose to use a different host to continue creating your user"
-echo    "and host TLS keys, cp the <WORKING_DIRECTORY> and .private to the new host and run"
+echo    "and host TLS keys, cp the <WORKING_DIRECTORY> to the new host and run"
 echo -e "\t${BOLD}${YELLOW}create-new-openssl.cnf-tls.sh scipt.${NORMAL}"
 
 ###  Production standard 1.3.531 DEBUG variable
@@ -177,51 +180,43 @@ if [[ $# -ge  3 ]]  ; then WORKING_DIRECTORY=${3} ; elif [[ "${WORKING_DIRECTORY
 if [[ "${CA_PRIVATE_CERT}" == "" ]] ; then CA_PRIVATE_CERT="${DEFAULT_CA_PRIVATE_CERT}" ; fi
 if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  NUMBER_DAYS >${NUMBER_DAYS}< CA_CERT >${CA_CERT}< WORKING_DIRECTORY >${WORKING_DIRECTORY}< CA_PRIVATE_CERT >${CA_PRIVATE_CERT}<" 1>&2 ; fi
 
-#    Check if working directory is on system
-if [[ ! -d "${WORKING_DIRECTORY}" ]] ; then
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${WORKING_DIRECTORY} does not exist on this system" 1>&2
+#    Test <NUMBER_DAYS> for integer
+if ! [[ "${NUMBER_DAYS}" =~ ^[0-9]+$ ]] ; then
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  <NUMBER_DAYS> is not an interger.  <NUMBER_DAYS> is set to '${NUMBER_DAYS}'" 1>&2
+  display_usage
   exit 1
 fi
+
+CERT_CREATE_DATE=$(date +%Y-%m-%dT%H:%M:%S-%Z)
 mkdir -p   "${WORKING_DIRECTORY}/.private"
-chmod 0700 "${WORKING_DIRECTORY}/.private"
-chmod 0700 "${WORKING_DIRECTORY}"
+mkdir -p   "${WORKING_DIRECTORY}/site"
+chmod 0700 "${WORKING_DIRECTORY}/.private" || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  You do not have permission to manage ${WORKING_DIRECTORY}/.private on this system" ; exit 1; }
+chmod 0700 "${WORKING_DIRECTORY}" || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  You do not have permission to manage ${WORKING_DIRECTORY} on this system" ; exit 1; }
+chmod 0700 "${WORKING_DIRECTORY}/site"
 cd         "${WORKING_DIRECTORY}/.private"
 
-#    Check if ${CA_PRIVATE_CERT}  file exists
-if [[ -e "${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}" ]] ; then
-
-
-
-
-  echo -e "\tSite private key ${WORKING_DIRECTORY}/docker-ca/.private/${CA_PRIVATE_CERT}\n\talready exists, renaming existing site private key to ${CA_PRIVATE_CERT}_$(date +%Y-%m-%dT%H:%M%:z)_backup" 1>&2
-# >>>	paste here #1 
-# >>>	Goal is to name the cert so it can be copied
-# >>>	think about removing next line
-  mv "${WORKING_DIRECTORY}/docker-ca/.private/${CA_PRIVATE_CERT}"  "${WORKING_DIRECTORY}/docker-ca/.private/${CA_PRIVATE_CERT}_$(date +%Y-%m-%dT%H:%M%:z)_backup"
-# >>>	think about checking if file is already in current directory or just force it ?    less logic ... faster ... is it more or less secure
-fi
-
-#    Create site private key
-echo -e "\tCreating private key and prompting for a passphrase in ${WORKING_DIRECTORY}/docker-ca/.private" 1>&2
-openssl genrsa -aes256 -out ${CA_PRIVATE_CERT} 4096  || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Pass phrase does not match." ; exit 1; }
-chmod 0400 "${WORKING_DIRECTORY}/docker-ca/.private/${CA_PRIVATE_CERT}"
-
-#    Check if ${CA_CERT} file exists
-cd "${WORKING_DIRECTORY}/docker-ca"
-if [[ -e "${CA_CERT}" ]] ; then
-  echo -e "\tSite CA ${WORKING_DIRECTORY}/docker-ca/${CA_CERT} already exists, renaming existing site CA" 1>&2
-
-# >>>	copy from here #1 
-#    Get certificate start and expiration date of ${CA_CERT} file
-  CA_CERT_START_DATE=$(openssl x509 -in "${CA_CERT}" -noout -startdate | cut -d '=' -f 2)
-  CA_CERT_START_DATE_2=$(date -u -d"${CA_CERT_START_DATE}" +%g%m%d%H%M.%S)
-  CA_CERT_START_DATE=$(date -u -d"${CA_CERT_START_DATE}" +%Y-%m-%dT%H:%M:%S%z)
-  CA_CERT_EXPIRE_DATE=$(openssl x509 -in "${CA_CERT}" -noout -enddate | cut -d '=' -f 2)
-  CA_CERT_EXPIRE_DATE=$(date -u -d"${CA_CERT_EXPIRE_DATE}" +%Y-%m-%dT%H:%M:%S%z)
-  mv -f "${CA_CERT}" "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
-  chmod 0444 "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
-  touch -m -t "${CA_CERT_START_DATE_2}" "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
-# >>>	copy end here #1 
+#    Check if ${CA_PRIVATE_CERT}  link exists
+if [[ -e "${CA_PRIVATE_CERT}" ]] ; then
+  echo -e "\n${BOLD}${CYAN}"
+  ls -l "${CA_PRIVATE_CERT}"
+  echo -e "\n\t${NORMAL}Site private key ${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}\n\talready exists.  ${BOLD}${YELLOW}Do you want to use this site private key? (y/n)${NORMAL}?" 1>&2
+  read ANSWER
+  if ! [[ "${ANSWER}"  == "Y" || "${ANSWER}"  == "Yes" || "${ANSWER}"  == "y" || "${ANSWER}"  == "yes" ]] ; then
+    rm -f "${CA_PRIVATE_CERT}"
+    #    Create site private key
+    echo -e "\tCreating private key and prompting for a passphrase in ${WORKING_DIRECTORY}/.private" 1>&2
+    openssl genrsa -aes256 -out "${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}" 4096  || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Pass phrase does not match." ; exit 1; }
+    chmod 0400 "${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}"
+    ln -s "${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}"  "${CA_PRIVATE_CERT}"
+  else
+    CERT_CREATE_DATE=$(ls -l "${CA_PRIVATE_CERT}" | sed -e 's/^.*--//')
+  fi
+else
+  #    Create site private key
+  echo -e "\tCreating private key and prompting for a passphrase in ${WORKING_DIRECTORY}/.private" 1>&2
+  openssl genrsa -aes256 -out "${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}" 4096  || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Pass phrase does not match." ; exit 1; }
+  chmod 0400 "${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}"
+  ln -s "${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}"  "${CA_PRIVATE_CERT}"
 fi
 
 #    Create site public key
@@ -240,24 +235,27 @@ echo -e "\tOrganization Name (Company Name)"
 echo -e "\tOrganizational Unit Name (IT - SRE Team Central US)"
 echo -e "\tCommon Name (${LOCALHOST})"
 echo -e "\tEmail Address ()\n"
-echo -e "\n\tCreating public key good for ${NUMBER_DAYS} days in ${WORKING_DIRECTORY}/docker-ca\n"	1>&2
-openssl req -x509 -days "${NUMBER_DAYS}" -sha256 -new -key .private/${CA_PRIVATE_CERT} -out ${CA_CERT} || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Incorrect pass phrase for .private/${CA_PRIVATE_CERT}" ; exit 1; }
+echo -e "\n\tCreating public key good for  ${BOLD}${YELLOW}${NUMBER_DAYS}${NORMAL}  days in ${WORKING_DIRECTORY} directory.\n"	1>&2
+openssl req -x509 -days "${NUMBER_DAYS}" -sha256 -new -key "${CA_PRIVATE_CERT}" -out "${CA_CERT}--${CERT_CREATE_DATE}" || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Incorrect pass phrase for ${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}" ; exit 1; }
 
 #    Get certificate start and expiration date of ${CA_CERT} file
-CA_CERT_START_DATE=$(openssl x509 -in "${CA_CERT}" -noout -startdate | cut -d '=' -f 2)
-CA_CERT_START_DATE_2=$(date -u -d"${CA_CERT_START_DATE}" +%g%m%d%H%M.%S)
-CA_CERT_START_DATE=$(date -u -d"${CA_CERT_START_DATE}" +%Y-%m-%dT%H:%M:%S%z)
-CA_CERT_EXPIRE_DATE=$(openssl x509 -in "${CA_CERT}" -noout -enddate | cut -d '=' -f 2)
-CA_CERT_EXPIRE_DATE=$(date -u -d"${CA_CERT_EXPIRE_DATE}" +%Y-%m-%dT%H:%M:%S%z)
-cp -f -p "${CA_CERT}" "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
-chmod 0444 "${CA_CERT}" "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
-touch -m -t "${CA_CERT_START_DATE_2}" "${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
-
-cp -f -p ".private/${CA_PRIVATE_CERT}" ".private/${CA_PRIVATE_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
+CA_CERT_START_DATE_TEMP=$(openssl x509 -in "${CA_CERT}--${CERT_CREATE_DATE}" -noout -startdate | cut -d '=' -f 2)
+CA_CERT_START_DATE_2=$(date -u -d"${CA_CERT_START_DATE_TEMP}" +%g%m%d%H%M.%S)
+CA_CERT_START_DATE=$(date -d"${CA_CERT_START_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
+CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${CA_CERT}--${CERT_CREATE_DATE}" -noout -enddate | cut -d '=' -f 2)
+CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
+mv   "${CA_CERT}--${CERT_CREATE_DATE}"  "${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"
+chmod 0444  "${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"
+touch -m -t "${CA_CERT_START_DATE_2}"  "${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"
+ln -sf "${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"  "${CA_CERT}"
+ln -sf ".private/${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"  "../${CA_CERT}"
 
 #	Help hint
-echo -e "\n\t${BOLD}These certificates are valid for ${YELLOW}${NUMBER_DAYS}${NORMAL}${BOLD} days or until ${YELLOW}${CA_CERT_EXPIRE_DATE}${NORMAL}\n"
-echo -e "\tIt would be prudent to document the date when to renew these certificates and"
+echo -e "\n\t${BOLD}These certificates are valid for  ${YELLOW}${NUMBER_DAYS}${WHITE}  days or until ${YELLOW}${CA_CERT_EXPIRE_DATE}${NORMAL}"
+echo -e "${BOLD}${CYAN}"
+ls -l "${CA_CERT}"
+ls -l "${CA_PRIVATE_CERT}"
+echo -e "\n\t${NORMAL}It would be prudent to document the date when to renew these certificates and"
 echo -e "\tset an operations or project management calendar entry about 15 days before"
 echo -e "\trenewal as a reminder to schedule a new site certificate or open a work\n\tticket."
 
