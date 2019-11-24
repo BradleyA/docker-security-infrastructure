@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-site-private-public-tls.sh  3.510.1050  2019-11-23T22:12:36.068581-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.509-4-g51ba3d2  
-# 	   docker-TLS/create-site-private-public-tls.sh    debug file format 
-# 	docker-TLS/create-site-private-public-tls.sh  3.505.1039  2019-11-22T15:01:23.390104-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.504  
-# 	   Production standard 8.3.541 --usage 
+# 	docker-TLS/create-site-private-public-tls.sh  3.511.1051  2019-11-24T16:05:56.343289-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.510  
+# 	   docker-TLS/create-site-private-public-tls.sh  update user hint, move files to sync with Production standard 6.3.539  Architecture tree, alot of debugging 
 #86# docker-TLS/create-site-private-public-tls.sh - Create site private and CA keys
 ###  Production standard 3.0 shellcheck
 ###  Production standard 5.1.160 Copyright
@@ -49,7 +47,7 @@ display_usage
 #    Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
 echo    "An administration user can run this script to create site private and CA"
-echo    "keys.  Run this script first on your host that will be creating all your TLS"
+echo    "key.  Run this script first on your host that will be creating all your TLS"
 echo    "keys for your site.  It creates the working directories <WORKING_DIRECTORY>"
 echo -e "(${DEFAULT_WORKING_DIRECTORY}) for your site.\n"
 echo    "If you later choose to use a different host to continue creating your user"
@@ -204,37 +202,29 @@ if [[ -e "${CA_PRIVATE_CERT}" ]] ; then
   if ! [[ "${ANSWER}"  == "Y" || "${ANSWER}"  == "Yes" || "${ANSWER}"  == "y" || "${ANSWER}"  == "yes" ]] ; then
     rm -f "${CA_PRIVATE_CERT}"
     #    Create site private key
-    echo -e "\tCreating private key and prompting for a passphrase in ${WORKING_DIRECTORY}/.private" 1>&2
-    openssl genrsa -aes256 -out "${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}" 4096  || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Pass phrase does not match." ; exit 1; }
+    echo -e "\tCreating private key and prompting for a new passphrase in ${BOLD}${YELLOW}${WORKING_DIRECTORY}/.private${NORMAL}" 1>&2
+    openssl genrsa -aes256 -out "${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}" 4096  || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Both pass phrases entered do not match each other." ; exit 1; }
     chmod 0400 "${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}"
-    ln -s "${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}"  "${CA_PRIVATE_CERT}"
+    mv     "${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}"  "${WORKING_DIRECTORY}/site"
+    ln -sf "../site/${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}"  "../.private/${CA_PRIVATE_CERT}"
   else
     CERT_CREATE_DATE=$(ls -l "${CA_PRIVATE_CERT}" | sed -e 's/^.*--//')
   fi
 else
   #    Create site private key
-  echo -e "\tCreating private key and prompting for a passphrase in ${WORKING_DIRECTORY}/.private" 1>&2
-  openssl genrsa -aes256 -out "${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}" 4096  || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Pass phrase does not match." ; exit 1; }
+  echo -e "\tCreating private key and prompting for a new passphrase in ${BOLD}${YELLOW}${WORKING_DIRECTORY}/.private${NORMAL}" 1>&2
+  openssl genrsa -aes256 -out "${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}" 4096  || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Both pass phrases entered do not match each other." ; exit 1; }
   chmod 0400 "${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}"
-  ln -s "${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}"  "${CA_PRIVATE_CERT}"
+  mv     "${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}"  "${WORKING_DIRECTORY}/site"
+  ln -sf "../site/${CA_PRIVATE_CERT}--${CERT_CREATE_DATE}"  "../.private/${CA_PRIVATE_CERT}"
 fi
 
 #    Create site public key
 #    Help hint
-echo -e "${NORMAL}\n\tOnce all the certificates and keys have been generated with this private key,"
-echo -e "\tit would be prudent to move the private key to a Universal Serial Bus (USB)"
-echo -e "\tmemory stick.  Remove the private key from the system and store the USB memory"
-echo -e "\tstick in a locked fireproof location."
-echo -e "\n\tThe public key is copied to all systems in an environment so that those"
-echo -e "\tsystems trust signed certificates.  The following is a list of prompts from"
-echo -e "\tthe following command and example answers are in parentheses."
-echo -e "\tCountry Name (US)"
-echo -e "\tState or Province Name (Texas)"
-echo -e "\tLocality Name (Cedar Park)"
-echo -e "\tOrganization Name (Company Name)"
-echo -e "\tOrganizational Unit Name (IT - SRE Team Central US)"
-echo -e "\tCommon Name (${LOCALHOST})"
-echo -e "\tEmail Address ()\n"
+echo -e "\n\t${NORMAL}The following is a list of prompts and example answers are in parentheses."
+echo -e "\tCountry Name (US), State or Province Name (Texas), Locality Name (Cedar"
+echo -e "\tPark), Organization Name (Company Name), Organizational Unit Name (IT -"
+echo -e "\tSRE Team Central US), Common Name (${LOCALHOST}), and Email Address"
 echo -e "\n\tCreating public key good for  ${BOLD}${YELLOW}${NUMBER_DAYS}${NORMAL}  days in ${WORKING_DIRECTORY} directory.\n"	1>&2
 openssl req -x509 -days "${NUMBER_DAYS}" -sha256 -new -key "${CA_PRIVATE_CERT}" -out "${CA_CERT}--${CERT_CREATE_DATE}" || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Incorrect pass phrase for ${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}" ; exit 1; }
 
@@ -244,20 +234,24 @@ CA_CERT_START_DATE_2=$(date -u -d"${CA_CERT_START_DATE_TEMP}" +%g%m%d%H%M.%S)
 CA_CERT_START_DATE=$(date -d"${CA_CERT_START_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
 CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${CA_CERT}--${CERT_CREATE_DATE}" -noout -enddate | cut -d '=' -f 2)
 CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
-mv   "${CA_CERT}--${CERT_CREATE_DATE}"  "${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"
+mv     "${CA_CERT}--${CERT_CREATE_DATE}"  "${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"
 chmod 0444  "${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"
 touch -m -t "${CA_CERT_START_DATE_2}"  "${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"
-ln -sf "${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"  "${CA_CERT}"
-ln -sf ".private/${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"  "../${CA_CERT}"
+mv     "${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"  "${WORKING_DIRECTORY}/site"
+ln -sf "site/${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"  "../${CA_CERT}"
 
 #	Help hint
 echo -e "\n\t${BOLD}These certificates are valid for  ${YELLOW}${NUMBER_DAYS}${WHITE}  days or until ${YELLOW}${CA_CERT_EXPIRE_DATE}${NORMAL}"
 echo -e "${BOLD}${CYAN}"
-ls -l "${CA_CERT}"
 ls -l "${CA_PRIVATE_CERT}"
-echo -e "\n\t${NORMAL}It would be prudent to document the date when to renew these certificates and"
-echo -e "\tset an operations or project management calendar entry about 15 days before"
-echo -e "\trenewal as a reminder to schedule a new site certificate or open a work\n\tticket."
+cd ..
+ls -l "${CA_CERT}"
+echo -e "${NORMAL}\n\tNow that the certificate has been generated, it would be prudent to move"
+echo -e "\tthe private key to a Universal Serial Bus (USB) memory stick after creating your"
+echo -e "\tother host and user keys.  Remove the private key from the system and store the USB"
+echo -e "\tmemory stick in a locked fireproof location.  Also document the date when to renew"
+echo -e "\tthese certificates and set an operations or project management calendar or ticket"
+echo -e "\tentry about 15 days before renewal as a reminder."
 
 #
 new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished..." 1>&2
