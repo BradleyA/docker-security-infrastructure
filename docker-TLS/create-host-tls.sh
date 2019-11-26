@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.512.1053  2019-11-26T16:10:09.194940-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.511-1-g2e0252d  
+# 	   docker-TLS/create-host-tls.sh  change file name standard to include site private CA date in all certs that are built from it 
 # 	docker-TLS/create-host-tls.sh  3.505.1039  2019-11-22T15:01:23.026486-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.504  
 # 	   Production standard 8.3.541 --usage 
 #86# docker-TLS/create-host-tls.sh - Create host public, private keys and CA
@@ -198,7 +200,6 @@ if [[ ! -d "${WORKING_DIRECTORY}/.private" ]] ; then
   echo -e "\t${YELLOW}create-host-tls.sh${WHITE} or ${YELLOW}create-user-tls.sh${WHITE} as many times as you want."
   exit 1
 fi
-cd "${WORKING_DIRECTORY}"
 
 #    Check if ${CA_PRIVATE_CERT} file on system
 if ! [[ -e "${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}" ]] ; then
@@ -211,7 +212,23 @@ if ! [[ -e "${WORKING_DIRECTORY}/.private/${CA_PRIVATE_CERT}" ]] ; then
   exit 1
 fi
 
-# >>>	need to add check for ${CA_CERT} file is in ${WORKING_DIRECTORY}
+#    Check if ${CA_CERT} file on system
+if ! [[ -e "${WORKING_DIRECTORY}/${CA_CERT}" ]] ; then
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Site public key ${WORKING_DIRECTORY}/${CA_CERT}\n  is not in this location.\n  Enter ${COMMAND_NAME} --help for more information." 1>&2
+#    Help hint
+  echo -e "\n\tEither link ${CA_CERT} to a file in site directory"
+  echo -e "\t${WORKING_DIRECTORY}/"
+  echo -e "\tor run ${YELLOW}create-site-private-public-tls.sh${WHITE} and sudo"
+  echo -e "\t${YELLOW}create-new-openssl.cnf-tls.sh${WHITE} to create a new key."
+  exit 1
+fi
+
+#    Test <NUMBER_DAYS> for integer
+if ! [[ "${NUMBER_DAYS}" =~ ^[0-9]+$ ]] ; then
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  <NUMBER_DAYS> is not an interger.  <NUMBER_DAYS> is set to '${NUMBER_DAYS}'" 1>&2
+  display_usage
+  exit 1
+fi
 
 #    Prompt for ${FQDN} if argement not entered
 if [[ -z "${FQDN}" ]] ; then
@@ -225,7 +242,8 @@ if [[ -z "${FQDN}" ]] ; then
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  A Fully Qualified Domain Name (FQDN) is required to create new host TLS keys." 1>&2
   exit 1
 fi
-mkdir -p "${FQDN}"
+mkdir -p "${WORKING_DIRECTORY}/${FQDN}"
+cd       "${WORKING_DIRECTORY}"
 
 if [[ -e "${FQDN}-priv-key.pem" ]] ; then
   rm  -f "${FQDN}-priv-key.pem"
@@ -237,20 +255,11 @@ echo -e "\n\tCreating private key for host ${BOLD}${YELLOW}${FQDN}${NORMAL}"
 openssl genrsa -out "${FQDN}-priv-key.pem" 2048
 
 #    Create CSR (Certificate Signing Request) for host ${FQDN}
-echo -e "\n\tGenerate a Certificate Signing Request (CSR) for"
-echo -e "\thost ${BOLD}${FQDN}${NORMAL}"
+echo -e "\n\tGenerate a Certificate Signing Request (CSR) for host ${BOLD}${FQDN}${NORMAL}"
 openssl req -sha256 -new -key "${FQDN}-priv-key.pem" -subj "/CN=${FQDN}/subjectAltName=${FQDN}" -out "${FQDN}.csr"
 
-#    Test <NUMBER_DAYS> for integer
-if ! [[ "${NUMBER_DAYS}" =~ ^[0-9]+$ ]] ; then
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  <NUMBER_DAYS> is not an interger.  <NUMBER_DAYS> is set to '${NUMBER_DAYS}'" 1>&2
-  display_usage
-  exit 1
-fi
-
 #    Create and sign a ${NUMBER_DAYS} day certificate for host ${FQDN}
-echo -e "\n\tCreate and sign a  ${BOLD}${YELLOW}${NUMBER_DAYS}${NORMAL}  day certificate for host ${FQDN}."
-echo -e "\t${BOLD}${FQDN}${NORMAL}"
+echo -e "\n\tCreate and sign a  ${BOLD}${YELLOW}${NUMBER_DAYS}${NORMAL}  day certificate for host ${BOLD}${FQDN}${NORMAL}"
 openssl x509 -req -days "${NUMBER_DAYS}" -sha256 -in "${FQDN}.csr" -CA ${CA_CERT} -CAkey .private/${CA_PRIVATE_CERT} -CAcreateserial -out "${FQDN}-cert.pem" -extensions v3_req -extfile /usr/lib/ssl/openssl.cnf || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Wrong pass phrase for .private/${CA_PRIVATE_CERT}: " ; exit 1; }
 openssl rsa -in "${FQDN}-priv-key.pem" -out "${FQDN}-priv-key.pem"
 
@@ -263,21 +272,22 @@ chmod 0400 "${FQDN}-priv-key.pem"
 chmod 0444 "${FQDN}-cert.pem"
 
 #    Place a copy in ${WORKING_DIRECTORY}/${FQDN} directory
+SITE_CA_CERT=$(ls -l "${CA_CERT}" | sed -e 's/^.* -> site\///')
+SITE_CA_CERT_CREATE_DATE=$(echo "${SITE_CA_CERT}" | sed -e 's/---.*$//' | sed -e 's/^.*--//')
 CERT_CREATE_DATE=$(date +%Y-%m-%dT%H:%M:%S-%Z)
-CA_CERT_START_DATE_TEMP=$(openssl x509 -in "${CA_CERT}" -noout -startdate | cut -d '=' -f 2)
-CA_CERT_START_DATE=$(date -d"${CA_CERT_START_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
-CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${CA_CERT}" -noout -enddate  | cut -d '=' -f 2)
-CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
-cp -p ${CA_CERT}              "${FQDN}/${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"
-ln -sf "${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"  "${FQDN}/${CA_CERT}"
-CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${FQDN}-cert.pem" -noout -enddate  | cut -d '=' -f 2)
-CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
-mv   "${FQDN}-cert.pem"       "${FQDN}/${FQDN}-cert.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
-mv   "${FQDN}-priv-key.pem"   "${FQDN}/${FQDN}-priv-key.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
-ln -sf "${FQDN}-cert.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"     "${FQDN}/${FQDN}-cert.pem"
-ln -sf "${FQDN}-priv-key.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}" "${FQDN}/${FQDN}-priv-key.pem"
+NUMBER_DAYS="+"${NUMBER_DAYS}" days"
+CERT_EXPIRE_DATE=$(date -d "${NUMBER_DAYS}" +%Y-%m-%dT%H:%M:%S-%Z)
+if [[  "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  SITE_CA_CERT >${SITE_CA_CERT}< SITE_CA_CERT_CREATE_DATE >${SITE_CA_CERT_CREATE_DATE}< CERT_CREATE_DATE >${CERT_CREATE_DATE}< NUMBER_DAYS >${NUMBER_DAYS}< CERT_EXPIRE_DATE >${CERT_EXPIRE_DATE}<" 1>&2 ; fi
+cp -p  "site/${SITE_CA_CERT}"   "${FQDN}/${SITE_CA_CERT}"
+mv     "${FQDN}-cert.pem"       "${FQDN}/${FQDN}-cert.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"
+mv     "${FQDN}-priv-key.pem"   "${FQDN}/${FQDN}-priv-key.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"
+cd     "${FQDN}"
+ln -sf "${SITE_CA_CERT}"  "${CA_CERT}"
+ln -sf "${FQDN}-cert.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"     "${FQDN}-cert.pem"
+ln -sf "${FQDN}-priv-key.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}" "${FQDN}-priv-key.pem"
 echo   "${BOLD}${CYAN}"
-ls -1 "${FQDN}" | grep "${CERT_CREATE_DATE}"
+ls -1 | grep "${CERT_CREATE_DATE}"
+ls -1 "${SITE_CA_CERT}"
 
 #    Help hint
 echo -e "\n\t${NORMAL}Use script ${BOLD}${YELLOW}copy-host-2-remote-host-tls.sh${NORMAL} to update remote host.\n"
