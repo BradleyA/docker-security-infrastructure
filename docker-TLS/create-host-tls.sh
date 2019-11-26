@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.513.1055  2019-11-26T16:21:26.192635-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.512-1-ge486f77  
+# 	   docker-TLS/create-host-tls.sh   correct shellcheck incident 
 # 	docker-TLS/create-host-tls.sh  3.512.1053  2019-11-26T16:10:09.194940-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.511-1-g2e0252d  
 # 	   docker-TLS/create-host-tls.sh  change file name standard to include site private CA date in all certs that are built from it 
 # 	docker-TLS/create-host-tls.sh  3.505.1039  2019-11-22T15:01:23.026486-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.504  
@@ -275,7 +277,7 @@ chmod 0444 "${FQDN}-cert.pem"
 SITE_CA_CERT=$(ls -l "${CA_CERT}" | sed -e 's/^.* -> site\///')
 SITE_CA_CERT_CREATE_DATE=$(echo "${SITE_CA_CERT}" | sed -e 's/---.*$//' | sed -e 's/^.*--//')
 CERT_CREATE_DATE=$(date +%Y-%m-%dT%H:%M:%S-%Z)
-NUMBER_DAYS="+"${NUMBER_DAYS}" days"
+NUMBER_DAYS="+${NUMBER_DAYS} days"
 CERT_EXPIRE_DATE=$(date -d "${NUMBER_DAYS}" +%Y-%m-%dT%H:%M:%S-%Z)
 if [[  "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  SITE_CA_CERT >${SITE_CA_CERT}< SITE_CA_CERT_CREATE_DATE >${SITE_CA_CERT_CREATE_DATE}< CERT_CREATE_DATE >${CERT_CREATE_DATE}< NUMBER_DAYS >${NUMBER_DAYS}< CERT_EXPIRE_DATE >${CERT_EXPIRE_DATE}<" 1>&2 ; fi
 cp -p  "site/${SITE_CA_CERT}"   "${FQDN}/${SITE_CA_CERT}"
