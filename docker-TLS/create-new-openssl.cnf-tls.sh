@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-new-openssl.cnf-tls.sh  3.514.1056  2019-11-26T22:45:24.040574-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.513  
+# 	   Production standard 6.3.543  Architecture tree 
 # 	docker-TLS/create-new-openssl.cnf-tls.sh  3.505.1039  2019-11-22T15:01:23.150102-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.504  
 # 	   Production standard 8.3.541 --usage 
 #86# docker-TLS/create-new-openssl.cnf-tls.sh - Modify /etc/ssl/openssl.conf file
@@ -73,7 +75,7 @@ echo    "variable DEBUG.  You are on your own defining environment variables if"
 echo    "you are using other shells."
 echo    "   DEBUG       (default off '0')"
 
-###  Production standard 6.1.177 Architecture tree
+###  Production standard 6.3.543  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "/etc/ "
 echo -e "└── ssl/openssl.cnf                        <-- OpenSSL configuration file\n"

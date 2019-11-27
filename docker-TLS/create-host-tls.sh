@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.514.1056  2019-11-26T22:45:23.918794-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.513  
+# 	   Production standard 6.3.543  Architecture tree 
 # 	docker-TLS/create-host-tls.sh  3.513.1055  2019-11-26T16:21:26.192635-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.512-1-ge486f77  
 # 	   docker-TLS/create-host-tls.sh   correct shellcheck incident 
 # 	docker-TLS/create-host-tls.sh  3.512.1053  2019-11-26T16:10:09.194940-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.511-1-g2e0252d  
@@ -102,7 +104,7 @@ echo    "                     (default ${DEFAULT_NUMBER_DAYS})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
-###  Production standard 6.3.539 Architecture tree
+###  Production standard 6.3.543  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
@@ -112,6 +114,9 @@ echo    "        │   └── ca-priv-key.pem            <-- Current site CA 
 echo    "        ├── ca.pem                         <-- Current site CA cert"               # 3.539
 echo    "        ├── hosts/                         <-- Directory for hostnames"            # 3.539
 echo    "        │   └── <HOST>/                    <-- Directory to store host certs"      # 3.539
+echo    "        │      ├── ca.pem                  <-- CA Cert"                            # 3.542
+echo    "        │      ├── cert.pem                <-- public key"                         # 3.543
+echo    "        │      └── priv-key.pem            <-- private key"                        # 3.543
 echo    "        ├── site/                          <-- Directory to store site certs"      # 3.539
 echo    "        │   ├── ca.pem_20xx-...            <-- CA Cert"                            # 3.539
 echo    "        │   └── ca-priv-key.pem_20xx-...   <-- CA Private Key"                     # 3.539
@@ -244,7 +249,7 @@ if [[ -z "${FQDN}" ]] ; then
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  A Fully Qualified Domain Name (FQDN) is required to create new host TLS keys." 1>&2
   exit 1
 fi
-mkdir -p "${WORKING_DIRECTORY}/${FQDN}"
+mkdir -p "${WORKING_DIRECTORY}/hosts/${FQDN}"
 cd       "${WORKING_DIRECTORY}"
 
 if [[ -e "${FQDN}-priv-key.pem" ]] ; then
@@ -261,7 +266,8 @@ echo -e "\n\tGenerate a Certificate Signing Request (CSR) for host ${BOLD}${FQDN
 openssl req -sha256 -new -key "${FQDN}-priv-key.pem" -subj "/CN=${FQDN}/subjectAltName=${FQDN}" -out "${FQDN}.csr"
 
 #    Create and sign a ${NUMBER_DAYS} day certificate for host ${FQDN}
-echo -e "\n\tCreate and sign a  ${BOLD}${YELLOW}${NUMBER_DAYS}${NORMAL}  day certificate for host ${BOLD}${FQDN}${NORMAL}"
+SITE_CA_CERT=$(ls -l "${CA_CERT}" | sed -e 's/^.* -> site\///')
+echo -e "\n\tCreate and sign a  ${BOLD}${YELLOW}${NUMBER_DAYS}${NORMAL}  day certificate for host ${BOLD}${YELLOW}${FQDN}${NORMAL}\n\trequires the CA Private Key pass phrase for\n\t${BOLD}${YELLOW}${SITE_CA_CERT}${NORMAL}"
 openssl x509 -req -days "${NUMBER_DAYS}" -sha256 -in "${FQDN}.csr" -CA ${CA_CERT} -CAkey .private/${CA_PRIVATE_CERT} -CAcreateserial -out "${FQDN}-cert.pem" -extensions v3_req -extfile /usr/lib/ssl/openssl.cnf || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Wrong pass phrase for .private/${CA_PRIVATE_CERT}: " ; exit 1; }
 openssl rsa -in "${FQDN}-priv-key.pem" -out "${FQDN}-priv-key.pem"
 
@@ -274,16 +280,15 @@ chmod 0400 "${FQDN}-priv-key.pem"
 chmod 0444 "${FQDN}-cert.pem"
 
 #    Place a copy in ${WORKING_DIRECTORY}/${FQDN} directory
-SITE_CA_CERT=$(ls -l "${CA_CERT}" | sed -e 's/^.* -> site\///')
 SITE_CA_CERT_CREATE_DATE=$(echo "${SITE_CA_CERT}" | sed -e 's/---.*$//' | sed -e 's/^.*--//')
 CERT_CREATE_DATE=$(date +%Y-%m-%dT%H:%M:%S-%Z)
 NUMBER_DAYS="+${NUMBER_DAYS} days"
 CERT_EXPIRE_DATE=$(date -d "${NUMBER_DAYS}" +%Y-%m-%dT%H:%M:%S-%Z)
 if [[  "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  SITE_CA_CERT >${SITE_CA_CERT}< SITE_CA_CERT_CREATE_DATE >${SITE_CA_CERT_CREATE_DATE}< CERT_CREATE_DATE >${CERT_CREATE_DATE}< NUMBER_DAYS >${NUMBER_DAYS}< CERT_EXPIRE_DATE >${CERT_EXPIRE_DATE}<" 1>&2 ; fi
-cp -p  "site/${SITE_CA_CERT}"   "${FQDN}/${SITE_CA_CERT}"
-mv     "${FQDN}-cert.pem"       "${FQDN}/${FQDN}-cert.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"
-mv     "${FQDN}-priv-key.pem"   "${FQDN}/${FQDN}-priv-key.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"
-cd     "${FQDN}"
+cp -p  "site/${SITE_CA_CERT}"   "hosts/${FQDN}/${SITE_CA_CERT}"
+mv     "${FQDN}-cert.pem"       "hosts/${FQDN}/${FQDN}-cert.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"
+mv     "${FQDN}-priv-key.pem"   "hosts/${FQDN}/${FQDN}-priv-key.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"
+cd     "hosts/${FQDN}"
 ln -sf "${SITE_CA_CERT}"  "${CA_CERT}"
 ln -sf "${FQDN}-cert.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"     "${FQDN}-cert.pem"
 ln -sf "${FQDN}-priv-key.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}" "${FQDN}-priv-key.pem"

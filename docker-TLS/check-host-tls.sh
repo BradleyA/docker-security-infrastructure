@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-host-tls.sh  3.514.1056  2019-11-26T22:45:23.795945-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.513  
+# 	   Production standard 6.3.543  Architecture tree 
 # 	docker-TLS/check-host-tls.sh  3.483.1007  2019-11-07T20:30:57.657697-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.482  
 # 	   docker-TLS/check-host-tls.sh  remove display_usage from message requiring script to be run as root 
 # 	docker-TLS/check-host-tls.sh  3.477.998  2019-10-22T22:15:34.622024-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.476  
@@ -34,9 +36,9 @@ WHITE=$(tput  setaf 7)
 ###  Production standard 7.0 Default variable value
 DEFAULT_CERT_DAEMON_DIR="/etc/docker/certs.d/daemon/"
 
-###  Production standard 8.3.530 --usage
+###  Production standard 8.3.541 --usage
+COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')   # 3.541
 display_usage() {
-COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')
 echo -e "\n${NORMAL}${COMMAND_NAME}\n   Check public, private keys, and CA for host"
 echo -e "\n${BOLD}USAGE${NORMAL}"
 echo -e "   sudo ${COMMAND_NAME} [<CERT_DAEMON_DIR>]\n"
@@ -94,7 +96,7 @@ echo    "   DEBUG               (default off '0')"
 echo -e "\n${BOLD}OPTIONS${NORMAL}"
 echo    "   CERT_DAEMON_DIR     dockerd certification directory (default ${DEFAULT_CERT_DAEMON_DIR})"
 
-###  Production standard 6.1.177 Architecture tree
+###  Production standard 6.3.542  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "/etc/ "
 echo    "└── docker/ "
