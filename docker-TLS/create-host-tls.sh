@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.515.1059  2019-12-02T23:34:16.237524-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.514-2-gea40c52  
+# 	   docker-TLS/create-host-tls.sh   removed hostname from key names in symbolic link 
 # 	docker-TLS/create-host-tls.sh  3.514.1056  2019-11-26T22:45:23.918794-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.513  
 # 	   Production standard 6.3.543  Architecture tree 
 # 	docker-TLS/create-host-tls.sh  3.513.1055  2019-11-26T16:21:26.192635-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.512-1-ge486f77  
@@ -122,6 +124,7 @@ echo    "        │   ├── ca.pem_20xx-...            <-- CA Cert"        
 echo    "        │   └── ca-priv-key.pem_20xx-...   <-- CA Private Key"                     # 3.539
 echo    "        └── users/                         <-- Directory for users"                # 3.539
 echo    "            └── <USER>/                    <-- Directory to store user certs"      # 3.539
+# >>> 		>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
@@ -249,9 +252,12 @@ if [[ -z "${FQDN}" ]] ; then
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  A Fully Qualified Domain Name (FQDN) is required to create new host TLS keys." 1>&2
   exit 1
 fi
-mkdir -p "${WORKING_DIRECTORY}/hosts/${FQDN}"
+mkdir -p   "${WORKING_DIRECTORY}/hosts/${FQDN}"
+chmod 0700 "${WORKING_DIRECTORY}/hosts/${FQDN}"
+chmod 0700 "${WORKING_DIRECTORY}/hosts"
 cd       "${WORKING_DIRECTORY}"
 
+#    Garbage cleanup when one of the following lines exit error 
 if [[ -e "${FQDN}-priv-key.pem" ]] ; then
   rm  -f "${FQDN}-priv-key.pem"
   rm  -f "${FQDN}-cert.pem"
@@ -290,8 +296,8 @@ mv     "${FQDN}-cert.pem"       "hosts/${FQDN}/${FQDN}-cert.pem--${SITE_CA_CERT_
 mv     "${FQDN}-priv-key.pem"   "hosts/${FQDN}/${FQDN}-priv-key.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"
 cd     "hosts/${FQDN}"
 ln -sf "${SITE_CA_CERT}"  "${CA_CERT}"
-ln -sf "${FQDN}-cert.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"     "${FQDN}-cert.pem"
-ln -sf "${FQDN}-priv-key.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}" "${FQDN}-priv-key.pem"
+ln -sf "${FQDN}-cert.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"     "cert.pem"
+ln -sf "${FQDN}-priv-key.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}" "priv-key.pem"
 echo   "${BOLD}${CYAN}"
 ls -1 | grep "${CERT_CREATE_DATE}"
 ls -1 "${SITE_CA_CERT}"
