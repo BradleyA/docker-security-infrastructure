@@ -1,10 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-host-tls.sh  3.515.1059  2019-12-02T23:34:16.237524-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.514-2-gea40c52  
-# 	   docker-TLS/create-host-tls.sh   removed hostname from key names in symbolic link 
-# 	docker-TLS/create-host-tls.sh  3.514.1056  2019-11-26T22:45:23.918794-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.513  
-# 	   Production standard 6.3.543  Architecture tree 
-# 	docker-TLS/create-host-tls.sh  3.513.1055  2019-11-26T16:21:26.192635-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.512-1-ge486f77  
-# 	   docker-TLS/create-host-tls.sh   correct shellcheck incident 
+# 	docker-TLS/create-host-tls.sh  3.516.1061  2019-12-02T23:51:21.368823-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.515-1-g6f7ce6f  
+# 	   docker-TLS/create-host-tls.sh   forced copy of SITE_CA_CERT 
 # 	docker-TLS/create-host-tls.sh  3.512.1053  2019-11-26T16:10:09.194940-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.511-1-g2e0252d  
 # 	   docker-TLS/create-host-tls.sh  change file name standard to include site private CA date in all certs that are built from it 
 # 	docker-TLS/create-host-tls.sh  3.505.1039  2019-11-22T15:01:23.026486-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.504  
@@ -291,7 +287,7 @@ CERT_CREATE_DATE=$(date +%Y-%m-%dT%H:%M:%S-%Z)
 NUMBER_DAYS="+${NUMBER_DAYS} days"
 CERT_EXPIRE_DATE=$(date -d "${NUMBER_DAYS}" +%Y-%m-%dT%H:%M:%S-%Z)
 if [[  "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  SITE_CA_CERT >${SITE_CA_CERT}< SITE_CA_CERT_CREATE_DATE >${SITE_CA_CERT_CREATE_DATE}< CERT_CREATE_DATE >${CERT_CREATE_DATE}< NUMBER_DAYS >${NUMBER_DAYS}< CERT_EXPIRE_DATE >${CERT_EXPIRE_DATE}<" 1>&2 ; fi
-cp -p  "site/${SITE_CA_CERT}"   "hosts/${FQDN}/${SITE_CA_CERT}"
+cp -fp "site/${SITE_CA_CERT}"   "hosts/${FQDN}/${SITE_CA_CERT}"
 mv     "${FQDN}-cert.pem"       "hosts/${FQDN}/${FQDN}-cert.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"
 mv     "${FQDN}-priv-key.pem"   "hosts/${FQDN}/${FQDN}-priv-key.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"
 cd     "hosts/${FQDN}"
