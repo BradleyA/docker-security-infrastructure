@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.517.1062  2019-12-03T01:39:07.219234-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
+# 	   Production standard 6.3.544  Architecture tree 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.509.1045  2019-11-23T09:57:09.484459-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.508  
 # 	   Production standard 8.3.541 --usage 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.482.1006  2019-10-24T21:35:12.026886-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.481  
@@ -103,7 +105,7 @@ echo    "                     (default ${DEFAULT_REMOTE_HOST})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
-###  Production standard 6.1.177 Architecture tree
+###  Production standard 6.3.544  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
@@ -111,17 +113,23 @@ echo    "    ├── ca.pem                             <-- User tlscacert or 
 echo    "    ├── cert.pem                           <-- Symbolic link to user tlscert"
 echo    "    ├── key.pem                            <-- Symbolic link to user tlskey"
 echo    "    └── docker-ca/                         <-- Working directory to create certs"
+echo    "        └── users/                         <-- Directory for users"                # 3.539
+echo    "            └── <USER>/                    <-- Directory to store user certs"      # 3.539
+echo    "               ├── ca.pem                  <-- CA Cert"                            # 3.544
+echo    "               ├── cert.pem                <-- public key"                         # 3.544
+echo -e "               └── priv-key.pem            <-- private key\n"                      # 3.544
 # >>>   FUTURE  open ticket on github
-# >>>   FUTURE  echo    "/usr/local/data/                           <-- <DATA_DIR>"
-# >>>   FUTURE  echo    "└── <CLUSTER>/                             <-- <CLUSTER>"
-# >>>   FUTURE  echo    "    └── docker-accounts/                   <-- Docker TLS certs"
-# >>>   FUTURE  echo    "        ├── <HOST-1>/                      <-- Host in cluster"
-# >>>   FUTURE  echo    "        │   ├── <USER-1>/                  <-- User TLS certs directory"
-# >>>   FUTURE  echo    "        │   │   ├── ca.pem       FUTURE    <-- User tlscacert"
-# >>>   FUTURE  echo    "        │   │   ├── cert.pem     FUTURE    <-- User tlscert"
-# >>>   FUTURE  echo    "        │   │   └── key.pem      FUTURE    <-- User tlskey"
-# >>>   FUTURE  echo    "        │   └── <USER-2>/                  <-- User TLS certs directory"
-# >>>   FUTURE  echo    "        └── <HOST-2>/                      <-- Host in cluster"
+echo    "/usr/local/data/                           <-- <DATA_DIR>"
+echo    "└── <CLUSTER>/                             <-- <CLUSTER>"
+echo    "    └── docker-accounts/                   <-- Docker TLS certs"
+echo    "        ├── <HOST-1>/                      <-- Host in cluster"
+echo    "        │   ├── <USER-1>/                  <-- User TLS certs directory"
+echo    "        │   │   └── docker         FUTURE  <-- User tlscacert"
+echo    "        │   │       ├── ca.pem     FUTURE  <-- User tlscacert"
+echo    "        │   │       ├── cert.pem   FUTURE  <-- User tlscert"
+echo    "        │   │       └── key.pem    FUTURE  <-- User tlskey"
+echo    "        │   └── <USER-2>/                  <-- User TLS certs directory"
+echo    "        └── <HOST-2>/                      <-- Host in cluster"
 
 echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"

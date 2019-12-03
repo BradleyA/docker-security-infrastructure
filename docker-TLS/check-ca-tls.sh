@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-ca-tls.sh  3.517.1062  2019-12-03T01:39:06.412262-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
+# 	   Production standard 6.3.544  Architecture tree 
 # 	docker-TLS/check-ca-tls.sh  3.466.981  2019-10-21T21:43:30.920833-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.465-1-g5db421c  
 # 	   docker-TLS/check-ca-tls.sh   add color output ; Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/check-ca-tls.sh  3.454.951  2019-10-13T15:24:56.576980-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.453  
@@ -96,7 +98,7 @@ echo -e "Order of precedence: CLI options, environment variable, default code.\n
 echo    "   CERT_DIR        Certification directory (default '${DEFAULT_CERT_DIR}')"
 echo    "   CA_CERT         Name of CA certificate (default '${DEFAULT_CA_CERT}')"
 
-###  Production standard 6.1.177 Architecture tree
+###  Production standard 6.3.544  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
@@ -107,7 +109,7 @@ echo    "    └── certs.d/                           <-- Host docker cert d
 echo    "        ├── daemon/                        <-- Daemon cert directory"
 echo    "        │   └── ca.pem                     <-- Daemon tlscacert"
 echo    "        └── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory"
-echo -e "            └── ca.crt                     <-- Daemon registry domain cert\n"
+echo    "            └── ca.crt                     <-- Daemon registry domain cert"
 
 echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"

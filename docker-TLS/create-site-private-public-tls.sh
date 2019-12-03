@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-site-private-public-tls.sh  3.514.1056  2019-11-26T22:45:24.284061-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.513  
-# 	   Production standard 6.3.543  Architecture tree 
+# 	docker-TLS/create-site-private-public-tls.sh  3.517.1062  2019-12-03T01:39:07.722541-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
+# 	   Production standard 6.3.544  Architecture tree 
 # 	docker-TLS/create-site-private-public-tls.sh  3.511.1051  2019-11-24T16:05:56.343289-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.510  
 # 	   docker-TLS/create-site-private-public-tls.sh  update user hint, move files to sync with Production standard 6.3.539  Architecture tree, alot of debugging 
 #86# docker-TLS/create-site-private-public-tls.sh - Create site private and CA keys
@@ -107,16 +107,9 @@ echo    "    └── docker-ca/                         <-- Working directory 
 echo    "        ├── .private/                      "                                       # 3.539
 echo    "        │   └── ca-priv-key.pem            <-- Current site CA Private Key"        # 3.539
 echo    "        ├── ca.pem                         <-- Current site CA cert"               # 3.539
-echo    "        ├── hosts/                         <-- Directory for hostnames"            # 3.539
-echo    "        │   └── <HOST>/                    <-- Directory to store host certs"      # 3.539
-echo    "        │      ├── ca.pem                  <-- CA Cert"                            # 3.542
-echo    "        │      ├── cert.pem                <-- public key"                         # 3.543
-echo    "        │      └── priv-key.pem            <-- private key"                        # 3.543
-echo    "        ├── site/                          <-- Directory to store site certs"      # 3.539
-echo    "        │   ├── ca.pem_20xx-...            <-- CA Cert"                            # 3.539
-echo    "        │   └── ca-priv-key.pem_20xx-...   <-- CA Private Key"                     # 3.539
-echo    "        └── users/                         <-- Directory for users"                # 3.539
-echo    "            └── <USER>/                    <-- Directory to store user certs"      # 3.539
+echo    "        └── site/                          <-- Directory to store site certs"      # 3.539
+echo    "            ├── ca.pem                     <-- CA Cert"                            # 3.544
+echo    "            └── ca-priv-key.pem            <-- CA Private Key"                     # 3.544
 
 echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"

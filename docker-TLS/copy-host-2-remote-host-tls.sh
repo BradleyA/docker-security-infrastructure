@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.517.1062  2019-12-03T01:39:06.968094-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
+# 	   Production standard 6.3.544  Architecture tree 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.509.1045  2019-11-23T09:57:09.237685-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.508  
 # 	   Production standard 8.3.541 --usage 
 #86# docker-TLS/copy-host-2-remote-host-tls.sh - Copy public, private keys and CA to remote host
@@ -99,11 +101,16 @@ echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 echo    "   CERT_DAEMON_DIR   dockerd certification directory"
 echo    "                     (default ${DEFAULT_CERT_DAEMON_DIR})"
 
-###  Production standard 6.1.177 Architecture tree
+###  Production standard 6.3.544  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
-echo -e "    └── docker-ca/                         <-- Working directory to create certs\n"
+echo    "    └── docker-ca/                         <-- Working directory to create certs"
+echo    "        └── hosts/                         <-- Directory for hostnames"            # 3.539
+echo    "            └── <HOST>/                    <-- Directory to store host certs"      # 3.539
+echo    "               ├── ca.pem                  <-- CA Cert"                            # 3.542
+echo    "               ├── cert.pem                <-- public key"                         # 3.543
+echo -e "               └── priv-key.pem            <-- private key\n"                      # 3.543
 echo    "/etc/ "
 echo    "└── docker/ "
 echo    "    └── certs.d/                           <-- Host docker cert directory"

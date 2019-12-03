@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-registry-tls.sh  3.517.1062  2019-12-03T01:39:06.719118-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
+# 	   Production standard 6.3.544  Architecture tree 
 # 	docker-TLS/check-registry-tls.sh  3.468.984  2019-10-21T22:11:55.677172-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.467-1-g6c34ae8  
 # 	   docker-TLS/check-registry-tls.sh   added color output ; updated Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/check-registry-tls.sh  3.454.951  2019-10-13T15:24:56.778776-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.453  
@@ -106,7 +108,7 @@ echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PO
 echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
 echo    "   DATA_DIR        Data directory (default '${DEFAULT_DATA_DIR}')"
 
-###  Production standard 6.1.177 Architecture tree
+###  Production standard 6.3.544 Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "/usr/local/data/                           <-- <DATA_DIR>"
 echo    "└── <CLUSTER>/                             <-- <CLUSTER>"

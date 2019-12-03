@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.514.1056  2019-11-26T22:45:24.161713-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.513  
-# 	   Production standard 6.3.543  Architecture tree 
-# 	docker-TLS/create-registry-tls.sh  3.508.1044  2019-11-22T23:19:47.188883-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.507-2-gc1f97dc  
-# 	   docker-TLS/create-registry-tls.sh   debug shellcheck incidents 
+# 	docker-TLS/create-registry-tls.sh  3.517.1062  2019-12-03T01:39:07.597216-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
+# 	   Production standard 6.3.544  Architecture tree 
 # 	docker-TLS/create-registry-tls.sh  3.507.1041  2019-11-22T23:00:12.959309-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.506  
 # 	   docker-TLS/create-registry-tls.sh   Production standard 6.3.539   added number of days in output message 
 # 	docker-TLS/create-registry-tls.sh  3.506.1040  2019-11-22T22:27:34.292738-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.505  
@@ -107,7 +105,7 @@ echo    "                     (default '${DEFAULT_NUMBER_DAYS}')"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
-###  Production standard 6.3.543  Architecture tree
+###  Production standard 6.3.544  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
@@ -117,7 +115,7 @@ echo    "    │   ├── ca.crt                         <-- Daemon registry 
 echo    "    │   ├── domain.crt                     <-- Registry cert"
 echo    "    │   └── domain.key                     <-- Registry private key"
 echo    "    └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory"
-echo -e "                                               to create registory certs\n"
+echo    "                                               to create registory certs"
 
 echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
