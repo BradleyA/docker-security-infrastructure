@@ -1,10 +1,10 @@
 
-In SA-shellcheck-001 line 258:
+In SA-shellcheck-001 line 255:
 SITE_CA_CERT=$(ls -l "${CA_CERT}" | sed -e 's/^.* -> site\///')
                ^-- SC2012: Use find instead of ls to better handle non-alphanumeric filenames.
 
 
-In SA-shellcheck-001 line 285:
+In SA-shellcheck-001 line 282:
 ls -1 | grep "${CERT_CREATE_DATE}"
 ^-- SC2010: Don't use ls | grep. Use a glob or a for loop with a condition to allow non-alphanumeric filenames.
 
