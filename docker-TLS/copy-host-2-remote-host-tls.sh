@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.519.1071  2019-12-04T10:25:25.303988-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.518  
-# 	   docker-TLS/copy-host-2-remote-host-tls.sh   start update 
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.520.1074  2019-12-04T16:15:31.189391-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.519-2-g645ca15  
+# 	   docker-TLS/copy-host-2-remote-host-tls.sh   update command to support Architecture changes 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.517.1062  2019-12-03T01:39:06.968094-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
 # 	   Production standard 6.3.544  Architecture tree 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.509.1045  2019-11-23T09:57:09.237685-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.508  
@@ -198,18 +198,9 @@ if [[ ! -d "${WORKING_DIRECTORY}" ]] ; then
   exit 1
 fi
 
-#    Check if ${REMOTE_HOST}-priv-key.pem file on system
-TEMP_PRIV_KEY_PEM=$(ls -l "${WORKING_DIRECTORY}/${REMOTE_HOST}-priv-key.pem" | sed -e 's/^.* -> //')
-if ! [[ -e "${WORKING_DIRECTORY}/${REMOTE_HOST}-priv-key.pem" ]] ; then
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  The ${REMOTE_HOST}-priv-key.pem file was not found in ${WORKING_DIRECTORY}" 1>&2
-#    Help hint
-  echo -e "\tRunning ${BOLD}${YELLOW}create-host-tls.sh${NORMAL} will create public and private keys."
-  exit 1
-fi
-
-cd "${WORKING_DIRECTORY}"
-echo -e "\n\t${BOLD}${YELLOW}${USER}${NORMAL} user may receive password and passphrase prompts"
-echo -e "\tfrom ${REMOTE_HOST}.  Running"
+cd "${WORKING_DIRECTORY}"/hosts/"${REMOTE_HOST}"
+echo -e "\n\t${BOLD}${YELLOW}${USER} user may receive password and passphrase prompts"
+echo -e "\tfrom ${REMOTE_HOST}${NORMAL}.  Running"
 echo -e "\t  ${BOLD}${YELLOW}ssh-copy-id ${USER}@${REMOTE_HOST}${NORMAL}"
 echo -e "\tmay stop some of the prompts.\n"
 
@@ -219,82 +210,55 @@ if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}
     new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${REMOTE_HOST} not responding on ssh port." 1>&2
     exit 1
   fi
-  #    Check if /etc/docker directory on ${REMOTE_HOST}
-  if ! $(ssh -t "${REMOTE_HOST}" "test -d /etc/docker") ; then
-    new_message "${LINENO}" "${RED}ERROR${WHITE}" "  /etc/docker directory missing, is docker installed on ${REMOTE_HOST}." 1>&2
-    exit 1
-# >>>	Is this one of those chicken or the egg came first
-# >>>	see below
-  fi
-else
-  #    Check if /etc/docker directory on ${LOCALHOST}
-  if ! [[ -d "/etc/docker" ]] ; then
-    new_message "${LINENO}" "${RED}ERROR${WHITE}" "  /etc/docker directory missing, is docker installed on ${REMOTE_HOST}." 1>&2
-    exit 1
-# >>>	Is this one of those chicken or the egg came first
-# >>>	Copy the docker certs before installing docker .. ... ..
-# >>>	I would think that it is NOT and ERROR exit 1 , just a preference
-# >>>	if so need to open a ticket and change this
-  fi
 fi
 
-#    Create working directory ${WORKING_DIRECTORY}/${REMOTE_HOST}
+#    Create working directory ${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/${REMOTE_HOST}
 mkdir -p "${REMOTE_HOST}"
 cd       "${REMOTE_HOST}"
 
-#    Backup ${REMOTE_HOST}:${CERT_DAEMON_DIR}/..
-FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%6N%z)
+#    Backup ${REMOTE_HOST}:${CERT_DAEMON_DIR}/.. to support rollback
+FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S-%Z)
 echo -e "\n\tBacking up ${REMOTE_HOST}:${CERT_DAEMON_DIR}/.."
-echo -e "\tto $(pwd)\n\tRoot access required.\n"
+echo -e "\tto $(pwd)\n\t${BOLD}${YELLOW}Root access required.${NORMAL}\n"
 if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}"
   ssh -t "${REMOTE_HOST}" "sudo mkdir -p ${CERT_DAEMON_DIR} ; cd /etc ; sudo tar -pcf /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon ; sudo chown ${USER}.${USER} /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; chmod 0400 /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
   scp -p "${REMOTE_HOST}:/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" .
   ssh -t "${REMOTE_HOST}" "rm -f /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
 else
-#    Backup ${CERT_DAEMON_DIR}/..
+#    Backup ${CERT_DAEMON_DIR}/.. to support rollback
   sudo mkdir -p "${CERT_DAEMON_DIR}"
   cd /etc
-  sudo tar -pcf "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" ./docker/certs.d/daemon
-  chmod 0400 "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
-  cp -p      "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" .
-  rm -f      "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
-  cd "${WORKING_DIRECTORY}"/"${REMOTE_HOST}"
+  sudo tar -pcf            "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"  ./docker/certs.d/daemon
+  cd    "${WORKING_DIRECTORY}"/hosts/"${REMOTE_HOST}"/"${REMOTE_HOST}"
+  chown "${USER}.${USER}"  "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
+  chmod 0400               "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
+  cp -p                    "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"  .
+  rm -f                    "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
 fi
 
 tar -pxf "${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
 
-# >>>	I think this is where there is going to be trouble with new directory archiceture 
-# >>>
+TEMP_CA_PEM=$(ls -l "${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/ca.pem" | sed -e 's/^.* -> //')
+TEMP_CERT_PEM=$(ls -l "${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/cert.pem" | sed -e 's/^.* -> //')
+TEMP_PRIV_KEY_PEM=$(ls -l "${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/priv-key.pem" | sed -e 's/^.* -> //')
 
-#    Check if /etc/docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem file exists
-if [[ -e "./docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem" ]] ; then
-  echo -e "\n\t/etc/docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem"
-  echo -e "\talready exists, ${BOLD}${YELLOW}renaming existing keys${NORMAL} so new keys can be installed.\n"
-  mv "./docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem" "./docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem_rollback_${FILE_DATE_STAMP}"
-  mv "./docker/certs.d/daemon/${REMOTE_HOST}-cert.pem" "./docker/certs.d/daemon/${REMOTE_HOST}-cert.pem_rollback_${FILE_DATE_STAMP}"
-  mv "./docker/certs.d/daemon/${CA_CERT}" "./docker/certs.d/daemon/${CA_CERT}_rollback_${FILE_DATE_STAMP}"
-  rm ./docker/certs.d/daemon/{cert,key}.pem
-fi
-
-# >>>
-# >>>
-# >>>
 #    Create certification tar file and install it to ${REMOTE_HOST}
 chmod 0700 ./docker/certs.d/daemon
-cp -p "../hosts/${REMOTE_HOST}/priv-key.pem" ./docker/certs.d/daemon
-cp -p "../hosts/${REMOTE_HOST}/cert.pem"     ./docker/certs.d/daemon
-cp -p "../hosts/${REMOTE_HOST}/${CA_CERT}"   ./docker/certs.d/daemon
-cd ./docker/certs.d/daemon
-ln -s "${REMOTE_HOST}-priv-key.pem" key.pem
-ln -s "${REMOTE_HOST}-cert.pem" cert.pem
-cd ../../..
-FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%6N%z)
-tar -pcf "./${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" ./docker/certs.d/daemon
+cp -p  "../${TEMP_CA_PEM}"        ./docker/certs.d/daemon
+cp -p  "../${TEMP_CERT_PEM}"      ./docker/certs.d/daemon
+cp -p  "../${TEMP_PRIV_KEY_PEM}"  ./docker/certs.d/daemon
+cd     ./docker/certs.d/daemon
+ln -sf "${TEMP_CA_PEM}"        ca.pem
+ln -sf "${TEMP_CERT_PEM}"      cert.pem
+ln -sf "${TEMP_PRIV_KEY_PEM}"  key.pem
+cd     ../../..
+FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%6N-%Z)
+tar -pcf   "./${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" ./docker/certs.d/daemon
 chmod 0600 "./${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
 if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}"
-  scp -p "./${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" "${USER}@${REMOTE_HOST}:/tmp"
+  scp -p   "./${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" "${USER}@${REMOTE_HOST}:/tmp"
 else
-  cp -p "./${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" /tmp
+  cp -p    "./${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" /tmp
 fi
 
 #    Create remote directory /etc/docker/certs.d/daemon
@@ -305,12 +269,12 @@ echo -e "\tRoot access required.\n"
 if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}"
   ssh -t "${USER}@${REMOTE_HOST}" "cd /etc ; sudo tar -pxf /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; sudo chmod 0700 /etc/docker ; sudo chmod 0700 /etc/docker/certs.d ; sudo chown -R root.root ./docker ; rm /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
 else
-  cd /etc
-  sudo tar -pxf "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
+  cd   /etc
+  sudo tar -pxf   "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
   sudo chmod 0700 /etc/docker
   sudo chmod 0700 /etc/docker/certs.d
   sudo chown -R root.root ./docker
-  rm "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
+  rm   "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
 fi
 
 #    Display instructions about certification environment variables
