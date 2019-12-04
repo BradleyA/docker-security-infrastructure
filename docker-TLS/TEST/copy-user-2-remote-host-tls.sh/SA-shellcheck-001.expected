@@ -1,20 +1,26 @@
 
-In SA-shellcheck-001 line 216:
+In SA-shellcheck-001 line 222:
   if $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
      ^-- SC2091: Remove surrounding $() to avoid executing output.
 
 
-In SA-shellcheck-001 line 217:
+In SA-shellcheck-001 line 223:
     ssh -t "${REMOTE_HOST}" " cd ~${TLS_USER} " || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${TLS_USER} user does not have home directory on ${REMOTE_HOST}"  ; exit 1; }
                                   ^-- SC2029: Note that, unescaped, this expands on the client side.
 
 
-In SA-shellcheck-001 line 223:
+In SA-shellcheck-001 line 229:
       ssh -t "${REMOTE_HOST}" " cd ~${TLS_USER} ; tar -xf /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; rm /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; chown -R ${TLS_USER}.${TLS_USER} .docker "
                                     ^-- SC2029: Note that, unescaped, this expands on the client side.
 
 
-In SA-shellcheck-001 line 226:
+In SA-shellcheck-001 line 232:
       ssh -t "${REMOTE_HOST}" "cd ~${TLS_USER}/.. ; sudo tar -pxf /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar -C ${TLS_USER} ; sudo rm /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; sudo chown -R ${TLS_USER}.${TLS_USER} ${TLS_USER}/.docker "
                                    ^-- SC2029: Note that, unescaped, this expands on the client side.
+
+
+In SA-shellcheck-001 line 248:
+    cd $(dirname $(eval echo "~${TLS_USER}"))
+       ^-- SC2046: Quote this to prevent word splitting.
+                 ^-- SC2046: Quote this to prevent word splitting.
 
