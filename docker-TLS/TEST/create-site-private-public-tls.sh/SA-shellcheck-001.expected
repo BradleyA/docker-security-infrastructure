@@ -1,5 +1,5 @@
 
-In SA-shellcheck-001 line 205:
+In SA-shellcheck-001 line 198:
     CERT_CREATE_DATE=$(ls -l "${CA_PRIVATE_CERT}" | sed -e 's/^.*--//')
                        ^-- SC2012: Use find instead of ls to better handle non-alphanumeric filenames.
 
