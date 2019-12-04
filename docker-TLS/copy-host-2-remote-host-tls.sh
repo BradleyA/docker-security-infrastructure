@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.518.1070  2019-12-03T23:02:57.521942-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.517-7-g1b77bc1  
-# 	   update output for shellcheck incidents 
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.519.1071  2019-12-04T10:25:25.303988-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.518  
+# 	   docker-TLS/copy-host-2-remote-host-tls.sh   start update 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.517.1062  2019-12-03T01:39:06.968094-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
 # 	   Production standard 6.3.544  Architecture tree 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.509.1045  2019-11-23T09:57:09.237685-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.508  
@@ -95,6 +95,7 @@ echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 echo    "   CERT_DAEMON_DIR   dockerd certification directory"
 echo    "                     (default ${DEFAULT_CERT_DAEMON_DIR})"
+
 echo -e "\n${BOLD}OPTIONS${NORMAL}"
 echo    "   REMOTE_HOST       Remote host to copy certificates to"
 echo    "                     (default ${DEFAULT_REMOTE_HOST})"
@@ -188,16 +189,17 @@ if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  REMOTE_HOST
 
 #    Check if ${WORKING_DIRECTORY} directory on system
 if [[ ! -d "${WORKING_DIRECTORY}" ]] ; then
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Default directory, ${BOLD}${WORKING_DIRECTORY}${NORMAL}, not on system." 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Default directory, ${BOLD}${YELLOW}${WORKING_DIRECTORY}${NORMAL}, not on system." 1>&2
 #    Help hint
-  echo -e "\n\tRunning ${YELLOW}create-site-private-public-tls.sh${WHITE} will create directories"
+  echo -e "\n\tRunning ${BOLD}${YELLOW}create-site-private-public-tls.sh${NORMAL} will create directories"
   echo -e "\tand site private and public keys.  Then run sudo"
-  echo -e "\t${YELLOW}create-new-openssl.cnf-tls.sh${WHITE} to modify openssl.cnf file."
-  echo -e "\t${BOLD}See DOCUMENTATION link in '${YELLOW}${COMMAND_NAME} --help${WHITE}' for more information.${NORMAL}"
+  echo -e "\t${BOLD}${YELLOW}create-new-openssl.cnf-tls.sh${NORMAL} to modify openssl.cnf file."
+  echo -e "\t${BOLD}See DOCUMENTATION link in '${YELLOW}${COMMAND_NAME} --help${NORMAL}' for more information.${NORMAL}"
   exit 1
 fi
 
 #    Check if ${REMOTE_HOST}-priv-key.pem file on system
+TEMP_PRIV_KEY_PEM=$(ls -l "${WORKING_DIRECTORY}/${REMOTE_HOST}-priv-key.pem" | sed -e 's/^.* -> //')
 if ! [[ -e "${WORKING_DIRECTORY}/${REMOTE_HOST}-priv-key.pem" ]] ; then
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  The ${REMOTE_HOST}-priv-key.pem file was not found in ${WORKING_DIRECTORY}" 1>&2
 #    Help hint
@@ -245,9 +247,9 @@ FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%6N%z)
 echo -e "\n\tBacking up ${REMOTE_HOST}:${CERT_DAEMON_DIR}/.."
 echo -e "\tto $(pwd)\n\tRoot access required.\n"
 if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}"
-  ssh -t "${USER}@${REMOTE_HOST}" "sudo mkdir -p ${CERT_DAEMON_DIR} ; cd /etc ; sudo tar -pcf /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon ; sudo chown ${USER}.${USER} /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; chmod 0400 /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
-  scp -p "${USER}@${REMOTE_HOST}:/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" .
-  ssh -t "${USER}@${REMOTE_HOST}" "rm -f /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
+  ssh -t "${REMOTE_HOST}" "sudo mkdir -p ${CERT_DAEMON_DIR} ; cd /etc ; sudo tar -pcf /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon ; sudo chown ${USER}.${USER} /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; chmod 0400 /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
+  scp -p "${REMOTE_HOST}:/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" .
+  ssh -t "${REMOTE_HOST}" "rm -f /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
 else
 #    Backup ${CERT_DAEMON_DIR}/..
   sudo mkdir -p "${CERT_DAEMON_DIR}"
@@ -261,21 +263,27 @@ fi
 
 tar -pxf "${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
 
+# >>>	I think this is where there is going to be trouble with new directory archiceture 
+# >>>
+
 #    Check if /etc/docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem file exists
 if [[ -e "./docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem" ]] ; then
   echo -e "\n\t/etc/docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem"
   echo -e "\talready exists, ${BOLD}${YELLOW}renaming existing keys${NORMAL} so new keys can be installed.\n"
-  mv "./docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem" "./docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem_${FILE_DATE_STAMP}"
-  mv "./docker/certs.d/daemon/${REMOTE_HOST}-cert.pem" "./docker/certs.d/daemon/${REMOTE_HOST}-cert.pem_${FILE_DATE_STAMP}"
-  mv "./docker/certs.d/daemon/${CA_CERT}" "./docker/certs.d/daemon/${CA_CERT}_${FILE_DATE_STAMP}"
+  mv "./docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem" "./docker/certs.d/daemon/${REMOTE_HOST}-priv-key.pem_rollback_${FILE_DATE_STAMP}"
+  mv "./docker/certs.d/daemon/${REMOTE_HOST}-cert.pem" "./docker/certs.d/daemon/${REMOTE_HOST}-cert.pem_rollback_${FILE_DATE_STAMP}"
+  mv "./docker/certs.d/daemon/${CA_CERT}" "./docker/certs.d/daemon/${CA_CERT}_rollback_${FILE_DATE_STAMP}"
   rm ./docker/certs.d/daemon/{cert,key}.pem
 fi
 
+# >>>
+# >>>
+# >>>
 #    Create certification tar file and install it to ${REMOTE_HOST}
 chmod 0700 ./docker/certs.d/daemon
-cp -p "../${REMOTE_HOST}-priv-key.pem" ./docker/certs.d/daemon
-cp -p "../${REMOTE_HOST}-cert.pem" ./docker/certs.d/daemon
-cp -p ../${CA_CERT} ./docker/certs.d/daemon
+cp -p "../hosts/${REMOTE_HOST}/priv-key.pem" ./docker/certs.d/daemon
+cp -p "../hosts/${REMOTE_HOST}/cert.pem"     ./docker/certs.d/daemon
+cp -p "../hosts/${REMOTE_HOST}/${CA_CERT}"   ./docker/certs.d/daemon
 cd ./docker/certs.d/daemon
 ln -s "${REMOTE_HOST}-priv-key.pem" key.pem
 ln -s "${REMOTE_HOST}-cert.pem" cert.pem
