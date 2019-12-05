@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.521.1077  2019-12-05T11:41:15.790445-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.520-2-g800126c  
-# 	   docker-TLS/copy-host-2-remote-host-tls.sh   changes in architecture during test 
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.520.1074  2019-12-04T16:15:31.189391-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.519-2-g645ca15  
-# 	   docker-TLS/copy-host-2-remote-host-tls.sh   update command to support Architecture changes 
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.522.1079  2019-12-05T12:23:55.989423-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.521-1-gf04c683  
+# 	   docker-TLS/copy-host-2-remote-host-tls.sh   update command to support Production standard 6.3.544 Architecture 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.517.1062  2019-12-03T01:39:06.968094-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
 # 	   Production standard 6.3.544  Architecture tree 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.509.1045  2019-11-23T09:57:09.237685-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.508  
