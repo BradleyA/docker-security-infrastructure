@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-user-tls.sh  3.524.1081  2019-12-05T13:42:38.270718-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.523  
+# 	   docker-TLS/create-user-tls.sh   typo incident during testing on local system 
 # 	docker-TLS/create-user-tls.sh  3.523.1080  2019-12-05T12:58:57.779180-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.522  
 # 	   docker-TLS/create-user-tls.sh   update command to support Production standard 6.3.546  Architecture tree 
 # 	docker-TLS/create-user-tls.sh  3.517.1062  2019-12-03T01:39:07.852679-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
@@ -102,7 +104,7 @@ echo    "                     (default ${DEFAULT_NUMBER_DAYS})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
-###  Production standard 6.3.544  Architecture tree
+###  Production standard 6.3.546  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
@@ -116,8 +118,8 @@ echo    "        ├── ca.pem                         <-- Current site CA ce
 echo    "        └── users/                         <-- Directory for users"                # 3.539
 echo    "            └── <USER>/                    <-- Directory to store user certs"      # 3.539
 echo    "               ├── ca.pem                  <-- CA Cert"                            # 3.544
-echo    "               ├── cert.pem                <-- public key"                         # 3.544
-echo    "               └── priv-key.pem            <-- private key"                        # 3.544
+echo    "               ├── user-cert.pem           <-- public key"                         # 3.546
+echo    "               └── user-priv-key.pem       <-- private key"                        # 3.546
 
 echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
@@ -272,13 +274,13 @@ CA_CERT_START_DATE=$(date -d"${CA_CERT_START_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
 CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${CA_CERT}" -noout -enddate  | cut -d '=' -f 2)
 CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
 cp -pf "${CA_CERT}"                    "users/${TLS_USER}/${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"
-ln -sf "../${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"  "users/${TLS_USER}/${CA_CERT}"
+ln -sf "${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"  "users/${TLS_USER}/${CA_CERT}"
 CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${TLS_USER}-user-cert.pem" -noout -enddate  | cut -d '=' -f 2)
 CA_CERT_EXPIRE_DATE=$(date -d "${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
-mv     "${TLS_USER}-user-cert.pem"     "user/${TLS_USER}/${TLS_USER}-user-cert.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
-mv     "${TLS_USER}-user-priv-key.pem" "user/${TLS_USER}/${TLS_USER}-user-priv-key.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
-ln -sf "../${TLS_USER}-user-cert.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"     "users/${TLS_USER}/${TLS_USER}-user-cert.pem"
-ln -sf "../${TLS_USER}-user-priv-key.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}" "users/${TLS_USER}/${TLS_USER}-user-priv-key.pem"
+mv     "${TLS_USER}-user-cert.pem"     "users/${TLS_USER}/${TLS_USER}-user-cert.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
+mv     "${TLS_USER}-user-priv-key.pem" "users/${TLS_USER}/${TLS_USER}-user-priv-key.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
+ln -sf "${TLS_USER}-user-cert.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"     "users/${TLS_USER}/${TLS_USER}-user-cert.pem"
+ln -sf "${TLS_USER}-user-priv-key.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}" "users/${TLS_USER}/${TLS_USER}-user-priv-key.pem"
 echo   "${BOLD}${CYAN}"
 ls -1 "users/${TLS_USER}" | grep "${CERT_CREATE_DATE}"
 
