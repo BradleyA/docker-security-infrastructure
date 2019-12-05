@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.521.1077  2019-12-05T11:41:15.790445-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.520-2-g800126c  
+# 	   docker-TLS/copy-host-2-remote-host-tls.sh   changes in architecture during test 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.520.1074  2019-12-04T16:15:31.189391-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.519-2-g645ca15  
 # 	   docker-TLS/copy-host-2-remote-host-tls.sh   update command to support Architecture changes 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.517.1062  2019-12-03T01:39:06.968094-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
@@ -178,7 +180,6 @@ while [[ "${#}" -gt 0 ]] ; do
 done
 
 ###
-
 REMOTE_HOST=${1:-${DEFAULT_REMOTE_HOST}}
 #    Order of precedence: CLI argument, environment variable, default code
 if [[ $# -ge  2 ]]  ; then WORKING_DIRECTORY=${2} ; elif [[ "${WORKING_DIRECTORY}" == "" ]] ; then WORKING_DIRECTORY="${DEFAULT_WORKING_DIRECTORY}" ; fi
@@ -199,8 +200,9 @@ if [[ ! -d "${WORKING_DIRECTORY}" ]] ; then
 fi
 
 cd "${WORKING_DIRECTORY}"/hosts/"${REMOTE_HOST}"
-echo -e "\n\t${BOLD}${YELLOW}${USER} user may receive password and passphrase prompts"
-echo -e "\tfrom ${REMOTE_HOST}${NORMAL}.  Running"
+
+echo -e "\n\t${BOLD}${USER} user may receive password and passphrase prompts"
+echo -e "\tfrom host: ${REMOTE_HOST}${NORMAL}.  Running"
 echo -e "\t  ${BOLD}${YELLOW}ssh-copy-id ${USER}@${REMOTE_HOST}${NORMAL}"
 echo -e "\tmay stop some of the prompts.\n"
 
@@ -217,26 +219,26 @@ mkdir -p "${REMOTE_HOST}"
 cd       "${REMOTE_HOST}"
 
 #    Backup ${REMOTE_HOST}:${CERT_DAEMON_DIR}/.. to support rollback
-FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S-%Z)
+FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%2N-%Z)
 echo -e "\n\tBacking up ${REMOTE_HOST}:${CERT_DAEMON_DIR}/.."
 echo -e "\tto $(pwd)\n\t${BOLD}${YELLOW}Root access required.${NORMAL}\n"
 if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}"
-  ssh -t "${REMOTE_HOST}" "sudo mkdir -p ${CERT_DAEMON_DIR} ; cd /etc ; sudo tar -pcf /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon ; sudo chown ${USER}.${USER} /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; chmod 0400 /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
-  scp -p "${REMOTE_HOST}:/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" .
-  ssh -t "${REMOTE_HOST}" "rm -f /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
+  ssh -t "${REMOTE_HOST}" "sudo mkdir -p ${CERT_DAEMON_DIR} ; cd /etc ; sudo tar -pcf /tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon ; sudo chown ${USER}.${USER} /tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ; chmod 0400 /tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+  scp -p "${REMOTE_HOST}:/tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" .
+  ssh -t "${REMOTE_HOST}" "rm -f /tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
 else
 #    Backup ${CERT_DAEMON_DIR}/.. to support rollback
   sudo mkdir -p "${CERT_DAEMON_DIR}"
   cd /etc
-  sudo tar -pcf            "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"  ./docker/certs.d/daemon
-  cd    "${WORKING_DIRECTORY}"/hosts/"${REMOTE_HOST}"/"${REMOTE_HOST}"
-  chown "${USER}.${USER}"  "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
-  chmod 0400               "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
-  cp -p                    "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"  .
-  rm -f                    "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
+  sudo tar -pcf "/tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"  ./docker/certs.d/daemon
+  cd  "${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/${REMOTE_HOST}"
+  sudo chown "${USER}.${USER}"  "/tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+  chmod 0400 "/tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+  cp -p      "/tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"  .
+  rm -f      "/tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
 fi
 
-tar -pxf "${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
+tar -pxf "${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
 
 TEMP_CA_PEM=$(ls -l "${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/ca.pem" | sed -e 's/^.* -> //')
 TEMP_CERT_PEM=$(ls -l "${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/cert.pem" | sed -e 's/^.* -> //')
@@ -244,21 +246,21 @@ TEMP_PRIV_KEY_PEM=$(ls -l "${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/priv-key.pe
 
 #    Create certification tar file and install it to ${REMOTE_HOST}
 chmod 0700 ./docker/certs.d/daemon
-cp -p  "../${TEMP_CA_PEM}"        ./docker/certs.d/daemon
-cp -p  "../${TEMP_CERT_PEM}"      ./docker/certs.d/daemon
-cp -p  "../${TEMP_PRIV_KEY_PEM}"  ./docker/certs.d/daemon
+cp -pf "../${TEMP_CA_PEM}"        ./docker/certs.d/daemon
+cp -pf "../${TEMP_CERT_PEM}"      ./docker/certs.d/daemon
+cp -pf "../${TEMP_PRIV_KEY_PEM}"  ./docker/certs.d/daemon
 cd     ./docker/certs.d/daemon
 ln -sf "${TEMP_CA_PEM}"        ca.pem
 ln -sf "${TEMP_CERT_PEM}"      cert.pem
 ln -sf "${TEMP_PRIV_KEY_PEM}"  key.pem
 cd     ../../..
-FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%6N-%Z)
-tar -pcf   "./${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" ./docker/certs.d/daemon
-chmod 0600 "./${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
+FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%2N-%Z)
+tar -pcf   "./${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" ./docker/certs.d/daemon
+chmod 0600 "./${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
 if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}"
-  scp -p   "./${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" "${USER}@${REMOTE_HOST}:/tmp"
+  scp -p   "./${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" "${USER}@${REMOTE_HOST}:/tmp"
 else
-  cp -p    "./${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" /tmp
+  cp -p    "./${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" /tmp
 fi
 
 #    Create remote directory /etc/docker/certs.d/daemon
@@ -267,14 +269,14 @@ fi
 echo -e "\n\tCopying dockerd certification to ${REMOTE_HOST}"
 echo -e "\tRoot access required.\n"
 if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}"
-  ssh -t "${USER}@${REMOTE_HOST}" "cd /etc ; sudo tar -pxf /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; sudo chmod 0700 /etc/docker ; sudo chmod 0700 /etc/docker/certs.d ; sudo chown -R root.root ./docker ; rm /tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
+  ssh -t "${USER}@${REMOTE_HOST}" "cd /etc ; sudo tar -pxf /tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ; sudo chmod 0700 /etc/docker ; sudo chmod 0700 /etc/docker/certs.d ; sudo chown -R root.root ./docker ; rm /tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
 else
   cd   /etc
-  sudo tar -pxf   "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
+  sudo tar -pxf   "/tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
   sudo chmod 0700 /etc/docker
   sudo chmod 0700 /etc/docker/certs.d
   sudo chown -R root.root ./docker
-  rm   "/tmp/${REMOTE_HOST}-${FILE_DATE_STAMP}.tar"
+  rm   "/tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
 fi
 
 #    Display instructions about certification environment variables
