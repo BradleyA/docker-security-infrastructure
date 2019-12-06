@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-user-tls.sh  3.525.1082  2019-12-05T23:09:33.846178-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.524  
+# 	   docker-TLS/create-user-tls.sh   complete Production standard 6.3.546  Architecture changes 
 # 	docker-TLS/create-user-tls.sh  3.524.1081  2019-12-05T13:42:38.270718-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.523  
 # 	   docker-TLS/create-user-tls.sh   typo incident during testing on local system 
 # 	docker-TLS/create-user-tls.sh  3.523.1080  2019-12-05T12:58:57.779180-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.522  
@@ -256,8 +258,9 @@ echo -e "\tuser ${BOLD}${TLS_USER}${NORMAL}"
 openssl req -subj '/subjectAltName=client' -new -key "${TLS_USER}-user-priv-key.pem" -out "${TLS_USER}-user.csr"
 
 #    Create and sign a ${NUMBER_DAYS} day certificate for user ${TLS_USER}
-echo -e "\n\tCreate and sign a  ${BOLD}${YELLOW}${NUMBER_DAYS}${NORMAL}  day certificate for user ${TLS_USER}."
-openssl x509 -req -days "${NUMBER_DAYS}" -sha256 -in "${TLS_USER}-user.csr" -CA ca.pem -CAkey .private/ca-priv-key.pem -CAcreateserial -out "${TLS_USER}-user-cert.pem" || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Wrong pass phrase for .private/ca-priv-key.pem:" ; exit 1; }
+SITE_CA_CERT=$(ls -l "${CA_CERT}" | sed -e 's/^.* -> site\///')
+echo -e "\n\tCreate and sign a  ${BOLD}${YELLOW}${NUMBER_DAYS}${NORMAL}  day certificate for user ${BOLD}${YELLOW}${TLS_USER}${NORMAL}\n\trequires the CA Private Key pass phrase for\n\t${BOLD}${YELLOW}${SITE_CA_CERT}${NORMAL}"
+openssl x509 -req -days "${NUMBER_DAYS}" -sha256 -in "${TLS_USER}-user.csr" -CA ca.pem -CAkey ".private/${CA_PRIVATE_CERT}" -CAcreateserial -out "${TLS_USER}-user-cert.pem" || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Wrong pass phrase for .private/${CA_PRIVATE_CERT}:" ; exit 1; }
 
 #    Removing certificate signing requests (CSR)
 echo -e "\n\tRemoving certificate signing requests (CSR) and set file permissions"
@@ -268,19 +271,19 @@ chmod 0444  "${TLS_USER}-user-cert.pem"
 chmod 0400  "${TLS_USER}-user-priv-key.pem"
 
 #    Place a copy in ${WORKING_DIRECTORY}/users/${TLS_USER} directory
+SITE_CA_CERT_CREATE_DATE=$(echo "${SITE_CA_CERT}" | sed -e 's/---.*$//' | sed -e 's/^.*--//')
 CERT_CREATE_DATE=$(date +%Y-%m-%dT%H:%M:%S-%Z)
-CA_CERT_START_DATE_TEMP=$(openssl x509 -in "${CA_CERT}" -noout -startdate | cut -d '=' -f 2)
-CA_CERT_START_DATE=$(date -d"${CA_CERT_START_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
-CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${CA_CERT}" -noout -enddate  | cut -d '=' -f 2)
-CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
-cp -pf "${CA_CERT}"                    "users/${TLS_USER}/${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"
-ln -sf "${CA_CERT}--${CERT_CREATE_DATE}---${CA_CERT_START_DATE}--${CA_CERT_EXPIRE_DATE}"  "users/${TLS_USER}/${CA_CERT}"
-CA_CERT_EXPIRE_DATE_TEMP=$(openssl x509 -in "${TLS_USER}-user-cert.pem" -noout -enddate  | cut -d '=' -f 2)
-CA_CERT_EXPIRE_DATE=$(date -d "${CA_CERT_EXPIRE_DATE_TEMP}" +%Y-%m-%dT%H:%M:%S-%Z)
-mv     "${TLS_USER}-user-cert.pem"     "users/${TLS_USER}/${TLS_USER}-user-cert.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
-mv     "${TLS_USER}-user-priv-key.pem" "users/${TLS_USER}/${TLS_USER}-user-priv-key.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
-ln -sf "${TLS_USER}-user-cert.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"     "users/${TLS_USER}/${TLS_USER}-user-cert.pem"
-ln -sf "${TLS_USER}-user-priv-key.pem---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}" "users/${TLS_USER}/${TLS_USER}-user-priv-key.pem"
+NUMBER_DAYS="+${NUMBER_DAYS} days"
+CERT_EXPIRE_DATE=$(date -d "${NUMBER_DAYS}" +%Y-%m-%dT%H:%M:%S-%Z)
+if [[  "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  SITE_CA_CERT >${SITE_CA_CERT}< SITE_CA_CERT_CREATE_DATE >${SITE_CA_CERT_CREATE_DATE}< CERT_CREATE_DATE >${CERT_CREATE_DATE}< NUMBER_DAYS >${NUMBER_DAYS}< CERT_EXPIRE_DATE >${CERT_EXPIRE_DATE}<" 1>&2 ; fi
+cp -fp "site/${SITE_CA_CERT}"          "users/${TLS_USER}/${SITE_CA_CERT}"
+mv     "${TLS_USER}-user-cert.pem"     "users/${TLS_USER}/${TLS_USER}-user-cert.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"
+mv     "${TLS_USER}-user-priv-key.pem" "users/${TLS_USER}/${TLS_USER}-user-priv-key.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"
+cd     "users/${TLS_USER}"
+ln -sf "${SITE_CA_CERT}"  "${CA_CERT}"
+ln -sf "${TLS_USER}-user-cert.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"     "user-cert.pem"
+ln -sf ${TLS_USER}-user-priv-key.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"  "user-priv-key.pem"
+
 echo   "${BOLD}${CYAN}"
 ls -1 "users/${TLS_USER}" | grep "${CERT_CREATE_DATE}"
 

@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.525.1082  2019-12-05T23:09:33.721023-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.524  
+# 	   docker-TLS/create-user-tls.sh   complete Production standard 6.3.546  Architecture changes 
 # 	docker-TLS/create-host-tls.sh  3.517.1062  2019-12-03T01:39:07.345120-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
 # 	   Production standard 6.3.544  Architecture tree 
 # 	docker-TLS/create-host-tls.sh  3.512.1053  2019-11-26T16:10:09.194940-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.511-1-g2e0252d  
@@ -278,7 +280,7 @@ rm    ca.srl
 chmod 0400 "${FQDN}-priv-key.pem"
 chmod 0444 "${FQDN}-cert.pem"
 
-#    Place a copy in ${WORKING_DIRECTORY}/${FQDN} directory
+#    Place a copy in ${WORKING_DIRECTORY}/hosts/${FQDN} directory
 SITE_CA_CERT_CREATE_DATE=$(echo "${SITE_CA_CERT}" | sed -e 's/---.*$//' | sed -e 's/^.*--//')
 CERT_CREATE_DATE=$(date +%Y-%m-%dT%H:%M:%S-%Z)
 NUMBER_DAYS="+${NUMBER_DAYS} days"
