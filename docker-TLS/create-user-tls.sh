@@ -1,8 +1,8 @@
 #!/bin/bash
+# 	docker-TLS/create-user-tls.sh  3.526.1084  2019-12-05T23:31:12.094438-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.525-1-ge1f86cf  
+# 	   3.527 
 # 	docker-TLS/create-user-tls.sh  3.525.1082  2019-12-05T23:09:33.846178-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.524  
 # 	   docker-TLS/create-user-tls.sh   complete Production standard 6.3.546  Architecture changes 
-# 	docker-TLS/create-user-tls.sh  3.524.1081  2019-12-05T13:42:38.270718-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.523  
-# 	   docker-TLS/create-user-tls.sh   typo incident during testing on local system 
 # 	docker-TLS/create-user-tls.sh  3.523.1080  2019-12-05T12:58:57.779180-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.522  
 # 	   docker-TLS/create-user-tls.sh   update command to support Production standard 6.3.546  Architecture tree 
 # 	docker-TLS/create-user-tls.sh  3.517.1062  2019-12-03T01:39:07.852679-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
@@ -282,10 +282,10 @@ mv     "${TLS_USER}-user-priv-key.pem" "users/${TLS_USER}/${TLS_USER}-user-priv-
 cd     "users/${TLS_USER}"
 ln -sf "${SITE_CA_CERT}"  "${CA_CERT}"
 ln -sf "${TLS_USER}-user-cert.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"     "user-cert.pem"
-ln -sf ${TLS_USER}-user-priv-key.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}"  "user-priv-key.pem"
-
+ln -sf "${TLS_USER}-user-priv-key.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}--${CERT_EXPIRE_DATE}" "user-priv-key.pem"
 echo   "${BOLD}${CYAN}"
-ls -1 "users/${TLS_USER}" | grep "${CERT_CREATE_DATE}"
+ls -1  "${SITE_CA_CERT}"
+ls -1  | grep "${CERT_CREATE_DATE}"
 
 #    Help hint
 echo -e "\n\t${NORMAL}Use script ${BOLD}${YELLOW}copy-user-2-remote-host-tls.sh${NORMAL} to update remote host.\n"
