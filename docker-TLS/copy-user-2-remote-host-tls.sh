@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.529.1088  2019-12-06T23:26:53.026219-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.528  
+# 	   testing 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.528.1087  2019-12-06T22:26:48.259823-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.527-1-g7c2c902  
 # 	   docker-TLS/copy-user-2-remote-host-tls.sh   Check if ${TLS_USER} == ${USER} 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.527.1085  2019-12-06T22:05:51.130891-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.526  
@@ -263,11 +265,11 @@ else
 #    Check if ${TLS_USER} == ${USER} because sudo is not required for user copying their certs
   if [[ "${TLS_USER}" == "${USER}" ]] ; then
     #    Backup ${TLS_USER}/.docker to support rollback
-    mkdir -p  ~"${TLS_USER}/.docker"
     cd ~"${TLS_USER}"
+    mkdir -p ".docker"
     tar -pcf "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"  .docker
     cd  "${WORKING_DIRECTORY}/users/${TLS_USER}/${TLS_USER}"
-    sudo chown "${USER}.${USER}"  "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+    chown "${USER}.${USER}"  "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
     chmod 0400 "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
     cp -p      "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"  .
     rm -f      "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"

@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.529.1088  2019-12-06T23:26:52.852689-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.528  
+# 	   testing 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.527.1085  2019-12-06T22:05:50.957649-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.526  
 # 	   update command to support Production standard 6.3.544 Architecture 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.522.1079  2019-12-05T12:23:55.989423-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.521-1-gf04c683  
@@ -274,8 +276,10 @@ cp -pf "../${TEMP_CERT_PEM}"      ./docker/certs.d/daemon
 cp -pf "../${TEMP_PRIV_KEY_PEM}"  ./docker/certs.d/daemon
 cd     ./docker/certs.d/daemon
 ln -sf "${TEMP_CA_PEM}"        ca.pem
-ln -sf "${TEMP_CERT_PEM}"      cert.pem
-ln -sf "${TEMP_PRIV_KEY_PEM}"  key.pem
+#	ln -sf "${TEMP_CERT_PEM}"      cert.pem                #  default
+#	ln -sf "${TEMP_PRIV_KEY_PEM}"  key.pem                 #  default
+ln -sf "${TEMP_CERT_PEM}"      ${REMOTE_HOST}-cert.pem         #  docker-security-infrastructure/dockerd-configuration-options/ uses these links
+ln -sf "${TEMP_PRIV_KEY_PEM}"  ${REMOTE_HOST}-priv-key.pem     #  docker-security-infrastructure/dockerd-configuration-options/ uses these links
 cd     ../../..
 FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%2N-%Z)
 tar -pcf   "./${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" ./docker/certs.d/daemon
