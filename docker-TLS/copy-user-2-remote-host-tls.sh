@@ -1,8 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.523.1080  2019-12-05T12:58:57.597347-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.522  
-# 	   docker-TLS/create-user-tls.sh   update command to support Production standard 6.3.546  Architecture tree 
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.517.1062  2019-12-03T01:39:07.219234-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
-# 	   Production standard 6.3.544  Architecture tree 
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.527.1085  2019-12-06T22:05:51.130891-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.526  
+# 	   update command to support Production standard 6.3.544 Architecture 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.509.1045  2019-11-23T09:57:09.484459-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.508  
 # 	   Production standard 8.3.541 --usage 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.482.1006  2019-10-24T21:35:12.026886-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.481  
@@ -107,7 +105,7 @@ echo    "                     (default ${DEFAULT_REMOTE_HOST})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
-###  Production standard 6.3.544  Architecture tree
+###  Production standard  6.3.546  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
@@ -118,8 +116,8 @@ echo    "    └── docker-ca/                         <-- Working directory 
 echo    "        └── users/                         <-- Directory for users"                # 3.539
 echo    "            └── <USER>/                    <-- Directory to store user certs"      # 3.539
 echo    "               ├── ca.pem                  <-- CA Cert"                            # 3.544
-echo    "               ├── cert.pem                <-- public key"                         # 3.544
-echo -e "               └── priv-key.pem            <-- private key\n"                      # 3.544
+echo    "               ├── user-cert.pem           <-- public key"                         # 3.546
+echo -e "               └── user-priv-key.pem       <-- private key\n"                      # 3.546
 # >>>   FUTURE  open ticket on github
 echo    "/usr/local/data/                           <-- <DATA_DIR>"
 echo    "└── <CLUSTER>/                             <-- <CLUSTER>"
@@ -139,7 +137,7 @@ echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/mast
 echo -e "\n${BOLD}EXAMPLES${NORMAL}"
 echo    "   Administrator copies TLS keys and CA from /usr/local/north-office/certs"
 echo    "   local working directory to remote host, two.cptx86.com, for user bob"
-echo -e "\t${BOLD}${0} bob two.cptx86.com /usr/local/north-office/certs${NORMAL}"
+echo -e "\t${BOLD}${COMMAND_NAME} bob two.cptx86.com /usr/local/north-office/certs${NORMAL}"
 }
 
 #    Date and time function ISO 8601
@@ -202,75 +200,133 @@ if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  TLS_USER >$
 if [[ ! -d "${WORKING_DIRECTORY}" ]] ; then
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Default directory, ${BOLD}${WORKING_DIRECTORY}${NORMAL}, not on system." 1>&2
 #    Help hint
-  echo -e "\n\tRunning create-site-private-public-tls.sh will create directories"
+  echo -e "\n\tRunning ${BOLD}${YELLOW}create-site-private-public-tls.sh${NORMAL} will create directories"
   echo -e "\tand site private and public keys.  Then run sudo"
-  echo -e "\tcreate-new-openssl.cnf-tls.sh to modify openssl.cnf file."
-  echo -e "\t${BOLD}See DOCUMENTATION link in '${SCRIPT_NAME} --help' for more information.${NORMAL}"
+  echo -e "\t${BOLD}${YELLOW}create-new-openssl.cnf-tls.sh${NORMAL} to modify openssl.cnf file."
+  echo -e "\t${BOLD}See DOCUMENTATION link in '${COMMAND_NAME} --help' for more information.${NORMAL}"
   exit 1
 fi
 
-#    Check if ${TLS_USER}-user-priv-key.pem file on system
-if ! [[ -e "${WORKING_DIRECTORY}/${TLS_USER}-user-priv-key.pem" ]] ; then
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  The ${YELLOW}${TLS_USER}-user-priv-key.pem${WHITE} file was not found in ${WORKING_DIRECTORY}" 1>&2
+#    Check if ${CA_CERT} file on system
+if ! [[ -e "${WORKING_DIRECTORY}/users/${TLS_USER}/${CA_CERT}" ]] ; then
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Site public key ${WORKING_DIRECTORY}/users/${TLS_USER}/${CA_CERT}\n  is not in this location.\n  Enter ${COMMAND_NAME} --help for more information." 1>&2
 #    Help hint
-  echo -e "\n\tRunning ${BOLD}${YELLOW}create-user-tls.sh${NORMAL} will create public and private keys."
+  echo -e "\n\tEither link ${CA_CERT} to a file in site directory"
+  echo -e "\t${WORKING_DIRECTORY}/site/"
+  echo -e "\tor run ${YELLOW}create-site-private-public-tls.sh${WHITE} and sudo"
+  echo -e "\t${YELLOW}create-new-openssl.cnf-tls.sh${WHITE} to create a new key."
   exit 1
 fi
 
-cd "${WORKING_DIRECTORY}"
+#    Check if user-priv-key.pem file on system
+if ! [[ -e "${WORKING_DIRECTORY}/users/${TLS_USER}/user-priv-key.pem" ]] ; then
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  The ${YELLOW}user-priv-key.pem${WHITE} file was not found in ${WORKING_DIRECTORY}/users/${TLS_USER}/" 1>&2
+#    Help hint
+  echo -e "\n\tRunning ${BOLD}${YELLOW}create-user-tls.sh${NORMAL} will create public and private keys.\n\tEnter ${COMMAND_NAME} --help for more information."
+  exit 1
+fi
+
 echo -e "\n\t${BOLD}${YELLOW}${USER}${NORMAL} user may receive password and passphrase prompts"
 echo -e "\tfrom ${REMOTE_HOST}.  Running"
 echo -e "\t  ${BOLD}${YELLOW}ssh-copy-id ${USER}@${REMOTE_HOST}${NORMAL}"
 echo -e "\tmay stop some of the prompts.\n"
 
-#    Create tar of files
-echo -e "\tCreate directory, change file permissions, and copy TLS keys to ${TLS_USER}@${REMOTE_HOST}." 1>&2
-mkdir -p "${TLS_USER}/.docker"
-chmod 0755 "${TLS_USER}"
-chmod 0700 "${TLS_USER}/.docker"
-cp -p ca.pem "${TLS_USER}/.docker"
-cp -p "${TLS_USER}-user-cert.pem"  "${TLS_USER}/.docker"
-cp -p "${TLS_USER}-user-priv-key.pem"  "${TLS_USER}/.docker"
-FILE_DATE_STAMP=$(date +%Y-%m-%dT%H:%M:%S.%6N%:z)
-cd "${TLS_USER}/.docker"
-ln -s "${TLS_USER}-user-cert.pem"  cert.pem
-ln -s "${TLS_USER}-user-priv-key.pem"  key.pem
-cd ..
-tar -pcf "./${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" .docker
+if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}"
+#    Check if ${REMOTE_HOST} is available on ssh port
+  if ! $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
+    new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${REMOTE_HOST} not responding on ssh port." 1>&2
+    exit 1
+  fi
+fi
+
+#    Create working directory ${WORKING_DIRECTORY}/users/${TLS_USER}/${TLS_USER}
+cd "${WORKING_DIRECTORY}/users/${TLS_USER}"
+mkdir -p "${TLS_USER}"
+cd       "${TLS_USER}"
+
+#    Check if ${WORKING_DIRECTORY}/users/${TLS_USER}/${TLS_USER}/.docker directory on system from a previous backup
+if [[ -d ".docker" ]] ; then
+  rm -rf .docker
+fi
+
+#    Backup ${REMOTE_HOST}:${CERT_DAEMON_DIR}/.. to support rollback
+FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%2N-%Z)
+echo -e "\n\tBacking up ${REMOTE_HOST}:~${TLS_USER}/.docker"
+echo -e "\tto $(pwd)\n\t${BOLD}${YELLOW}Root access required.${NORMAL}\n"
+if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}"
+  ssh -t "${REMOTE_HOST}" "sudo mkdir -p ~${TLS_USER}/.docker ; cd ~"${TLS_USER}" ; sudo tar -pcf /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar .docker ; sudo chown ${USER}.${USER} /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ; chmod 0400 /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+  scp -p "${REMOTE_HOST}:/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" .
+  ssh -t "${REMOTE_HOST}" "rm -f /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+else
+#    Backup ${TLS_USER}/.docker to support rollback
+  sudo mkdir -p  ~"${TLS_USER}/.docker"
+  cd ~"${TLS_USER}"
+  sudo tar -pcf "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"  .docker
+  cd  "${WORKING_DIRECTORY}/users/${TLS_USER}/${TLS_USER}"
+  sudo chown "${USER}.${USER}"  "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+  chmod 0400 "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+  cp -p      "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"  .
+  rm -f      "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+fi
+
+tar -pxf "${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+
+TEMP_CA_PEM=$(ls -l "${WORKING_DIRECTORY}/users/${TLS_USER}/ca.pem" | sed -e 's/^.* -> //')
+TEMP_USER_CERT_PEM=$(ls -l "${WORKING_DIRECTORY}/users/${TLS_USER}/user-cert.pem" | sed -e 's/^.* -> //')
+TEMP_USER_PRIV_KEY_PEM=$(ls -l "${WORKING_DIRECTORY}/users/${TLS_USER}/user-priv-key.pem" | sed -e 's/^.* -> //')
+
+#    Create certification tar file and install it to ${REMOTE_HOST}
+chmod 0700 .docker
+cp -pf "../${TEMP_CA_PEM}"             .docker
+cp -pf "../${TEMP_USER_CERT_PEM}"      .docker
+cp -pf "../${TEMP_USER_PRIV_KEY_PEM}"  .docker
+cd     .docker
+ln -sf "${TEMP_CA_PEM}"             ca.pem
+ln -sf "${TEMP_USER_CERT_PEM}"      cert.pem
+ln -sf "${TEMP_USER_PRIV_KEY_PEM}"  key.pem
+cd     ..
+FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%2N-%Z)
+tar -pcf   "./${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" .docker
+chmod 0600 "./${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}"
+  scp -p   "./${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" "${USER}@${REMOTE_HOST}:/tmp"
+else
+  cp -p    "./${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" /tmp
+fi
 
 if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #5 Not "${LOCALHOST}"
 #    Check if ${REMOTE_HOST} is available on ssh port
   if $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
-    ssh -t "${REMOTE_HOST}" " cd ~${TLS_USER} " || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${TLS_USER} user does not have home directory on ${REMOTE_HOST}"  ; exit 1; }
+    ssh -t "${REMOTE_HOST}" "cd ~${TLS_USER}" || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${TLS_USER} user does not have home directory on ${REMOTE_HOST}"  ; exit 1; }
     echo -e "\tTransfer TLS keys to ${TLS_USER}@${REMOTE_HOST}." 1>&2
-    scp -p "./${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar" "${REMOTE_HOST}:/tmp"
+    scp -p "./${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" "${REMOTE_HOST}:/tmp"
 
 #    Check if ${TLS_USER} == ${USER} because sudo is not required for user copying their certs
     if [[ "${TLS_USER}" == "${USER}" ]] ; then
-      ssh -t "${REMOTE_HOST}" " cd ~${TLS_USER} ; tar -xf /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; rm /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; chown -R ${TLS_USER}.${TLS_USER} .docker "
+      ssh -t "${REMOTE_HOST}" "cd ~${TLS_USER} ; tar -pxf /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ; rm /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ; chown -R ${TLS_USER}.${TLS_USER} .docker "
     else
       new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  ${USER}, sudo password is required to install other user, ${TLS_USER}, certs on host, ${REMOTE_HOST}." 1>&2
-      ssh -t "${REMOTE_HOST}" "cd ~${TLS_USER}/.. ; sudo tar -pxf /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar -C ${TLS_USER} ; sudo rm /tmp/${TLS_USER}-${REMOTE_HOST}-${FILE_DATE_STAMP}.tar ; sudo chown -R ${TLS_USER}.${TLS_USER} ${TLS_USER}/.docker "
+      ssh -t "${REMOTE_HOST}" "cd ~${TLS_USER} ; sudo tar -pxf /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ; sudo rm /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ; sudo chown -R ${TLS_USER}.${TLS_USER} .docker "
     fi
   else
     new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${REMOTE_HOST} not responding on ssh port." 1>&2
     exit 1
   fi
 else
-  cp -p ./"${TLS_USER}"-"${REMOTE_HOST}"-"${FILE_DATE_STAMP}".tar /tmp
+  cp -p "./${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" /tmp
 
 #    Check if ${TLS_USER} == ${USER} because sudo is not required for user copying their certs
   if [[ "${TLS_USER}" == "${USER}" ]] ; then
     cd "${HOME}"
-    tar -xf /tmp/"${TLS_USER}"-"${REMOTE_HOST}"-"${FILE_DATE_STAMP}".tar
+    tar -pxf "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
     chown -R "${TLS_USER}"."${TLS_USER}" .docker
   else
     new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  ${USER}, sudo password is required to install other user, ${TLS_USER}, certs on host, ${REMOTE_HOST}." 1>&2
     cd $(dirname $(eval echo "~${TLS_USER}"))
-    sudo tar -pxf /tmp/"${TLS_USER}"-"${REMOTE_HOST}"-"${FILE_DATE_STAMP}".tar -C "${TLS_USER}"
-    sudo chown -R "${TLS_USER}"."${TLS_USER}" "${TLS_USER}"/.docker
+    sudo tar -pxf "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" -C "${TLS_USER}"
+    sudo chown -R "${TLS_USER}"."${TLS_USER}" .docker
   fi
-  rm /tmp/"${TLS_USER}"-"${REMOTE_HOST}"-"${FILE_DATE_STAMP}".tar
+  rm "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
 fi
 
 #    Display instructions about cert environment variables
@@ -281,6 +337,7 @@ echo -e "\tlogs into the computer system.  Edit your .bashrc file (or the"
 echo -e "\tcorrect shell if different) and prepend the following two lines."
 echo -e "\t  ${YELLOW}export DOCKER_HOST=tcp://$(hostname -f):2376"
 echo -e "\t  export DOCKER_TLS_VERIFY=1${WHITE}"
+echo -e "\tExample: https://github.com/BradleyA/user-files/blob/master/.bashrc"
 
 new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished....." 1>&2
 ###

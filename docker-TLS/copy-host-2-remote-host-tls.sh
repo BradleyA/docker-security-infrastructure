@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.527.1085  2019-12-06T22:05:50.957649-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.526  
+# 	   update command to support Production standard 6.3.544 Architecture 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.522.1079  2019-12-05T12:23:55.989423-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.521-1-gf04c683  
 # 	   docker-TLS/copy-host-2-remote-host-tls.sh   update command to support Production standard 6.3.544 Architecture 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.517.1062  2019-12-03T01:39:06.968094-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
@@ -197,7 +199,24 @@ if [[ ! -d "${WORKING_DIRECTORY}" ]] ; then
   exit 1
 fi
 
-cd "${WORKING_DIRECTORY}"/hosts/"${REMOTE_HOST}"
+#    Check if ${CA_CERT} file on system
+if ! [[ -e "${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/${CA_CERT}" ]] ; then
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Site public key ${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/${CA_CERT}\n  is not in this location.\n  Enter ${COMMAND_NAME} --help for more information." 1>&2
+#    Help hint
+  echo -e "\n\tEither link ${CA_CERT} to a file in site directory"
+  echo -e "\t${WORKING_DIRECTORY}/site/"
+  echo -e "\tor run ${YELLOW}create-site-private-public-tls.sh${WHITE} and sudo"
+  echo -e "\t${YELLOW}create-new-openssl.cnf-tls.sh${WHITE} to create a new key."
+  exit 1
+fi
+
+#    Check if priv-key.pem file on system
+if ! [[ -e "${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/priv-key.pem" ]] ; then
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  The ${YELLOW}priv-key.pem${WHITE} file was not found in ${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/" 1>&2
+#    Help hint
+  echo -e "\n\tRunning ${BOLD}${YELLOW}create-user-tls.sh${NORMAL} will create public and private keys.\n\tEnter ${COMMAND_NAME} --help for more information."
+  exit 1
+fi
 
 echo -e "\n\t${BOLD}${USER} user may receive password and passphrase prompts"
 echo -e "\tfrom host: ${REMOTE_HOST}${NORMAL}.  Running"
@@ -213,8 +232,14 @@ if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}
 fi
 
 #    Create working directory ${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/${REMOTE_HOST}
+cd "${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}"
 mkdir -p "${REMOTE_HOST}"
 cd       "${REMOTE_HOST}"
+
+#    Check if ${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/${REMOTE_HOST}/docker directory on system from a previous backup
+if [[ -d "docker" ]] ; then
+  rm -r docker
+fi
 
 #    Backup ${REMOTE_HOST}:${CERT_DAEMON_DIR}/.. to support rollback
 FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%2N-%Z)
