@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.530.1089  2019-12-07T13:09:51.747058-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.529  
+# 	   docker-TLS/copy-host-2-remote-host-tls.sh  add default standard for Docker Swarm standalone manager 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.529.1088  2019-12-06T23:26:52.852689-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.528  
 # 	   testing 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.527.1085  2019-12-06T22:05:50.957649-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.526  
@@ -276,8 +278,8 @@ cp -pf "../${TEMP_CERT_PEM}"      ./docker/certs.d/daemon
 cp -pf "../${TEMP_PRIV_KEY_PEM}"  ./docker/certs.d/daemon
 cd     ./docker/certs.d/daemon
 ln -sf "${TEMP_CA_PEM}"        ca.pem
-#	ln -sf "${TEMP_CERT_PEM}"      cert.pem                #  default
-#	ln -sf "${TEMP_PRIV_KEY_PEM}"  key.pem                 #  default
+ln -sf "${TEMP_CERT_PEM}"      cert.pem     #  default  Repeat this on each host that will be running a Docker Swarm standalone manager
+ln -sf "${TEMP_PRIV_KEY_PEM}"  key.pem      #  default  Repeat this on each host that will be running a Docker Swarm standalone manager
 ln -sf "${TEMP_CERT_PEM}"      ${REMOTE_HOST}-cert.pem         #  docker-security-infrastructure/dockerd-configuration-options/ uses these links
 ln -sf "${TEMP_PRIV_KEY_PEM}"  ${REMOTE_HOST}-priv-key.pem     #  docker-security-infrastructure/dockerd-configuration-options/ uses these links
 cd     ../../..
