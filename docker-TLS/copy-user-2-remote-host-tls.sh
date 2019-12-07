@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.528.1087  2019-12-06T22:26:48.259823-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.527-1-g7c2c902  
+# 	   docker-TLS/copy-user-2-remote-host-tls.sh   Check if ${TLS_USER} == ${USER} 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.527.1085  2019-12-06T22:05:51.130891-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.526  
 # 	   update command to support Production standard 6.3.544 Architecture 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.509.1045  2019-11-23T09:57:09.484459-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.508  
@@ -258,15 +260,30 @@ if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}
   scp -p "${REMOTE_HOST}:/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" .
   ssh -t "${REMOTE_HOST}" "rm -f /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
 else
-#    Backup ${TLS_USER}/.docker to support rollback
-  sudo mkdir -p  ~"${TLS_USER}/.docker"
-  cd ~"${TLS_USER}"
-  sudo tar -pcf "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"  .docker
-  cd  "${WORKING_DIRECTORY}/users/${TLS_USER}/${TLS_USER}"
-  sudo chown "${USER}.${USER}"  "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
-  chmod 0400 "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
-  cp -p      "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"  .
-  rm -f      "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+#    Check if ${TLS_USER} == ${USER} because sudo is not required for user copying their certs
+  if [[ "${TLS_USER}" == "${USER}" ]] ; then
+    #    Backup ${TLS_USER}/.docker to support rollback
+    mkdir -p  ~"${TLS_USER}/.docker"
+    cd ~"${TLS_USER}"
+    tar -pcf "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"  .docker
+    cd  "${WORKING_DIRECTORY}/users/${TLS_USER}/${TLS_USER}"
+    sudo chown "${USER}.${USER}"  "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+    chmod 0400 "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+    cp -p      "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"  .
+    rm -f      "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+  else
+    #    Backup ${TLS_USER}/.docker to support rollback
+    sudo mkdir -p   ~"${TLS_USER}/.docker"
+    sudo chown "${TLS_USER}"."${TLS_USER}" ~"${TLS_USER}/.docker"
+    sudo chmod 0700 ~"${TLS_USER}/.docker"
+    cd ~"${TLS_USER}"
+    sudo tar -pcf "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"  .docker
+    cd  "${WORKING_DIRECTORY}/users/${TLS_USER}/${TLS_USER}"
+    sudo chown "${USER}.${USER}"  "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+    chmod 0400 "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+    cp -p      "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"  .
+    rm -f      "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+  fi
 fi
 
 tar -pxf "${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
