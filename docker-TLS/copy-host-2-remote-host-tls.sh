@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.532.1092  2019-12-08T11:06:32.776224-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.531-1-g6b7cc9c  
+# 	   docker-TLS/copy-host-2-remote-host-tls.sh  quote variable 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.531.1090  2019-12-07T18:53:13.042839-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.530  
 # 	   docker-TLS/copy-host-2-remote-host-tls.sh   Production standard 6.3.547  Architecture tree 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.509.1045  2019-11-23T09:57:09.237685-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.508  
@@ -272,8 +274,8 @@ cd     ./docker/certs.d/daemon
 ln -sf "${TEMP_CA_PEM}"        ca.pem
 ln -sf "${TEMP_CERT_PEM}"      cert.pem     #  default  Repeat this on each host that will be running a Docker Swarm standalone manager
 ln -sf "${TEMP_PRIV_KEY_PEM}"  key.pem      #  default  Repeat this on each host that will be running a Docker Swarm standalone manager
-ln -sf "${TEMP_CERT_PEM}"      ${REMOTE_HOST}-cert.pem         #  docker-security-infrastructure/dockerd-configuration-options/ uses these links
-ln -sf "${TEMP_PRIV_KEY_PEM}"  ${REMOTE_HOST}-priv-key.pem     #  docker-security-infrastructure/dockerd-configuration-options/ uses these links
+ln -sf "${TEMP_CERT_PEM}"      "${REMOTE_HOST}-cert.pem"      #  docker-security-infrastructure/dockerd-configuration-options/ uses these links
+ln -sf "${TEMP_PRIV_KEY_PEM}"  "${REMOTE_HOST}-priv-key.pem"  #  docker-security-infrastructure/dockerd-configuration-options/ uses these links
 cd     ../../..
 FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%2N-%Z)
 tar -pcf   "./${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" ./docker/certs.d/daemon
