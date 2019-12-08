@@ -1,35 +1,35 @@
 
-In SA-shellcheck-001 line 196:
+In SA-shellcheck-001 line 213:
   if ! $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
        ^-- SC2091: Remove surrounding $() to avoid executing output.
 
 
-In SA-shellcheck-001 line 211:
+In SA-shellcheck-001 line 234:
   ssh -t "${REMOTE_HOST}" "sudo mkdir -p ${CERT_DAEMON_DIR} ; cd /etc ; sudo tar -pcf /tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ./docker/certs.d/daemon ; sudo chown ${USER}.${USER} /tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ; chmod 0400 /tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
                                          ^-- SC2029: Note that, unescaped, this expands on the client side.
 
 
-In SA-shellcheck-001 line 213:
+In SA-shellcheck-001 line 236:
   ssh -t "${REMOTE_HOST}" "rm -f /tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
                                       ^-- SC2029: Note that, unescaped, this expands on the client side.
 
 
-In SA-shellcheck-001 line 228:
+In SA-shellcheck-001 line 251:
 TEMP_CA_PEM=$(ls -l "${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/ca.pem" | sed -e 's/^.* -> //')
               ^-- SC2012: Use find instead of ls to better handle non-alphanumeric filenames.
 
 
-In SA-shellcheck-001 line 229:
+In SA-shellcheck-001 line 252:
 TEMP_CERT_PEM=$(ls -l "${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/cert.pem" | sed -e 's/^.* -> //')
                 ^-- SC2012: Use find instead of ls to better handle non-alphanumeric filenames.
 
 
-In SA-shellcheck-001 line 230:
+In SA-shellcheck-001 line 253:
 TEMP_PRIV_KEY_PEM=$(ls -l "${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/priv-key.pem" | sed -e 's/^.* -> //')
                     ^-- SC2012: Use find instead of ls to better handle non-alphanumeric filenames.
 
 
-In SA-shellcheck-001 line 257:
+In SA-shellcheck-001 line 282:
   ssh -t "${USER}@${REMOTE_HOST}" "cd /etc ; sudo tar -pxf /tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ; sudo chmod 0700 /etc/docker ; sudo chmod 0700 /etc/docker/certs.d ; sudo chown -R root.root ./docker ; rm /tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
                                                                 ^-- SC2029: Note that, unescaped, this expands on the client side.
 
