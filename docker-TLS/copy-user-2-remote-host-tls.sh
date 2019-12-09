@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.533.1093  2019-12-08T22:02:25.101585-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.532  
+# 	   docker-TLS/copy-user-2-remote-host-tls.sh   add DEBUG statements 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.529.1088  2019-12-06T23:26:53.026219-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.528  
 # 	   testing 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.528.1087  2019-12-06T22:26:48.259823-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.527-1-g7c2c902  
@@ -258,15 +260,16 @@ FILE_DATE_STAMP=$(date +%Y-%m-%dT%H.%M.%S.%2N-%Z)
 echo -e "\n\tBacking up ${REMOTE_HOST}:~${TLS_USER}/.docker"
 echo -e "\tto $(pwd)\n\t${BOLD}${YELLOW}Root access required.${NORMAL}\n"
 if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}"
-  ssh -t "${REMOTE_HOST}" "sudo mkdir -p ~${TLS_USER}/.docker ; cd ~"${TLS_USER}" ; sudo tar -pcf /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar .docker ; sudo chown ${USER}.${USER} /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ; chmod 0400 /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
+  if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  ${LOCALHOST} does NOT equal ${REMOTE_HOST}" 1>&2 ; fi
+  ssh -t "${REMOTE_HOST}" "sudo mkdir -p ~${TLS_USER}/.docker ; cd "~${TLS_USER}" ; sudo tar -pcf /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar .docker ; sudo chown ${USER}.${USER} /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ; chmod 0400 /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
   scp -p "${REMOTE_HOST}:/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" .
   ssh -t "${REMOTE_HOST}" "rm -f /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
 else
 #    Check if ${TLS_USER} == ${USER} because sudo is not required for user copying their certs
   if [[ "${TLS_USER}" == "${USER}" ]] ; then
+    if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  ${LOCALHOST} does equal ${REMOTE_HOST}  and  ${TLS_USER} does equal ${USER}" 1>&2 ; fi
     #    Backup ${TLS_USER}/.docker to support rollback
-    cd ~"${TLS_USER}"
-    mkdir -p ".docker"
+    cd
     tar -pcf "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"  .docker
     cd  "${WORKING_DIRECTORY}/users/${TLS_USER}/${TLS_USER}"
     chown "${USER}.${USER}"  "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
@@ -274,11 +277,14 @@ else
     cp -p      "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"  .
     rm -f      "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
   else
+    if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  ${LOCALHOST} does equal ${REMOTE_HOST}  and  ${TLS_USER} does NOT equal ${USER}" 1>&2 ; fi
     #    Backup ${TLS_USER}/.docker to support rollback
-    sudo mkdir -p   ~"${TLS_USER}/.docker"
-    sudo chown "${TLS_USER}"."${TLS_USER}" ~"${TLS_USER}/.docker"
-    sudo chmod 0700 ~"${TLS_USER}/.docker"
-    cd ~"${TLS_USER}"
+# >>>    cd $(eval echo "~${TLS_USER}")
+# >>>	sudo ls -1 ~bob/.docker | grep -Ev 'docker-ca|trust|registry*' | sed -e 's/^/.docker\//'
+    sudo mkdir -p   "~${TLS_USER}/.docker"
+    sudo chown "${TLS_USER}"."${TLS_USER}" "~${TLS_USER}/.docker"
+    sudo chmod 0700 "~${TLS_USER}/.docker"
+    cd "~${TLS_USER}"
     sudo tar -pcf "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"  .docker
     cd  "${WORKING_DIRECTORY}/users/${TLS_USER}/${TLS_USER}"
     sudo chown "${USER}.${USER}"  "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
@@ -293,6 +299,7 @@ tar -pxf "${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
 TEMP_CA_PEM=$(ls -l "${WORKING_DIRECTORY}/users/${TLS_USER}/ca.pem" | sed -e 's/^.* -> //')
 TEMP_USER_CERT_PEM=$(ls -l "${WORKING_DIRECTORY}/users/${TLS_USER}/user-cert.pem" | sed -e 's/^.* -> //')
 TEMP_USER_PRIV_KEY_PEM=$(ls -l "${WORKING_DIRECTORY}/users/${TLS_USER}/user-priv-key.pem" | sed -e 's/^.* -> //')
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  TEMP_CA_PEM >${TEMP_CA_PEM}< TEMP_USER_CERT_PEM >${TEMP_USER_CERT_PEM}< TEMP_USER_PRIV_KEY_PEM >${TEMP_USER_PRIV_KEY_PEM}<" 1>&2 ; fi
 
 #    Create certification tar file and install it to ${REMOTE_HOST}
 chmod 0700 .docker
@@ -314,6 +321,7 @@ else
 fi
 
 if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #5 Not "${LOCALHOST}"
+  if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  ${LOCALHOST} does NOT equal ${REMOTE_HOST}" 1>&2 ; fi
 #    Check if ${REMOTE_HOST} is available on ssh port
   if $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
     ssh -t "${REMOTE_HOST}" "cd ~${TLS_USER}" || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${TLS_USER} user does not have home directory on ${REMOTE_HOST}"  ; exit 1; }
@@ -332,6 +340,7 @@ if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #5 Not "${LOCALHOST}"
     exit 1
   fi
 else
+  if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  ${LOCALHOST} does equal ${REMOTE_HOST}" 1>&2 ; fi
   cp -p "./${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" /tmp
 
 #    Check if ${TLS_USER} == ${USER} because sudo is not required for user copying their certs
