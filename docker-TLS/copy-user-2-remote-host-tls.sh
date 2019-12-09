@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.534.1094  2019-12-08T23:27:10.157598-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.533  
+# 	   docker-TLS/copy-user-2-remote-host-tls.sh   add more DEBUG statements 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.533.1093  2019-12-08T22:02:25.101585-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.532  
 # 	   docker-TLS/copy-user-2-remote-host-tls.sh   add DEBUG statements 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.529.1088  2019-12-06T23:26:53.026219-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.528  
@@ -270,7 +272,7 @@ else
     if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  ${LOCALHOST} does equal ${REMOTE_HOST}  and  ${TLS_USER} does equal ${USER}" 1>&2 ; fi
     #    Backup ${TLS_USER}/.docker to support rollback
     cd
-    tar -pcf "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"  .docker
+    tar --no-recursion -pcf "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" .docker/*
     cd  "${WORKING_DIRECTORY}/users/${TLS_USER}/${TLS_USER}"
     chown "${USER}.${USER}"  "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
     chmod 0400 "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
@@ -281,6 +283,7 @@ else
     #    Backup ${TLS_USER}/.docker to support rollback
 # >>>    cd $(eval echo "~${TLS_USER}")
 # >>>	sudo ls -1 ~bob/.docker | grep -Ev 'docker-ca|trust|registry*' | sed -e 's/^/.docker\//'
+
     sudo mkdir -p   "~${TLS_USER}/.docker"
     sudo chown "${TLS_USER}"."${TLS_USER}" "~${TLS_USER}/.docker"
     sudo chmod 0700 "~${TLS_USER}/.docker"
@@ -330,8 +333,10 @@ if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #5 Not "${LOCALHOST}"
 
 #    Check if ${TLS_USER} == ${USER} because sudo is not required for user copying their certs
     if [[ "${TLS_USER}" == "${USER}" ]] ; then
+      if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  ${TLS_USER} does equal ${USER}" 1>&2 ; fi
       ssh -t "${REMOTE_HOST}" "cd ~${TLS_USER} ; tar -pxf /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ; rm /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ; chown -R ${TLS_USER}.${TLS_USER} .docker "
     else
+      if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  ${TLS_USER} does NOT equal ${USER}" 1>&2 ; fi
       new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  ${USER}, sudo password is required to install other user, ${TLS_USER}, certs on host, ${REMOTE_HOST}." 1>&2
       ssh -t "${REMOTE_HOST}" "cd ~${TLS_USER} ; sudo tar -pxf /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ; sudo rm /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ; sudo chown -R ${TLS_USER}.${TLS_USER} .docker "
     fi
@@ -345,10 +350,12 @@ else
 
 #    Check if ${TLS_USER} == ${USER} because sudo is not required for user copying their certs
   if [[ "${TLS_USER}" == "${USER}" ]] ; then
+    if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  ${TLS_USER} does equal ${USER}" 1>&2 ; fi
     cd "${HOME}"
     tar -pxf "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
     chown -R "${TLS_USER}"."${TLS_USER}" .docker
   else
+    if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  ${TLS_USER} does NOT equal ${USER}" 1>&2 ; fi
     new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  ${USER}, sudo password is required to install other user, ${TLS_USER}, certs on host, ${REMOTE_HOST}." 1>&2
     cd $(dirname $(eval echo "~${TLS_USER}"))
     sudo tar -pxf "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar" -C "${TLS_USER}"
