@@ -1,14 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.534.1094  2019-12-08T23:27:10.157598-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.533  
-# 	   docker-TLS/copy-user-2-remote-host-tls.sh   add more DEBUG statements 
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.533.1093  2019-12-08T22:02:25.101585-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.532  
-# 	   docker-TLS/copy-user-2-remote-host-tls.sh   add DEBUG statements 
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.529.1088  2019-12-06T23:26:53.026219-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.528  
-# 	   testing 
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.528.1087  2019-12-06T22:26:48.259823-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.527-1-g7c2c902  
-# 	   docker-TLS/copy-user-2-remote-host-tls.sh   Check if ${TLS_USER} == ${USER} 
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.527.1085  2019-12-06T22:05:51.130891-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.526  
-# 	   update command to support Production standard 6.3.544 Architecture 
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.535.1095  2019-12-10T00:03:37.856236-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.534  
+# 	   docker-TLS/copy-user-2-remote-host-tls.sh   Production standard 6.3.547  Architecture tree 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.509.1045  2019-11-23T09:57:09.484459-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.508  
 # 	   Production standard 8.3.541 --usage 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.482.1006  2019-10-24T21:35:12.026886-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.481  
@@ -113,7 +105,7 @@ echo    "                     (default ${DEFAULT_REMOTE_HOST})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
-###  Production standard  6.3.546  Architecture tree
+###  Production standard 6.3.547  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
@@ -354,6 +346,7 @@ else
     cd "${HOME}"
     tar -pxf "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
     chown -R "${TLS_USER}"."${TLS_USER}" .docker
+# >>>	>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   else
     if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  ${TLS_USER} does NOT equal ${USER}" 1>&2 ; fi
     new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  ${USER}, sudo password is required to install other user, ${TLS_USER}, certs on host, ${REMOTE_HOST}." 1>&2
