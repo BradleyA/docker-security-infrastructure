@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.539.1099  2019-12-12T23:51:06.837144-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.538  
-# 	   docker-TLS/copy-user-2-remote-host-tls.sh   testing removte host with users 
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.540.1100  2019-12-13T12:49:07.976087-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.539  
+# 	   docker-TLS/copy-user-2-remote-host-tls.sh   testing copying user TLS to remote system 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.535.1095  2019-12-10T00:03:37.856236-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.534  
 # 	   docker-TLS/copy-user-2-remote-host-tls.sh   Production standard 6.3.547  Architecture tree 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.509.1045  2019-11-23T09:57:09.484459-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.508  
@@ -257,7 +257,9 @@ echo -e "\n\tBacking up ${REMOTE_HOST}:~${TLS_USER}/.docker"
 echo -e "\tto $(pwd)\n\t${BOLD}${YELLOW}Root access required.${NORMAL}\n"
 if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  #48 Not "${LOCALHOST}"
   if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  ${LOCALHOST} does NOT equal ${REMOTE_HOST}" 1>&2 ; fi
-  ssh -t "${REMOTE_HOST}" "sudo mkdir -p ~${TLS_USER}/.docker ; cd "~${TLS_USER}" ; sudo tar -pcf /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.backup.tar --exclude=.docker/docker-ca .docker ; sudo chown ${USER}.${USER} /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.backup.tar ; chmod 0400 /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.backup.tar"
+ ssh -t "${REMOTE_HOST}" "sudo mkdir -p ~${TLS_USER}/.docker ; cd "~${TLS_USER}" ; sudo tar -pcf /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.backup.tar --exclude=.docker/docker-ca .docker ; sudo chown ${USER}.${USER} /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.backup.tar ; chmod 0400 /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.backup.tar"
+# >>>	<<<<<<<<<<<<<<<<<<<<<<<<<<<,,,,,,
+#	  ssh -t "${REMOTE_HOST}" "TLS_USER_HOME=$(eval echo ~${TLS_USER}) ; cd ${TLS_USER_HOME} ;  sudo -u ${TLS_USER} mkdir -p ${TLS_USER_HOME}/.docker ; sudo -u "${TLS_USER}"  chmod 0700 ${TLS_USER_HOME}/.docker ; sudo -u ${TLS_USER}  tar -pcf /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.backup.tar --exclude=.docker/docker-ca .docker ; sudo chown ${USER}.${USER} /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.backup.tar ; chmod 0400 /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.backup.tar"
   scp -p "${REMOTE_HOST}:/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.backup.tar" .
   ssh -t "${REMOTE_HOST}" "rm -f /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.backup.tar"
 else
@@ -325,8 +327,9 @@ if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  #5 Not "${LOCALHOST}"
       ssh -t "${REMOTE_HOST}" "cd ~${TLS_USER} ; tar -pxf /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.new.tar ; rm /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.new.tar ; chown ${TLS_USER}.${TLS_USER} .docker ; chown ${TLS_USER}.${TLS_USER} .docker/*"
     else
       if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  ${TLS_USER} does NOT equal ${USER}" 1>&2 ; fi
-      new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  ${USER}, sudo password is required to install other user, ${TLS_USER}, certs on host, ${REMOTE_HOST}." 1>&2
-      ssh -t "${REMOTE_HOST}" "cd ~${TLS_USER} ; sudo tar -pxf /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.new.tar ; sudo rm /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.new.tar ; sudo chown ${TLS_USER}.${TLS_USER} .docker ; sudo chown ${TLS_USER}.${TLS_USER} .docker/*"
+      echo -e "\n\tInstalling TLS keys in ${REMOTE_HOST}:~${TLS_USER}/.docker"
+      echo -e "\t${BOLD}${YELLOW}Root access required.${NORMAL}\n"
+      ssh -t "${REMOTE_HOST}" "cd ~${TLS_USER} ; sudo tar -pxf /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.new.tar ; sudo rm /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.new.tar ; sudo chown -R ${TLS_USER}.${TLS_USER} .docker"
     fi
   else
     new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${REMOTE_HOST} not responding on ssh port." 1>&2
