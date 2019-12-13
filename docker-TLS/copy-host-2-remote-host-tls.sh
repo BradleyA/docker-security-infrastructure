@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.532.1092  2019-12-08T11:06:32.776224-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.531-1-g6b7cc9c  
-# 	   docker-TLS/copy-host-2-remote-host-tls.sh  quote variable 
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.542.1105  2019-12-13T15:25:56.678002-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.541  
+# 	   docker-TLS/copy-host-2-remote-host-tls.sh  force remove of ${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/${REMOTE_HOST}/docker 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.531.1090  2019-12-07T18:53:13.042839-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.530  
 # 	   docker-TLS/copy-host-2-remote-host-tls.sh   Production standard 6.3.547  Architecture tree 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.509.1045  2019-11-23T09:57:09.237685-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.508  
@@ -236,7 +236,7 @@ cd       "${REMOTE_HOST}"
 
 #    Check if ${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/${REMOTE_HOST}/docker directory on system from a previous backup
 if [[ -d "docker" ]] ; then
-  rm -r docker
+  rm -fR docker
 fi
 
 #    Backup ${REMOTE_HOST}:${CERT_DAEMON_DIR}/.. to support rollback
