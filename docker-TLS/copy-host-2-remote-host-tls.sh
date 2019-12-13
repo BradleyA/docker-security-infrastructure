@@ -290,7 +290,7 @@ fi
 #    This directory was selected to place dockerd TLS certifications because
 #    docker registry stores it's TLS certifications in /etc/docker/certs.d.
 echo -e "\n\tCopying dockerd certification to ${REMOTE_HOST}"
-echo -e "\tRoot access required.\n"
+echo -e "\t${BOLD}${YELLOW}Root access required.${NORMAL}\n"
 if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  >>> #48 Not "${LOCALHOST}"
   ssh -t "${USER}@${REMOTE_HOST}" "cd /etc ; sudo tar -pxf /tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar ; sudo chmod 0700 /etc/docker ; sudo chmod 0700 /etc/docker/certs.d ; sudo chown -R root.root ./docker ; rm /tmp/${REMOTE_HOST}--${FILE_DATE_STAMP}.tar"
 else
