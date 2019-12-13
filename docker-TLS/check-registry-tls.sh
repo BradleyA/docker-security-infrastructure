@@ -1,8 +1,8 @@
 #!/bin/bash
+# 	docker-TLS/check-registry-tls.sh  3.544.1108  2019-12-13T17:19:01.662273-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.543-1-gf077e1f  
+# 	   docker-TLS/check-registry-tls.sh 
 # 	docker-TLS/check-registry-tls.sh  3.543.1106  2019-12-13T16:20:51.986929-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
 # 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
-# 	docker-TLS/check-registry-tls.sh  3.517.1062  2019-12-03T01:39:06.719118-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
-# 	   Production standard 6.3.544  Architecture tree 
 # 	docker-TLS/check-registry-tls.sh  3.468.984  2019-10-21T22:11:55.677172-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.467-1-g6c34ae8  
 # 	   docker-TLS/check-registry-tls.sh   added color output ; updated Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/check-registry-tls.sh  3.454.951  2019-10-13T15:24:56.778776-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.453  
@@ -134,10 +134,10 @@ echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
 
 echo -e "\n${BOLD}EXAMPLES${NORMAL}"
-echo -e "   Check local host certificates for <REGISTRY_HOST> (two.cptx86.com) using\n   <REGISTRY_PORT> (17313)\n\t${BOLD}sudo ${0} two.cptx86.com 17313${NORMAL}"
+echo -e "   Check local host certificates for <REGISTRY_HOST> (two.cptx86.com) using\n   <REGISTRY_PORT> (17313)\n\t${BOLD}sudo ${COMMAND_NAME} two.cptx86.com 17313${NORMAL}"
 echo -e "   Use cluster-command.sh script to loop through hosts in a cluster."
 echo    "   Check each host certificates for <REGISTRY_HOST> (two.cptx86.com) using"
-echo -e "   <REGISTRY_PORT> (17313)\n\t${BOLD}cluster-command.sh special 'sudo ${0} two.cptx86.com 17313${NORMAL}'"
+echo -e "   <REGISTRY_PORT> (17313)\n\t${BOLD}cluster-command.sh special 'sudo ${COMMAND_NAME} two.cptx86.com 17313${NORMAL}'"
 }
 
 #    Date and time function ISO 8601
@@ -191,10 +191,9 @@ if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable...
 
 #    Root is required to copy certs
 if ! [[ "$(id -u)" = 0 ]] ; then
-  display_help | more
-  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Use sudo ${0}" 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Use sudo ${COMMAND_NAME}" 1>&2
 #    Help hint
-  echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT   <<\n${NORMAL}"  1>&2
+  echo -e "\n\t${BOLD}${YELLOW}>>   SCRIPT MUST BE RUN AS ROOT   <<\n${NORMAL}"  1>&2
   exit 1
 fi
 
@@ -207,6 +206,30 @@ if [[ $# -ge  2 ]]  ; then REGISTRY_PORT=${2} ; elif [[ "${REGISTRY_PORT}" == ""
 if [[ $# -ge  3 ]]  ; then CLUSTER=${3} ; elif [[ "${CLUSTER}" == "" ]] ; then CLUSTER=${DEFAULT_CLUSTER} ; fi
 if [[ $# -ge  4 ]]  ; then DATA_DIR=${4} ; elif [[ "${DATA_DIR}" == "" ]] ; then DATA_DIR=${DEFAULT_DATA_DIR} ; fi
 if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_PORT >${REGISTRY_PORT}< CLUSTER >${CLUSTER}< DATA_DIR >${DATA_DIR}<" 1>&2 ; fi
+
+#    Check if /etc/docker directory on system
+if [[ ! -d /etc/docker ]] ; then
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  /etc/docker directory not found." 1>&2
+  exit 1
+fi
+
+#    Check if /etc/docker/certs.d directory on system
+if [[ ! -d /etc/docker/certs.d ]] ; then
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  /etc/docker/certs.d directory not found." 1>&2
+  exit 1
+fi
+
+#    Check if /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT} directory on system
+if [[ ! -d "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}" ]] ; then
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT} directory not found." 1>&2
+  exit 1
+fi
+
+#    Check if 
+if [[ ! -e "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt" ]] ; then
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt file not found." 1>&2
+  exit 1
+fi
 
 #    Get currect date in seconds
 CURRENT_DATE_SECONDS=$(date '+%s')
