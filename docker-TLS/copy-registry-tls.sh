@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/copy-registry-tls.sh  3.517.1062  2019-12-03T01:39:07.093720-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
-# 	   Production standard 6.3.544  Architecture tree 
+# 	docker-TLS/copy-registry-tls.sh  3.543.1106  2019-12-13T16:20:52.378258-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
+# 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
 # 	docker-TLS/copy-registry-tls.sh  3.509.1045  2019-11-23T09:57:09.363268-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.508  
 # 	   Production standard 8.3.541 --usage 
 # 	docker-TLS/copy-registry-tls.sh  3.470.989  2019-10-21T22:45:38.330337-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.469-2-gd8380ad  
@@ -120,8 +120,7 @@ echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
 echo    "   DATA_DIR        Data directory (default '${DEFAULT_DATA_DIR}')"
 echo    "   SYSTEMS_FILE    Hosts in cluster (default '${DEFAULT_SYSTEMS_FILE}')"
 
-
-###  Production standard 6.3.544  Architecture tree
+###  Production standard 6.3.547  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "/usr/local/data/                           <-- <DATA_DIR>"
 echo    "├── <CLUSTER>/                             <-- <CLUSTER>"

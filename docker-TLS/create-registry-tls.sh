@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.517.1062  2019-12-03T01:39:07.597216-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
-# 	   Production standard 6.3.544  Architecture tree 
+# 	docker-TLS/create-registry-tls.sh  3.543.1106  2019-12-13T16:20:52.770703-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
+# 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
 # 	docker-TLS/create-registry-tls.sh  3.507.1041  2019-11-22T23:00:12.959309-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.506  
 # 	   docker-TLS/create-registry-tls.sh   Production standard 6.3.539   added number of days in output message 
 # 	docker-TLS/create-registry-tls.sh  3.506.1040  2019-11-22T22:27:34.292738-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.505  
@@ -105,7 +105,7 @@ echo    "                     (default '${DEFAULT_NUMBER_DAYS}')"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
-###  Production standard 6.3.544  Architecture tree
+###  Production standard 6.3.547  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"

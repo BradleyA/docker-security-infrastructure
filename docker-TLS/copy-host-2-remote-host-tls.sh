@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  3.543.1106  2019-12-13T16:20:52.247955-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
+# 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.542.1105  2019-12-13T15:25:56.678002-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.541  
 # 	   docker-TLS/copy-host-2-remote-host-tls.sh  force remove of ${WORKING_DIRECTORY}/hosts/${REMOTE_HOST}/${REMOTE_HOST}/docker 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.531.1090  2019-12-07T18:53:13.042839-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.530  
@@ -113,7 +115,7 @@ echo    "        └── hosts/                         <-- Directory for host
 echo    "            └── <HOST>/                    <-- Directory to store host certs"      # 3.539
 echo    "               ├── ca.pem                  <-- CA Cert"                            # 3.542
 echo    "               ├── <HOST>-cert.pem         <-- public key (default: cert.pem)"     # 3.547
-echo    "               └── <HOST>-priv-key.pem     <-- private key (default: key.pem)"     # 3.547
+echo -e "               └── <HOST>-priv-key.pem     <-- private key (default: key.pem)\n"   # 3.547
 echo    "/etc/ "
 echo    "└── docker/ "
 echo    "    └── certs.d/                           <-- Host docker cert directory"

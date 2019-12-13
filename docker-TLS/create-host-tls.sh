@@ -1,10 +1,8 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.543.1106  2019-12-13T16:20:52.509183-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
+# 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
 # 	docker-TLS/create-host-tls.sh  3.525.1082  2019-12-05T23:09:33.721023-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.524  
 # 	   docker-TLS/create-user-tls.sh   complete Production standard 6.3.546  Architecture changes 
-# 	docker-TLS/create-host-tls.sh  3.517.1062  2019-12-03T01:39:07.345120-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
-# 	   Production standard 6.3.544  Architecture tree 
-# 	docker-TLS/create-host-tls.sh  3.512.1053  2019-11-26T16:10:09.194940-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.511-1-g2e0252d  
-# 	   docker-TLS/create-host-tls.sh  change file name standard to include site private CA date in all certs that are built from it 
 # 	docker-TLS/create-host-tls.sh  3.505.1039  2019-11-22T15:01:23.026486-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.504  
 # 	   Production standard 8.3.541 --usage 
 #86# docker-TLS/create-host-tls.sh - Create host public, private keys and CA
@@ -104,7 +102,7 @@ echo    "                     (default ${DEFAULT_NUMBER_DAYS})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
-###  Production standard 6.3.544  Architecture tree
+###  Production standard 6.3.547  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
@@ -115,8 +113,8 @@ echo    "        ├── ca.pem                         <-- Current site CA ce
 echo    "        ├── hosts/                         <-- Directory for hostnames"            # 3.539
 echo    "        │   └── <HOST>/                    <-- Directory to store host certs"      # 3.539
 echo    "        │      ├── ca.pem                  <-- CA Cert"                            # 3.542
-echo    "        │      ├── cert.pem                <-- public key"                         # 3.543
-echo    "        │      └── priv-key.pem            <-- private key"                        # 3.543
+echo    "        │      ├── <HOST>-cert.pem         <-- public key (default: cert.pem)"     # 3.547
+echo    "        │      └── <HOST>-priv-key.pem     <-- private key (default: key.pem)"     # 3.547
 echo    "        └── site/                          <-- Directory to store site certs"      # 3.539
 echo    "            ├── ca.pem                     <-- CA Cert"                            # 3.544
 echo    "            └── ca-priv-key.pem            <-- CA Private Key"                     # 3.544

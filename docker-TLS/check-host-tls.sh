@@ -1,16 +1,8 @@
 #!/bin/bash
-# 	docker-TLS/check-host-tls.sh  3.517.1062  2019-12-03T01:39:06.594761-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
-# 	   Production standard 6.3.544  Architecture tree 
-# 	docker-TLS/check-host-tls.sh  3.483.1007  2019-11-07T20:30:57.657697-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.482  
-# 	   docker-TLS/check-host-tls.sh  remove display_usage from message requiring script to be run as root 
-# 	docker-TLS/check-host-tls.sh  3.477.998  2019-10-22T22:15:34.622024-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.476  
-# 	   docker-TLS/check-user-tls.sh docker-TLS/check-host-tls.sh   add color output   testing #49 
-# 	docker-TLS/check-host-tls.sh  3.467.982  2019-10-21T21:56:59.079438-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.466  
-# 	   docker-TLS/check-host-tls.sh   add color output ; upgrade Production standard 4.3.534 Documentation Language 
+# 	docker-TLS/check-host-tls.sh  3.543.1106  2019-12-13T16:20:51.857535-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
+# 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
 # 	docker-TLS/check-host-tls.sh  3.454.953  2019-10-13T16:00:06.942880-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.454-1-g4d6f510  
 # 	   docker-TLS/check-host-tls.sh - upgrade Production standard #60 
-# 	docker-TLS/check-host-tls.sh  3.444.930  2019-10-10T22:52:39.829867-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.443-1-g3c76d63  
-# 	   close #60    check-host-tls.sh - upgrade Production standard 
 # 	docker-TLS/check-host-tls.sh  3.283.750  2019-06-10T23:51:10.800496-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.282  
 # 	   docker-TLS/check-ca-tls.sh - complete design - in development #56 
 #86# docker-TLS/check-host-tls.sh - Check public, private keys, and CA for host
@@ -96,15 +88,15 @@ echo    "   DEBUG               (default off '0')"
 echo -e "\n${BOLD}OPTIONS${NORMAL}"
 echo    "   CERT_DAEMON_DIR     dockerd certification directory (default ${DEFAULT_CERT_DAEMON_DIR})"
 
-###  Production standard 6.3.544  Architecture tree
+###  Production standard 6.3.547  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "/etc/ "
 echo    "└── docker/ "
 echo    "    └── certs.d/                           <-- Host docker cert directory"
 echo    "        └── daemon/                        <-- Daemon cert directory"
-echo    "            ├── ca.pem                     <-- Daemon tlscacert"
-echo    "            ├── cert.pem                   <-- Daemon tlscert"
-echo    "            └── key.pem                    <-- Daemon tlskey"
+echo    "            ├── ca.pem                     <-- CA Cert"                            # 3.542
+echo    "            ├── <HOST>-cert.pem            <-- public key (default: cert.pem)"     # 3.547
+echo    "            └── <HOST>-priv-key.pem        <-- private key (default: key.pem)"     # 3.547
 
 echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"

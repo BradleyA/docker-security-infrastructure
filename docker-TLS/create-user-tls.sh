@@ -1,12 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-user-tls.sh  3.526.1084  2019-12-05T23:31:12.094438-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.525-1-ge1f86cf  
-# 	   3.527 
-# 	docker-TLS/create-user-tls.sh  3.525.1082  2019-12-05T23:09:33.846178-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.524  
-# 	   docker-TLS/create-user-tls.sh   complete Production standard 6.3.546  Architecture changes 
-# 	docker-TLS/create-user-tls.sh  3.523.1080  2019-12-05T12:58:57.779180-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.522  
-# 	   docker-TLS/create-user-tls.sh   update command to support Production standard 6.3.546  Architecture tree 
-# 	docker-TLS/create-user-tls.sh  3.517.1062  2019-12-03T01:39:07.852679-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
-# 	   Production standard 6.3.544  Architecture tree 
+# 	docker-TLS/create-user-tls.sh  3.543.1106  2019-12-13T16:20:53.033820-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
+# 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
 # 	docker-TLS/create-user-tls.sh  3.505.1039  2019-11-22T15:01:23.509800-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.504  
 # 	   Production standard 8.3.541 --usage 
 #86# docker-TLS/create-user-tls.sh - Create user public and private key and CA
@@ -106,7 +100,7 @@ echo    "                     (default ${DEFAULT_NUMBER_DAYS})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
-###  Production standard 6.3.546  Architecture tree
+###  Production standard 6.3.547  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"

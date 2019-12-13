@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-registry-tls.sh  3.543.1106  2019-12-13T16:20:51.986929-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
+# 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
 # 	docker-TLS/check-registry-tls.sh  3.517.1062  2019-12-03T01:39:06.719118-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
 # 	   Production standard 6.3.544  Architecture tree 
 # 	docker-TLS/check-registry-tls.sh  3.468.984  2019-10-21T22:11:55.677172-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.467-1-g6c34ae8  
@@ -32,9 +34,9 @@ DEFAULT_REGISTRY_PORT="5000"
 DEFAULT_CLUSTER="us-tx-cluster-1/"
 DEFAULT_DATA_DIR="/usr/local/data/"
 
-###  Production standard 8.3.530 --usage
+###  Production standard 8.3.541 --usage
+COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')   # 3.541
 display_usage() {
-COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')
 echo -e "\n${NORMAL}${COMMAND_NAME}\n   - Check certifications for private registry"
 echo -e "\n${BOLD}USAGE${NORMAL}"
 echo    "   ${YELLOW}Positional Arguments${NORMAL}"

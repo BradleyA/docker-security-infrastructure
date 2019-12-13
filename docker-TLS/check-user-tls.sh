@@ -1,14 +1,12 @@
 #!/bin/bash
-# 	docker-TLS/check-user-tls.sh  3.517.1062  2019-12-03T01:39:06.844039-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
-# 	   Production standard 6.3.544  Architecture tree 
+# 	docker-TLS/check-user-tls.sh  3.543.1106  2019-12-13T16:20:52.117501-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
+# 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
 # 	docker-TLS/check-user-tls.sh  3.464.977  2019-10-16T22:28:28.323070-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.463  
 # 	   docker-TLS/check-user-tls.sh    - upgrade Production standard #62 
 # 	docker-TLS/check-user-tls.sh  3.455.955  2019-10-13T20:32:00.191462-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.454-3-g6f32d2b  
 # 	   docker-TLS/check-user-tls.sh   #62  Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
 # 	docker-TLS/check-user-tls.sh  3.448.938  2019-10-12T14:56:00.146490-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.447  
 # 	   close #62   docker-TLS/check-user-tls.sh    - upgrade Production standard 
-# 	docker-TLS/check-user-tls.sh  3.439.917  2019-09-07T13:52:54.148689-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.438  
-# 	   docker-TLS/check-user-tls.sh  corrected incident with $(dirname "${HOME}") because it does not include an ending / 
 # 	docker-TLS/check-user-tls.sh  3.436.914  2019-09-04T15:13:18.865841-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.435  
 # 	   docker-TLS/check-user-tls.sh  upgrade to Production standard 1.3.496 DEBUG variable ; shellcheck version section corrected ; change DEFAULT_USER_HOME 
 #86# docker-TLS/check-user-tls.sh - Check public, private keys, and CA for a user
@@ -35,9 +33,9 @@ WHITE=$(tput  setaf 7)
 DEFAULT_TLS_USER="${USER}"
 DEFAULT_USER_HOME=$(dirname "${HOME}")
 
-###  Production standard 8.3.530 --usage
+###  Production standard 8.3.541 --usage
+COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')   # 3.541
 display_usage() {
-COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')
 echo -e "\n${NORMAL}${COMMAND_NAME}\n  Check public, private keys, and CA for a user"
 echo -e "\n${BOLD}USAGE${NORMAL}"
 echo    "   ${YELLOW}Positional Arguments${NORMAL}"
@@ -101,7 +99,7 @@ echo    "   TLS_USER    Administration user (default ${DEFAULT_TLS_USER})"
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo    "               sites have different home directory locations (/u/north-office/)"
 
-###  Production standard 6.3.544  Architecture tree
+###  Production standard 6.3.547  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"

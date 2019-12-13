@@ -1,6 +1,6 @@
 #!/bin/bash
-# 	docker-TLS/create-site-private-public-tls.sh  3.517.1062  2019-12-03T01:39:07.722541-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.516  
-# 	   Production standard 6.3.544  Architecture tree 
+# 	docker-TLS/create-site-private-public-tls.sh  3.543.1106  2019-12-13T16:20:52.902216-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
+# 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
 # 	docker-TLS/create-site-private-public-tls.sh  3.511.1051  2019-11-24T16:05:56.343289-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.510  
 # 	   docker-TLS/create-site-private-public-tls.sh  update user hint, move files to sync with Production standard 6.3.539  Architecture tree, alot of debugging 
 #86# docker-TLS/create-site-private-public-tls.sh - Create site private and CA keys
@@ -99,7 +99,7 @@ echo    "   CA_CERT           File name of certificate (default ${DEFAULT_CA_CER
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
 
-###  Production standard 6.3.543 Architecture tree
+###  Production standard 6.3.547  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "<USER_HOME>/                               <-- Location of user home directory"
 echo    "└── <USER-1>/.docker/                      <-- User docker cert directory"
