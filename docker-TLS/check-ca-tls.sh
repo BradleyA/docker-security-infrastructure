@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-ca-tls.sh  3.546.1113  2019-12-14T16:57:25.372870-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.545-3-ga1fbf5a  
+# 	   docker-TLS/check-ca-tls.sh  update output and display_help 
 # 	docker-TLS/check-ca-tls.sh  3.543.1106  2019-12-13T16:20:51.645739-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
 # 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
 # 	docker-TLS/check-ca-tls.sh  3.466.981  2019-10-21T21:43:30.920833-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.465-1-g5db421c  
@@ -23,6 +25,7 @@ if [[ "${DEBUG}" == "5" ]] ; then set -e -o pipefail ; fi   # Exit immediately i
 BOLD=$(tput -Txterm bold)
 NORMAL=$(tput -Txterm sgr0)
 YELLOW=$(tput setaf 3)
+CYAN=$(tput   setaf 6)
 WHITE=$(tput  setaf 7)
 
 ###  Production standard 7.0 Default variable value
@@ -32,7 +35,7 @@ DEFAULT_CA_CERT="ca.pem"
 ###  Production standard 8.3.541 --usage
 COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')   # 3.541
 display_usage() {
-echo -e "\n${NORMAL}${COMMAND_NAME}\n   start and end dates of ${DEFAULT_CERT_DIR}/${DEFAULT_CA_CERT}"
+echo -e "\n${NORMAL}${COMMAND_NAME}\n   print start and end dates of ${DEFAULT_CERT_DIR}/${DEFAULT_CA_CERT}"
 echo -e "\n${BOLD}USAGE${NORMAL}"
 echo    "   ${YELLOW}Positional Arguments${NORMAL}"
 echo    "   ${COMMAND_NAME} [<CERT_DIR>]"
@@ -47,10 +50,8 @@ display_help() {
 display_usage
 #    Displaying help DESCRIPTION in English en_US.UTF-8
 echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
-echo    "Check start and end dates of a Docker CA in <CERT_DIR> (default:"
-echo    "${DEFAULT_CERT_DIR}).  This script will create a copy of the"
-echo    "<CA_CERT> file with the start and end dates appended to the file name in"
-echo    "${DEFAULT_CERT_DIR}."
+echo    "Print start and end dates of a Docker CA in <CERT_DIR> (default:"
+echo    "${DEFAULT_CERT_DIR})."
 echo -e "\nAn administrator may receive password and/or passphrase prompts from a"
 echo    "remote systen; running the following may stop the prompts in your cluster."
 echo -e "\t${BOLD}ssh-copy-id <TLS_USER>@<REMOTE_HOST>${NORMAL}"
@@ -116,23 +117,25 @@ echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/mast
 
 echo -e "\n${BOLD}EXAMPLES${NORMAL}"
 echo    "   User checking start and end dates of their Docker CA in \$HOME/.docker."
-echo -e "\t${BOLD}${COMMAND_NAME}${NORMAL}"
+echo -e "\t${BOLD}${COMMAND_NAME}${NORMAL}\n"
+echo    "   User checking start and end dates of their Docker CA in ."
+echo -e "\t${BOLD}cd ~/.docker ; ${COMMAND_NAME} . ca.pem${NORMAL}\n"
 echo    "   To loop through a list of hosts in a cluster a user could use,"
 echo    "(https://github.com/BradleyA/Linux-admin/tree/master/cluster-command)"
-echo -e "\t${BOLD}cluster-command.sh special '${COMMAND_NAME}'${NORMAL}"
+echo -e "\t${BOLD}cluster-command.sh special '${COMMAND_NAME}'${NORMAL}\n"
+echo    "   Administrator checking start and end dates of other certificates by using:"
+echo -e "\t${BOLD}sudo ${COMMAND_NAME} ~sam/.docker ca.pem${NORMAL}\n"
 echo    "   To loop through a list of hosts in a cluster an administrator could check the"
 echo    "   start and end dates of Docker CA for user sam in /home/sam/.docker."
-echo -e "\t${BOLD}cluster-command.sh special 'sudo ${COMMAND_NAME} /home/sam/.docker ca.pem'${NORMAL}"
-echo    "   Administrator checking start and end dates of other certificates by using:"
-echo -e "\t${BOLD}sudo ${COMMAND_NAME} <CERT_DIR> <CA_CERT>${NORMAL}"
-echo -e "   Administrator checking a Docker daemon CA by including sudo.  To use"
+echo -e "\t${BOLD}cluster-command.sh special 'sudo ${COMMAND_NAME} /home/sam/.docker ca.pem'${NORMAL}\n"
+echo    "   Administrator checking a Docker daemon CA by including sudo.  To use"
 echo    "   ${COMMAND_NAME} on a remote hosts (one-rpi3b.cptx86.com) with ssh port"
 echo    "   of 12323 as uadmin user;"
-echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo ${COMMAND_NAME} /etc/docker/certs.d/daemon ca.pem'${NORMAL}"
+echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo ${COMMAND_NAME} /etc/docker/certs.d/daemon ca.pem'${NORMAL}\n"
 echo -e "   Administrator checking a Docker private registry CA by including sudo.  To"
 echo    "   use ${COMMAND_NAME} on a remote hosts (two-rpi3b.cptx86.com) with"
 echo    "   default ssh port as uadmin user;"
-echo -e "\t${BOLD}ssh -t uadmin@two-rpi3b.cptx86.com 'sudo ${COMMAND_NAME} /etc/docker/certs.d/two.cptx86.com:17315 ca.crt'${NORMAL}"
+echo -e "\t${BOLD}ssh -t uadmin@two-rpi3b.cptx86.com 'sudo ${COMMAND_NAME} /etc/docker/certs.d/two.cptx86.com:17315 ca.crt'${NORMAL}\n"
 }
 
 #    Date and time function ISO 8601
@@ -195,13 +198,17 @@ if [[ -s "${CERT_DIR}/${CA_CERT}" ]] ; then
   #  Get certificate start and expiration date of ${CA_CERT} file
   CA_CERT_START_DATE=$(openssl x509 -in "${CERT_DIR}/${CA_CERT}" -noout -startdate | cut -d '=' -f 2)
   CA_CERT_START_DATE_2=$(date -u -d"${CA_CERT_START_DATE}" +%g%m%d%H%M.%S)
-  CA_CERT_START_DATE=$(date -u -d"${CA_CERT_START_DATE}" +%Y-%m-%dT%H:%M:%S%z)
+  CA_CERT_START_DATE=$(date -d"${CA_CERT_START_DATE}" +%Y-%m-%dT%H:%M:%S-%Z)
   CA_CERT_EXPIRE_DATE=$(openssl x509 -in "${CERT_DIR}/${CA_CERT}" -noout -enddate | cut -d '=' -f 2)
-  CA_CERT_EXPIRE_DATE=$(date -u -d"${CA_CERT_EXPIRE_DATE}" +%Y-%m-%dT%H:%M:%S%z)
-  cp -f -p "${CERT_DIR}/${CA_CERT}" "${CERT_DIR}/${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
-  chmod 0400 "${CERT_DIR}/${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}"
-  touch -m -t "${CA_CERT_START_DATE_2}" "${CERT_DIR}/${CA_CERT}_${CA_CERT_START_DATE}_${CA_CERT_EXPIRE_DATE}" "${CERT_DIR}/${CA_CERT}"
-  ls -l "${CERT_DIR}/${CA_CERT}"*
+  CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE}" +%Y-%m-%dT%H:%M:%S-%Z)
+  DAYS_VALID=$(echo "( $(date -d ${CA_CERT_EXPIRE_DATE} +%s) - $(date -d ${CA_CERT_START_DATE} +%s)) / (24*3600)" | bc)
+#    Help hint
+  echo -e "\n\tDocker CA, ${YELLOW}${CERT_DIR}/${CA_CERT}${WHITE}, is valid for ${BOLD}${YELLOW}${DAYS_VALID} days${NORMAL}"
+  echo -e "\tfrom ${BOLD}${YELLOW}${CA_CERT_START_DATE}${NORMAL} to ${BOLD}${YELLOW}${CA_CERT_EXPIRE_DATE}${NORMAL}."
+  echo -e "\n\tOther ${CA_CERT} files in directory ${CERT_DIR} are listed below:${CYAN}${BOLD}"
+  cd "${CERT_DIR}"
+  ls -1 "${CA_CERT}"* | sed 's/^/        /' 
+  echo -e "${NORMAL}"
 else
 #    Help hint
   echo "Cannot access ${BOLD}${YELLOW}${CERT_DIR}/${CA_CERT}${NORMAL}: Permission denied or No such file or directory"
