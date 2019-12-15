@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-ca-tls.sh  3.547.1114  2019-12-14T23:22:01.979282-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.546  
+# 	   docker-TLS/check-ca-tls.sh  begin testing Production standard 0.3.550 --help 
 # 	docker-TLS/check-ca-tls.sh  3.546.1113  2019-12-14T16:57:25.372870-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.545-3-ga1fbf5a  
 # 	   docker-TLS/check-ca-tls.sh  update output and display_help 
 # 	docker-TLS/check-ca-tls.sh  3.543.1106  2019-12-13T16:20:51.645739-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
@@ -136,6 +138,22 @@ echo -e "   Administrator checking a Docker private registry CA by including sud
 echo    "   use ${COMMAND_NAME} on a remote hosts (two-rpi3b.cptx86.com) with"
 echo    "   default ssh port as uadmin user;"
 echo -e "\t${BOLD}ssh -t uadmin@two-rpi3b.cptx86.com 'sudo ${COMMAND_NAME} /etc/docker/certs.d/two.cptx86.com:17315 ca.crt'${NORMAL}\n"
+
+echo -e "\n${BOLD}SEE ALSO${NORMAL}"                                                          # 3.550
+echo    "   cluster-command.sh (https://github.com/BradleyA/Linux-admin/tree/master/cluster-command)"  # 3.550
+
+echo -e "\n${BOLD}AUTHOR${NORMAL}"                                                            # 3.550
+echo    "   ${COMMAND_NAME} was written by Bradley Allen <allen.bradley@ymail.com>"           # 3.550
+
+echo -e "\n${BOLD}REPORTING BUGS${NORMAL}"                                                    # 3.550
+echo    "   Report ${COMMAND_NAME} bugs https://github.com/BradleyA/docker-security-infrastructure/issues/new"  # 3.550
+
+###  Production standard 5.3.550 Copyright                                                    # 3.550
+echo -e "\n${BOLD}COPYRIGHT${NORMAL}"                                                         # 3.550
+echo    "   Copyright (c) 2020 Bradley Allen"                                                 # 3.550
+echo    "   MIT License https://github.com/BradleyA/docker-security-infrastructure/blob/master/LICENSE"  # 3.550
+
+#    echo -e "\n${BOLD}HISTORY${NORMAL}"                                                           # 3.550
 }
 
 #    Date and time function ISO 8601
@@ -197,7 +215,6 @@ if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable...
 if [[ -s "${CERT_DIR}/${CA_CERT}" ]] ; then
   #  Get certificate start and expiration date of ${CA_CERT} file
   CA_CERT_START_DATE=$(openssl x509 -in "${CERT_DIR}/${CA_CERT}" -noout -startdate | cut -d '=' -f 2)
-  CA_CERT_START_DATE_2=$(date -u -d"${CA_CERT_START_DATE}" +%g%m%d%H%M.%S)
   CA_CERT_START_DATE=$(date -d"${CA_CERT_START_DATE}" +%Y-%m-%dT%H:%M:%S-%Z)
   CA_CERT_EXPIRE_DATE=$(openssl x509 -in "${CERT_DIR}/${CA_CERT}" -noout -enddate | cut -d '=' -f 2)
   CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE}" +%Y-%m-%dT%H:%M:%S-%Z)
