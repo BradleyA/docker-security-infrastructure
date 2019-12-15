@@ -1,20 +1,18 @@
 #!/bin/bash
-# 	docker-TLS/check-registry-tls.sh  3.545.1109  2019-12-13T21:36:33.034226-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.544  
-# 	   docker-TLS/check-registry-tls.sh   update comments 
+# 	docker-TLS/check-registry-tls.sh  3.552.1121  2019-12-15T16:39:00.522328-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.551-1-g23e6062  
+# 	   docker-TLS/check-registry-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 
 # 	docker-TLS/check-registry-tls.sh  3.543.1106  2019-12-13T16:20:51.986929-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
 # 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
-# 	docker-TLS/check-registry-tls.sh  3.468.984  2019-10-21T22:11:55.677172-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.467-1-g6c34ae8  
-# 	   docker-TLS/check-registry-tls.sh   added color output ; updated Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/check-registry-tls.sh  3.454.951  2019-10-13T15:24:56.778776-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.453  
 # 	   docker-TLS/check-ca-tls.sh docker-TLS/check-registry-tls.sh  #59 #61  updated Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
 # 	docker-TLS/check-registry-tls.sh  3.451.945  2019-10-12T18:45:13.024119-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.450-1-g7ebe3d6  
 # 	   close #61   docker-TLS/check-registry-tls.sh  - upgrade Production standard 
 #86# docker-TLS/check-registry-tls.sh - Check certifications for private registry
 ###  Production standard 3.0 shellcheck
-###  Production standard 5.1.160 Copyright
-#    Copyright (c) 2019 Bradley Allen
-#    MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-###  Production standard 1.3.531 DEBUG variable
+###  Production standard 5.3.550 Copyright                                                  # 3.550
+#    Copyright (c) 2020 Bradley Allen                                                       # 3.550
+#    MIT License is online  https://github.com/BradleyA/user-files/blob/master/LICENSE      # 3.550
+###  Production standard 1.3.550 DEBUG variable                                             # 3.550
 #    Order of precedence: environment variable, default code
 if [[ "${DEBUG}" == ""  ]] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 if [[ "${DEBUG}" == "2" ]] ; then set -x    ; fi   # Print trace of simple commands before they are executed
@@ -51,10 +49,10 @@ echo    "   ${COMMAND_NAME} [--usage | -usage | -u]"
 echo    "   ${COMMAND_NAME} [--version | -version | -v]"
 }
 
-###  Production standard 0.3.214 --help
+###  Production standard 0.3.550 --help                                                     # 3.550
 display_help() {
 display_usage
-#    Displaying help DESCRIPTION in English en_US.UTF-8
+#    Displaying help DESCRIPTION in English en_US.UTF-8, en.UTF-8, C.UTF-8                  # 3.550
 echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
 echo    "This script has to be run as root to check daemon registry cert (ca.crt),"
 echo    "registry cert (domain.crt), and registry private key (domain.key) in"
@@ -62,51 +60,44 @@ echo    "/etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/ and"
 echo    "<DATA_DIR>/<CLUSTER>/docker-registry/<REGISTRY_HOST>-<REGISTRY_PORT>/certs/"
 echo    "directories.  The certification files and directory permissions are also"
 echo    "checked."
-echo -e "\nThis script works for the local host only.  To use check-registry-tls.sh on a"
-echo    "remote hosts (one-rpi3b.cptx86.com) with ssh port of 12323 as uadmin user;"
-echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo check-registry-tls.sh two.cptx86.com 17313'${NORMAL}"
-echo    "or"
-echo -e "\t${BOLD}ssh -t uadmin@three-rpi3b.cptx86.com 'sudo check-registry-tls.sh two.cptx86.com 17313'${NORMAL}"
-echo    "To loop through a list of hosts in the cluster use,"
-echo    "https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
-echo -e "\t${BOLD}cluster-command.sh special 'sudo check-registry-tls.sh two.cptx86.com 17313'${NORMAL}"
 
-###  Production standard 1.3.531 DEBUG variable
-echo -e "\nThe DEBUG environment variable can be set to '', '0', '1', '2', '3', '4' or"
-echo    "'5'.  The setting '' or '0' will turn off all DEBUG messages during execution of"
-echo    "this script.  The setting '1' will print all DEBUG messages during execution of"
-echo    "this script.  The setting '2' (set -x) will print a trace of simple commands"
-echo    "before they are executed in this script.  The setting '3' (set -v) will print"
-echo    "shell input lines as they are read.  The setting '4' (set -e) will exit"
-echo    "immediately if non-zero exit status is recieved with some exceptions.  The"
-echo    "setting '5' (set -e -o pipefail) will do setting '4' and exit if any command in"
-echo    "a pipeline errors.  For more information about any of the set options, see"
-echo    "man bash."
-
-###  Production standard 4.3.534 Documentation Language
+###  Production standard 4.3.550 Documentation Language                                     # 3.550
 #    Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [[ "${LANG}" == "fr_CA.UTF-8" ]] || [[ "${LANG}" == "fr_FR.UTF-8" ]] || [[ "${LANG}" == "fr_CH.UTF-8" ]] ; then
   echo -e "\n--> ${LANG}"
   echo    "<votre aide va ici>" # your help goes here
   echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
-elif ! [[ "${LANG}" == "en_US.UTF-8" ]] ; then
+elif ! [[ "${LANG}" == "en_US.UTF-8" ||  "${LANG}" == "en.UTF-8" || "${LANG}" == "C.UTF-8" ]] ; then  # 3.550
   new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
 
 echo -e "\n${BOLD}ENVIRONMENT VARIABLES${NORMAL}"
 echo    "If using the bash shell, enter; 'export DEBUG=1' on the command line to set"
-echo    "the DEBUG environment variable to '1' (0 = debug off, 1 = debug on).  Use the"
-echo    "command, 'unset DEBUG' to remove the exported information from the DEBUG"
-echo    "environment variable.  You are on your own defining environment variables if"
+echo    "the environment variable DEBUG to '1' (0 = debug off, 1 = debug on).  Use the"
+echo    "command, 'unset DEBUG' to remove the exported information from the environment"
+echo    "variable DEBUG.  You are on your own defining environment variables if"
 echo    "you are using other shells."
-echo    "   DEBUG           (default off '0')"
+
+###  Production standard 1.3.550 DEBUG variable                                             # 3.550
+echo    "   DEBUG           (default off '0')  The DEBUG environment variable can be set"   # 3.550
+echo    "                   to 0, 1, 2, 3, 4 or 5.  The setting '' or 0 will turn off"      # 3.550
+echo    "                   all DEBUG messages during execution of this script.  The"       # 3.550
+echo    "                   setting 1 will print all DEBUG messages during execution."      # 3.550
+echo    "                   Setting 2 (set -x) will print a trace of simple commands"       # 3.550
+echo    "                   before they are executed.  Setting 3 (set -v) will print"       # 3.550
+echo    "                   shell input lines as they are read.  Setting 4 (set -e) will"   # 3.550
+echo    "                   exit immediately if non-zero exit status is recieved with"      # 3.550
+echo    "                   some exceptions.  Setting 5 (set -e -o pipefail) will do"       # 3.550
+echo    "                   setting 4 and exit if any command in a pipeline errors.  For"   # 3.550
+echo    "                   more information about the set options, see man bash."          # 3.550
+
 echo    "   REGISTRY_HOST   Registry host (default '${DEFAULT_REGISTRY_HOST}')"
 echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
 echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
 echo    "   DATA_DIR        Data directory (default '${DEFAULT_DATA_DIR}')"
 
 echo -e "\n${BOLD}OPTIONS${NORMAL}"
-echo    "Order of precedence: CLI options, environment variable, default code."
+echo -e "Order of precedence: CLI options, environment variable, default code.\n"
 echo    "   REGISTRY_HOST   Registry host (default '${DEFAULT_REGISTRY_HOST}')"
 echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
 echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
@@ -136,10 +127,32 @@ echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
 
 echo -e "\n${BOLD}EXAMPLES${NORMAL}"
-echo -e "   Check local host certificates for <REGISTRY_HOST> (two.cptx86.com) using\n   <REGISTRY_PORT> (17313)\n\t${BOLD}sudo ${COMMAND_NAME} two.cptx86.com 17313${NORMAL}"
-echo -e "   Use cluster-command.sh script to loop through hosts in a cluster."
-echo    "   Check each host certificates for <REGISTRY_HOST> (two.cptx86.com) using"
-echo -e "   <REGISTRY_PORT> (17313)\n\t${BOLD}cluster-command.sh special 'sudo ${COMMAND_NAME} two.cptx86.com 17313${NORMAL}'"
+echo -e "   Check local host certificates for <REGISTRY_HOST> (two.cptx86.com) using\n   <REGISTRY_PORT> (17313)\n\t${BOLD}sudo ${COMMAND_NAME} two.cptx86.com 17313${NORMAL}\n"  # 3.550
+echo    "   This script works for the local host only.  To use ${COMMAND_NAME} on a"
+echo    "   remote hosts (one-rpi3b.cptx86.com) with ssh port of 12323 as uadmin user;"
+echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo ${COMMAND_NAME} two.cptx86.com 17313'${NORMAL}"
+echo    "   or"
+echo -e "\t${BOLD}ssh -t uadmin@three-rpi3b.cptx86.com 'sudo ${COMMAND_NAME} two.cptx86.com 17313'${NORMAL}\n"
+echo    "   To loop through a list of hosts in the cluster use,"
+echo    "   https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
+echo -e "\t${BOLD}cluster-command.sh special 'sudo ${COMMAND_NAME} two.cptx86.com 17313'${NORMAL}"
+
+echo -e "\n${BOLD}SEE ALSO${NORMAL}"                                                        # 3.550
+echo    "   cluster-command.sh (https://github.com/BradleyA/Linux-admin/tree/master/cluster-command)"  # 3.550
+
+echo -e "\n${BOLD}AUTHOR${NORMAL}"                                                          # 3.550
+echo    "   ${COMMAND_NAME} was written by Bradley Allen <allen.bradley@ymail.com>"         # 3.550
+
+echo -e "\n${BOLD}REPORTING BUGS${NORMAL}"                                                  # 3.550
+echo    "   Report ${COMMAND_NAME} bugs https://github.com/BradleyA/docker-security-infrastructure/issues/new"  # 3.550
+
+###  Production standard 5.3.550 Copyright                                                  # 3.550
+echo -e "\n${BOLD}COPYRIGHT${NORMAL}"                                                       # 3.550
+echo    "   Copyright (c) 2020 Bradley Allen"                                               # 3.550
+echo    "   MIT License https://github.com/BradleyA/docker-security-infrastructure/blob/master/LICENSE"  # 3.550
+
+#	echo -e "\n${BOLD}HISTORY${NORMAL}"                                                         # 3.550
+#	echo    "   As of . . .  "                                                                  # 3.550
 }
 
 #    Date and time function ISO 8601
@@ -261,7 +274,7 @@ if [[ "${REGISTRY_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ]] ; then
 
 #    Check if certificate will expire in the next 30 day
   if [[ "${REGISTRY_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS_PLUS_30_DAYS}" ]] ; then
-    echo -e "\n\tCertificate on ${LOCALHOST}, /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/${YELLOW}ca.crt${NORMAL}: ${BOLD}${GREEN}PASS${NORMAL} until ${BOLD}${YELLOW}${REGISTRY_EXPIRE_DATE}${NORMAL}"
+    echo -e "\n\tCertificate on ${BOLD}${CYAN}${LOCALHOST}${NORMAL},\n\t/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/${YELLOW}ca.crt${NORMAL}:\n\t${BOLD}${GREEN}PASS${NORMAL} until ${BOLD}${YELLOW}${REGISTRY_EXPIRE_DATE}${NORMAL}"
   else
     new_message "${LINENO}" "${YELLOW}WARN${WHITE}" "  Certificate on ${LOCALHOST}, /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/${YELLOW}ca.crt${NORMAL}, ${BOLD}${YELLOW}EXPIRES${NORMAL} on ${BOLD}${YELLOW}${REGISTRY_EXPIRE_DATE}${NORMAL}" 1>&2
 #    Help hint
@@ -322,7 +335,7 @@ if [[ "${LOCALHOST}" == "${REGISTRY_HOST}" ]] ; then
 #    Check if certificate has expired
   if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  REGISTRY_EXPIRE_DATE  >${REGISTRY_EXPIRE_DATE}<  REGISTRY_EXPIRE_SECONDS > CURRENT_DATE_SECONDS ${REGISTRY_EXPIRE_SECONDS} -gt ${CURRENT_DATE_SECONDS}" 1>&2 ; fi
   if [[ "${REGISTRY_EXPIRE_SECONDS}" -gt "${CURRENT_DATE_SECONDS}" ]] ; then
-    echo -e "\n\tCertificate on ${LOCALHOST}, ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/${YELLOW}domain.crt${NORMAL}: ${BOLD}${GREEN}PASS${NORMAL} until ${BOLD}${YELLOW}${REGISTRY_EXPIRE_DATE}${NORMAL}"
+    echo -e "\n\tCertificate on ${BOLD}${CYAN}${LOCALHOST}${NORMAL},\n\t${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/${YELLOW}domain.crt${NORMAL}:\n\t${BOLD}${GREEN}PASS${NORMAL} until ${BOLD}${YELLOW}${REGISTRY_EXPIRE_DATE}${NORMAL}"
   else
     new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Certificate on ${LOCALHOST}, ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/${YELLOW}domain.crt${WHITE}, ${BOLD}${RED}HAS EXPIRED${NORMAL} on ${BOLD}${YELLOW}${REGISTRY_EXPIRE_DATE}${NORMAL}" 1>&2
 #    Help hint
