@@ -1,20 +1,20 @@
 
-In SA-shellcheck-001 line 223:
+In SA-shellcheck-001 line 241:
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  File permissions for ${CERT_DAEMON_DIR}ca.pem are not 444.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/ca.pem) to 0444 file permissions." 1>&2
                                                                                                                                         ^-- SC2086: Double quote to prevent globbing and word splitting.
 
 
-In SA-shellcheck-001 line 229:
+In SA-shellcheck-001 line 247:
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  File permissions for ${CERT_DAEMON_DIR}cert.pem are not 444.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/cert.pem) to 0444 file permissions." 1>&2
                                                                                                                                           ^-- SC2086: Double quote to prevent globbing and word splitting.
 
 
-In SA-shellcheck-001 line 235:
+In SA-shellcheck-001 line 253:
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  File permissions for ${CERT_DAEMON_DIR}key.pem are not 400.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}/key.pem) to 0400 file permissions." 1>&2
                                                                                                                                          ^-- SC2086: Double quote to prevent globbing and word splitting.
 
 
-In SA-shellcheck-001 line 241:
+In SA-shellcheck-001 line 259:
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Directory permissions for ${CERT_DAEMON_DIR} are not 700.  Correcting $(stat -Lc %a ${CERT_DAEMON_DIR}) to 700 directory permissions." 1>&2
                                                                                                                                        ^-- SC2086: Double quote to prevent globbing and word splitting.
 
