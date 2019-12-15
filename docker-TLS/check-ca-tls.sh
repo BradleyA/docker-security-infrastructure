@@ -1,24 +1,18 @@
 #!/bin/bash
-# 	docker-TLS/check-ca-tls.sh  3.548.1116  2019-12-14T23:31:25.261515-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.547-1-g77bee8e  
-# 	   docker-TLS/check-ca-tls.sh   correct shellcheck incident 
-# 	docker-TLS/check-ca-tls.sh  3.547.1114  2019-12-14T23:22:01.979282-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.546  
-# 	   docker-TLS/check-ca-tls.sh  begin testing Production standard 0.3.550 --help 
-# 	docker-TLS/check-ca-tls.sh  3.546.1113  2019-12-14T16:57:25.372870-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.545-3-ga1fbf5a  
-# 	   docker-TLS/check-ca-tls.sh  update output and display_help 
+# 	docker-TLS/check-ca-tls.sh  3.549.1117  2019-12-15T14:54:01.361686-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.548  
+# 	   docker-TLS/check-ca-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 
 # 	docker-TLS/check-ca-tls.sh  3.543.1106  2019-12-13T16:20:51.645739-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
 # 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
-# 	docker-TLS/check-ca-tls.sh  3.466.981  2019-10-21T21:43:30.920833-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.465-1-g5db421c  
-# 	   docker-TLS/check-ca-tls.sh   add color output ; Production standard 4.3.534 Documentation Language 
 # 	docker-TLS/check-ca-tls.sh  3.454.951  2019-10-13T15:24:56.576980-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.453  
 # 	   docker-TLS/check-ca-tls.sh docker-TLS/check-registry-tls.sh  #59 #61  updated Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
 # 	docker-TLS/check-ca-tls.sh  3.293.760  2019-07-20T19:51:00.914284-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.292  
 # 	   complete, release to production close #56 
 #86# docker-TLS/check-ca-tls.sh - shell script start and end dates of ${DEFAULT_CERT_DIR}/${DEFAULT_CA_CERT}
 ###  Production standard 3.0 shellcheck
-###  Production standard 5.1.160 Copyright
-#    Copyright (c) 2019 Bradley Allen
-#    MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-###  Production standard 1.3.531 DEBUG variable
+###  Production standard 5.3.550 Copyright                                              # 3.550
+#    Copyright (c) 2020 Bradley Allen                                                   # 3.550
+#    MIT License is online  https://github.com/BradleyA/user-files/blob/master/LICENSE  # 3.550
+###  Production standard 1.3.550 DEBUG variable                                         # 3.550
 #    Order of precedence: environment variable, default code
 if [[ "${DEBUG}" == ""  ]] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 if [[ "${DEBUG}" == "2" ]] ; then set -x    ; fi   # Print trace of simple commands before they are executed
@@ -37,7 +31,7 @@ DEFAULT_CERT_DIR="${HOME}/.docker"
 DEFAULT_CA_CERT="ca.pem"
 
 ###  Production standard 8.3.541 --usage
-COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')   # 3.541
+COMMAND_NAME=$(echo "${0}" | sed 's/^.*\///')                                               # 3.541
 display_usage() {
 echo -e "\n${NORMAL}${COMMAND_NAME}\n   print start and end dates of ${DEFAULT_CERT_DIR}/${DEFAULT_CA_CERT}"
 echo -e "\n${BOLD}USAGE${NORMAL}"
@@ -49,42 +43,22 @@ echo    "   ${COMMAND_NAME} [--usage | -usage | -u]"
 echo    "   ${COMMAND_NAME} [--version | -version | -v]"
 }
 
-###  Production standard 0.3.214 --help
+###  Production standard 0.3.550 --help                                                     # 3.550
 display_help() {
 display_usage
-#    Displaying help DESCRIPTION in English en_US.UTF-8
+#    Displaying help DESCRIPTION in English en_US.UTF-8, en.UTF-8, C.UTF-8                  # 3.550
 echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
-echo    "Print start and end dates of a Docker CA in <CERT_DIR> (default:"
-echo    "${DEFAULT_CERT_DIR})."
-echo -e "\nAn administrator may receive password and/or passphrase prompts from a"
-echo    "remote systen; running the following may stop the prompts in your cluster."
-echo -e "\t${BOLD}ssh-copy-id <TLS_USER>@<REMOTE_HOST>${NORMAL}"
-echo    "or"
-echo -e "\t${BOLD}ssh-copy-id <TLS_USER>@<192.168.x.x>${NORMAL}"
-echo    "If that does not resolve the prompting challenge then review the man pages for"
-echo    "ssh-agent and ssh-add before entering the following in a terminal window."
-echo -e "\t${BOLD}eval \$(ssh-agent)${NORMAL}"
-echo -e "\t${BOLD}ssh-add${NORMAL}"
+echo    "Print start and end dates of a Docker CA, ${DEFAULT_CA_CERT}, in"
+echo    "${DEFAULT_CERT_DIR}.  Other Docker CA file names in other directories"
+echo    "can be checked using options."
 
-###  Production standard 1.3.531 DEBUG variable
-echo -e "\nThe DEBUG environment variable can be set to '', '0', '1', '2', '3', '4' or"
-echo    "'5'.  The setting '' or '0' will turn off all DEBUG messages during execution of"
-echo    "this script.  The setting '1' will print all DEBUG messages during execution of"
-echo    "this script.  The setting '2' (set -x) will print a trace of simple commands"
-echo    "before they are executed in this script.  The setting '3' (set -v) will print"
-echo    "shell input lines as they are read.  The setting '4' (set -e) will exit"
-echo    "immediately if non-zero exit status is recieved with some exceptions.  The"
-echo    "setting '5' (set -e -o pipefail) will do setting '4' and exit if any command in"
-echo    "a pipeline errors.  For more information about any of the set options, see"
-echo    "man bash."
-
-###  Production standard 4.3.534 Documentation Language
+###  Production standard 4.3.550 Documentation Language                                     # 3.550
 #    Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [[ "${LANG}" == "fr_CA.UTF-8" ]] || [[ "${LANG}" == "fr_FR.UTF-8" ]] || [[ "${LANG}" == "fr_CH.UTF-8" ]] ; then
   echo -e "\n--> ${LANG}"
   echo    "<votre aide va ici>" # your help goes here
   echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
-elif ! [[ "${LANG}" == "en_US.UTF-8" ]] ; then
+elif ! [[ "${LANG}" == "en_US.UTF-8" ||  "${LANG}" == "en.UTF-8" || "${LANG}" == "C.UTF-8" ]] ; then  # 3.550
   new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
 
@@ -94,7 +68,20 @@ echo    "the environment variable DEBUG to '1' (0 = debug off, 1 = debug on).  U
 echo    "command, 'unset DEBUG' to remove the exported information from the environment"
 echo    "variable DEBUG.  You are on your own defining environment variables if"
 echo    "you are using other shells."
-echo    "   DEBUG           (default off '0')"
+
+###  Production standard 1.3.550 DEBUG variable                                             # 3.550
+echo    "   DEBUG           (default off '0')  The DEBUG environment variable can be set"   # 3.550
+echo    "                   to 0, 1, 2, 3, 4 or 5.  The setting '' or 0 will turn off"      # 3.550
+echo    "                   all DEBUG messages during execution of this script.  The"       # 3.550
+echo    "                   setting 1 will print all DEBUG messages during execution."      # 3.550
+echo    "                   Setting 2 (set -x) will print a trace of simple commands"       # 3.550
+echo    "                   before they are executed.  Setting 3 (set -v) will print"       # 3.550
+echo    "                   shell input lines as they are read.  Setting 4 (set -e) will"   # 3.550
+echo    "                   exit immediately if non-zero exit status is recieved with"      # 3.550
+echo    "                   some exceptions.  Setting 5 (set -e -o pipefail) will do"       # 3.550
+echo    "                   setting 4 and exit if any command in a pipeline errors.  For"   # 3.550
+echo    "                   more information about the set options, see man bash."          # 3.550
+
 echo    "   CERT_DIR        Certification directory (default '${DEFAULT_CERT_DIR}')"
 echo    "   CA_CERT         Name of CA certificate (default '${DEFAULT_CA_CERT}')"
 
@@ -121,41 +108,48 @@ echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/mast
 
 echo -e "\n${BOLD}EXAMPLES${NORMAL}"
 echo    "   User checking start and end dates of their Docker CA in \$HOME/.docker."
-echo -e "\t${BOLD}${COMMAND_NAME}${NORMAL}\n"
+echo -e "\t${BOLD}${COMMAND_NAME}${NORMAL}\n"                                               # 3.550
 echo    "   User checking start and end dates of their Docker CA in ."
-echo -e "\t${BOLD}cd ~/.docker ; ${COMMAND_NAME} . ca.pem${NORMAL}\n"
-echo    "   To loop through a list of hosts in a cluster a user could use,"
-echo    "(https://github.com/BradleyA/Linux-admin/tree/master/cluster-command)"
-echo -e "\t${BOLD}cluster-command.sh special '${COMMAND_NAME}'${NORMAL}\n"
-echo    "   Administrator checking start and end dates of other certificates by using:"
-echo -e "\t${BOLD}sudo ${COMMAND_NAME} ~sam/.docker ca.pem${NORMAL}\n"
+echo -e "\t${BOLD}cd ~/.docker ; ${COMMAND_NAME} . ca.pem${NORMAL}\n"                       # 3.550
+echo    "   To loop through a list of hosts a user could use, cluster-command.sh."          # 3.550
+echo    "   An administrator may receive password and/or passphrase prompts from a"         # 3.550
+echo    "   remote systen; running the following may stop the prompts."                     # 3.550
+echo -e "\t${BOLD}ssh-copy-id <TLS_USER>@<REMOTE_HOST>${NORMAL}"                            # 3.550
+echo    "   or"                                                                             # 3.550
+echo -e "\t${BOLD}ssh-copy-id <TLS_USER>@<192.168.x.x>${NORMAL}"                            # 3.550
+echo    "   If that does not resolve the prompting challenge then review man pages for"     # 3.550
+echo    "   ssh-agent and ssh-add."                                                         # 3.550
+echo    "   (https://github.com/BradleyA/Linux-admin/tree/master/cluster-command)"          # 3.550
+echo -e "\t${BOLD}cluster-command.sh special '${COMMAND_NAME}'${NORMAL}\n"                  # 3.550
+echo    "   Administrator checking start and end dates of another user by using:"
+echo -e "\t${BOLD}sudo ${COMMAND_NAME} ~sam/.docker ca.pem${NORMAL}\n"                      # 3.550
 echo    "   To loop through a list of hosts in a cluster an administrator could check the"
 echo    "   start and end dates of Docker CA for user sam in /home/sam/.docker."
-echo -e "\t${BOLD}cluster-command.sh special 'sudo ${COMMAND_NAME} /home/sam/.docker ca.pem'${NORMAL}\n"
+echo -e "\t${BOLD}cluster-command.sh special 'sudo ${COMMAND_NAME} /home/sam/.docker ca.pem'${NORMAL}\n"  # 3.550
 echo    "   Administrator checking a Docker daemon CA by including sudo.  To use"
 echo    "   ${COMMAND_NAME} on a remote hosts (one-rpi3b.cptx86.com) with ssh port"
 echo    "   of 12323 as uadmin user;"
-echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo ${COMMAND_NAME} /etc/docker/certs.d/daemon ca.pem'${NORMAL}\n"
+echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo ${COMMAND_NAME} /etc/docker/certs.d/daemon ca.pem'${NORMAL}\n"  # 3.550
 echo -e "   Administrator checking a Docker private registry CA by including sudo.  To"
 echo    "   use ${COMMAND_NAME} on a remote hosts (two-rpi3b.cptx86.com) with"
 echo    "   default ssh port as uadmin user;"
-echo -e "\t${BOLD}ssh -t uadmin@two-rpi3b.cptx86.com 'sudo ${COMMAND_NAME} /etc/docker/certs.d/two.cptx86.com:17315 ca.crt'${NORMAL}\n"
+echo -e "\t${BOLD}ssh -t uadmin@two-rpi3b.cptx86.com 'sudo ${COMMAND_NAME} /etc/docker/certs.d/two.cptx86.com:17315 ca.crt'${NORMAL}"  # 3.550
 
-echo -e "\n${BOLD}SEE ALSO${NORMAL}"                                                          # 3.550
+echo -e "\n${BOLD}SEE ALSO${NORMAL}"                                                        # 3.550
 echo    "   cluster-command.sh (https://github.com/BradleyA/Linux-admin/tree/master/cluster-command)"  # 3.550
 
-echo -e "\n${BOLD}AUTHOR${NORMAL}"                                                            # 3.550
-echo    "   ${COMMAND_NAME} was written by Bradley Allen <allen.bradley@ymail.com>"           # 3.550
+echo -e "\n${BOLD}AUTHOR${NORMAL}"                                                          # 3.550
+echo    "   ${COMMAND_NAME} was written by Bradley Allen <allen.bradley@ymail.com>"         # 3.550
 
-echo -e "\n${BOLD}REPORTING BUGS${NORMAL}"                                                    # 3.550
+echo -e "\n${BOLD}REPORTING BUGS${NORMAL}"                                                  # 3.550
 echo    "   Report ${COMMAND_NAME} bugs https://github.com/BradleyA/docker-security-infrastructure/issues/new"  # 3.550
 
-###  Production standard 5.3.550 Copyright                                                    # 3.550
-echo -e "\n${BOLD}COPYRIGHT${NORMAL}"                                                         # 3.550
-echo    "   Copyright (c) 2020 Bradley Allen"                                                 # 3.550
+###  Production standard 5.3.550 Copyright                                                  # 3.550
+echo -e "\n${BOLD}COPYRIGHT${NORMAL}"                                                       # 3.550
+echo    "   Copyright (c) 2020 Bradley Allen"                                               # 3.550
 echo    "   MIT License https://github.com/BradleyA/docker-security-infrastructure/blob/master/LICENSE"  # 3.550
 
-#    echo -e "\n${BOLD}HISTORY${NORMAL}"                                                           # 3.550
+#    echo -e "\n${BOLD}HISTORY${NORMAL}"                                                    # 3.550
 }
 
 #    Date and time function ISO 8601
