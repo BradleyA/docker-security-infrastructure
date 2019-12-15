@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-ca-tls.sh  3.548.1116  2019-12-14T23:31:25.261515-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.547-1-g77bee8e  
+# 	   docker-TLS/check-ca-tls.sh   correct shellcheck incident 
 # 	docker-TLS/check-ca-tls.sh  3.547.1114  2019-12-14T23:22:01.979282-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.546  
 # 	   docker-TLS/check-ca-tls.sh  begin testing Production standard 0.3.550 --help 
 # 	docker-TLS/check-ca-tls.sh  3.546.1113  2019-12-14T16:57:25.372870-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.545-3-ga1fbf5a  
@@ -218,7 +220,7 @@ if [[ -s "${CERT_DIR}/${CA_CERT}" ]] ; then
   CA_CERT_START_DATE=$(date -d"${CA_CERT_START_DATE}" +%Y-%m-%dT%H:%M:%S-%Z)
   CA_CERT_EXPIRE_DATE=$(openssl x509 -in "${CERT_DIR}/${CA_CERT}" -noout -enddate | cut -d '=' -f 2)
   CA_CERT_EXPIRE_DATE=$(date -d"${CA_CERT_EXPIRE_DATE}" +%Y-%m-%dT%H:%M:%S-%Z)
-  DAYS_VALID=$(echo "( $(date -d ${CA_CERT_EXPIRE_DATE} +%s) - $(date -d ${CA_CERT_START_DATE} +%s)) / (24*3600)" | bc)
+  DAYS_VALID=$(echo "( $(date -d "${CA_CERT_EXPIRE_DATE}" +%s) - $(date -d "${CA_CERT_START_DATE}" +%s)) / (24*3600)" | bc)
 #    Help hint
   echo -e "\n\tDocker CA, ${YELLOW}${CERT_DIR}/${CA_CERT}${WHITE}, is valid for ${BOLD}${YELLOW}${DAYS_VALID} days${NORMAL}"
   echo -e "\tfrom ${BOLD}${YELLOW}${CA_CERT_START_DATE}${NORMAL} to ${BOLD}${YELLOW}${CA_CERT_EXPIRE_DATE}${NORMAL}."
