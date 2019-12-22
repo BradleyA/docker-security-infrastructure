@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-user-tls.sh  3.554.1125  2019-12-22T17:05:42.650726-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.553-1-g3e4c43d  
+# 	   docker-TLS/create-user-tls.sh   add warning when${CA_CERT} expires before user-cert.pem 
 # 	docker-TLS/create-user-tls.sh  3.543.1106  2019-12-13T16:20:53.033820-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
 # 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
 # 	docker-TLS/create-user-tls.sh  3.505.1039  2019-11-22T15:01:23.509800-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.504  
@@ -254,7 +256,7 @@ openssl req -subj '/subjectAltName=client' -new -key "${TLS_USER}-user-priv-key.
 #    Create and sign a ${NUMBER_DAYS} day certificate for user ${TLS_USER}
 SITE_CA_CERT=$(ls -l "${CA_CERT}" | sed -e 's/^.* -> site\///')
 echo -e "\n\tCreate and sign a  ${BOLD}${YELLOW}${NUMBER_DAYS}${NORMAL}  day certificate for user ${BOLD}${YELLOW}${TLS_USER}${NORMAL}\n\trequires the CA Private Key pass phrase for\n\t${BOLD}${YELLOW}${SITE_CA_CERT}${NORMAL}"
-openssl x509 -req -days "${NUMBER_DAYS}" -sha256 -in "${TLS_USER}-user.csr" -CA ca.pem -CAkey ".private/${CA_PRIVATE_CERT}" -CAcreateserial -out "${TLS_USER}-user-cert.pem" || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Wrong pass phrase for .private/${CA_PRIVATE_CERT}:" ; exit 1; }
+openssl x509 -req -days "${NUMBER_DAYS}" -sha256 -in "${TLS_USER}-user.csr" -CA "${CA_CERT}" -CAkey ".private/${CA_PRIVATE_CERT}" -CAcreateserial -out "${TLS_USER}-user-cert.pem" || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Wrong pass phrase for .private/${CA_PRIVATE_CERT}:" ; exit 1; }
 
 #    Removing certificate signing requests (CSR)
 echo -e "\n\tRemoving certificate signing requests (CSR) and set file permissions"
@@ -280,6 +282,21 @@ ln -sf "${TLS_USER}-user-priv-key.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREA
 echo   "${BOLD}${CYAN}"
 ls -1  "${SITE_CA_CERT}"
 ls -1  | grep "${CERT_CREATE_DATE}"
+
+#    View user certificate expiration date of ca.pem file
+CA_CERT_EXPIRE_DATE=$(openssl x509 -in "${CA_CERT}" -noout -enddate | cut -d '=' -f 2)
+CA_CERT_EXPIRE_SECONDS=$(date -d "${CA_CERT_EXPIRE_DATE}" '+%s')
+
+#    View user certificate expiration date of user-cert.pem file
+USER_EXPIRE_DATE=$(openssl x509 -in "user-cert.pem" -noout -enddate | cut -d '=' -f 2)
+USER_EXPIRE_SECONDS=$(date -d "${USER_EXPIRE_DATE}" '+%s')
+
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable... USER_EXPIRE_DATE >${USER_EXPIRE_DATE}< USER_EXPIRE_SECONDS >${USER_EXPIRE_SECONDS}< CA_CERT_EXPIRE_DATE >${CA_CERT_EXPIRE_DATE}< CA_CERT_EXPIRE_SECONDS >${CA_CERT_EXPIRE_SECONDS}<" 1>&2 ; fi
+
+#    Check if certificate has expired
+if [[ "${USER_EXPIRE_SECONDS}" -gt "${CA_CERT_EXPIRE_SECONDS}" ]] ; then
+  new_message "${LINENO}" "${YELLOW}WARN${WHITE}" "  The ${YELLOW}${CA_CERT}${WHITE}, ${CA_CERT_EXPIRE_DATE}, will expire before ${YELLOW}user-cert.pem${NORMAL}, ${USER_EXPIRE_DATE}." 1>&2
+fi
 
 #    Help hint
 echo -e "\n\t${NORMAL}Use script ${BOLD}${YELLOW}copy-user-2-remote-host-tls.sh${NORMAL} to update remote host.\n"
