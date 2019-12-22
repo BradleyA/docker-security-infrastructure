@@ -1,23 +1,23 @@
 
-In SA-shellcheck-001 line 284:
+In SA-shellcheck-001 line 299:
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  File permissions for ${USER_HOME}${TLS_USER}/.docker/ca.pem are not 444.  Correcting $(stat -Lc %a ${USER_HOME}${TLS_USER}/.docker/ca.pem) to 0444 file permissions" 1>&2
                                                                                                                                                       ^-- SC2086: Double quote to prevent globbing and word splitting.
                                                                                                                                                                   ^-- SC2086: Double quote to prevent globbing and word splitting.
 
 
-In SA-shellcheck-001 line 290:
+In SA-shellcheck-001 line 305:
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  File permissions for ${USER_HOME}${TLS_USER}/.docker/cert.pem are not 444.  Correcting $(stat -Lc %a ${USER_HOME}${TLS_USER}/.docker/cert.pem) to 0444 file permissions" 1>&2
                                                                                                                                                         ^-- SC2086: Double quote to prevent globbing and word splitting.
                                                                                                                                                                     ^-- SC2086: Double quote to prevent globbing and word splitting.
 
 
-In SA-shellcheck-001 line 296:
+In SA-shellcheck-001 line 311:
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  File permissions for ${USER_HOME}${TLS_USER}/.docker/key.pem are not 400.  Correcting $(stat -Lc %a ${USER_HOME}${TLS_USER}/.docker/key.pem) to 0400 file permissions" 1>&2
                                                                                                                                                        ^-- SC2086: Double quote to prevent globbing and word splitting.
                                                                                                                                                                    ^-- SC2086: Double quote to prevent globbing and word splitting.
 
 
-In SA-shellcheck-001 line 302:
+In SA-shellcheck-001 line 317:
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Directory permissions for ${USER_HOME}${TLS_USER}/.docker\n\tare not 700.  Correcting $(stat -Lc %a ${USER_HOME}${TLS_USER}/.docker) to 700 directory permissions" 1>&2
                                                                                                                                                        ^-- SC2086: Double quote to prevent globbing and word splitting.
                                                                                                                                                                    ^-- SC2086: Double quote to prevent globbing and word splitting.

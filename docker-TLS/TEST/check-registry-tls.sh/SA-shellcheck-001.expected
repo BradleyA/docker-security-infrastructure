@@ -1,25 +1,30 @@
 
-In SA-shellcheck-001 line 278:
+In SA-shellcheck-001 line 227:
+  ls -1 /etc/docker/certs.d/ | sed 's/^/        /'
+  ^-- SC2012: Use find instead of ls to better handle non-alphanumeric filenames.
+
+
+In SA-shellcheck-001 line 282:
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  File permissions for /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/${YELLOW}ca.crt${NORMAL} are not 400.  Correcting $(stat -Lc %a /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt) to 0400 file permissions." 1>&2
                                                                                                                                                                                                                   ^-- SC2086: Double quote to prevent globbing and word splitting.
 
 
-In SA-shellcheck-001 line 284:
+In SA-shellcheck-001 line 288:
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Directory permissions for /etc/docker/certs.d/${YELLOW}${REGISTRY_HOST}:${REGISTRY_PORT}${WHITE}/ are not 700.  Correcting $(stat -Lc %a /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/) to 700 directory permissions." 1>&2
                                                                                                                                                                                                                 ^-- SC2086: Double quote to prevent globbing and word splitting.
 
 
-In SA-shellcheck-001 line 334:
+In SA-shellcheck-001 line 338:
     new_message "${LINENO}" "${RED}ERROR${WHITE}" "  File permissions for ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/${YELLOW}domain.crt${WHITE} are not 400.  Correcting $(stat -Lc %a  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt) to 0400 file permissions." 1>&2
                                                                                                                                                                                                                                                                     ^-- SC2086: Double quote to prevent globbing and word splitting.
 
 
-In SA-shellcheck-001 line 340:
+In SA-shellcheck-001 line 344:
     new_message "${LINENO}" "${RED}ERROR${WHITE}" "  File permissions for ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/${YELLOW}domain.key${WHITE} are not 400.  Correcting $(stat -Lc %a  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key) to 0400 file permissions." 1>&2
                                                                                                                                                                                                                                                                     ^-- SC2086: Double quote to prevent globbing and word splitting.
 
 
-In SA-shellcheck-001 line 346:
+In SA-shellcheck-001 line 350:
     new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Directory permissions for ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/${YELLOW}certs${WHITE}/ are not 700.  Correcting $(stat -Lc %a ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/) to 700 directory permissions." 1>&2
                                                                                                                                                                                                                                                               ^-- SC2086: Double quote to prevent globbing and word splitting.
 
