@@ -1,20 +1,16 @@
 #!/bin/bash
+# 	docker-TLS/check-user-tls.sh  3.553.1123  2019-12-22T15:11:49.408322-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.552-1-ge20f94a  
+# 	   docker-TLS/check-user-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 
 # 	docker-TLS/check-user-tls.sh  3.543.1106  2019-12-13T16:20:52.117501-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
 # 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
-# 	docker-TLS/check-user-tls.sh  3.464.977  2019-10-16T22:28:28.323070-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.463  
-# 	   docker-TLS/check-user-tls.sh    - upgrade Production standard #62 
 # 	docker-TLS/check-user-tls.sh  3.455.955  2019-10-13T20:32:00.191462-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.454-3-g6f32d2b  
 # 	   docker-TLS/check-user-tls.sh   #62  Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
-# 	docker-TLS/check-user-tls.sh  3.448.938  2019-10-12T14:56:00.146490-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.447  
-# 	   close #62   docker-TLS/check-user-tls.sh    - upgrade Production standard 
-# 	docker-TLS/check-user-tls.sh  3.436.914  2019-09-04T15:13:18.865841-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.435  
-# 	   docker-TLS/check-user-tls.sh  upgrade to Production standard 1.3.496 DEBUG variable ; shellcheck version section corrected ; change DEFAULT_USER_HOME 
 #86# docker-TLS/check-user-tls.sh - Check public, private keys, and CA for a user
 ###  Production standard 3.0 shellcheck
-###  Production standard 5.1.160 Copyright
-#    Copyright (c) 2019 Bradley Allen
-#    MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-###  Production standard 1.3.531 DEBUG variable
+###  Production standard 5.3.550 Copyright                                                  # 3.550
+#    Copyright (c) 2020 Bradley Allen                                                       # 3.550
+#    MIT License is online  https://github.com/BradleyA/user-files/blob/master/LICENSE      # 3.550
+###  Production standard 1.3.550 DEBUG variable                                             # 3.550
 #    Order of precedence: environment variable, default code
 if [[ "${DEBUG}" == ""  ]] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 if [[ "${DEBUG}" == "2" ]] ; then set -x    ; fi   # Print trace of simple commands before they are executed
@@ -54,34 +50,14 @@ echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
 echo    "Users can check their public, private keys, and CA in /home/ or other"
 echo    "non-default home directories.  The file and directory permissions are also"
 echo    "checked."
-echo -e "\t${BOLD}${COMMAND_NAME}${NORMAL}"
-echo -e "\nTo loop through a list of hosts in a cluster a user could use,"
-echo    "https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
-echo -e "\t${BOLD}cluster-command.sh special '${COMMAND_NAME}'${NORMAL}"
-echo -e "\nAdministrators can check other users certificates by using"
-echo -e "\t${BOLD}sudo ${COMMAND_NAME} <user-name>${NORMAL}"
-echo -e "\nTo loop through a list of hosts in a cluster an administrators could use,"
-echo -e "\t${BOLD}cluster-command.sh special 'sudo ${COMMAND_NAME} <user-name>'${NORMAL}"
 
-###  Production standard 1.3.531 DEBUG variable
-echo -e "\nThe DEBUG environment variable can be set to '', '0', '1', '2', '3', '4' or"
-echo    "'5'.  The setting '' or '0' will turn off all DEBUG messages during execution of"
-echo    "this script.  The setting '1' will print all DEBUG messages during execution of"
-echo    "this script.  The setting '2' (set -x) will print a trace of simple commands"
-echo    "before they are executed in this script.  The setting '3' (set -v) will print"
-echo    "shell input lines as they are read.  The setting '4' (set -e) will exit"
-echo    "immediately if non-zero exit status is recieved with some exceptions.  The"
-echo    "setting '5' (set -e -o pipefail) will do setting '4' and exit if any command in"
-echo    "a pipeline errors.  For more information about any of the set options, see"
-echo    "man bash."
-
-###  Production standard 4.3.534 Documentation Language
+###  Production standard 4.3.550 Documentation Language                                     # 3.550
 #    Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [[ "${LANG}" == "fr_CA.UTF-8" ]] || [[ "${LANG}" == "fr_FR.UTF-8" ]] || [[ "${LANG}" == "fr_CH.UTF-8" ]] ; then
   echo -e "\n--> ${LANG}"
   echo    "<votre aide va ici>" # your help goes here
   echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
-elif ! [[ "${LANG}" == "en_US.UTF-8" ]] ; then
+elif ! [[ "${LANG}" == "en_US.UTF-8" ||  "${LANG}" == "en.UTF-8" || "${LANG}" == "C.UTF-8" ]] ; then  # 3.550
   new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
 
@@ -91,10 +67,24 @@ echo    "the environment variable DEBUG to '1' (0 = debug off, 1 = debug on).  U
 echo    "command, 'unset DEBUG' to remove the exported information from the environment"
 echo    "variable DEBUG.  You are on your own defining environment variables if"
 echo    "you are using other shells."
-echo    "   DEBUG       (default off '0')"
+
+###  Production standard 1.3.550 DEBUG variable                                             # 3.550
+echo    "   DEBUG           (default off '0')  The DEBUG environment variable can be set"   # 3.550
+echo    "                   to 0, 1, 2, 3, 4 or 5.  The setting '' or 0 will turn off"      # 3.550
+echo    "                   all DEBUG messages during execution of this script.  The"       # 3.550
+echo    "                   setting 1 will print all DEBUG messages during execution."      # 3.550
+echo    "                   Setting 2 (set -x) will print a trace of simple commands"       # 3.550
+echo    "                   before they are executed.  Setting 3 (set -v) will print"       # 3.550
+echo    "                   shell input lines as they are read.  Setting 4 (set -e) will"   # 3.550
+echo    "                   exit immediately if non-zero exit status is recieved with"      # 3.550
+echo    "                   some exceptions.  Setting 5 (set -e -o pipefail) will do"       # 3.550
+echo    "                   setting 4 and exit if any command in a pipeline errors.  For"   # 3.550
+echo    "                   more information about the set options, see man bash."          # 3.550
+
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 
 echo -e "\n${BOLD}OPTIONS${NORMAL}"
+echo -e "Order of precedence: CLI options, environment variable, default code.\n"
 echo    "   TLS_USER    Administration user (default ${DEFAULT_TLS_USER})"
 echo    "   USER_HOME   Location of user home directory (default ${DEFAULT_USER_HOME})"
 echo    "               sites have different home directory locations (/u/north-office/)"
@@ -122,10 +112,31 @@ echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
 
 echo -e "\n${BOLD}EXAMPLES${NORMAL}"
-echo -e "   User checking their certificates\n\t${BOLD}${COMMAND_NAME}${NORMAL}"
-echo -e "   User sam checking their certificates in a non-default home directory\n\t${BOLD}${COMMAND_NAME} sam /u/north-office/${NORMAL}"
-echo -e "   Administrator checks user bob certificates\n\t${BOLD}sudo ${COMMAND_NAME} bob${NORMAL}"
-echo -e "   Administrator checks user sam certificates in a different home directory\n\t${BOLD}sudo ${COMMAND_NAME} sam /u/north-office/${NORMAL}"
+echo -e "   User checking their certificates\n\t${BOLD}${COMMAND_NAME}${NORMAL}\n"          # 3.550
+echo -e "   User sam checking their certificates in a non-default home directory\n\t${BOLD}${COMMAND_NAME} sam /u/north-office/${NORMAL}\n"  # 3.550
+echo -e "   Administrator checks user bob certificates\n\t${BOLD}sudo ${COMMAND_NAME} bob${NORMAL}\n"  # 3.550
+echo -e "   Administrator checks user sam certificates in a different home directory\n\t${BOLD}sudo ${COMMAND_NAME} sam /u/north-office/${NORMAL}\n"  # 3.550
+echo -e "   To loop through a list of hosts in a cluster a user could use,"
+echo    "   https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
+echo -e "\t${BOLD}cluster-command.sh special '${COMMAND_NAME}'${NORMAL}\n"  # 3.550
+echo -e "   To loop through a list of hosts in a cluster an administrators could use,\n\t${BOLD}cluster-command.sh special 'sudo ${COMMAND_NAME} <user-name>'${NORMAL}"
+
+echo -e "\n${BOLD}SEE ALSO${NORMAL}"                                                        # 3.550
+echo    "   cluster-command.sh (https://github.com/BradleyA/Linux-admin/tree/master/cluster-command)"  # 3.550
+
+echo -e "\n${BOLD}AUTHOR${NORMAL}"                                                          # 3.550
+echo    "   ${COMMAND_NAME} was written by Bradley Allen <allen.bradley@ymail.com>"         # 3.550
+
+echo -e "\n${BOLD}REPORTING BUGS${NORMAL}"                                                  # 3.550
+echo    "   Report ${COMMAND_NAME} bugs https://github.com/BradleyA/docker-security-infrastructure/issues/new"  # 3.550
+
+###  Production standard 5.3.550 Copyright                                                  # 3.550
+echo -e "\n${BOLD}COPYRIGHT${NORMAL}"                                                       # 3.550
+echo    "   Copyright (c) 2020 Bradley Allen"                                               # 3.550
+echo    "   MIT License https://github.com/BradleyA/docker-security-infrastructure/blob/master/LICENSE"  # 3.550
+
+#	echo -e "\n${BOLD}HISTORY${NORMAL}"                                                         # 3.550
+#	echo    "   As of . . .  "                                                                  # 3.550
 }
 
 #    Date and time function ISO 8601

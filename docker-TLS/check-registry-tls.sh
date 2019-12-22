@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-registry-tls.sh  3.553.1123  2019-12-22T15:11:49.248036-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.552-1-ge20f94a  
+# 	   docker-TLS/check-user-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 
 # 	docker-TLS/check-registry-tls.sh  3.552.1121  2019-12-15T16:39:00.522328-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.551-1-g23e6062  
 # 	   docker-TLS/check-registry-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 
 # 	docker-TLS/check-registry-tls.sh  3.543.1106  2019-12-13T16:20:51.986929-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
@@ -237,6 +239,10 @@ fi
 #    Check if /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT} directory on system
 if [[ ! -d "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}" ]] ; then
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  /etc/docker/certs.d/${YELLOW}${REGISTRY_HOST}:${REGISTRY_PORT}${NORMAL} directory not found." 1>&2
+#    Help hint
+  echo -e "\n\tOthers in directory /etc/docker/certs.d/ are listed below:${CYAN}${BOLD}"
+  ls -1 /etc/docker/certs.d/ | sed 's/^/        /'
+  echo -e "${NORMAL}"
   exit 1
 fi
 
