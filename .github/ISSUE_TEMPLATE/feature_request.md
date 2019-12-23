@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-title: ''
+title:  - [enter brief description]
 labels: new command/service
 assignees: BradleyA
 
