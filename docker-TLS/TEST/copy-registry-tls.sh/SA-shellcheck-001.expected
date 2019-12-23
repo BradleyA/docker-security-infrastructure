@@ -4,38 +4,38 @@ echo    "~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT> directory on t
          ^-- SC2088: Note that ~ does not expand in quotes.
 
 
-In SA-shellcheck-001 line 261:
+In SA-shellcheck-001 line 276:
   echo -e "### ${SYSTEMS_FILE}"  >> ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}
   ^-- SC2129: Consider using { cmd1; cmd2; } >> file instead of individual redirects.
 
 
-In SA-shellcheck-001 line 273:
+In SA-shellcheck-001 line 288:
 for NODE in $(cat "${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}" | grep -v "#" ) ; do
             ^-- SC2013: To read lines rather than words, pipe/redirect to a 'while read' loop.
                   ^-- SC2002: Useless cat. Consider 'cmd < file | ..' or 'cmd file | ..' instead.
 
 
-In SA-shellcheck-001 line 280:
+In SA-shellcheck-001 line 295:
     if $(ssh "${NODE}" 'exit' >/dev/null 2>&1 ) ; then
        ^-- SC2091: Remove surrounding $() to avoid executing output.
 
 
-In SA-shellcheck-001 line 290:
+In SA-shellcheck-001 line 305:
         ssh -q -t -i ~/.ssh/id_rsa "${USER}@${NODE}" "${TEMP}"
                                                       ^-- SC2029: Note that, unescaped, this expands on the client side.
 
 
-In SA-shellcheck-001 line 320:
+In SA-shellcheck-001 line 335:
   if $(ssh "${REGISTRY_HOST}" 'exit' >/dev/null 2>&1 ) ; then
      ^-- SC2091: Remove surrounding $() to avoid executing output.
 
 
-In SA-shellcheck-001 line 328:
+In SA-shellcheck-001 line 343:
     ssh -q -t -i ~/.ssh/id_rsa "${USER}@${REGISTRY_HOST}" "${TEMP}"
                                                            ^-- SC2029: Note that, unescaped, this expands on the client side.
 
 
-In SA-shellcheck-001 line 354:
+In SA-shellcheck-001 line 369:
   if [[ $(ps -ef | grep remap | wc -l) == 2 ]] ; then
           ^-- SC2009: Consider using pgrep instead of grepping ps output.
                    ^-- SC2126: Consider using grep -c instead of grep|wc.
