@@ -1,18 +1,16 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.559.1135  2019-12-22T18:44:18.902233-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.558-1-g8474618  
+# 	   docker-TLS/create-registry-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 
 # 	docker-TLS/create-registry-tls.sh  3.543.1106  2019-12-13T16:20:52.770703-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
 # 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
-# 	docker-TLS/create-registry-tls.sh  3.507.1041  2019-11-22T23:00:12.959309-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.506  
-# 	   docker-TLS/create-registry-tls.sh   Production standard 6.3.539   added number of days in output message 
 # 	docker-TLS/create-registry-tls.sh  3.506.1040  2019-11-22T22:27:34.292738-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.505  
 # 	   docker-TLS/create-registry-tls.sh   updated display_help, added cert duration dates & cert symbolic links 
-# 	docker-TLS/create-registry-tls.sh  3.505.1039  2019-11-22T15:01:23.269771-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.504  
-# 	   Production standard 8.3.541 --usage 
 #86# docker-TLS/create-registry-tls.sh - Create TLS for Private Registry V2
 ###  Production standard 3.0 shellcheck
-###  Production standard 5.1.160 Copyright
-#    Copyright (c) 2019 Bradley Allen
-#    MIT License is in the online DOCUMENTATION, DOCUMENTATION URL defined below.
-###  Production standard 1.3.531 DEBUG variable
+###  Production standard 5.3.550 Copyright                                                  # 3.550
+#    Copyright (c) 2020 Bradley Allen                                                       # 3.550
+#    MIT License is online  https://github.com/BradleyA/user-files/blob/master/LICENSE      # 3.550
+###  Production standard 1.3.550 DEBUG variable                                             # 3.550
 #    Order of precedence: environment variable, default code
 if [[ "${DEBUG}" == ""  ]] ; then DEBUG="0" ; fi   # 0 = debug off, 1 = debug on, 'export DEBUG=1', 'unset DEBUG' to unset environment variable (bash)
 if [[ "${DEBUG}" == "2" ]] ; then set -x    ; fi   # Print trace of simple commands before they are executed
@@ -46,10 +44,10 @@ echo    "   ${COMMAND_NAME} [--usage | -usage | -u]"
 echo    "   ${COMMAND_NAME} [--version | -version | -v]"
 }
 
-###  Production standard 0.3.214 --help
+###  Production standard 0.3.550 --help                                                     # 3.550
 display_help() {
 display_usage
-#    Displaying help DESCRIPTION in English en_US.UTF-8
+#    Displaying help DESCRIPTION in English en_US.UTF-8, en.UTF-8, C.UTF-8                  # 3.550
 echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
 echo    "Run this script to create Docker private registry certificates on any host in"
 echo    "the <WORKING_DIRECTORY> (default ${DEFAULT_WORKING_DIRECTORY}).  It will create"
@@ -62,25 +60,13 @@ echo -e "\nThe scripts create-site-private-public-tls.sh and"
 echo    "create-new-openssl.cnf-tls.sh are NOT required for private registry"
 echo    "certificates."
 
-###  Production standard 1.3.531 DEBUG variable
-echo -e "\nThe DEBUG environment variable can be set to '', '0', '1', '2', '3', '4' or"
-echo    "'5'.  The setting '' or '0' will turn off all DEBUG messages during execution of"
-echo    "this script.  The setting '1' will print all DEBUG messages during execution of"
-echo    "this script.  The setting '2' (set -x) will print a trace of simple commands"
-echo    "before they are executed in this script.  The setting '3' (set -v) will print"
-echo    "shell input lines as they are read.  The setting '4' (set -e) will exit"
-echo    "immediately if non-zero exit status is recieved with some exceptions.  The"
-echo    "setting '5' (set -e -o pipefail) will do setting '4' and exit if any command in"
-echo    "a pipeline errors.  For more information about any of the set options, see"
-echo    "man bash."
-
-###  Production standard 4.3.534 Documentation Language
+###  Production standard 4.3.550 Documentation Language                                     # 3.550
 #    Displaying help DESCRIPTION in French fr_CA.UTF-8, fr_FR.UTF-8, fr_CH.UTF-8
 if [[ "${LANG}" == "fr_CA.UTF-8" ]] || [[ "${LANG}" == "fr_FR.UTF-8" ]] || [[ "${LANG}" == "fr_CH.UTF-8" ]] ; then
   echo -e "\n--> ${LANG}"
   echo    "<votre aide va ici>" # your help goes here
   echo    "Souhaitez-vous traduire la section description?" # Do you want to translate the description section?
-elif ! [[ "${LANG}" == "en_US.UTF-8" ]] ; then
+elif ! [[ "${LANG}" == "en_US.UTF-8" ||  "${LANG}" == "en.UTF-8" || "${LANG}" == "C.UTF-8" ]] ; then  # 3.550
   new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Your language, ${LANG}, is not supported.  Would you like to translate the description section?" 1>&2
 fi
 
@@ -90,7 +76,20 @@ echo    "the environment variable DEBUG to '1' (0 = debug off, 1 = debug on).  U
 echo    "command, 'unset DEBUG' to remove the exported information from the environment"
 echo    "variable DEBUG.  You are on your own defining environment variables if"
 echo    "you are using other shells."
-echo    "   DEBUG             (default off '0')"
+
+###  Production standard 1.3.550 DEBUG variable                                             # 3.550
+echo    "   DEBUG           (default off '0')  The DEBUG environment variable can be set"   # 3.550
+echo    "                   to 0, 1, 2, 3, 4 or 5.  The setting '' or 0 will turn off"      # 3.550
+echo    "                   all DEBUG messages during execution of this script.  The"       # 3.550
+echo    "                   setting 1 will print all DEBUG messages during execution."      # 3.550
+echo    "                   Setting 2 (set -x) will print a trace of simple commands"       # 3.550
+echo    "                   before they are executed.  Setting 3 (set -v) will print"       # 3.550
+echo    "                   shell input lines as they are read.  Setting 4 (set -e) will"   # 3.550
+echo    "                   exit immediately if non-zero exit status is recieved with"      # 3.550
+echo    "                   some exceptions.  Setting 5 (set -e -o pipefail) will do"       # 3.550
+echo    "                   setting 4 and exit if any command in a pipeline errors.  For"   # 3.550
+echo    "                   more information about the set options, see man bash."          # 3.550
+
 echo    "   REGISTRY_PORT     Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
 echo    "   NUMBER_DAYS       Number of days certificate valid"
 echo    "                     (default '${DEFAULT_NUMBER_DAYS}')" 
@@ -121,8 +120,22 @@ echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
 echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
 
 echo -e "\n${BOLD}EXAMPLES${NORMAL}"
-echo -e "   Create new certificates with 17315 port number\n\t${BOLD}${COMMAND_NAME} 17315${NORMAL}"
-echo -e "   Create new certificates with 17315 port number valid for 90 days\n\t${BOLD}${COMMAND_NAME} 17315 90${NORMAL}"
+echo -e "   Create new certificates with 17315 port number\n\t${BOLD}${COMMAND_NAME} 17315${NORMAL}\n" # 3.550
+echo -e "   Create new certificates with 17315 port number valid for 90 days\n\t${BOLD}${COMMAND_NAME} 17315 90${NORMAL}\n" # 3.550
+
+echo -e "\n${BOLD}AUTHOR${NORMAL}"                                                          # 3.550
+echo    "   ${COMMAND_NAME} was written by Bradley Allen <allen.bradley@ymail.com>"         # 3.550
+
+echo -e "\n${BOLD}REPORTING BUGS${NORMAL}"                                                  # 3.550
+echo    "   Report ${COMMAND_NAME} bugs https://github.com/BradleyA/docker-security-infrastructure/issues/new"  # 3.550
+
+###  Production standard 5.3.550 Copyright                                                  # 3.550
+echo -e "\n${BOLD}COPYRIGHT${NORMAL}"                                                       # 3.550
+echo    "   Copyright (c) 2020 Bradley Allen"                                               # 3.550
+echo    "   MIT License https://github.com/BradleyA/user-files/blob/master/LICENSE"         # 3.550
+
+#	echo -e "\n${BOLD}HISTORY${NORMAL}"                                                         # 3.550
+#	echo    "   As of . . .  "                                                                  # 3.550
 }
 
 #    Date and time function ISO 8601
