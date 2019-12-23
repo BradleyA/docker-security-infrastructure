@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-host-tls.sh  3.562.1140  2019-12-22T19:52:09.933361-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.561  
+# 	   docker-TLS/create-host-tls.sh   add warning when${CA_CERT} expires before cert.pem 
 # 	docker-TLS/create-host-tls.sh  3.558.1133  2019-12-22T18:34:17.692078-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.557-1-ge117bf8  
 # 	   docker-TLS/create-host-tls.sh docker-TLS/create-new-openssl.cnf-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 
 # 	docker-TLS/create-host-tls.sh  3.543.1106  2019-12-13T16:20:52.509183-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
@@ -307,6 +309,22 @@ ln -sf "${FQDN}-priv-key.pem--${SITE_CA_CERT_CREATE_DATE}---${CERT_CREATE_DATE}-
 echo   "${BOLD}${CYAN}"
 ls -1 | grep "${CERT_CREATE_DATE}"
 ls -1 "${SITE_CA_CERT}"
+
+#    View user certificate expiration date of ca.pem file
+CA_CERT_EXPIRE_DATE=$(openssl x509 -in "${CA_CERT}" -noout -enddate | cut -d '=' -f 2)
+CA_CERT_EXPIRE_SECONDS=$(date -d "${CA_CERT_EXPIRE_DATE}" '+%s')
+
+#    View user certificate expiration date of user-cert.pem file
+HOST_EXPIRE_DATE=$(openssl x509 -in "cert.pem" -noout -enddate | cut -d '=' -f 2)
+HOST_EXPIRE_SECONDS=$(date -d "${HOST_EXPIRE_DATE}" '+%s')
+
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable... HOST_EXPIRE_DATE >${HOST_EXPIRE_DATE}< HOST_EXPIRE_SECONDS >${HOST_EXPIRE_SECONDS}< CA_CERT_EXPIRE_DATE >${CA_CERT_EXPIRE_DATE}< CA_CERT_EXPIRE_SECONDS >${CA_CERT_EXPIRE_SECONDS}<" 1>&2 ; fi
+
+#    Check if certificate has expired
+if [[ "${HOST_EXPIRE_SECONDS}" -gt "${CA_CERT_EXPIRE_SECONDS}" ]] ; then
+  new_message "${LINENO}" "${YELLOW}WARN${WHITE}" "  The ${YELLOW}${CA_CERT}${WHITE}, ${CA_CERT_EXPIRE_DATE}, will expire before ${YELLOW}cert.pem${NORMAL}, ${HOST_EXPIRE_DATE}." 1>&2
+fi
+
 
 #    Help hint
 echo -e "\n\t${NORMAL}Use script ${BOLD}${YELLOW}copy-host-2-remote-host-tls.sh${NORMAL} to update remote host.\n"
