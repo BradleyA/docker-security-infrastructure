@@ -1,7 +1,7 @@
 ---
 name: Other
 about: Miscellaneous
-title: "[enter command causing incident] - [enter brief description]"
+title: "[enter command] - [enter brief description]"
 labels: ''
 assignees: BradleyA
 
@@ -15,4 +15,4 @@ A clear and concise description
  - Command: [e.g. hooks/post-commit  2.199.861]
 
 **Screenshots:**
-If applicable, add screenshots to help explain your incident.
+If applicable, add screenshots to help explain.
