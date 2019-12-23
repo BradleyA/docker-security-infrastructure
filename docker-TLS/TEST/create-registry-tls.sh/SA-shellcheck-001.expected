@@ -1,5 +1,5 @@
 
-In SA-shellcheck-001 line 226:
+In SA-shellcheck-001 line 241:
 ls -1 | grep "${CERT_CREATE_DATE}"
 ^-- SC2010: Don't use ls | grep. Use a glob or a for loop with a condition to allow non-alphanumeric filenames.
 
