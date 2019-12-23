@@ -1,50 +1,50 @@
 
-In SA-shellcheck-001 line 217:
+In SA-shellcheck-001 line 233:
   if ! $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
        ^-- SC2091: Remove surrounding $() to avoid executing output.
 
 
-In SA-shellcheck-001 line 239:
+In SA-shellcheck-001 line 255:
   ssh -t "${REMOTE_HOST}" "sudo -u ${TLS_USER}  mkdir -p ~${TLS_USER}/.docker ; cd ~${TLS_USER} ; sudo tar -pcf /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.backup.tar --exclude=.docker/docker-ca .docker ; sudo chown ${USER}.${USER} /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.backup.tar ; chmod 0400 /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.backup.tar"
                                    ^-- SC2029: Note that, unescaped, this expands on the client side.
 
 
-In SA-shellcheck-001 line 241:
+In SA-shellcheck-001 line 257:
   ssh -t "${REMOTE_HOST}"  rm -f "/tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.backup.tar"
                                        ^-- SC2029: Note that, unescaped, this expands on the client side.
 
 
-In SA-shellcheck-001 line 271:
+In SA-shellcheck-001 line 287:
 TEMP_CA_PEM=$(ls -l "${WORKING_DIRECTORY}/users/${TLS_USER}/ca.pem" | sed -e 's/^.* -> //')
               ^-- SC2012: Use find instead of ls to better handle non-alphanumeric filenames.
 
 
-In SA-shellcheck-001 line 272:
+In SA-shellcheck-001 line 288:
 TEMP_USER_CERT_PEM=$(ls -l "${WORKING_DIRECTORY}/users/${TLS_USER}/user-cert.pem" | sed -e 's/^.* -> //')
                      ^-- SC2012: Use find instead of ls to better handle non-alphanumeric filenames.
 
 
-In SA-shellcheck-001 line 273:
+In SA-shellcheck-001 line 289:
 TEMP_USER_PRIV_KEY_PEM=$(ls -l "${WORKING_DIRECTORY}/users/${TLS_USER}/user-priv-key.pem" | sed -e 's/^.* -> //')
                          ^-- SC2012: Use find instead of ls to better handle non-alphanumeric filenames.
 
 
-In SA-shellcheck-001 line 295:
+In SA-shellcheck-001 line 311:
   if $(ssh "${REMOTE_HOST}" 'exit' >/dev/null 2>&1 ) ; then
      ^-- SC2091: Remove surrounding $() to avoid executing output.
 
 
-In SA-shellcheck-001 line 296:
+In SA-shellcheck-001 line 312:
     ssh -t "${REMOTE_HOST}" "cd ~${TLS_USER}" || { new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${TLS_USER} user does not have home directory on ${REMOTE_HOST}"  ; exit 1; }
                                  ^-- SC2029: Note that, unescaped, this expands on the client side.
 
 
-In SA-shellcheck-001 line 303:
+In SA-shellcheck-001 line 319:
       ssh -t "${REMOTE_HOST}" "cd ; tar -pxf /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.new.tar ; rm -f /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.new.tar ; chown -fR ${TLS_USER}.${TLS_USER} .docker"
                                                   ^-- SC2029: Note that, unescaped, this expands on the client side.
 
 
-In SA-shellcheck-001 line 308:
+In SA-shellcheck-001 line 324:
       ssh -t "${REMOTE_HOST}" "cd ~${TLS_USER} ; sudo tar -pxf /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.new.tar ; sudo rm /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.new.tar ; sudo chown -fR ${TLS_USER}.${TLS_USER} .docker"
                                    ^-- SC2029: Note that, unescaped, this expands on the client side.
 
