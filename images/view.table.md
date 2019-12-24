@@ -6,3 +6,7 @@ Unique  vistors:  |       1       |       6       |       6       |       3     
 
 Total views: 683
 ###### Updated: 2019-12-24
+
+[Return to README](https://github.com/BradleyA/user-files/blob/master/README.md#traffic)
+
+**Note**  Data collection stopped between 10/14 & 12/23
