@@ -256,6 +256,7 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
 <img id="check-user-tls.sh" src="../images/check-user-tls.gif" >
 
 ## Usage
+Print start and end dates of a Docker CA, ca.pem, in /home/uthree/.docker.  Other Docker CA file names in other directories can be checked using options.
 
     check-ca-tls.sh
     
