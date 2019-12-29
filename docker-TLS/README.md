@@ -253,26 +253,7 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
 
 ## Output
 
-    $ sudo ./check-user-tls.sh bob
-    
-    View /home/bob/.docker certificate expiration date of ca.pem file.
-    notAfter=Feb  4 19:11:00 2020 GMT
-    
-    View /home/bob/.docker certificate expiration date of cert.pem file
-    notAfter=May  6 15:07:05 2018 GMT
-    
-    View /home/bob/.docker certificate issuer data of the ca.pem file.
-    issuer= /C=US/ST=Texas/L=Cedar Park/O=Company Name/OU=IT - SRE Team Central US/CN=two.cptx86.com
-    
-    View /home/bob/.docker certificate issuer data of the cert.pem file.
-    issuer= /C=US/ST=Texas/L=Cedar Park/O=Company Name/OU=IT - SRE Team Central US/CN=two.cptx86.com
-    
-    Verify that user public key in your certificate matches the public portion of your private key.
-    (stdin)= b2fb009b395f688263a23691495c2988
-    If only one line of output is returned then the public key matches the public portion of your private key.
-    
-    Verify that user certificate was issued by the CA.
-    /home/bob/.docker/cert.pem: OK
+<img id="check-user-tls.sh" src="../images/check-user-tls.gif" >
 
 ## Usage
 
