@@ -281,6 +281,8 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
 ## Output
 <img id="Steps . . " src="../images/check-host-tls.gif" >
 
+<img id="Steps . . " src="../images/check-host-tls2.gif" >
+
     $ sudo ./check-host-tls.sh
     ./check-host-tls.sh 54 [INFO]:	Checking six-rpi3b.cptx86.com TLS
 	certifications and directory permissions.
