@@ -279,7 +279,6 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
     check-host-tls.sh
 
 ## Output
-<img id="Steps . . " src="../images/check-host-tls.gif" >
 
 <img id="Steps . 2 . " src="../images/check-host-tls2.gif" >
 
