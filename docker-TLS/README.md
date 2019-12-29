@@ -141,44 +141,7 @@ A user with administration authority (uadmin) uses this script to copy host TLS 
     copy-host-2-remote-host-tls.sh <remotehost>
 
 ## Output
-     $ copy-host-2-remote-host-tls.sh one-rpi3b.cptx86.com
-     ./copy-host-2-remote-host-tls.sh 71 [INFO]:	uadmin may receive password and
-	passphrase prompt from one-rpi3b.cptx86.com. Running ssh-copy-id
-	uadmin@one-rpi3b.cptx86.com may stop the prompts.
-	#################################################
-	#         All connections are monitored         #
-	#################################################
-    Connection to one-rpi3b.cptx86.com closed.
-	#################################################
-	#         All connections are monitored         #
-	#################################################
-    Connection to one-rpi3b.cptx86.com closed.
-    ./copy-host-2-remote-host-tls.sh 102 [INFO]: Transfer TLS keys to
-	one-rpi3b.cptx86.com.
-	#################################################
-	#         All connections are monitored         #
-	#################################################
-    one-rpi3b.cptx86.com2018-02-05-08-46-39-CST.tar                      100%   20KB  20.0KB/s   00:00
-    ./copy-host-2-remote-host-tls.sh 107 [INFO]:	Create dockerd certification
-	directory on one-rpi3b.cptx86.com
-	#################################################
-	#         All connections are monitored         #
-	#################################################
-    [sudo] password for uadmin:
-    Connection to one-rpi3b.cptx86.com closed.
-    
-    Add TLS flags to dockerd so it will know to use TLS certifications (--tlsverify,
-    --tlscacert, --tlscert, --tlskey).  Scripts that will help with setup and
-    operations of Docker using TLS can be found:
-    https://github.com/BradleyA/docker/tree/master/dockerd-configuration-options
-	The dockerd-configuration-options scripts will help with
-	configuration of dockerd on systems running Ubuntu 16.04
-	(systemd) and Ubuntu 14.04 (Upstart).
-	
-	If dockerd is already using TLS certifications then:
-	Ubuntu 16.04 (systemd) sudo systemctl restart docker
-	Ubuntu 14.04 (systemd) sudo service docker restart
-	./copy-host-2-remote-host-tls.sh 125 [INFO]:	Done.
+<img id="copy-host-2-remote-host-tls.sh" src="../images/copy-host-2-remote-host-tls.gif" >
 
 ## Usage
 A user can check their public, private keys, and CA in $HOME/.docker or a user can check other users certificates by using sudo.
