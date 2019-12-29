@@ -152,10 +152,9 @@ done
 
 #    Root is required to copy certs
 if ! [[ "${UID}"  = 0 ]] ; then
-  display_help | more
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Use sudo ${COMMAND_NAME}" 1>&2
 #    Help hint
-  echo -e "\n\t${BOLD}>>   SCRIPT MUST BE RUN AS ROOT   <<\n${NORMAL}"  1>&2
+  echo -e "\n\t${BOLD}${YELLOW}>>   SCRIPT MUST BE RUN AS ROOT   <<\n${NORMAL}"  1>&2
   exit 1
 fi
 
