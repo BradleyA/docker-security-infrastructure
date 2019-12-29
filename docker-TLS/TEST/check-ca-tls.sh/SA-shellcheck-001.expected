@@ -1,0 +1,5 @@
+
+In SA-shellcheck-001 line 208:
+  ls -1 "${CA_CERT}"* | sed 's/^/        /' 
+  ^-- SC2012: Use find instead of ls to better handle non-alphanumeric filenames.
+
