@@ -276,33 +276,21 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
 
 ## Usage
 
+    check-ca-tls.sh
+    
+## Output
+
+<img id="check-ca-tls.sh" src="../images/check-ca-tls.gif" >
+
+## Usage
+
     check-host-tls.sh
 
 ## Output
-<img id="Steps . . " src="../images/check-host-tls.gif" >
 
-<img id="Steps . . " src="../images/check-host-tls2.gif" >
+<img id="check-host-tls2.sh" src="../images/check-host-tls2.gif" >
 
-    $ sudo ./check-host-tls.sh
-    ./check-host-tls.sh 54 [INFO]:	Checking six-rpi3b.cptx86.com TLS
-	certifications and directory permissions.
-	
-    View dockerd daemon certificate expiration date of ca.pem file.
-    notAfter=Dec  5 22:34:44 2020 GMT
-    
-    View dockerd daemon certificate expiration date of cert.pem file
-    notAfter=Jan 21 18:52:28 2019 GMT
-    
-    View dockerd daemon certificate issuer data of the ca.pem file
-    issuer= /C=US/ST=Texas/L=Cedar Park/O=Company Name/OU=IT/CN=two.cptx86.com
-    
-    View dockerd daemon certificate issuer data of the cert.pem file
-    issuer= /C=US/ST=Texas/L=Cedar Park/O=Company Name/OU=IT/CN=two.cptx86.com
-    
-    Verify that dockerd daemon certificate was issued by the CA.
-    /etc/docker/certs.d/daemon/cert.pem: OK
-
-## Usage
+ ## Usage
 Run this script to create Docker private registry certificates on any host in the directory; ~/.docker/.
     
     create-registry-tls.sh <REGISTRY_PORT> <NUMBER_DAYS>
