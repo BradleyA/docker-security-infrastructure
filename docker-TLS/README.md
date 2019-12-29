@@ -100,15 +100,15 @@ Run this script second on your host that will be used to create all your certifi
 
 ## Output
     $ sudo ./create-new-openssl.cnf-tls.sh
-    This script will make changes to /etc/ssl/openssl.cnf file.
-    These changes are required before creating user and host TLS keys for Docker.
-    Run this script before running the user and host TLS scripts.  It is not
-    required to be run on hosts not creating TLS keys.
-    
-    Creating backup file of /etc/ssl/openssl.cnf and naming it /etc/ssl/openssl.cnf-2018-02-04_13:23:04_CST
-    
-    ./create-new-openssl.cnf-tls.sh 41 [INFO]:	Adding the extended KeyUsage
-	at the beginning of [ v3_ca ] section.
+    2019-12-29T15:08:13.455810-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/create-new-openssl.cnf-tls.sh[30842] 3.558.1133 134 root 0:0 [INFO]    Started...
+	This script will make changes to /etc/ssl/openssl.cnf file.
+	These changes are required before creating user and host TLS keys for Docker.
+	Run this script before running the user and host TLS scripts.  It is not
+	required to be run on hosts not creating TLS keys.
+
+	Creating backup file of /etc/ssl/openssl.cnf and naming it /etc/ssl/openssl.cnf-2019-12-29T15:08:13.419065-06:00
+    2019-12-29T15:08:13.475798-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/create-new-openssl.cnf-tls.sh[30842] 3.558.1133 174 root 0:0 [INFO]    Adding the extended KeyUsage at the beginning of [ v3_ca ] section.
+    2019-12-29T15:08:13.488252-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/create-new-openssl.cnf-tls.sh[30842] 3.558.1133 181 root 0:0 [INFO]    Operation finished...
 
 ## Usage
 Run this script for each user that requires a new Docker public and private TLS key.
