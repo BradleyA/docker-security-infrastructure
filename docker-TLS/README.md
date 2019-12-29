@@ -276,11 +276,19 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
 
 ## Usage
 
+    check-ca-tls.sh
+    
+## Output
+
+<img id="check-ca-tls.sh" src="../images/check-ca-tls.gif" >
+
+## Usage
+
     check-host-tls.sh
 
 ## Output
 
-<img id="Steps . 2 . " src="../images/check-host-tls2.gif" >
+<img id="check-host-tls2.sh" src="../images/check-host-tls2.gif" >
 
  ## Usage
 Run this script to create Docker private registry certificates on any host in the directory; ~/.docker/.
