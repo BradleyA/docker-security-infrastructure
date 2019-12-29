@@ -116,7 +116,6 @@ Run this script for each user that requires a new Docker public and private TLS 
     create-user-tls.sh <user> <#days> 
 
 ## Output
-
 <img id="create-user-tls.sh" src="../images/create-user-tls.gif" >
 	
 ## Usage
@@ -125,25 +124,7 @@ Run this script for each host that requires a new Docker public and private TLS 
     create-host-tls.sh <FQDN> <#days>
 
 ## Output
-    $ create-host-tls.sh two.cptx86.com 185
-    ./create-host-tls.sh 82 [INFO]:	Creating private key for host
-	two.cptx86.com.
-	Generating RSA private key, 2048 bit long modulus
-	..................+++
-	.................................................................................................................+++
-	e is 65537 (0x10001)
-	./create-host-tls.sh 85 [INFO]:	Generate a Certificate Signing Request
-	(CSR) for host two.cptx86.com.
-	./create-host-tls.sh 88 [INFO]:	Create and sign a 185 day
-	certificate for host two.cptx86.com.
-	Signature ok
-	subject=/CN=two.cptx86.com/subjectAltName=two.cptx86.com
-	Getting CA Private Key
-	Enter pass phrase for .private/ca-priv-key.pem:
-	writing RSA key
-	./create-host-tls.sh 91 [INFO]:	Removing certificate signing requests
-	(CSR) and set file permissions for host two.cptx86.com key pairs.
-	./create-host-tls.sh 95 [INFO]:	Done.
+<img id="create-host-tls.sh" src="../images/create-host-tls.gif" >
 
 ## Usage
 An administration user can run this script to copy user public, private TLS keys, and CA to a remote host.
@@ -187,7 +168,6 @@ A user with administration authority (uadmin) uses this script to copy host TLS 
     copy-host-2-remote-host-tls.sh <remotehost>
 
 ## Output
-
      $ copy-host-2-remote-host-tls.sh one-rpi3b.cptx86.com
      ./copy-host-2-remote-host-tls.sh 71 [INFO]:	uadmin may receive password and
 	passphrase prompt from one-rpi3b.cptx86.com. Running ssh-copy-id
@@ -233,7 +213,6 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
     check-user-tls.sh <user>
 
 ## Output
-
 <img id="check-user-tls.sh" src="../images/check-user-tls.gif" >
 
 ## Usage
@@ -242,7 +221,6 @@ Print start and end dates of a Docker CA, ca.pem, in /home/uthree/.docker.  Othe
     check-ca-tls.sh
     
 ## Output
-
 <img id="check-ca-tls.sh" src="../images/check-ca-tls.gif" >
 
 ## Usage
@@ -250,7 +228,6 @@ Print start and end dates of a Docker CA, ca.pem, in /home/uthree/.docker.  Othe
     check-host-tls.sh
 
 ## Output
-
 <img id="check-host-tls2.sh" src="../images/check-host-tls2.gif" >
 
  ## Usage
@@ -259,7 +236,6 @@ Run this script to create Docker private registry certificates on any host in th
     create-registry-tls.sh <REGISTRY_PORT> <NUMBER_DAYS>
 
 ## Output
-
     $ create-registry-tls.sh 17315 90
     2019-04-07T15:05:25.694993-05:00 (CDT) two-rpi3b.cptx86.com /usr/local/bin/create-registry-tls.sh[8880] 3.190.617 106 uadmin 10000:10000 [INFO]  Started...
     
@@ -295,7 +271,6 @@ A user with administration authority uses this script to copy Docker private reg
     copy-registry-tls.sh <REGISTRY_HOST> <REGISTRY_PORT>
 
 ## Output
-
     $ copy-registry-tls.sh two-rpi3b.cptx86.com 17315
     2019-04-07T15:22:48.885398-05:00 (CDT) two-rpi3b.cptx86.com /usr/local/bin/copy-registry-tls.sh[13176] 3.190.617 153 uadmin 10000:10000 [INFO]  Started...
 
@@ -336,7 +311,6 @@ This script has to be run as root to check daemon registry cert (ca.crt), regist
     sudo check-registry-tls.sh <REGISTRY_HOST> <REGISTRY_PORT>
 
 ## Output
-
     $ sudo check-registry-tls.sh two-rpi3b.cptx86.com 17315
     2019-04-07T15:36:19.371823-05:00 (CDT) two-rpi3b.cptx86.com /usr/local/bin/check-registry-tls.sh[16672] 3.190.617 131 root 0:0 [INFO]  Started...
 
