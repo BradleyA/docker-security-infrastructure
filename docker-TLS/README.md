@@ -47,55 +47,51 @@ Run this script first on your host to create your site private and public TLS ke
     create-site-private-public-tls.sh <#days>
 
 ## Output
-    $ create-site-private-public-tls.sh
-    
-    ./create-site-private-public-tls.sh 48 [INFO]:	Creating private key with passphrase in /home/uadmin/.docker/docker-ca/.private
-    Generating RSA private key, 4096 bit long modulus
-    .............................................................................................................++
-    ................................................++
-    e is 65537 (0x10001)
-    Enter pass phrase for ca-priv-key.pem:
-    Verifying - Enter pass phrase for ca-priv-key.pem:
-    
-    Once all the certificates and keys have been generated with this private key,
-    it would be prudent to move the private key to a Universal Serial Bus (USB)
-    memory stick.  Remove the private key from the system and store the USB memory
-    stick in a locked fireproof location.
-    
-    ./create-site-private-public-tls.sh 55 [INFO]:	Creating public key good for
-	730 days in /home/uadmin/.docker/docker-ca
-    The public key is copied to all systems in an environment so that those
-    systems trust signed certificates.  The following is a list of prompts from
-    the following command and example answers are in parentheses.
-    Country Name (US)
-    State or Province Name (Texas)
-    Locality Name (Cedar Park)
-    Organization Name (Company Name)
-    Organizational Unit Name (IT - SRE Team Central US)
-    Common Name (two.cptx86.com)
-    Email Address ()
-    
-    Enter pass phrase for .private/ca-priv-key.pem:
-    You are about to be asked to enter information that will be incorporated
-    into your certificate request.
-    What you are about to enter is what is called a Distinguished Name or a DN.
-    There are quite a few fields but you can leave some blank
-    For some fields there will be a default value,
-    If you enter '.', the field will be left blank.
-    -----
-    Country Name (2 letter code) [AU]:US
-    State or Province Name (full name) [Some-State]:Texas
-    Locality Name (eg, city) []:Cedar Park
-    Organization Name (eg, company) [Internet Widgits Pty Ltd]:Company Name
-    Organizational Unit Name (eg, section) []:IT - SRE Team Central US
-    Common Name (e.g. server FQDN or YOUR name) []:two.cptx86.com
-    Email Address []:
-    
-    ./create-site-private-public-tls.sh 74 [INFO]:	These certificate
-	are valid for 730 days.
-    It would be prudent to document the date when to renew these certificates and
-    set an operations or project management calendar entry about 15 days before
-    renewal as a reminder to schedule
+    $ create-site-private-public-tls.sh 366
+2019-12-29T14:54:21.336685-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/create-site-private-public-tls.sh[27357] 3.560.1137 167 uadmin 10000:10000 [INFO]    Started...
+	Creating private key and prompting for a new passphrase in /home/uadmin/.docker/docker-ca/.private
+Generating RSA private key, 4096 bit long modulus
+..................................................................++
+.........................................................................................................................................................................................++
+e is 65537 (0x10001)
+Enter pass phrase for ca-priv-key.pem--2019-12-29T14:54:21-CST:
+Verifying - Enter pass phrase for ca-priv-key.pem--2019-12-29T14:54:21-CST:
+
+	The following is a list of prompts and example answers are in parentheses.
+	Country Name (US), State or Province Name (Texas), Locality Name (Cedar
+	Park), Organization Name (Company Name), Organizational Unit Name (IT -
+	SRE Team Central US), Common Name (five-rpi3b.cptx86.com), and Email Address
+
+	Creating public key good for  366  days in /home/uadmin/.docker/docker-ca directory.
+
+Enter pass phrase for ca-priv-key.pem:
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:US
+State or Province Name (full name) [Some-State]:Texas
+Locality Name (eg, city) []:Cedar Park
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:Small Company
+Organizational Unit Name (eg, section) []:IT SRE team #3
+Common Name (e.g. server FQDN or YOUR name) []:five-rpi3b.cptx86.com
+Email Address []:
+
+	These certificates are valid for  366  days or until 2020-12-29T14:56:22-CST
+
+lrwxrwxrwx 1 uadmin uadmin 48 Dec 29 14:54 ca-priv-key.pem -> ../site/ca-priv-key.pem--2019-12-29T14:54:21-CST
+lrwxrwxrwx 1 uadmin uadmin 87 Dec 29 14:56 ca.pem -> site/ca.pem--2019-12-29T14:54:21-CST---2019-12-29T14:56:22-CST--2020-12-29T14:56:22-CST
+
+	Now that the certificate has been generated, it would be prudent to move
+	the private key to a Universal Serial Bus (USB) memory stick after creating your
+	other host and user keys.  Remove the private key from the system and store the USB
+	memory stick in a locked fireproof location.  Also document the date when to renew
+	these certificates and set an operations or project management calendar or ticket
+	entry about 15 days before renewal as a reminder.
+2019-12-29T14:56:22.250857-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/create-site-private-public-tls.sh[27357] 3.560.1137 272 uadmin 10000:10000 [INFO]    Operation finished...
 
 ## Usage
 Run this script second on your host that will be used to create all your certificates.  This script makes a change to the openssl.cnf file.
