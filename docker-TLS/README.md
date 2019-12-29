@@ -132,34 +132,7 @@ An administration user can run this script to copy user public, private TLS keys
     copy-user-2-remote-host-tls.sh <user> <remotehost> 
     
 ## Output
-    $ copy-user-2-remote-host-tls.sh sally two.cptx86.com
-    ./copy-user-2-remote-host-tls.sh 75 [INFO]:	uadmin may receive password and
-	passphrase prompt from two.cptx86.com. Running
-	ssh-copy-id uadmin@two.cptx86.com may stop the prompts.
-	#################################################
-	#         All connections are monitored         #
-	#################################################
-    Connection to two.cptx86.com closed.
-    ./copy-user-2-remote-host-tls.sh 77 [INFO]:	Create directory, change
-	file permissions, and copy TLS keys to sally@two.cptx86.com.
-    ./copy-user-2-remote-host-tls.sh 90 [INFO]:	Transfer TLS keys to sally@two.cptx86.com.
-	#################################################
-	#         All connections are monitored         #
-	#################################################
-    sallytwo.cptx86.com2018-02-04-13-54-27-CST.tar                                   100%   10KB  10.0KB/s   00:00    
-	#################################################
-	#         All connections are monitored         #
-	#################################################
-    [sudo] password for uadmin:
-    Connection to two.cptx86.com closed.
-    
-    To set environment variables permanently, add them to the user's
-	.bashrc.  These environment variables will be set each time the user
-	logs into the computer system.  Edit your .bashrc file (or the
-	correct shell if different) and append the following two lines.
-	export DOCKER_HOST=tcp://`hostname -f`:2376
-	export DOCKER_TLS_VERIFY=1
-    ./copy-user-2-remote-host-tls.sh 109 [INFO]:	Done.
+<img id="copy-user-2-remote-host-tls.sh" src="../images/copy-user-2-remote-host-tls.gif" >
 
 ## Usage
 A user with administration authority (uadmin) uses this script to copy host TLS CA, public, and private keys from /home/uadmin/.docker/docker-ca directory on this system to /etc/docker/certs.d directory on a remote system.  The administration user may receive password and/or passphrase prompts from a remote systen; running the following may stop the prompts in your cluster.
