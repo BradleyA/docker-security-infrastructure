@@ -116,23 +116,8 @@ Run this script for each user that requires a new Docker public and private TLS 
     create-user-tls.sh <user> <#days> 
 
 ## Output
-    $ create-user-tls.sh sally 30
-    ./create-user-tls.sh 71 [INFO]:	Creating private key for user sally.
-    Generating RSA private key, 2048 bit long modulus
-    .........+++
-    .....................................................+++
-    e is 65537 (0x10001)
-    ./create-user-tls.sh 74 [INFO]:	Generate a Certificate Signing
-	Request (CSR) for user sally.
-	./create-user-tls.sh 77 [INFO]:	Create and sign a 30 day
-	certificate for user sally.
-	Signature ok
-	subject=/subjectAltName=client
-	Getting CA Private Key
-	Enter pass phrase for .private/ca-priv-key.pem:
-	./create-user-tls.sh 80 [INFO]:	Removing certificate signing
-	requests (CSR) and set file permissions for sally key pairs.
-	./create-user-tls.sh 85 [INFO]: Done.
+
+<img id="create-user-tls.sh" src="../images/create-user-tls.gif" >
 	
 ## Usage
 Run this script for each host that requires a new Docker public and private TLS key.
