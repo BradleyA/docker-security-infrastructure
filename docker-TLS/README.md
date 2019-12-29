@@ -172,34 +172,7 @@ Run this script to create Docker private registry certificates on any host in th
     create-registry-tls.sh <REGISTRY_PORT> <NUMBER_DAYS>
 
 ## Output
-    $ create-registry-tls.sh 17315 90
-    2019-04-07T15:05:25.694993-05:00 (CDT) two-rpi3b.cptx86.com /usr/local/bin/create-registry-tls.sh[8880] 3.190.617 106 uadmin 10000:10000 [INFO]  Started...
-    
-	Create Self-Signed Certificate Keys in /home/uadmin/.docker/tmp-17315 
-
-    Generating a 4096 bit RSA private key
-    .......................................................++
-    ................++
-    writing new private key to 'domain.key'
-    -----
-    You are about to be asked to enter information that will be incorporated
-    into your certificate request.
-    What you are about to enter is what is called a Distinguished Name or a DN.
-    There are quite a few fields but you can leave some blank
-    For some fields there will be a default value,
-    If you enter '.', the field will be left blank.
-    -----
-    Country Name (2 letter code) [AU]:US
-    State or Province Name (full name) [Some-State]:Texas
-    Locality Name (eg, city) []:Cedar Park
-    Organization Name (eg, company) [Internet Widgits Pty Ltd]:Top Company
-    Organizational Unit Name (eg, section) []:IT SRE Team A
-    Common Name (e.g. server FQDN or YOUR name) []:two-rpi3b.cptx86.com
-    Email Address []:
-    
-	    Move Self-Signed Certificate Keys into /home/uadmin/.docker/registry-certs-two-rpi3b.cptx86.com-17315 
-
-    2019-04-07T15:07:09.898001-05:00 (CDT) two-rpi3b.cptx86.com /usr/local/bin/create-registry-tls.sh[8880] 3.190.617 177 uadmin 10000:10000 [INFO]  Operation finished.
+<img id="create-registry-tls.sh" src="../images/create-registry-tls.gif" >
 
 ## Usage
 A user with administration authority uses this script to copy Docker private registry certificates from ~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT> directory on this system to systems in <SYSTEMS_FILE>.
