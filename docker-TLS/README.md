@@ -20,6 +20,7 @@ These bash scripts also help minimize the exposure to risk when incidents happen
 
 **check-host-tls.sh** - An administration user can check a host public, private keys, and CA in /etc/docker/certs.d/daemon by using sudo.
 
+**check-ca-tls.sh** - An administration user can check ca.pem in any directory.
 
 **create-registry-tls.sh** - Run this script to create Docker private registry certificates on any host in the directory; ~/.docker/.  It will create a working directory, ~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>.  The <REGISTRY_PORT>
 number is not required when creating a private registry certificates.  It is used to keep track of multiple certificates for multiple private registries on the same host.  The scripts create-site-private-public-tls.sh and create-new-openssl.cnf-tls.sh are NOT required to create or use a private registry.
