@@ -1,5 +1,5 @@
 
-## NOT TESTED YET
+## NOT TESTED for production YET
 ## OLD script from old clusters 2016
 ```
 -rwxr-xr-x 1 uadmin uadmin     1533 Mar  8  2016 docker-enter
