@@ -172,7 +172,38 @@ Run this script to create Docker private registry certificates on any host in th
     create-registry-tls.sh <REGISTRY_PORT> <NUMBER_DAYS>
 
 ## Output
-<img id="create-registry-tls.sh" src="../images/create-registry-tls.gif" >
+    $ create-registry-tls.sh 17313 180
+    2019-12-29T21:17:35.806802-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/create-registry-tls.sh[27753] 3.564.1195 172 uadmin 10000:10000 [INFO]    Started...
+
+	Create Self-Signed Certificate Keys
+
+    Generating a 4096 bit RSA private key
+    ...............................................................++
+    ................................................................................................................................    .....................................................................................................++
+    writing new private key to 'domain.key'
+    -----
+    You are about to be asked to enter information that will be incorporated
+    into your certificate request.
+    What you are about to enter is what is called a Distinguished Name or a DN.
+    There are quite a few fields but you can leave some blank
+    For some fields there will be a default value,
+    If you enter '.', the field will be left blank.
+    -----
+    Country Name (2 letter code) [AU]:US
+    State or Province Name (full name) [Some-State]:Texas
+    Locality Name (eg, city) []:Cedar Park
+    Organization Name (eg, company) [Internet Widgits Pty Ltd]:Small Company
+    Organizational Unit Name (eg, section) []:IT SRE Team#3
+    Common Name (e.g. server FQDN or YOUR name) []:five-rpi3b.cptx86.com
+    Email Address []:
+
+	Move 180 day Self-Signed Certificate Keys into  /home/uadmin/.docker/registry-certs-five-rpi3b.cptx86.com-17313 
+
+    domain.crt---2019-12-29T21:19:06-CST--2020-06-26T22:19:05-CDT
+    domain.key---2019-12-29T21:19:06-CST--2020-06-26T22:19:05-CDT
+
+    2019-12-29T21:19:06.206093-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/create-registry-tls.sh[27753] 3.564.1195 261 uadmin 10000:10000 [INFO]    Operation finished...
+
 
 ## Usage
 A user with administration authority uses this script to copy Docker private registry certificates from ~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT> directory on this system to systems in <SYSTEMS_FILE>.
