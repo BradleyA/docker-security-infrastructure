@@ -267,7 +267,22 @@ This script has to be run as root to check daemon registry cert (ca.crt), regist
     sudo check-registry-tls.sh <REGISTRY_HOST> <REGISTRY_PORT>
 
 ## Output
-<img id="check-registry-tls.sh" src="../images/check-registry-tls.gif" >
+    $ sudo check-registry-tls.sh five-rpi3b.cptx86.com 17313
+    [sudo] password for uadmin: 
+    2019-12-29T22:00:55.773201-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/check-registry-tls.sh[8164] 3.553.1123 189 root 0:0 [INFO]    Started...
+
+	Certificate on five-rpi3b.cptx86.com,
+        /etc/docker/certs.d/five-rpi3b.cptx86.com:17313/ca.crt:
+	PASS until Jun 27 03:19:05 2020 GMT
+
+	Verify and correct file permissions.
+
+	Certificate on five-rpi3b.cptx86.com,
+	/usr/local/data//us-tx-cluster-1//docker-registry/five-rpi3b.cptx86.com-17313/certs/domain.crt:
+	PASS until Jun 27 03:19:05 2020 GMT
+
+	Verify and correct file permissions.
+    2019-12-29T22:00:55.899717-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/check-registry-tls.sh[8164] 3.553.1123 373 root 0:0 [INFO]    Operation finished...
 
 #### ARCHITECTURE TREE
 
