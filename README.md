@@ -51,8 +51,8 @@ To install, change to the location you want to download the scripts. Use git to 
 
 #### Traffic
 
- * <img alt="Clones" src="https://img.shields.io/static/v1?label=Clones&message=112&color=blue">  [Clones Table](images/clone.table.md)
- * <img alt="Views" src="https://img.shields.io/static/v1?label=Views&message=683&color=blue">  [Views Table](images/view.table.md)
+ * <img alt="Clones" src="https://img.shields.io/static/v1?label=Clones&message=128&color=blue">  [Clones Table](images/clone.table.md)
+ * <img alt="Views" src="https://img.shields.io/static/v1?label=Views&message=875&color=blue">  [Views Table](images/view.table.md)
  
 **Note**  Data collection stopped between 10/14 & 12/9
 
