@@ -172,7 +172,38 @@ Run this script to create Docker private registry certificates on any host in th
     create-registry-tls.sh <REGISTRY_PORT> <NUMBER_DAYS>
 
 ## Output
-<img id="create-registry-tls.sh" src="../images/create-registry-tls.gif" >
+    $ create-registry-tls.sh 17313 180
+    2019-12-29T21:17:35.806802-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/create-registry-tls.sh[27753] 3.564.1195 172 uadmin 10000:10000 [INFO]    Started...
+
+	Create Self-Signed Certificate Keys
+
+    Generating a 4096 bit RSA private key
+    ...............................................................++
+    ................................................................................................................................    .....................................................................................................++
+    writing new private key to 'domain.key'
+    -----
+    You are about to be asked to enter information that will be incorporated
+    into your certificate request.
+    What you are about to enter is what is called a Distinguished Name or a DN.
+    There are quite a few fields but you can leave some blank
+    For some fields there will be a default value,
+    If you enter '.', the field will be left blank.
+    -----
+    Country Name (2 letter code) [AU]:US
+    State or Province Name (full name) [Some-State]:Texas
+    Locality Name (eg, city) []:Cedar Park
+    Organization Name (eg, company) [Internet Widgits Pty Ltd]:Small Company
+    Organizational Unit Name (eg, section) []:IT SRE Team#3
+    Common Name (e.g. server FQDN or YOUR name) []:five-rpi3b.cptx86.com
+    Email Address []:
+
+	Move 180 day Self-Signed Certificate Keys into  /home/uadmin/.docker/registry-certs-five-rpi3b.cptx86.com-17313 
+
+    domain.crt---2019-12-29T21:19:06-CST--2020-06-26T22:19:05-CDT
+    domain.key---2019-12-29T21:19:06-CST--2020-06-26T22:19:05-CDT
+
+    2019-12-29T21:19:06.206093-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/create-registry-tls.sh[27753] 3.564.1195 261 uadmin 10000:10000 [INFO]    Operation finished...
+
 
 ## Usage
 A user with administration authority uses this script to copy Docker private registry certificates from ~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT> directory on this system to systems in <SYSTEMS_FILE>.
@@ -180,39 +211,55 @@ A user with administration authority uses this script to copy Docker private reg
     copy-registry-tls.sh <REGISTRY_HOST> <REGISTRY_PORT>
 
 ## Output
-    $ copy-registry-tls.sh two-rpi3b.cptx86.com 17315
-    2019-04-07T15:22:48.885398-05:00 (CDT) two-rpi3b.cptx86.com /usr/local/bin/copy-registry-tls.sh[13176] 3.190.617 153 uadmin 10000:10000 [INFO]  Started...
+    $ copy-registry-tls.sh five-rpi3b.cptx86.com 17313
+    2019-12-29T21:30:18.811830-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/copy-registry-tls.sh[30966] 3.556.1129 208 uadmin 10000:10000 [INFO]    Started...
 
-    	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
-    	to one-rpi3b.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
+	Copy ~/.docker/registry-certs-five-rpi3b.cptx86.com-17313/ca.crt
+	to one-rpi3b.cptx86.com /etc/docker/certs.d/five-rpi3b.cptx86.com:17313/ca.crt
     [sudo] password for uadmin: 
 
-    	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
-    	to two-rpi3b.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
+	ca.crt already exists, renaming existing keys so new keys can be copied.
+
+	Copy ~/.docker/registry-certs-five-rpi3b.cptx86.com-17313/ca.crt
+	to two-rpi3b.cptx86.com /etc/docker/certs.d/five-rpi3b.cptx86.com:17313/ca.crt
     [sudo] password for uadmin: 
 
-    	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
-    	to three-rpi3b.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
+	ca.crt already exists, renaming existing keys so new keys can be copied.
+
+	Copy ~/.docker/registry-certs-five-rpi3b.cptx86.com-17313/ca.crt
+	to three-rpi3b.cptx86.com /etc/docker/certs.d/five-rpi3b.cptx86.com:17313/ca.crt
     [sudo] password for uadmin: 
 
-    	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
-    	to four-rpi3b.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
+	ca.crt already exists, renaming existing keys so new keys can be copied.
+
+	Copy ~/.docker/registry-certs-five-rpi3b.cptx86.com-17313/ca.crt
+	to four-rpi3b.cptx86.com /etc/docker/certs.d/five-rpi3b.cptx86.com:17313/ca.crt
     [sudo] password for uadmin: 
 
-    	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
-    	to five-rpi3b.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
+	ca.crt already exists, renaming existing keys so new keys can be copied.
+
+	Copy ~/.docker/registry-certs-five-rpi3b.cptx86.com-17313/ca.crt
+	to five-rpi3b.cptx86.com /etc/docker/certs.d/five-rpi3b.cptx86.com:17313/ca.crt
     [sudo] password for uadmin: 
 
-    	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
-    	to six-rpi3b.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
+	Copy ~/.docker/registry-certs-five-rpi3b.cptx86.com-17313/ca.crt
+	to six-rpi3b.cptx86.com /etc/docker/certs.d/five-rpi3b.cptx86.com:17313/ca.crt
     [sudo] password for uadmin: 
 
-    	Copy ~/.docker/registry-certs-two-rpi3b.cptx86.com-17315/ca.crt
-    	to two.cptx86.com /etc/docker/certs.d/two-rpi3b.cptx86.com:17315/ca.crt
+	ca.crt already exists, renaming existing keys so new keys can be copied.
+
+	Copy ~/.docker/registry-certs-five-rpi3b.cptx86.com-17313/ca.crt
+	to two.cptx86.com /etc/docker/certs.d/five-rpi3b.cptx86.com:17313/ca.crt
     [sudo] password for uadmin: 
 
-    	Copy domain.{crt,key} to /usr/local/data//us-tx-cluster-1//docker-registry/two-rpi3b.cptx86.com-17315/certs
-    2019-04-07T15:24:01.572032-05:00 (CDT) two-rpi3b.cptx86.com /usr/local/bin/copy-registry-tls.sh[13176] 3.190.617 316 uadmin 10000:10000 [INFO]  Operation finished.
+	ca.crt already exists, renaming existing keys so new keys can be copied.
+
+	Copy domain.{crt,key} to five-rpi3b.cptx86.com in /usr/local/data//us-tx-cluster-1//docker-registry/five-rpi3b.cptx86.com-17313/certs
+
+	domain.crt already exists, renaming existing keys so new keys can be copied.
+
+	domain.key already exists, renaming existing keys so new keys can be copied.
+    2019-12-29T21:31:05.591271-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/copy-registry-tls.sh[30966] 3.556.1129 390 uadmin 10000:10000 [INFO]    Operation finished...
 
 ## Usage
 This script has to be run as root to check daemon registry cert (ca.crt), registry cert (domain.crt), and registry private key (domain.key) in /etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/ and <DATA_DIR>/<CLUSTER>/docker-registry/<REGISTRY_HOST>-<REGISTRY_PORT>/certs/ directories.
