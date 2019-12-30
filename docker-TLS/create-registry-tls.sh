@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/create-registry-tls.sh  3.564.1195  2019-12-29T21:00:22.229642-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.563-53-ge1a1e28  
+# 	   docker-TLS/create-registry-tls.sh   correct incident chmod: cannot access 'domain.???- 
 # 	docker-TLS/create-registry-tls.sh  3.559.1135  2019-12-22T18:44:18.902233-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.558-1-g8474618  
 # 	   docker-TLS/create-registry-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 
 # 	docker-TLS/create-registry-tls.sh  3.543.1106  2019-12-13T16:20:52.770703-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
@@ -245,7 +247,8 @@ rm -f ca.crt
 CERT_CREATE_DATE=$(date +%Y-%m-%dT%H:%M:%S-%Z)
 cp -p  "../tmp-${REGISTRY_PORT}/domain.crt"  "domain.crt---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
 cp -p  "../tmp-${REGISTRY_PORT}/domain.key"  "domain.key---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
-chmod 0400  "domain.???---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
+chmod 0400  "domain.crt---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
+chmod 0400  "domain.key---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"
 ln -s  "domain.crt---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"  ca.crt
 ln -s  "domain.crt---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"  domain.crt
 ln -s  "domain.key---${CERT_CREATE_DATE}--${CA_CERT_EXPIRE_DATE}"  domain.key
