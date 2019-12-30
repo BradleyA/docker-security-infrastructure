@@ -1,5 +1,7 @@
 #!/bin/bash
-# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.557.1131  2019-12-22T18:16:53.567416-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.556-1-ga963163  
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  4.1.1211  2019-12-30T11:34:27.458921-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.565-13-g1455a67  
+# 	   docker-TLS/*   New Release 4.1 
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  3.557.1131  2019-12-22T18:16:53.567416-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.556-1-ga963163 
 # 	   docker-TLS/copy-user-2-remote-host-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.535.1095  2019-12-10T00:03:37.856236-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.534  
 # 	   docker-TLS/copy-user-2-remote-host-tls.sh   Production standard 6.3.547  Architecture tree 

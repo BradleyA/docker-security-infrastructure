@@ -1,5 +1,7 @@
 #!/bin/bash
-# 	docker-TLS/create-host-tls.sh  3.562.1140  2019-12-22T19:52:09.933361-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.561  
+# 	docker-TLS/create-host-tls.sh  4.1.1211  2019-12-30T11:34:27.624839-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.565-13-g1455a67  
+# 	   docker-TLS/*   New Release 4.1 
+# 	docker-TLS/create-host-tls.sh  3.562.1140  2019-12-22T19:52:09.933361-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.561 
 # 	   docker-TLS/create-host-tls.sh   add warning when${CA_CERT} expires before cert.pem 
 # 	docker-TLS/create-host-tls.sh  3.558.1133  2019-12-22T18:34:17.692078-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.557-1-ge117bf8  
 # 	   docker-TLS/create-host-tls.sh docker-TLS/create-new-openssl.cnf-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 

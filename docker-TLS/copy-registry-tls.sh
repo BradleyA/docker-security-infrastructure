@@ -1,5 +1,7 @@
 #!/bin/bash
-# 	docker-TLS/copy-registry-tls.sh  3.565.1197  2019-12-29T21:34:25.959016-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.564-1-g0d974f5  
+# 	docker-TLS/copy-registry-tls.sh  4.1.1211  2019-12-30T11:34:27.293638-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.565-13-g1455a67  
+# 	   docker-TLS/*   New Release 4.1 
+# 	docker-TLS/copy-registry-tls.sh  3.565.1197  2019-12-29T21:34:25.959016-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.564-1-g0d974f5 
 # 	   docker-TLS/copy-registry-tls.sh   correct incident sudo: [[: command not found 
 # 	docker-TLS/copy-registry-tls.sh  3.556.1129  2019-12-22T18:04:19.023913-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.555-1-ga9d0626  
 # 	   docker-TLS/copy-registry-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 

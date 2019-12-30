@@ -1,5 +1,7 @@
 #!/bin/bash
-# 	docker-TLS/check-host-tls.sh  3.551.1119  2019-12-15T16:04:40.046301-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.550  
+# 	docker-TLS/check-host-tls.sh  4.1.1211  2019-12-30T11:34:26.630795-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.565-13-g1455a67  
+# 	   docker-TLS/*   New Release 4.1 
+# 	docker-TLS/check-host-tls.sh  3.551.1119  2019-12-15T16:04:40.046301-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.550 
 # 	   check-host-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 
 # 	docker-TLS/check-host-tls.sh  3.543.1106  2019-12-13T16:20:51.857535-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
 # 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 

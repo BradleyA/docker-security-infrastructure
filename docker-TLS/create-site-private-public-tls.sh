@@ -1,5 +1,7 @@
 #!/bin/bash
-# 	docker-TLS/create-site-private-public-tls.sh  3.560.1137  2019-12-22T18:52:36.992641-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.559-1-g2f4f0ee  
+# 	docker-TLS/create-site-private-public-tls.sh  4.1.1211  2019-12-30T11:34:28.123423-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.565-13-g1455a67  
+# 	   docker-TLS/*   New Release 4.1 
+# 	docker-TLS/create-site-private-public-tls.sh  3.560.1137  2019-12-22T18:52:36.992641-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.559-1-g2f4f0ee 
 # 	   docker-TLS/create-site-private-public-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 
 # 	docker-TLS/create-site-private-public-tls.sh  3.543.1106  2019-12-13T16:20:52.902216-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
 # 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 

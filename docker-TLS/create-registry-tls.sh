@@ -1,5 +1,7 @@
 #!/bin/bash
-# 	docker-TLS/create-registry-tls.sh  3.564.1195  2019-12-29T21:00:22.229642-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.563-53-ge1a1e28  
+# 	docker-TLS/create-registry-tls.sh  4.1.1211  2019-12-30T11:34:27.957184-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.565-13-g1455a67  
+# 	   docker-TLS/*   New Release 4.1 
+# 	docker-TLS/create-registry-tls.sh  3.564.1195  2019-12-29T21:00:22.229642-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.563-53-ge1a1e28 
 # 	   docker-TLS/create-registry-tls.sh   correct incident chmod: cannot access 'domain.???- 
 # 	docker-TLS/create-registry-tls.sh  3.559.1135  2019-12-22T18:44:18.902233-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.558-1-g8474618  
 # 	   docker-TLS/create-registry-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 

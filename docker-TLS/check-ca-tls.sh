@@ -1,5 +1,7 @@
 #!/bin/bash
-# 	docker-TLS/check-ca-tls.sh  3.563.1141  2019-12-22T20:15:30.690203-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.562  
+# 	docker-TLS/check-ca-tls.sh  4.1.1211  2019-12-30T11:34:26.456665-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.565-13-g1455a67  
+# 	   docker-TLS/*   New Release 4.1 
+# 	docker-TLS/check-ca-tls.sh  3.563.1141  2019-12-22T20:15:30.690203-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.562 
 # 	   docker-TLS/check-ca-tls.sh   created this script to test ca.pem  close #49 
 # 	docker-TLS/check-ca-tls.sh  3.549.1117  2019-12-15T14:54:01.361686-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.548  
 # 	   docker-TLS/check-ca-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 

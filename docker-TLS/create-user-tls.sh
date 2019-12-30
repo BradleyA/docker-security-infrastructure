@@ -1,5 +1,7 @@
 #!/bin/bash
-# 	docker-TLS/create-user-tls.sh  3.561.1139  2019-12-22T19:24:09.387862-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.560-1-gb54441e  
+# 	docker-TLS/create-user-tls.sh  4.1.1211  2019-12-30T11:34:28.288317-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.565-13-g1455a67  
+# 	   docker-TLS/*   New Release 4.1 
+# 	docker-TLS/create-user-tls.sh  3.561.1139  2019-12-22T19:24:09.387862-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.560-1-gb54441e 
 # 	   docker-TLS/create-user-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 
 # 	docker-TLS/create-user-tls.sh  3.554.1125  2019-12-22T17:05:42.650726-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.553-1-g3e4c43d  
 # 	   docker-TLS/create-user-tls.sh   add warning when${CA_CERT} expires before user-cert.pem 

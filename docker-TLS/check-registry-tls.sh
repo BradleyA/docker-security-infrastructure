@@ -1,5 +1,7 @@
 #!/bin/bash
-# 	docker-TLS/check-registry-tls.sh  3.553.1123  2019-12-22T15:11:49.248036-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.552-1-ge20f94a  
+# 	docker-TLS/check-registry-tls.sh  4.1.1211  2019-12-30T11:34:26.795302-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.565-13-g1455a67  
+# 	   docker-TLS/*   New Release 4.1 
+# 	docker-TLS/check-registry-tls.sh  3.553.1123  2019-12-22T15:11:49.248036-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.552-1-ge20f94a 
 # 	   docker-TLS/check-user-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 
 # 	docker-TLS/check-registry-tls.sh  3.552.1121  2019-12-15T16:39:00.522328-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.551-1-g23e6062  
 # 	   docker-TLS/check-registry-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 
