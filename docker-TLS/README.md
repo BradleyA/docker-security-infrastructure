@@ -299,10 +299,11 @@ This script has to be run as root to check daemon registry cert (ca.crt), regist
     │   ├── docker-accounts/                   <-- Docker TLS certs
     │   │   ├── <HOST-1>/                      <-- Host in cluster
     │   │   │   ├── <USER-1>/                  <-- User TLS certs directory
-    │   │   │   │   ├── ca.pem       FUTURE    <-- User tlscacert
-    │   │   │   │   ├── cert.pem     FUTURE    <-- User tlscert
-    │   │   │   │   ├── key.pem      FUTURE    <-- User tlskey
-    │   │   │   │   └── trust/                 <-- Backup of Docker Content Trust
+    │   │   │   │   ├── docker         FUTURE  <-- User tlscacert
+    │   │   │   │       ├── ca.pem     FUTURE  <-- User tlscacert
+    │   │   │   │       ├── cert.pem   FUTURE  <-- User tlscert
+    │   │   │   │       ├── key.pem    FUTURE  <-- User tlskey
+    │   │   │   │       └── trust/             <-- Backup of Docker Content Trust
     │   │   │   │                                  (DCT) keys
     │   │   │   └── <USER-2>/                  <-- User TLS certs directory
     │   │   └── <HOST-2>/                      <-- Host in cluster
@@ -319,47 +320,66 @@ This script has to be run as root to check daemon registry cert (ca.crt), regist
                                                    the systems are not in a cluster
 
     <USER_HOME>/                               <-- Location of user home directory
-    └── <USER-1>/.docker/                      <-- User docker cert directory
-        ├── ca.pem                             <-- Symbolic link to user tlscacert
-        ├── cert.pem                           <-- Symbolic link to user tlscert
-        ├── key.pem                            <-- Symbolic link to user tlskey
-        ├── docker-ca/                         <-- Working directory to create certs
-        ├── trust/                             <-- Docker Content Trust (DCT)
-        │   ├── private/                       <-- Notary Canonical Root Key ID
-        │   │                                      (DCT Root Key)
-        │   ├── trusted_certificates/          <-- Docker Content Trust (DCT) keys
-        │   └── tuf/                           <-- Update Framework (TUF)
-        ├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory
-        │   │                                      to create registory certs
-        │   ├── ca.crt                         <-- Daemon registry domain cert
-        │   ├── domain.crt                     <-- Registry cert
-        │   └── domain.key                     <-- Registry private key
-	├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory
-        │                                          to create registory certs
-        └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory
-                                                   to create registory certs
+    ├── <USER-1>/.docker/                      <-- User docker cert directory
+    │   ├── ca.pem                             <-- User tlscacert or symbolic link
+    │   ├── cert.pem                           <-- Symbolic link to user tlscert
+    │   ├── key.pem                            <-- Symbolic link to user tlskey
+    │   ├── docker-ca/                         <-- Working directory to create certs
+    │   │   ├── .private/                      
+    │   │   │   └── ca-priv-key.pem            <-- Current site CA Private Key
+    │   │   ├── ca.pem                         <-- Current site CA cert
+    │   │   ├── hosts/                         <-- Directory for hostnames
+    │   │   │   └── <HOST>/                    <-- Directory to store host certs
+    │   │   │      ├── ca.pem                  <-- CA Cert
+    │   │   │      ├── <HOST>-cert.pem         <-- public key (default: cert.pem)
+    │   │   │      └── <HOST>-priv-key.pem     <-- private key (default: key.pem)
+    │   │   ├── site/                          <-- Directory to store site certs
+    │   │   │   ├── ca.pem                     <-- CA Cert
+    │   │   │   └── ca-priv-key.pem            <-- CA Private Key
+    │   │   ├── users/                         <-- Directory for users
+    │   │   │   └── <USER>/                    <-- Directory to store user certs
+    │   │   │      ├── ca.pem                  <-- CA Cert
+    │   │   │      ├── user-cert.pem           <-- public key
+    │   │   │      └── user-priv-key.pem       <-- private key
+    │   ├── trust/                             <-- Docker Content Trust (DCT)
+    │   │   ├── private/                       <-- Notary Canonical Root Key ID
+    │   │   │                                      (DCT Root Key)
+    │   │   ├── trusted_certificates/          <-- Docker Content Trust (DCT) keys
+    │   │   └── tuf/                           <-- Update Framework (TUF)
+    │   ├── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory
+    │   │   │                                      to create registory certs
+    │   │   ├── ca.crt                         <-- Daemon registry domain cert
+    │   │   ├── domain.crt                     <-- Registry cert
+    │   │   └── domain.key                     <-- Registry private key
+    │   └── registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT>/ <-- Working directory
+    │                                              to create registory certs
+    └── <USER-1>/.ssh/                         <-- Secure Socket Shell directory
+        ├── authorized_keys                    <-- SSH keys for logging into account
+        ├── config                             <-- SSH user configuration file
+        ├── id_rsa                             <-- SSH private key
+        ├── id_rsa.pub                         <-- SSH public key
+        └── known_hosts                        <-- Systems previously connected to
 
-    /etc/
-    ├── docker/
+    /etc/ 
+    ├── docker/ 
     │   ├── certs.d/                           <-- Host docker cert directory
     │   │   ├── daemon/                        <-- Daemon cert directory
-    │   │   │       ├── ca.pem                 <-- Daemon tlscacert
-    │   │   │       ├── cert.pem               <-- Daemon tlscert
-    │   │   │       └── key.pem                <-- Daemon tlskey
+    │   │   │   ├── ca.pem                     <-- CA Cert
+    │   │   │   ├── <HOST>-cert.pem            <-- public key (default: cert.pem)
+    │   │   │   └── <HOST>-priv-key.pem        <-- private key (default: key.pem)
     │   │   ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory
     │   │   │   └── ca.crt                     <-- Daemon registry domain cert
     │   │   ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory
     │   │   └── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory
     │   ├── daemon.json                        <-- Daemon configuration file
     │   ├── key.json                           <-- Automatically generated dockerd
-    │   │                                          key for TLS connections
+    │   │                                          key for TLS connections to other
+    │   │                                          TLS servers
     │   ├── 10-override.begin                  <-- docker.service.d default lines
     │   ├── dockerd-configuration-file         <-- Daemon configuration
     │   ├── dockerd-configuration-file.service <- runs start-dockerd-with-systemd.sh
     │   │                                          during boot
     │   ├── docker.org                         <-- Copy of /etc/default/docker
-    │   ├── key.json                           <-- dockerd key for TLS connections
-    │   │                                          to other TLS servers
     │   ├── README.md
     │   ├── setup-dockerd.sh                   <-- moves and creates files
     │   ├── start-dockerd-with-systemd.begin   <-- Beginning default lines
@@ -368,12 +388,14 @@ This script has to be run as root to check daemon registry cert (ca.crt), regist
     │   └── uninstall-dockerd-scripts.sh       <-- Removes files and scripts
     ├── systemd/system/                        <-- Local systemd configurations
     │   ├── dockerd-configuration-file.service <-- Runs start-dockerd-with-systemd.sh
-    │   ├── docker.service.d/10-override.conf  <-- Override configutation file
+    │   ├── docker.service.d/
+    │   │   └── 10-override.conf               <-- Override configutation file
     │   └── docker.service.wants/              <-- Dependencies
     ├── default/
     │   └── docker                             <-- Docker daemon Upstart and
     │                                              SysVinit configuration file
-    └── ssl/openssl.cnf                        <-- OpenSSL configuration file
+    └── ssl/
+        └── openssl.cnf                        <-- OpenSSL configuration file
 
     /var/
     ├── lib/docker/                            <-- Root directory of persistent
