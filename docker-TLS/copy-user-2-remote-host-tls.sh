@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-user-2-remote-host-tls.sh  4.2.1225  2019-12-31T23:31:29.780084-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 4.1-13-g746335a  
+# 	   docker-TLS/copy-user-2-remote-host-tls.sh   resolve limit SSH (TCP port 22) connections with ufw on Ubuntu Linux 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  4.1.1211  2019-12-30T11:34:27.458921-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.565-13-g1455a67  
 # 	   docker-TLS/*   New Release 4.1 
 # 	docker-TLS/copy-user-2-remote-host-tls.sh  3.557.1131  2019-12-22T18:16:53.567416-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.556-1-ga963163 
@@ -343,7 +345,7 @@ if [[ "${LOCALHOST}" != "${REMOTE_HOST}" ]] ; then  #  #5 Not "${LOCALHOST}"
       ssh -t "${REMOTE_HOST}" "cd ~${TLS_USER} ; sudo tar -pxf /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.new.tar ; sudo rm /tmp/${TLS_USER}--${REMOTE_HOST}--${FILE_DATE_STAMP}.new.tar ; sudo chown -fR ${TLS_USER}.${TLS_USER} .docker"
     fi
   else
-    new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${REMOTE_HOST} not responding on ssh port." 1>&2
+    new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${REMOTE_HOST} not responding on ssh port.  Check to see if ssh port has a ufw limit." 1>&2
     exit 1
   fi
 else
