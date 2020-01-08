@@ -146,11 +146,3 @@ Majority of changes and updates for this release are in docker-security-infrastr
 #### Release Date Feb 18, 2018
 
 * New release, ready for production
-
-## Version  
-#### Release Name 
-#### Release Date
-
-## Version  
-#### Release Name 
-#### Release Date
