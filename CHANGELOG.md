@@ -95,39 +95,45 @@ Majority of changes and updates for this release are in docker-security-infrastr
 #### Release Name docker-security-infrastructure-scripts
 #### Release Date Feb 20, 2019
 
-update README, added DEBUG, update display_help; update 1-5 productio…
-
-…ns standards
+* update README, added DEBUG, update display_help; update 1-5 productio…
+* …ns standards
 
 ## Version  release.3.58
 #### Release Name release.3.58
 #### Release Date Sep 14, 2018
 
-change file names to use date format without : or _ close #17
+* change file names to use date format without : or _ close #17
 
 ## Version  3.31
 #### Release Name 
 #### Release Date Jun 23, 2018
 
-Added uninstall-dockerd-scripts.sh to /etc/docker so it is included on each system during setup.
+* Added uninstall-dockerd-scripts.sh to /etc/docker so it is included on each system during setup.
 
 ## Version  3.28
 #### Release Name 
 #### Release Date May 9, 2018
 
-add instruction to remove this script when complete
+* add instruction to remove this script when complete
 
 ## Version  3.20
 #### Release Name 
 #### Release Date Mar 5, 2018
 
-changes to display help
+* changes to display help
 
 ## Version  3.15
 #### Release Name 
 #### Release Date Feb 28, 2018
 
-ready for production
+* ready for production
+
+## Version  3.12
+#### Release Name 
+#### Release Date Feb 27, 2018
+
+* check-user-tls.sh added error message for User certificate NOT issued…
+* … by CA and BOLD test messages
 
 ## Version  
 #### Release Name 
