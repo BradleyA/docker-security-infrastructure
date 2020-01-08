@@ -67,3 +67,28 @@
 * close #70 docker-TLS/create-user-tls.sh - upgrade Production standard
 
 ### Misc
+
+## Version 3.234 
+#### Release Name 
+#### Release Date Apr 10, 2019
+
+### Features
+ 
+Majority of changes and updates for this release are in docker-security-infrastructure/docker-TLS
+
+update EXAMPLES format
+update DOCUMENTATION change links
+update README
+        added registry examples
+        added Architecture tree
+new command/service
+        added docker-TLS/copy-registry-tls.sh #43
+        added docker-TLS/create-registry-tls.sh #41
+        added docker-TLS/create-registry-tls.sh #41
+update production standard 0.1.166 --help many updates to display_help
+added new user help hints messaging
+added production standard 3.0 shellcheck
+added production standard 6.1.177 ARCHITECTURE TREE section
+added production standard 7.0 Default variable value section
+
+
