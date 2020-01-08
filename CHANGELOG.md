@@ -11,8 +11,10 @@
 * #11 dockerd-configuration-options - why systemd
 * #10 dockerd-configuration-options/setup-dockerd.sh systemctl daemon-reload testing
 * #40 swarm/{docker-enter,docker-swarm-clear} - test swarm script from 2016 clusters and upgrade
+
 ### Issue
 * #37 dockerd-configuration-options/README - review and update BUG
+* #44 registry solve the incident requiring --disable-content-trust
 
 ## Version 4.1 
 #### Release Name Production-4
