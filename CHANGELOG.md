@@ -91,6 +91,15 @@ Majority of changes and updates for this release are in docker-security-infrastr
 * added production standard 6.1.177 ARCHITECTURE TREE section
 * added production standard 7.0 Default variable value section
 
+## Version  3.122
+#### Release Name docker-security-infrastructure-scripts
+#### Release Date Feb 20, 2019
+
+update README, added DEBUG, update display_help; update 1-5 productio…
+
+…ns standards
+
 ## Version  
 #### Release Name 
 #### Release Date 
+
