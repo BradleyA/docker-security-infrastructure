@@ -99,7 +99,12 @@ update README, added DEBUG, update display_help; update 1-5 productio…
 
 …ns standards
 
+## Version  release.3.58
+#### Release Name release.3.58
+#### Release Date Sep 14, 2018
+
+change file names to use date format without : or _ close #17
+
 ## Version  
 #### Release Name 
 #### Release Date 
-
