@@ -105,6 +105,22 @@ update README, added DEBUG, update display_help; update 1-5 productio…
 
 change file names to use date format without : or _ close #17
 
+## Version  3.31
+#### Release Name 
+#### Release Date Jun 23, 2018
+
+Added uninstall-dockerd-scripts.sh to /etc/docker so it is included on each system during setup.
+
+## Version  
+#### Release Name 
+#### Release Date 
+
+
+## Version  
+#### Release Name 
+#### Release Date 
+
+
 ## Version  
 #### Release Name 
 #### Release Date 
