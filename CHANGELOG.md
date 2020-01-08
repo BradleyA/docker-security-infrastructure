@@ -19,17 +19,16 @@
   * added SA and FVT tests
   * update output for shellcheck incidents
   * improve output by adding color
-* docker-TLS/check-ca-tls.sh created this script to test ca.pem close #49
-* docker-TLS/check-ca-tls.sh update output and display_help
-* docker-TLS/create-host-tls.sh add warning when ${CA_CERT} expires before cert.pem
-* docker-TLS/create-host-tls.sh removed hostname from key names in symbolic link
-* docker-TLS/create-host-tls.sh change file name standard to include site private CA date in all certs that are built from it
+* docker-TLS/check-ca-tls.sh 
+  * created this script to test ca.pem close #49
+  * update output and display_help
+* docker-TLS/create-host-tls.sh 
+  * add warning when ${CA_CERT} expires before cert.pem
+  * removed hostname from key names in symbolic link
+  * change file name standard to include site private CA date in all certs that are built from it
 * docker-TLS/create-user-tls.sh add warning when ${CA_CERT} expires before user-cert.pem
-* docker-TLS/check-user-tls.sh - upgrade Production standard #62
-
 * docker-TLS/copy-host-2-remote-host-tls.sh add default standard for Docker Swarm standalone manager
 * docker-TLS/create-registry-tls.sh updated display_help, added cert duration dates & cert symbolic links
-* 
 
 ### Issues
 * close #5 #48 docker-TLS/copy-user-2-remote-host-tls.sh docker-TLS/copy-host-2-remote-host-tls.sh changes for #5 #48 localhost does not use scp & ssh
