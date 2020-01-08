@@ -9,9 +9,11 @@
 #### Release Date 2019-12-30
 
 ### Features
-* Production standard 0.3.550 --help
-* Production standard 4.3.550 Documentation Language
-* Production standard 1.3.550 DEBUG variable
+* docker-TLS/* 
+  * Production standard 5.3.550 Copyright
+  * Production standard 0.3.550 --help
+  * Production standard 4.3.550 Documentation Language
+  * Production standard 1.3.550 DEBUG variable
 ### Bugfixes
 
 ### Misc
