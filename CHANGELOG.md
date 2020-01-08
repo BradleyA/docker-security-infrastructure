@@ -3,8 +3,8 @@
 ## {Next Version}
 
 ### Misc
-* ssh/check-user-ssh.sh - check for additional authorized_keys when encrypted home directory #51
-* ssh notes for design changes #58
+* #51 ssh/check-user-ssh.sh - check for additional authorized_keys when encrypted home directory
+* #58 ssh notes for design changes
 
 ## Version 4.1 
 #### Release Name Production-4
