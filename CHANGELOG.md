@@ -135,10 +135,16 @@ Majority of changes and updates for this release are in docker-security-infrastr
 * check-user-tls.sh added error message for User certificate NOT issued…
 * … by CA and BOLD test messages
 
+## Version  3.8
+#### Release Name 
+#### Release Date Feb 19, 2018
+
+* dockerd-configuration-options change _ to - in XOS
+
 ## Version  
 #### Release Name 
 #### Release Date 
 
 ## Version  
 #### Release Name 
-#### Release Date 
+#### Release Date
