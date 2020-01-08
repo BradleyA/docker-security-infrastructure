@@ -111,10 +111,11 @@ change file names to use date format without : or _ close #17
 
 Added uninstall-dockerd-scripts.sh to /etc/docker so it is included on each system during setup.
 
-## Version  
+## Version  3.28
 #### Release Name 
-#### Release Date 
+#### Release Date May 9, 2018
 
+add instruction to remove this script when complete
 
 ## Version  
 #### Release Name 
