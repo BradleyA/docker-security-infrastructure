@@ -7,8 +7,11 @@
 * #58 ssh notes for design changes
 * #45 ufw/create-ufw.sh - create firewall Uncomplicated Firwwall (UFW)
 * #46 ufw/copy-ufw.sh - copy firewall Uncomplicated Firwwall (UFW)
-* #47 ufw/create-ufw.sh - Remove firewall Uncomplicated Firwwall (UFW) #47
-
+* #47 ufw/create-ufw.sh - Remove firewall Uncomplicated Firwwall (UFW)
+* #11 dockerd-configuration-options - why systemd
+* #10 dockerd-configuration-options/setup-dockerd.sh systemctl daemon-reload testing
+### Issue
+* #37 dockerd-configuration-options/README - review and update
 
 ## Version 4.1 
 #### Release Name Production-4
