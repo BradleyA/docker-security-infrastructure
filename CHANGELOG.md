@@ -10,29 +10,32 @@
 
 ### Features
 * docker-TLS/* 
+  * Production standard 6.3.547 Architecture tree
   * Production standard 5.3.550 Copyright
   * Production standard 0.3.550 --help
+  * Production standard 8.3.541 --usage
   * Production standard 4.3.550 Documentation Language
   * Production standard 1.3.550 DEBUG variable
+  * added SA and FVT tests
+  * improve output by adding color
+* docker-TLS/check-ca-tls.sh created this script to test ca.pem close #49
+* docker-TLS/create-host-tls.sh add warning when ${CA_CERT} expires before cert.pem
+* docker-TLS/create-user-tls.sh add warning when ${CA_CERT} expires before user-cert.pem
+* docker-TLS/check-ca-tls.sh update output and display_help
+* docker-TLS/copy-host-2-remote-host-tls.sh add default standard for Docker Swarm standalone manager
+* 
 ### Bugfixes
 
 ### Misc
+* docker-TLS/* update output for shellcheck incidents
 
-docker-TLS/check-ca-tls.sh created this script to test ca.pem close #49
-docker-TLS/create-host-tls.sh add warning when${CA_CERT} expires before cert.pem
-docker-TLS/* Production standard 5.3.550 Copyright
 
-docker-TLS/create-user-tls.sh add warning when${CA_CERT} expires before user-cert.pem
-docker-TLS/check-ca-tls.sh update output and display_help
-docker-TLS/* Production standard 6.3.547 Architecture tree
-docker-TLS/copy-host-2-remote-host-tls.sh add default standard for Docker Swarm standalone manager
-docker-TLS/* update output for shellcheck incidents
+
+
 docker-TLS/create-host-tls.sh removed hostname from key names in symbolic link
 docker-TLS/create-host-tls.sh change file name standard to include site private CA date in all certs that are built from it
-docker-TLS/* Production standard 8.3.541 --usage
 docker-TLS/create-registry-tls.sh updated display_help, added cert duration dates & cert symbolic links
-docker-TLS/* added SA and FVT tests
-docker-TLS/* improve output by adding color
+
 docker-TLS/copy-user-2-remote-host-tls.sh docker-TLS/copy-host-2-remote-host-tls.sh changes for #5 #48 localhost does not use scp & ssh
 docker-TLS/check-user-tls.sh - upgrade Production standard #62
 close #70 docker-TLS/create-user-tls.sh - upgrade Production standard
