@@ -20,6 +20,8 @@
 #### Release Name Production-4
 #### Release Date 2019-12-30
 
+Majority of changes and updates for this release are in docker-security-infrastructure/docker-TLS
+
 ### Features
 * docker-TLS/* 
   * Production standard 6.3.547 Architecture tree
