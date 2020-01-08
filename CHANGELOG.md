@@ -117,10 +117,20 @@ Added uninstall-dockerd-scripts.sh to /etc/docker so it is included on each syst
 
 add instruction to remove this script when complete
 
+## Version  3.20
+#### Release Name 
+#### Release Date Mar 5, 2018
+
+changes to display help
+
 ## Version  
 #### Release Name 
 #### Release Date 
 
+
+## Version  
+#### Release Name 
+#### Release Date 
 
 ## Version  
 #### Release Name 
