@@ -5,6 +5,10 @@
 ### Misc
 * #51 ssh/check-user-ssh.sh - check for additional authorized_keys when encrypted home directory
 * #58 ssh notes for design changes
+* #45 ufw/create-ufw.sh - create firewall Uncomplicated Firwwall (UFW)
+* #46 ufw/copy-ufw.sh - copy firewall Uncomplicated Firwwall (UFW)
+* #47 ufw/create-ufw.sh - Remove firewall Uncomplicated Firwwall (UFW) #47
+
 
 ## Version 4.1 
 #### Release Name Production-4
