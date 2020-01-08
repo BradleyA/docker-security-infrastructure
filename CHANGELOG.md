@@ -123,10 +123,11 @@ add instruction to remove this script when complete
 
 changes to display help
 
-## Version  
+## Version  3.15
 #### Release Name 
-#### Release Date 
+#### Release Date Feb 28, 2018
 
+ready for production
 
 ## Version  
 #### Release Name 
