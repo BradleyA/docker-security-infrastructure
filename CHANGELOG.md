@@ -141,9 +141,15 @@ Majority of changes and updates for this release are in docker-security-infrastr
 
 * dockerd-configuration-options change _ to - in XOS
 
+## Version  3.7
+#### Release Name 
+#### Release Date Feb 18, 2018
+
+* New release, ready for production
+
 ## Version  
 #### Release Name 
-#### Release Date 
+#### Release Date
 
 ## Version  
 #### Release Name 
