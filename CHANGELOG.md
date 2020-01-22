@@ -1,7 +1,14 @@
 # Changelog
 
-## {Next Version}
+## Version  {Next Version}
+#### Release Name  {unreleased alpha beta prerelease latest}
+#### Release Date 
 
+Brief description
+
+### Features Added
+### Features Changed
+### Features Deprecations
 ### Misc
 * #51 ssh/check-user-ssh.sh - check for additional authorized_keys when encrypted home directory
 * #58 ssh notes for design changes
@@ -146,3 +153,15 @@ Majority of changes and updates for this release are in docker-security-infrastr
 #### Release Date Feb 18, 2018
 
 * New release, ready for production
+
+## Version  {Next Version}
+#### Release Name  {unreleased alpha beta prerelease latest}
+#### Release Date 
+
+Brief description
+
+### Features Added
+### Features Changed
+### Features Deprecations
+### Issues
+### Misc
