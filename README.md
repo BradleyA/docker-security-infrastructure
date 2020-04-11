@@ -1,4 +1,10 @@
-# docker-security-infrastructure   [![Stable Release](https://img.shields.io/badge/Release-4.1-blue.svg)](https://github.com/BradleyA/docker-security-infrastructure/releases/tag/4.1)    [![GitHub commits](https://img.shields.io/github/commits-since/BradleyA/docker-security-infrastructure/4.1.svg)](https://github.com/BradleyA/docker-security-infrastructure/commits/)
+# docker-security-infrastructure
+[![Stable Release](https://img.shields.io/badge/Release-4.1-blue.svg)](https://github.com/BradleyA/docker-security-infrastructure/releases/tag/4.1)
+[![GitHub commits](https://img.shields.io/github/commits-since/BradleyA/docker-security-infrastructure/4.1.svg)](https://github.com/BradleyA/docker-security-infrastructure/commits/)
+[![MIT License](http://img.shields.io/badge/License-MIT-red.png)](LICENSE)
+[<img alt="Clones" src="https://img.shields.io/static/v1?label=Clones&message=140&color=blue">](images/clone.table.md)
+[<img alt="Views" src="https://img.shields.io/static/v1?label=Views&message=1176&color=blue">](images/view.table.md)
+
 This repository contains shell scripts that check user ssh permissions, setup and manage both TLS and dockerd on Ubuntu 14.04 (upstart) and Ubuntu 16.04 (systemd).  Most scripts in this repository support --help and --usage options.
   
 #### If you like this repository, select in the upper-right corner,  STAR,  thank you.
@@ -48,10 +54,6 @@ To install, change to the location you want to download the scripts. Use git to 
 
 
 #### To watch future updates in this repository select in the upper-right corner, the "Watch" list, and select Watching.
-
-#### Traffic
- * <img alt="Clones" src="https://img.shields.io/static/v1?label=Clones&message=140&color=blue"> [Clones Table](images/clone.table.md)
- * <img alt="Views" src="https://img.shields.io/static/v1?label=Views&message=1176&color=blue"> [Views Table](images/view.table.md)
 
 #### Author
 [<img id="twitter" src="images/twitter.png" width="50" a="twitter.com/bradleyaustintx/">
