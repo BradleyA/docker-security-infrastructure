@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  4.2.1.1273  2020-04-18T15:20:29.932587-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  master  uadmin  five-rpi3b.cptx86.com 4.2-47-g4ac099b  
+# 	   docker-TLS/copy-host-2-remote-host-tls.sh   display_help description typos close #72   update to Production standard 0.3.579 --help 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  4.1.1211  2019-12-30T11:34:27.128441-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.565-13-g1455a67  
 # 	   docker-TLS/*   New Release 4.1 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  3.555.1127  2019-12-22T17:46:04.738024-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.554-1-gb837ae5 
@@ -44,7 +46,7 @@ echo    "   ${COMMAND_NAME} [--usage | -usage | -u]"
 echo    "   ${COMMAND_NAME} [--version | -version | -v]"
 }
 
-###  Production standard 0.3.550 --help                                                     # 3.550
+###  Production standard 0.3.579 --help                                                     # 0.3.579
 display_help() {
 display_usage
 #    Displaying help DESCRIPTION in English en_US.UTF-8, en.UTF-8, C.UTF-8                  # 3.550
@@ -52,11 +54,11 @@ echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
 echo    "A user with administration authority uses this script to copy host TLS CA,"
 echo    "public, and private keys from <WORKING_DIRECTORY> directory on this"
 echo    "system to /etc/docker/certs.d/daemon directory on a local system or"
-echo    "remote system.  To copy to this local system, do not enter a <REMOTE_HOST>"
+echo    "remote system."
 echo -e "\nTo copy to this local system, do not enter a <REMOTE_HOST> on the"
 echo    "command line and this local system will be used."
 echo -e "\nThe administration user may receive password and/or passphrase prompts from a"
-echo    "remote systen; running the following may stop the prompts in your cluster."
+echo    "remote systen; running the following may stop the prompts."
 echo -e "\t${BOLD}ssh-copy-id <USER>@<REMOTE_HOST>${NORMAL}"
 echo    "or"
 echo -e "\t${BOLD}ssh-copy-id <USER>@<x.x.x.x>${NORMAL}"
@@ -90,7 +92,7 @@ echo    "                   exit immediately if non-zero exit status is recieved
 echo    "                   some exceptions.  Setting 5 (set -e -o pipefail) will do"       # 3.550
 echo    "                   setting 4 and exit if any command in a pipeline errors.  For"   # 3.550
 echo    "                   more information about the set options, see man bash."          # 3.550
-
+#
 echo    "   CA_CERT           File name of certificate (default ${DEFAULT_CA_CERT})"
 echo    "   WORKING_DIRECTORY Absolute path for working directory"
 echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
@@ -98,13 +100,20 @@ echo    "   CERT_DAEMON_DIR   dockerd certification directory"
 echo    "                     (default ${DEFAULT_CERT_DAEMON_DIR})"
 
 echo -e "\n${BOLD}OPTIONS${NORMAL}"
-echo -e "Order of precedence: CLI options, environment variable, default code.\n"
-echo    "   REMOTE_HOST       Remote host to copy certificates to"
-echo    "                     (default ${DEFAULT_REMOTE_HOST})"
-echo    "   WORKING_DIRECTORY Absolute path for working directory"
-echo    "                     (default ${DEFAULT_WORKING_DIRECTORY})"
-echo    "   CERT_DAEMON_DIR   dockerd certification directory"
-echo    "                     (default ${DEFAULT_CERT_DAEMON_DIR})"
+echo -e "Order of precedence: CLI options, environment variable, default value.\n"     # 3.572
+echo    "   --help, -help, help, -h, h, -?"                                            # 3.572
+echo -e "\tOn-line brief reference manual\n"                                           # 3.572
+echo    "   --usage, -usage, -u"                                                       # 3.572
+echo -e "\tOn-line command usage\n"                                                    # 3.572
+echo    "   --version, -version, -v"                                                      # 0.3.579
+echo -e "\tOn-line command version\n"                                                  # 3.572
+#                                                                                         # 0.3.579
+echo    "   REMOTE_HOST"                                                                  # 0.3.579
+echo -e "\tRemote host to copy certificates to (default ${DEFAULT_REMOTE_HOST})\n"        # 0.3.579
+echo    "   WORKING_DIRECTORY"                                                            # 0.3.579
+echo -e "\tAbsolute path for working directory (default ${DEFAULT_WORKING_DIRECTORY})\n"  # 0.3.579
+echo    "   CERT_DAEMON_DIR"                                                              # 0.3.579
+echo -e "\tdockerd certification directory (default ${DEFAULT_CERT_DAEMON_DIR})"          # 0.3.579
 
 ###  Production standard 6.3.547  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
@@ -134,7 +143,7 @@ echo -e "\n${BOLD}AUTHOR${NORMAL}"                                              
 echo    "   ${COMMAND_NAME} was written by Bradley Allen <allen.bradley@ymail.com>"         # 3.550
 
 echo -e "\n${BOLD}REPORTING BUGS${NORMAL}"                                                  # 3.550
-echo    "   Report ${COMMAND_NAME} bugs https://github.com/BradleyA/docker-security-infrastructure/issues/new"  # 3.550
+echo    "   Report ${COMMAND_NAME} bugs https://github.com/BradleyA/docker-security-infrastructure/issues/new/choose"  # 0.3.579
 
 ###  Production standard 5.3.550 Copyright                                                  # 3.550
 echo -e "\n${BOLD}COPYRIGHT${NORMAL}"                                                       # 3.550
