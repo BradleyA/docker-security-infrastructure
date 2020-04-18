@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	dockerd-configuration-options/setup-dockerd.sh  4.2.2.1275  2020-04-18T17:38:55.772160-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  master  uadmin  five-rpi3b.cptx86.com 4.2.1-1-g4c83f37  
+# 	   dockerd-configuration-options/setup-dockerd.sh   close #73   error  line 166: /bin/systemctl No such file or directory 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.266.733  2019-06-07T22:17:55.369699-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure  uadmin  six-rpi3b.cptx86.com 3.265  
 # 	   dockerd-configuration-options{setup-dockerd.sh,uninstall-dockerd-scripts.sh} - added production standard 8.0 --usage #53 
 # 	dockerd-configuration-options/setup-dockerd.sh  3.240.690  2019-04-15T09:49:31.653272-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  six-rpi3b.cptx86.com 3.239  
@@ -210,22 +212,25 @@ fi
 echo -e "\t. . . dockerd for Ubuntu 14.04 has been updated." 1>&2
 echo -e "\n\tIf you are using upstart, \n\tRun '${BOLD}sudo service docker restart${NORMAL}'\n\tfor dockerd to read ${UPSTART_SYSVINIT_DIRECTORY}docker.\n"	1>&2
 
-###	Configure dockerd (systemd) on Ubuntu 16.04
-#		Any changes to dockerd-configuration-file will be added to ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
-START_SYSTEMD_SCRIPT="start-dockerd-with-systemd.sh"
-echo -e "\tUpdate files for dockerd (systemd configuration file)\n\ton Ubuntu 16.04.\n"	1>&2
-cat "${WORK_DIRECTORY}start-dockerd-with-systemd.begin" > "${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}"
-cat "${WORK_DIRECTORY}dockerd-configuration-file" >> "${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}"
-cat "${WORK_DIRECTORY}start-dockerd-with-systemd.end" >> "${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}"
-chmod 700 "${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}"
-"${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}"
+#    Configure dockerd (systemd) on Ubuntu 16.04
+UBUNTU_OS_CODENAME=$(lsb_release --codename | cut -f2 )   #  do not run systemctl command, not on Ubuntu 14.04 trusty
+if ! [[ "${UBUNTU_OS_CODENAME}" == "trusty" ]] ; then
+  #    Any changes to dockerd-configuration-file will be added to ${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}
+  START_SYSTEMD_SCRIPT="start-dockerd-with-systemd.sh"
+  echo -e "\tUpdate files for dockerd (systemd configuration file)\n\ton Ubuntu 16.04.\n"	1>&2
+  cat "${WORK_DIRECTORY}start-dockerd-with-systemd.begin" > "${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}"
+  cat "${WORK_DIRECTORY}dockerd-configuration-file" >> "${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}"
+  cat "${WORK_DIRECTORY}start-dockerd-with-systemd.end" >> "${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}"
+  chmod 700 "${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}"
+  "${WORK_DIRECTORY}${START_SYSTEMD_SCRIPT}"
 
-#	Add /etc/systemd/system/dockerd-configuration-file.service to systemd
-cp "${WORK_DIRECTORY}/dockerd-configuration-file.service"  /etc/systemd/system/
-systemctl daemon-reload
-echo -e "\n\tIf you are using systemd, Run\n\t'${BOLD}sudo systemctl enable dockerd-configuration-file.service${NORMAL}'\n\tto start on boot."	1>&2
-echo -e "\tRun '${BOLD}sudo systemctl enable docker${NORMAL}'\n\tto start on boot."	1>&2
-echo -e "\tRun '${BOLD}sudo systemctl restart docker${NORMAL}'\n"	1>&2
+  #    Add /etc/systemd/system/dockerd-configuration-file.service to systemd
+  cp "${WORK_DIRECTORY}/dockerd-configuration-file.service"  /etc/systemd/system/
+  systemctl daemon-reload
+  echo -e "\n\tIf you are using systemd, Run\n\t'${BOLD}sudo systemctl enable dockerd-configuration-file.service${NORMAL}'\n\tto start on boot."	1>&2
+  echo -e "\tRun '${BOLD}sudo systemctl enable docker${NORMAL}'\n\tto start on boot."	1>&2
+  echo -e "\tRun '${BOLD}sudo systemctl restart docker${NORMAL}'\n"	1>&2
+fi
 
 #
 get_date_stamp ; echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${0}[$$] ${SCRIPT_VERSION} ${LINENO} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[INFO]${NORMAL}  Operation finished." 1>&2
