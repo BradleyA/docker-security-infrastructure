@@ -1,13 +1,13 @@
-#### 220 Git clones
-Date:             | 01-06 | 01-20 | 01-27
-|:---             |:---:  |:---:  |:---:
-Clones:           |    7  |    4  |    1
-Unique   clones:  |    7  |    4  |    1
+#### 2020 GitHub clones
+Date:		    | 01-06   |       01-20   |       01-27   |       02-03   |       02-10   |  02-24  |  03-02  |  03-09  |  03-23  |  04-06  |   04-13  |  04-20
+|:---    |:---: |:---:  |:---:  |:---:  |:---:  |:---:  |:---:  |:---:  |:---:  |:---:  |:---:  |:---:
+Clones:		  |  7       |       4       |       1       |       2       |       2       |  4      |  1      |  1      |  1      |  10     |   15     |  4
+Unique   clones:  | 7       |       4       |       1       |       2       |       2  |      4  |      1  |      1  |      1  |      10  |      7  |      3
 
-Total clones: 12
-###### Updated: 2020-01-31
+Total clones: 72
+###### Updated: 2020-05-07
 
-#### 2019 Git clones
+#### 2019 GitHub clones
 Date:    |        07-15   |       07-22   |       07-29   |       08-05   |       08-12   |       08-19   |       08-26   |       09-02   |       09-09   |  09-16  |  09-23  |  09-30  |  10-07  |   10-14  |  12-09  |  12-16  |  12-23  |  12-30
 |:---    |:---:   |:---:  |:---:  |:---:  |:---:  |:---:  |:---:  |:---:  |:---:  |:---:  |:---:  |:---:  |:---:  |:---:  |:---:  |:---:  |:---:  |:---:
 Clones:  |        4       |       26      |       4       |       5       |       2       |       2       |       4       |       6       |       5       |  4      |  3      |  5      |  18     |   4      |  10     |  5      |  16     |  5
@@ -15,7 +15,6 @@ Unique   clones:  |       2       |       4       |       3       |       4     
 
 Total clones: 128
 ###### Updated: 2019-12-30
+**Note**  Data collection stopped between 10/14/2019 & 12/9/2019
 
 [Return to README](https://github.com/BradleyA/docker-security-infrastructure/blob/master/README.md#docker-security-infrastructure)
-
-**Note**  Data collection stopped between 10/14 & 12/9
