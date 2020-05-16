@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-registry-tls.sh  4.2.3.1284  2020-05-16T13:50:51.774766-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  master  uadmin  five-rpi3b.cptx86.com 4.2.2-8-g1bea540  
+# 	   docker-TLS/copy-registry-tls.sh -->   added missing line in ARCHITECTURE TREE,  SYSTEMS  <-- List of hosts in cluster  
 # 	docker-TLS/copy-registry-tls.sh  4.1.1211  2019-12-30T11:34:27.293638-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.565-13-g1455a67  
 # 	   docker-TLS/*   New Release 4.1 
 # 	docker-TLS/copy-registry-tls.sh  3.565.1197  2019-12-29T21:34:25.959016-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.564-1-g0d974f5 
@@ -127,14 +129,15 @@ echo    "   SYSTEMS_FILE    Hosts in cluster (default '${DEFAULT_SYSTEMS_FILE}')
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
 echo    "/usr/local/data/                           <-- <DATA_DIR>"
 echo    "├── <CLUSTER>/                             <-- <CLUSTER>"
-echo    "│   └── docker-registry/                   <-- Docker registry directory"
-echo    "│       ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ < Registry container mount"
-echo    "│       │   ├── certs/                     <-- Registry cert directory"
-echo    "│       │   │   ├── domain.crt             <-- Registry cert"
-echo    "│       │   │   └── domain.key             <-- Registry private key"
-echo    "│       │   └── docker/                    <-- Registry storage directory"
-echo    "│       ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ < Registry container mount"
-echo    "│       └── <REGISTRY_HOST>-<REGISTRY_PORT>/ < Registry container mount"
+echo    "│   ├── docker-registry/                   <-- Docker registry directory"
+echo    "│   │   ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ < Registry container mount"
+echo    "│   │   │   ├── certs/                     <-- Registry cert directory"
+echo    "│   │   │   │   ├── domain.crt             <-- Registry cert"
+echo    "│   │   │   │   └── domain.key             <-- Registry private key"
+echo    "│   │   │   └── docker/                    <-- Registry storage directory"
+echo    "│   │   ├── <REGISTRY_HOST>-<REGISTRY_PORT>/ < Registry container mount"
+echo    "│   │   └── <REGISTRY_HOST>-<REGISTRY_PORT>/ < Registry container mount"
+echo    "│   └── SYSTEMS                            <-- List of hosts in cluster"
 echo    "└── <STANDALONE>/                          <-- <STANDALONE> Architecture tree"
 echo    "                                               is the same as <CLUSTER> TREE but"
 echo -e "                                               the systems are not in a cluster\n"
