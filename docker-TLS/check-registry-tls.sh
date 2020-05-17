@@ -1,16 +1,8 @@
 #!/bin/bash
+# 	docker-TLS/check-registry-tls.sh  4.2.4.1285  2020-05-16T20:26:17.725612-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  master  uadmin  five-rpi3b.cptx86.com 4.2.3  
+# 	   docker-TLS/check-registry-tls.sh -->   close #74  updated display_help with examples  
 # 	docker-TLS/check-registry-tls.sh  4.1.1211  2019-12-30T11:34:26.795302-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.565-13-g1455a67  
 # 	   docker-TLS/*   New Release 4.1 
-# 	docker-TLS/check-registry-tls.sh  3.553.1123  2019-12-22T15:11:49.248036-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.552-1-ge20f94a 
-# 	   docker-TLS/check-user-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 
-# 	docker-TLS/check-registry-tls.sh  3.552.1121  2019-12-15T16:39:00.522328-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.551-1-g23e6062  
-# 	   docker-TLS/check-registry-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 
-# 	docker-TLS/check-registry-tls.sh  3.543.1106  2019-12-13T16:20:51.986929-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
-# 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
-# 	docker-TLS/check-registry-tls.sh  3.454.951  2019-10-13T15:24:56.778776-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.453  
-# 	   docker-TLS/check-ca-tls.sh docker-TLS/check-registry-tls.sh  #59 #61  updated Production standard 2.3.529 log format, 8.3.530 --usage, 1.3.531 DEBUG variable 
-# 	docker-TLS/check-registry-tls.sh  3.451.945  2019-10-12T18:45:13.024119-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.450-1-g7ebe3d6  
-# 	   close #61   docker-TLS/check-registry-tls.sh  - upgrade Production standard 
 #86# docker-TLS/check-registry-tls.sh - Check certifications for private registry
 ###  Production standard 3.0 shellcheck
 ###  Production standard 5.3.550 Copyright                                                  # 3.550
@@ -25,10 +17,13 @@ if [[ "${DEBUG}" == "4" ]] ; then set -e    ; fi   # Exit immediately if non-zer
 if [[ "${DEBUG}" == "5" ]] ; then set -e -o pipefail ; fi   # Exit immediately if non-zero exit status and exit if any command in a pipeline errors
 #
 BOLD=$(tput -Txterm bold)
+UNDERLINE=$(tput -Txterm sgr 0 1)
 NORMAL=$(tput -Txterm sgr0)
 RED=$(tput    setaf 1)
 GREEN=$(tput  setaf 2)
 YELLOW=$(tput setaf 3)
+BLUE=$(tput   setaf 4)
+PURPLE=$(tput setaf 5)
 CYAN=$(tput   setaf 6)
 WHITE=$(tput  setaf 7)
 
@@ -59,6 +54,8 @@ display_usage
 #    Displaying help DESCRIPTION in English en_US.UTF-8, en.UTF-8, C.UTF-8                  # 3.550
 echo -e "\n${BOLD}DESCRIPTION${NORMAL}"
 echo    "This script has to be run as root to check daemon registry cert (ca.crt),"
+echo    "A user with administration authority uses this script to check daemon registry cert (ca.crt),"
+
 echo    "registry cert (domain.crt), and registry private key (domain.key) in"
 echo    "/etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/ and"
 echo    "<DATA_DIR>/<CLUSTER>/docker-registry/<REGISTRY_HOST>-<REGISTRY_PORT>/certs/"
@@ -94,7 +91,7 @@ echo    "                   exit immediately if non-zero exit status is recieved
 echo    "                   some exceptions.  Setting 5 (set -e -o pipefail) will do"       # 3.550
 echo    "                   setting 4 and exit if any command in a pipeline errors.  For"   # 3.550
 echo    "                   more information about the set options, see man bash."          # 3.550
-
+#
 echo    "   REGISTRY_HOST   Registry host (default '${DEFAULT_REGISTRY_HOST}')"
 echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
 echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
@@ -128,32 +125,34 @@ echo    "        ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert dire
 echo    "        └── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory"
 
 echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
-echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
+echo    "   ${UNDERLINE}https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md${NORMAL}"  # 4.2.4
 
-echo -e "\n${BOLD}EXAMPLES${NORMAL}"
-echo -e "   Check local host certificates for <REGISTRY_HOST> (two.cptx86.com) using\n   <REGISTRY_PORT> (17313)\n\t${BOLD}sudo ${COMMAND_NAME} two.cptx86.com 17313${NORMAL}\n"  # 3.550
+echo -e "\n${BOLD}EXAMPLES${NORMAL}"   # 3.550
+echo -e "   Check local host certificates using default port (${DEFAULT_REGISTRY_PORT})\n\t${BOLD}sudo ${COMMAND_NAME}${NORMAL}\n"
+echo -e "   Check local host certificates with environment variable DEBUG=1\n\t${BOLD}sudo DEBUG=1 ${COMMAND_NAME}${NORMAL}\n"
+echo -e "   Check local host certificates with environment variable REGISTRY_PORT=17315\n\t${BOLD}sudo REGISTRY_PORT=17315 ${COMMAND_NAME}${NORMAL}\n"
 echo    "   This script works for the local host only.  To use ${COMMAND_NAME} on a"
-echo    "   remote hosts (one-rpi3b.cptx86.com) with ssh port of 12323 as uadmin user;"
-echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo ${COMMAND_NAME} two.cptx86.com 17313'${NORMAL}"
-echo    "   or"
+echo    "   remote hosts (one-rpi3b.cptx86.com) with ssh port of 12323 as uadmin user"
+echo -e "\t${BOLD}ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo ${COMMAND_NAME} two.cptx86.com 17313'${NORMAL}\n"
+echo    "   Or using ssh's default port as uadmin user"
 echo -e "\t${BOLD}ssh -t uadmin@three-rpi3b.cptx86.com 'sudo ${COMMAND_NAME} two.cptx86.com 17313'${NORMAL}\n"
 echo    "   To loop through a list of hosts in the cluster use,"
-echo    "   https://github.com/BradleyA/Linux-admin/tree/master/cluster-command"
+echo    "   ${UNDERLINE}https://github.com/BradleyA/Linux-admin/tree/master/cluster-command${NORMAL}"
 echo -e "\t${BOLD}cluster-command.sh special 'sudo ${COMMAND_NAME} two.cptx86.com 17313'${NORMAL}"
 
 echo -e "\n${BOLD}SEE ALSO${NORMAL}"                                                        # 3.550
-echo    "   cluster-command.sh (https://github.com/BradleyA/Linux-admin/tree/master/cluster-command)"  # 3.550
+echo    "   cluster-command.sh (${UNDERLINE}https://github.com/BradleyA/Linux-admin/tree/master/cluster-command)${NORMAL}"  # 4.2.4
 
 echo -e "\n${BOLD}AUTHOR${NORMAL}"                                                          # 3.550
 echo    "   ${COMMAND_NAME} was written by Bradley Allen <allen.bradley@ymail.com>"         # 3.550
 
 echo -e "\n${BOLD}REPORTING BUGS${NORMAL}"                                                  # 3.550
-echo    "   Report ${COMMAND_NAME} bugs https://github.com/BradleyA/docker-security-infrastructure/issues/new"  # 3.550
+echo    "   Report ${COMMAND_NAME} bugs ${UNDERLINE}https://github.com/BradleyA/docker-security-infrastructure/issues/new${NORMAL}"  # 4.2.4
 
 ###  Production standard 5.3.550 Copyright                                                  # 3.550
 echo -e "\n${BOLD}COPYRIGHT${NORMAL}"                                                       # 3.550
 echo    "   Copyright (c) 2020 Bradley Allen"                                               # 3.550
-echo    "   MIT License https://github.com/BradleyA/docker-security-infrastructure/blob/master/LICENSE"  # 3.550
+echo    "   MIT License ${UNDERLINE}https://github.com/BradleyA/docker-security-infrastructure/blob/master/LICENSE${NORMAL}"  # 4.2.4
 
 #	echo -e "\n${BOLD}HISTORY${NORMAL}"                                                         # 3.550
 #	echo    "   As of . . .  "                                                                  # 3.550
@@ -173,7 +172,7 @@ LOCALHOST=$(hostname -f)
 #    Assumptions for the next two lines of code:  The second line in this script includes the script path & name as the second item and
 #    the script version as the third item separated with space(s).  The tool I use is called 'markit'. See example line below:
 #       template/template.sh  3.517.783  2019-09-13T18:20:42.144356-05:00 (CDT)  https://github.com/BradleyA/user-files.git  uadmin  one-rpi3b.cptx86.com 3.516  
-SCRIPT_NAME=$(head -2 "${0}" | awk '{printf $2}')
+SCRIPT_NAME=$(head -2 "${0}" | awk '{printf $2}')  #  Different from ${COMMAND_NAME}=$(echo "${0}" | sed 's/^.*\///'), SCRIPT_NAME = includes Git repository directory and can be used any where in script (for dev, test teams)
 SCRIPT_VERSION=$(head -2 "${0}" | awk '{printf $3}')
 if [[ "${SCRIPT_NAME}" == "" ]] ; then SCRIPT_NAME="${0}" ; fi
 if [[ "${SCRIPT_VERSION}" == "" ]] ; then SCRIPT_VERSION="v?.?" ; fi
@@ -181,10 +180,10 @@ if [[ "${SCRIPT_VERSION}" == "" ]] ; then SCRIPT_VERSION="v?.?" ; fi
 #    GID
 GROUP_ID=$(id -g)
 
-###  Production standard 2.3.529 log format (WHEN WHERE WHAT Version Line WHO UID:GID [TYPE] Message)
+###  Production standard 2.3.578 Log format (WHEN WHERE WHAT Version Line WHO UID:GID [TYPE] Message)
 new_message() {  #  $1="${LINENO}"  $2="DEBUG INFO ERROR WARN"  $3="message"
   get_date_stamp
-  echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${SCRIPT_NAME}[$$] ${SCRIPT_VERSION} ${1} ${USER} ${UID}:${GROUP_ID} ${BOLD}[${2}]${NORMAL}  ${3}"
+  echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${SCRIPT_NAME}[$$] ${BOLD}${BLUE}${SCRIPT_VERSION} ${PURPLE}${1}${NORMAL} ${USER} ${UID}:${GROUP_ID} ${BOLD}[${2}]${NORMAL}  ${3}"
 }
 
 #    INFO
@@ -206,9 +205,8 @@ while [[ "${#}" -gt 0 ]] ; do
     *) break ;;
   esac
 done
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable... ADMUSER >${ADMUSER}< CLUSTER >${CLUSTER}< DATA_DIR >${DATA_DIR}< FILE_NAME >${FILE_NAME}< SSH_USER >${SSH_USER}< USER_HOME >${USER_HOME}<" 1>&2 ; fi
 
-#    Root is required to copy certs
+#    Root is required to check certs
 if ! [[ "$(id -u)" = 0 ]] ; then
   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  Use sudo ${COMMAND_NAME}" 1>&2
 #    Help hint
@@ -222,9 +220,15 @@ fi
 #    Order of precedence: CLI argument, environment variable, default code
 if [[ $# -ge  1 ]]  ; then REGISTRY_HOST=${1} ; elif [[ "${REGISTRY_HOST}" == "" ]] ; then REGISTRY_HOST=${DEFAULT_REGISTRY_HOST} ; fi
 if [[ $# -ge  2 ]]  ; then REGISTRY_PORT=${2} ; elif [[ "${REGISTRY_PORT}" == "" ]] ; then REGISTRY_PORT=${DEFAULT_REGISTRY_PORT} ; fi
-if [[ $# -ge  3 ]]  ; then CLUSTER=${3} ; elif [[ "${CLUSTER}" == "" ]] ; then CLUSTER=${DEFAULT_CLUSTER} ; fi
-if [[ $# -ge  4 ]]  ; then DATA_DIR=${4} ; elif [[ "${DATA_DIR}" == "" ]] ; then DATA_DIR=${DEFAULT_DATA_DIR} ; fi
+if [[ $# -ge  3 ]]  ; then CLUSTER=${3}       ; elif [[ "${CLUSTER}" == "" ]] ; then CLUSTER=${DEFAULT_CLUSTER} ; fi
+if [[ $# -ge  4 ]]  ; then DATA_DIR=${4}      ; elif [[ "${DATA_DIR}" == "" ]] ; then DATA_DIR=${DEFAULT_DATA_DIR} ; fi
 if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_PORT >${REGISTRY_PORT}< CLUSTER >${CLUSTER}< DATA_DIR >${DATA_DIR}<" 1>&2 ; fi
+
+#    Test <REGISTRY_PORT> for integer
+if ! [[ "${REGISTRY_PORT}" =~ ^[0-9]+$ ]] ; then       #  requires [[   ]] or  [: =~: binary operator expected
+   new_message "${LINENO}" "${RED}ERROR${WHITE}" "  <REGISTRY_PORT> is not an interger.  <REGISTRY_PORT> is set to '${REGISTRY_PORT}'" 1>&2
+   exit 1
+fi
 
 #    Check if /etc/docker directory on system
 if [[ ! -d /etc/docker ]] ; then
