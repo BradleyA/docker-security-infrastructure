@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-registry-tls.sh  4.2.5.1286  2020-05-16T21:34:33.094398-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  master  uadmin  five-rpi3b.cptx86.com 4.2.4  
+# 	   docker-TLS/check-registry-tls.sh docker-TLS/copy-registry-tls.sh -->   update Options  
 # 	docker-TLS/check-registry-tls.sh  4.2.4.1285  2020-05-16T20:26:17.725612-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  master  uadmin  five-rpi3b.cptx86.com 4.2.3  
 # 	   docker-TLS/check-registry-tls.sh -->   close #74  updated display_help with examples  
 # 	docker-TLS/check-registry-tls.sh  4.1.1211  2019-12-30T11:34:26.795302-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.565-13-g1455a67  
@@ -98,11 +100,18 @@ echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
 echo    "   DATA_DIR        Data directory (default '${DEFAULT_DATA_DIR}')"
 
 echo -e "\n${BOLD}OPTIONS${NORMAL}"
-echo -e "Order of precedence: CLI options, environment variable, default code.\n"
-echo    "   REGISTRY_HOST   Registry host (default '${DEFAULT_REGISTRY_HOST}')"
-echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
-echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
-echo    "   DATA_DIR        Data directory (default '${DEFAULT_DATA_DIR}')"
+echo -e "Order of precedence: CLI options, environment variable, default value.\n"     # 3.572
+echo    "   --help, -help, help, -h, h, -?"                                            # 3.572
+echo -e "\tOn-line brief reference manual\n"                                           # 3.572
+echo    "   --usage, -usage, -u"                                                       # 3.572
+echo -e "\tOn-line command usage\n"                                                    # 3.572
+echo    "   --version, -version, -v"                                                      # 0.3.579
+echo -e "\tOn-line command version\n"                                                  # 3.572
+#
+echo -e "   REGISTRY_HOST\n\tRegistry host (default '${DEFAULT_REGISTRY_HOST}')\n"
+echo -e "   REGISTRY_PORT\n\tRegistry port number (default '${DEFAULT_REGISTRY_PORT}')\n"
+echo -e "   CLUSTER\n\tCluster name (default '${DEFAULT_CLUSTER}')\n"
+echo -e "   DATA_DIR\n\tData directory (default '${DEFAULT_DATA_DIR}')"
 
 ###  Production standard 6.3.547  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION

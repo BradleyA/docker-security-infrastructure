@@ -1,16 +1,8 @@
 #!/bin/bash
-# 	docker-TLS/copy-registry-tls.sh  4.2.3.1284  2020-05-16T13:50:51.774766-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  master  uadmin  five-rpi3b.cptx86.com 4.2.2-8-g1bea540  
-# 	   docker-TLS/copy-registry-tls.sh -->   added missing line in ARCHITECTURE TREE,  SYSTEMS  <-- List of hosts in cluster  
+# 	docker-TLS/copy-registry-tls.sh  4.2.5.1286  2020-05-16T21:34:33.217528-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  master  uadmin  five-rpi3b.cptx86.com 4.2.4  
+# 	   docker-TLS/check-registry-tls.sh docker-TLS/copy-registry-tls.sh -->   update Options  
 # 	docker-TLS/copy-registry-tls.sh  4.1.1211  2019-12-30T11:34:27.293638-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.565-13-g1455a67  
 # 	   docker-TLS/*   New Release 4.1 
-# 	docker-TLS/copy-registry-tls.sh  3.565.1197  2019-12-29T21:34:25.959016-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.564-1-g0d974f5 
-# 	   docker-TLS/copy-registry-tls.sh   correct incident sudo: [[: command not found 
-# 	docker-TLS/copy-registry-tls.sh  3.556.1129  2019-12-22T18:04:19.023913-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.555-1-ga9d0626  
-# 	   docker-TLS/copy-registry-tls.sh   Production standard 5.3.550 Copyright  Production standard 0.3.550 --help  Production standard 4.3.550 Documentation Language  Production standard 1.3.550 DEBUG variable 
-# 	docker-TLS/copy-registry-tls.sh  3.543.1106  2019-12-13T16:20:52.378258-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.542  
-# 	   Production standard 6.3.547  Architecture tree  Production standard 8.3.541 --usage 
-# 	docker-TLS/copy-registry-tls.sh  3.450.943  2019-10-12T18:38:29.108939-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.449-3-g62f64c7  
-# 	   close #41   copy-registry-tls.sh    - upgrade Production standard 
 #86# docker-TLS/copy-registry-tls.sh - Copy certs for Private Registry V2
 ###  Production standard 3.0 shellcheck
 ###  Production standard 5.3.550 Copyright                                                  # 3.550
@@ -25,9 +17,12 @@ if [[ "${DEBUG}" == "4" ]] ; then set -e    ; fi   # Exit immediately if non-zer
 if [[ "${DEBUG}" == "5" ]] ; then set -e -o pipefail ; fi   # Exit immediately if non-zero exit status and exit if any command in a pipeline errors
 #
 BOLD=$(tput -Txterm bold)
+UNDERLINE=$(tput -Txterm sgr 0 1)  # 0.3.583
 NORMAL=$(tput -Txterm sgr0)
 RED=$(tput    setaf 1)
 YELLOW=$(tput setaf 3)
+BLUE=$(tput   setaf 4)
+PURPLE=$(tput setaf 5)
 WHITE=$(tput  setaf 7)
 
 ### production standard 7.0 Default variable value
@@ -110,7 +105,7 @@ echo    "                   exit immediately if non-zero exit status is recieved
 echo    "                   some exceptions.  Setting 5 (set -e -o pipefail) will do"       # 3.550
 echo    "                   setting 4 and exit if any command in a pipeline errors.  For"   # 3.550
 echo    "                   more information about the set options, see man bash."          # 3.550
-
+#
 echo    "   REGISTRY_HOST   Registry host name (default '${DEFAULT_REGISTRY_HOST}')"
 echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
 echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
@@ -118,12 +113,19 @@ echo    "   DATA_DIR        Data directory (default '${DEFAULT_DATA_DIR}')"
 echo    "   SYSTEMS_FILE    Hosts in cluster (default '${DEFAULT_SYSTEMS_FILE}')"
 
 echo -e "\n${BOLD}OPTIONS${NORMAL}"
-echo    "Order of precedence: CLI options, environment variable, default code."
-echo    "   REGISTRY_HOST   Registry host (default '${DEFAULT_REGISTRY_HOST}')"
-echo    "   REGISTRY_PORT   Registry port number (default '${DEFAULT_REGISTRY_PORT}')"
-echo    "   CLUSTER         Cluster name (default '${DEFAULT_CLUSTER}')"
-echo    "   DATA_DIR        Data directory (default '${DEFAULT_DATA_DIR}')"
-echo    "   SYSTEMS_FILE    Hosts in cluster (default '${DEFAULT_SYSTEMS_FILE}')"
+echo -e "Order of precedence: CLI options, environment variable, default value.\n"     # 3.572
+echo    "   --help, -help, help, -h, h, -?"                                            # 3.572
+echo -e "\tOn-line brief reference manual\n"                                           # 3.572
+echo    "   --usage, -usage, -u"                                                       # 3.572
+echo -e "\tOn-line command usage\n"                                                    # 3.572
+echo    "   --version, -version, -v"                                                      # 0.3.579
+echo -e "\tOn-line command version\n"                                                  # 3.572
+#
+echo -e "   REGISTRY_HOST\n\tRegistry host (default '${DEFAULT_REGISTRY_HOST}')\n"
+echo -e "   REGISTRY_PORT\n\tRegistry port number (default '${DEFAULT_REGISTRY_PORT}')\n"
+echo -e "   CLUSTER\n\tCluster name (default '${DEFAULT_CLUSTER}')\n"
+echo -e "   DATA_DIR\n\tData directory (default '${DEFAULT_DATA_DIR}')\n"
+echo    "   SYSTEMS_FILE    Hosts in cluster (default '${DEFAULT_SYSTEMS_FILE}')\n"
 
 ###  Production standard 6.3.547  Architecture tree
 echo -e "\n${BOLD}ARCHITECTURE TREE${NORMAL}"  # STORAGE & CERTIFICATION
@@ -161,22 +163,22 @@ echo    "        ├── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert dire
 echo    "        └── <REGISTRY_HOST>:<REGISTRY_PORT>/ < Registry cert directory"
 
 echo -e "\n${BOLD}DOCUMENTATION${NORMAL}"
-echo    "   https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md"
+echo    "   ${UNDERLINE}https://github.com/BradleyA/docker-security-infrastructure/blob/master/docker-TLS/README.md${NORMAL}"
 
 echo -e "\n${BOLD}EXAMPLES${NORMAL}"
 echo -e "   Copy certs for Private Registry, two.cptx86.com, using port 17313\n\t${BOLD}${COMMAND_NAME} two.cptx86.com 17313${NORMAL}\n" # 3.550
-echo -e "   Copy certs for Private Registry using environment variables and default options\n\t${BOLD}${0}${NORMAL}\n" # 3.550
+echo -e "   Copy certs for Private Registry using environment variables and default options\n\t${BOLD}${COMMAND_NAME}${NORMAL}" # 3.550
 
 echo -e "\n${BOLD}AUTHOR${NORMAL}"                                                          # 3.550
 echo    "   ${COMMAND_NAME} was written by Bradley Allen <allen.bradley@ymail.com>"         # 3.550
 
 echo -e "\n${BOLD}REPORTING BUGS${NORMAL}"                                                  # 3.550
-echo    "   Report ${COMMAND_NAME} bugs https://github.com/BradleyA/docker-security-infrastructure/issues/new"  # 3.550
+echo    "   Report ${COMMAND_NAME} bugs ${UNDERLINE}https://github.com/BradleyA/docker-security-infrastructure/issues/new${NORMAL}"  # 3.550
 
 ###  Production standard 5.3.550 Copyright                                                  # 3.550
 echo -e "\n${BOLD}COPYRIGHT${NORMAL}"                                                       # 3.550
 echo    "   Copyright (c) 2020 Bradley Allen"                                               # 3.550
-echo    "   MIT License https://github.com/BradleyA/user-files/blob/master/LICENSE"         # 3.550
+echo    "   MIT License ${UNDERLINE}https://github.com/BradleyA/user-files/blob/master/LICENSE${NORMAL}"         # 3.550
 
 #	echo -e "\n${BOLD}HISTORY${NORMAL}"                                                         # 3.550
 #	echo    "   As of . . .  "                                                                  # 3.550
@@ -196,30 +198,29 @@ LOCALHOST=$(hostname -f)
 #    Assumptions for the next two lines of code:  The second line in this script includes the script path & name as the second item and
 #    the script version as the third item separated with space(s).  The tool I use is called 'markit'. See example line below:
 #       template/template.sh  3.517.783  2019-09-13T18:20:42.144356-05:00 (CDT)  https://github.com/BradleyA/user-files.git  uadmin  one-rpi3b.cptx86.com 3.516  
-SCRIPT_NAME=$(head -2 "${0}" | awk '{printf $2}')
+SCRIPT_NAME=$(head -2 "${0}" | awk '{printf $2}')  #  Different from ${COMMAND_NAME}=$(echo "${0}" | sed 's/^.*\///'), SCRIPT_NAME = includes Git repository directory and can be used any where in script (for dev, test teams)
 SCRIPT_VERSION=$(head -2 "${0}" | awk '{printf $3}')
 if [[ "${SCRIPT_NAME}" == "" ]] ; then SCRIPT_NAME="${0}" ; fi
 if [[ "${SCRIPT_VERSION}" == "" ]] ; then SCRIPT_VERSION="v?.?" ; fi
 
-#    UID and GID
-USER_ID=$(id -u)
+#    GID
 GROUP_ID=$(id -g)
 
-###  Production standard 2.3.512 log format (WHEN WHERE WHAT Version Line WHO UID:GID [TYPE] Message)
-new_message() {  #  $1="${SCRIPT_NAME}"  $2="${LINENO}"  $3="DEBUG INFO ERROR WARN"  $4="message"
+###  Production standard 2.3.578 Log format (WHEN WHERE WHAT Version Line WHO UID:GID [TYPE] Message)
+new_message() {  #  $1="${LINENO}"  $2="DEBUG INFO ERROR WARN"  $3="message"
   get_date_stamp
-  echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${1}[$$] ${SCRIPT_VERSION} ${2} ${USER} ${USER_ID}:${GROUP_ID} ${BOLD}[${3}]${NORMAL}  ${4}"
+  echo -e "${NORMAL}${DATE_STAMP} ${LOCALHOST} ${SCRIPT_NAME}[$$] ${BOLD}${BLUE}${SCRIPT_VERSION} ${PURPLE}${1}${NORMAL} ${USER} ${UID}:${GROUP_ID} ${BOLD}[${2}]${NORMAL}  ${3}"
 }
 
 #    INFO
-new_message "${SCRIPT_NAME}" "${LINENO}" "${YELLOW}INFO${WHITE}" "  Started..." 1>&2
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Started..." 1>&2
 
 #    Added following code because USER is not defined in crobtab jobs
 if ! [[ "${USER}" == "${LOGNAME}" ]] ; then  USER=${LOGNAME} ; fi
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Setting USER to support crobtab...  USER >${USER}<  LOGNAME >${LOGNAME}<" 1>&2 ; fi
 
 #    DEBUG
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Name_of_command >${SCRIPT_NAME}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Name_of_command >${SCRIPT_NAME}< Name_of_arg1 >${1}< Name_of_arg2 >${2}< Name_of_arg3 >${3}<  Version of bash ${BASH_VERSION}" 1>&2 ; fi
 
 ###  Production standard 9.3.513 Parse CLI options and arguments
 while [[ "${#}" -gt 0 ]] ; do
@@ -236,15 +237,15 @@ done
 #    Order of precedence: CLI argument, environment variable, default code
 if [[ $# -ge  1 ]]  ; then REGISTRY_HOST=${1} ; elif [[ "${REGISTRY_HOST}" == "" ]] ; then REGISTRY_HOST=${DEFAULT_REGISTRY_HOST} ; fi
 if [[ $# -ge  2 ]]  ; then REGISTRY_PORT=${2} ; elif [[ "${REGISTRY_PORT}" == "" ]] ; then REGISTRY_PORT=${DEFAULT_REGISTRY_PORT} ; fi
-if [[ $# -ge  3 ]]  ; then CLUSTER=${3} ; elif [[ "${CLUSTER}" == "" ]] ; then CLUSTER=${DEFAULT_CLUSTER} ; fi
-if [[ $# -ge  4 ]]  ; then DATA_DIR=${4} ; elif [[ "${DATA_DIR}" == "" ]] ; then DATA_DIR=${DEFAULT_DATA_DIR} ; fi
-if [[ $# -ge  5 ]]  ; then SYSTEMS_FILE=${5} ; elif [[ "${SYSTEMS_FILE}" == "" ]] ; then SYSTEMS_FILE=${DEFAULT_SYSTEMS_FILE} ; fi
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_PORT >${REGISTRY_PORT}< CLUSTER >${CLUSTER}< DATA_DIR >${DATA_DIR}< SYSTEMS_FILE >${SYSTEMS_FILE}<" 1>&2 ; fi
+if [[ $# -ge  3 ]]  ; then CLUSTER=${3}       ; elif [[ "${CLUSTER}" == "" ]] ; then CLUSTER=${DEFAULT_CLUSTER} ; fi
+if [[ $# -ge  4 ]]  ; then DATA_DIR=${4}      ; elif [[ "${DATA_DIR}" == "" ]] ; then DATA_DIR=${DEFAULT_DATA_DIR} ; fi
+if [[ $# -ge  5 ]]  ; then SYSTEMS_FILE=${5}  ; elif [[ "${SYSTEMS_FILE}" == "" ]] ; then SYSTEMS_FILE=${DEFAULT_SYSTEMS_FILE} ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Variable... REGISTRY_HOST >${REGISTRY_HOST}< REGISTRY_PORT >${REGISTRY_PORT}< CLUSTER >${CLUSTER}< DATA_DIR >${DATA_DIR}< SYSTEMS_FILE >${SYSTEMS_FILE}<" 1>&2 ; fi
 
 #    Check if user has home directory on system
 if [[ ! -d "${HOME}" ]] ; then
   display_help | more
-  new_message "${SCRIPT_NAME}" "${LINENO}" "${RED}ERROR${WHITE}" "  ${USER} does not have a home directory on this system or ${USER} home directory is not ${HOME}" 1>&2
+  new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${USER} does not have a home directory on this system or ${USER} home directory is not ${HOME}" 1>&2
   exit 1
 fi
 
@@ -290,7 +291,7 @@ rm -rf          ./"${REGISTRY_HOST}:${REGISTRY_PORT}"
 
 #    Check if ${SYSTEMS_FILE} file is on system, one FQDN or IP address per line for all hosts in cluster
 if ! [[ -s "${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}" ]] ; then
-  new_message "${SCRIPT_NAME}" "${LINENO}" "${YELLOW}WARN${WHITE}" "  ${BOLD}${SYSTEMS_FILE} file missing or empty, creating ${SYSTEMS_FILE} file with local host.  Edit ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE} file and add additional hosts that are in the cluster.${NORMAL}" 1>&2
+  new_message "${LINENO}" "${YELLOW}WARN${WHITE}" "  ${BOLD}${SYSTEMS_FILE} file missing or empty, creating ${SYSTEMS_FILE} file with local host.  Edit ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE} file and add additional hosts that are in the cluster.${NORMAL}" 1>&2
   mkdir -p "${DATA_DIR}/${CLUSTER}"
   echo -e "#\n# "  > ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}
   echo -e "### ${SYSTEMS_FILE}"  >> ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}
@@ -304,9 +305,9 @@ if ! [[ -s "${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}" ]] ; then
 fi
 
 #    Loop through hosts in ${SYSTEMS_FILE} file and update other host information
-if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Begin loop through hosts in ${SYSTEMS_FILE} file and update other host information" 1>&2 ; fi
+if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Begin loop through hosts in ${SYSTEMS_FILE} file and update other host information" 1>&2 ; fi
 for NODE in $(cat "${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}" | grep -v "#" ) ; do
-  if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Copy files to host ${NODE}" 1>&2 ; fi
+  if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Copy files to host ${NODE}" 1>&2 ; fi
 
 #    Check if ${NODE} is ${LOCALHOST}
   if [[ "${LOCALHOST}" != "${NODE}" ]] ; then
@@ -317,30 +318,30 @@ for NODE in $(cat "${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE}" | grep -v "#" ) ; do
 #     For each Docker daemon to trust the Docker private registry certificate
 #     Copy ca.crt file to /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt on every Docker host.
 #     Restart Docker not required
-      if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Checks complete; ${NODE}; Copy to /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}" 1>&2 ; fi
-        echo -e "\n\tCopy ~/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/ca.crt"
-        echo -e "\tto ${BOLD}${NODE}${NORMAL} /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt"
-        scp -q -p -i ~/.ssh/id_rsa "./${REGISTRY_HOST}.${REGISTRY_PORT}.tar" "${USER}@${NODE}:/tmp"
-        TEMP="sudo mkdir -p /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT} ; if sudo [ -s /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt ] ; then echo -e '\n\t${BOLD}ca.crt${NORMAL} already exists, renaming existing keys so new keys can be copied.' ; sudo mv /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt-$(date +%Y-%m-%dT%H:%M:%S%:z); fi ; sudo tar -xf /tmp/${REGISTRY_HOST}.${REGISTRY_PORT}.tar --owner=root --group=root --directory /etc/docker/certs.d ; sudo rm -f /tmp/${REGISTRY_HOST}.${REGISTRY_PORT}.tar"
-        ssh -q -t -i ~/.ssh/id_rsa "${USER}@${NODE}" "${TEMP}"
-      else
-        new_message "${SCRIPT_NAME}" "${LINENO}" "${YELLOW}WARN${WHITE}" "  ${NODE} found in ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE} file is not responding to ${LOCALHOST} on ssh port." 1>&2
-      fi
-    else
+      if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Checks complete; ${NODE}; Copy to /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}" 1>&2 ; fi
       echo -e "\n\tCopy ~/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/ca.crt"
-      echo -e "\tto ${BOLD}${NODE}${NORMAL} /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt"
-      sudo mkdir -p "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}"
+      echo -e "\tto ${BOLD}${YELLOW}${NODE}${NORMAL} /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt"
+      scp -q -p -i ~/.ssh/id_rsa "./${REGISTRY_HOST}.${REGISTRY_PORT}.tar" "${USER}@${NODE}:/tmp"
+      TEMP="sudo mkdir -p /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT} ; if sudo [ -s /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt ] ; then echo -e '\n\t${BOLD}ca.crt${NORMAL} already exists, renaming existing keys so new keys can be copied.' ; sudo mv /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt-$(date +%Y-%m-%dT%H:%M:%S%:z); fi ; sudo tar -xf /tmp/${REGISTRY_HOST}.${REGISTRY_PORT}.tar --owner=root --group=root --directory /etc/docker/certs.d ; sudo rm -f /tmp/${REGISTRY_HOST}.${REGISTRY_PORT}.tar"
+      ssh -q -t -i ~/.ssh/id_rsa "${USER}@${NODE}" "${TEMP}"
+    else
+      new_message "${LINENO}" "${YELLOW}WARN${WHITE}" "  ${NODE} found in ${DATA_DIR}/${CLUSTER}/${SYSTEMS_FILE} file is not responding to ${LOCALHOST} on ssh port." 1>&2
+    fi
+  else
+    echo -e "\n\tCopy ~/.docker/registry-certs-${REGISTRY_HOST}-${REGISTRY_PORT}/ca.crt"
+    echo -e "\tto ${BOLD}${YELLOW}${NODE}${NORMAL} /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt"
+    sudo mkdir -p "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}"
 
 #    Check if ca.crt already exist
-      if sudo [ -s "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt" ] ; then
-        echo -e "\n\t${BOLD}ca.crt${NORMAL} already exists, renaming existing keys so new keys can be copied."
-        sudo mv "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt" "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)"
-      fi
+    if sudo [ -s "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt" ] ; then
+      echo -e "\n\t${BOLD}ca.crt${NORMAL} already exists, renaming existing keys so new keys can be copied."
+      sudo mv "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt" "/etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt-$(date +%Y-%m-%dT%H:%M:%S%:z)"
+    fi
 
 #     For each Docker daemon to trust the Docker private registry certificate
 #     Copy ca.crt file to /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}/ca.crt on every Docker host.
 #     Restart Docker not required
-    if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  LOCALHOST; Copy to /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}" 1>&2 ; fi
+    if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  LOCALHOST; Copy to /etc/docker/certs.d/${REGISTRY_HOST}:${REGISTRY_PORT}" 1>&2 ; fi
     sudo tar -xf "./${REGISTRY_HOST}.${REGISTRY_PORT}.tar" --owner=root --group=root --directory /etc/docker/certs.d
   fi
 done
@@ -355,14 +356,14 @@ if [[ "${LOCALHOST}" != "${REGISTRY_HOST}" ]] ; then
   if $(ssh "${REGISTRY_HOST}" 'exit' >/dev/null 2>&1 ) ; then
 
 #    Copy domain.{crt,key} to ${USER}@${REGISTRY_HOST}:~/.docker/
-    if [[ "${DEBUG}" == "1" ]] ; then new_message "${SCRIPT_NAME}" "${LINENO}" "DEBUG" "  Copy domain.{crt,key} to ${USER}@${REGISTRY_HOST}:~/.docker/" 1>&2 ; fi
+    if [[ "${DEBUG}" == "1" ]] ; then new_message "${LINENO}" "DEBUG" "  Copy domain.{crt,key} to ${USER}@${REGISTRY_HOST}:~/.docker/" 1>&2 ; fi
     scp -q -p -i ~/.ssh/id_rsa ./domain.{crt,key} "${USER}@${REGISTRY_HOST}:~/.docker/"
     REMAP=$(ssh -q -t  -i ~/.ssh/id_rsa "${USER}@${REGISTRY_HOST}" "ps -ef | grep remap | wc -l | tr -d '\r\n'")
     REMAPUID=$(ssh -q -t  -i ~/.ssh/id_rsa "${USER}@${REGISTRY_HOST}" "grep dockremap /etc/subuid | cut -d ':' -f 2 | tr -d '\r\n'")
     TEMP="sudo mkdir -p  ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; sudo chmod 0700 ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; if sudo [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ] ; then echo -e '\n\t${BOLD}domain.crt${NORMAL} already exists, renaming existing keys so new keys can be copied.' ; sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.crt-$(date +%Y-%m-%dT%H:%M:%S%:z) ; fi ; if sudo [ -e ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ] ; then echo -e '\n\t${BOLD}domain.key${NORMAL} already exists, renaming existing keys so new keys can be copied.' ; sudo mv ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs/domain.key-$(date +%Y-%m-%dT%H:%M:%S%:z) ; fi ; sudo mv ~/.docker/domain.{crt,key} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; if [[ ${REMAP} -ge 3 ]] ; then  sudo chown -R ${REMAPUID}.${REMAPUID} ${DATA_DIR}/${CLUSTER}/docker-registry/${REGISTRY_HOST}-${REGISTRY_PORT}/certs ; fi"
     ssh -q -t -i ~/.ssh/id_rsa "${USER}@${REGISTRY_HOST}" "${TEMP}"
   else
-    new_message "${SCRIPT_NAME}" "${LINENO}" "${RED}ERROR${WHITE}" "  ${REGISTRY_HOST} is not responding to ${LOCALHOST} on ssh port. " 1>&2
+    new_message "${LINENO}" "${RED}ERROR${WHITE}" "  ${REGISTRY_HOST} is not responding to ${LOCALHOST} on ssh port. " 1>&2
     exit 1
   fi
 else
@@ -394,5 +395,5 @@ else
 fi
 
 #
-new_message "${SCRIPT_NAME}" "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished..." 1>&2
+new_message "${LINENO}" "${YELLOW}INFO${WHITE}" "  Operation finished..." 1>&2
 ###
