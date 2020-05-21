@@ -30,7 +30,7 @@ closed
   * close #37 dockerd-configuration-options/README - review and update BUG
 
 
-## Version 4.1 
+# Latest Release -->  Version 4.1 
 #### Release Name Production-4
 #### Release Date 2019-12-30
 * Majority of changes and updates for this release are in docker-security-infrastructure/docker-TLS
