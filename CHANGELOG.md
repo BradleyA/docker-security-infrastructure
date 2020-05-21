@@ -12,6 +12,8 @@
 ### Issues
  * close #37 dockerd-configuration-options/README - review and update BUG
  * close #72 docker-TLS/copy-host-2-remote-host-tls.sh - display_help description typos
+ * close #73 dockerd-configuration-options/start-dockerd-with-systemd.sh - line 166: /bin/systemctl No such file or directory
+ * close #74 Incident Report - docker-TLS/check-registry-tls.sh - remove environment variables
 
 ### Misc
 * #58 ssh notes for design changes
