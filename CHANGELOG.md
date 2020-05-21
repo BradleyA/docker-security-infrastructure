@@ -16,15 +16,15 @@
  * close #74 Incident Report - docker-TLS/check-registry-tls.sh - remove environment variables
 
 ### Misc
-* #58 ssh notes for design changes
-* #51 ssh/check-user-ssh.sh - check for additional authorized_keys when encrypted home directory
-* #47 ufw/create-ufw.sh - Remove firewall Uncomplicated Firwwall (UFW)
-* #46 ufw/copy-ufw.sh - copy firewall Uncomplicated Firwwall (UFW)
-* #45 ufw/create-ufw.sh - create firewall Uncomplicated Firwwall (UFW)
-* #44 registry solve the incident requiring --disable-content-trust 
-* #40 swarm/{docker-enter,docker-swarm-clear} - test swarm script from 2016 clusters and upgrade
-* #11 dockerd-configuration-options - why systemd
 * #10 dockerd-configuration-options/setup-dockerd.sh systemctl daemon-reload testing
+* #11 dockerd-configuration-options - why systemd
+* #40 swarm/{docker-enter,docker-swarm-clear} - test swarm script from 2016 clusters and upgrade
+* #44 registry solve the incident requiring --disable-content-trust 
+* #45 ufw/create-ufw.sh - create firewall Uncomplicated Firwwall (UFW)
+* #46 ufw/copy-ufw.sh - copy firewall Uncomplicated Firwwall (UFW)
+* #47 ufw/create-ufw.sh - Remove firewall Uncomplicated Firwwall (UFW)
+* #51 ssh/check-user-ssh.sh - check for additional authorized_keys when encrypted home directory
+* #58 ssh notes for design changes
 
 
 # Latest Release -->  Version 4.1 
