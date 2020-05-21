@@ -2,6 +2,7 @@
 
     git clone https://github.com/BradleyA/<REPOSITORY>.git --branch 2.42
 
+
 ## Next Version Under Construction {Version  X.X.????}  <img id="Construction" src="images/construction-icon.gif" width="120">
 #### Release Name  {unreleased rc-# alpha-# beta prerelease latest}
 #### Release Date  ????
@@ -9,25 +10,19 @@
 ### Features Changes
 ### Features Deprecations
 ### Issues
+ * close #37 dockerd-configuration-options/README - review and update BUG
+ * close #72 docker-TLS/copy-host-2-remote-host-tls.sh - display_help description typos
+
 ### Misc
-* #51 ssh/check-user-ssh.sh - check for additional authorized_keys when encrypted home directory
 * #58 ssh notes for design changes
-* #45 ufw/create-ufw.sh - create firewall Uncomplicated Firwwall (UFW)
-* #46 ufw/copy-ufw.sh - copy firewall Uncomplicated Firwwall (UFW)
+* #51 ssh/check-user-ssh.sh - check for additional authorized_keys when encrypted home directory
 * #47 ufw/create-ufw.sh - Remove firewall Uncomplicated Firwwall (UFW)
+* #46 ufw/copy-ufw.sh - copy firewall Uncomplicated Firwwall (UFW)
+* #45 ufw/create-ufw.sh - create firewall Uncomplicated Firwwall (UFW)
+* #44 registry solve the incident requiring --disable-content-trust 
+* #40 swarm/{docker-enter,docker-swarm-clear} - test swarm script from 2016 clusters and upgrade
 * #11 dockerd-configuration-options - why systemd
 * #10 dockerd-configuration-options/setup-dockerd.sh systemctl daemon-reload testing
-* #40 swarm/{docker-enter,docker-swarm-clear} - test swarm script from 2016 clusters and upgrade
-
-closed
- * #72 docker-TLS/copy-host-2-remote-host-tls.sh - display_help description typos
- 
-### Issues
-
-* #44 registry solve the incident requiring --disable-content-trust
-
-closed
-  * close #37 dockerd-configuration-options/README - review and update BUG
 
 
 # Latest Release -->  Version 4.1 
