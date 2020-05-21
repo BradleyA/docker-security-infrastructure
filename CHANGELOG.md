@@ -1,14 +1,14 @@
-# Changelog
+**Notes:** Use the following example to guide you to; How to download an earlier release.
 
-## Version  {Next Version}
-#### Release Name  {unreleased alpha beta prerelease latest}
-#### Release Date 
+    git clone https://github.com/BradleyA/<REPOSITORY>.git --branch 2.42
 
-Brief description
-
+## Next Version Under Construction {Version  X.X.????}  <img id="Construction" src="images/construction-icon.gif" width="120">
+#### Release Name  {unreleased rc-# alpha-# beta prerelease latest}
+#### Release Date  ????
 ### Features Added
-### Features Changed
+### Features Changes
 ### Features Deprecations
+### Issues
 ### Misc
 * #51 ssh/check-user-ssh.sh - check for additional authorized_keys when encrypted home directory
 * #58 ssh notes for design changes
