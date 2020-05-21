@@ -27,14 +27,15 @@ closed
 * #44 registry solve the incident requiring --disable-content-trust
 
 closed
-  * #37 dockerd-configuration-options/README - review and update BUG
+  * close #37 dockerd-configuration-options/README - review and update BUG
+
+
 ## Version 4.1 
 #### Release Name Production-4
 #### Release Date 2019-12-30
+* Majority of changes and updates for this release are in docker-security-infrastructure/docker-TLS
 
-Majority of changes and updates for this release are in docker-security-infrastructure/docker-TLS
-
-### Features
+### Features Added
 * docker-TLS/* 
   * Production standard 6.3.547 Architecture tree
   * Production standard 5.3.550 Copyright
@@ -85,9 +86,9 @@ Majority of changes and updates for this release are in docker-security-infrastr
 ## Version 3.234 
 #### Release Name 
 #### Release Date Apr 10, 2019
- 
-Majority of changes and updates for this release are in docker-security-infrastructure/docker-TLS
+* Majority of changes and updates for this release are in docker-security-infrastructure/docker-TLS
 
+### Features Added
 * update EXAMPLES format
 * update DOCUMENTATION change links
 * update README
@@ -103,61 +104,62 @@ Majority of changes and updates for this release are in docker-security-infrastr
 * added production standard 6.1.177 ARCHITECTURE TREE section
 * added production standard 7.0 Default variable value section
 
+
 ## Version  3.122
 #### Release Name docker-security-infrastructure-scripts
 #### Release Date Feb 20, 2019
-
 * update README, added DEBUG, update display_help; update 1-5 productio…
 * …ns standards
+
 
 ## Version  release.3.58
 #### Release Name release.3.58
 #### Release Date Sep 14, 2018
-
 * change file names to use date format without : or _ close #17
+
 
 ## Version  3.31
 #### Release Name 
 #### Release Date Jun 23, 2018
-
 * Added uninstall-dockerd-scripts.sh to /etc/docker so it is included on each system during setup.
+
 
 ## Version  3.28
 #### Release Name 
 #### Release Date May 9, 2018
-
 * add instruction to remove this script when complete
+
 
 ## Version  3.20
 #### Release Name 
 #### Release Date Mar 5, 2018
-
 * changes to display help
+
 
 ## Version  3.15
 #### Release Name 
 #### Release Date Feb 28, 2018
-
 * ready for production
+
 
 ## Version  3.12
 #### Release Name 
 #### Release Date Feb 27, 2018
-
 * check-user-tls.sh added error message for User certificate NOT issued…
 * … by CA and BOLD test messages
+
 
 ## Version  3.8
 #### Release Name 
 #### Release Date Feb 19, 2018
-
 * dockerd-configuration-options change _ to - in XOS
+
 
 ## Version  3.7
 #### Release Name 
 #### Release Date Feb 18, 2018
-
 * New release, ready for production
+
 
 ## EXAMPLE: Next Version Under Construction {Version  X.X.????}  <img id="Construction" src="images/construction-icon.gif" width="120">
 # EXAMPLE: Latest Release -->  Version  X.X.????
