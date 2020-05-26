@@ -1,4 +1,6 @@
 #!/bin/bash
+#	swarm/docker-swarm-clear  4.2.6.1289  2020-05-25T21:31:03.161991-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  master  uadmin  five-rpi3b.cptx86.com 4.2.5-2-gdb448cc  
+#	   swarm/docker-swarm-clear -->   minor format change to comments  
 #	swarm/docker-swarm-clear  3.124.530  2019-02-22T10:32:39.329511-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure-scripts.git  uadmin  two.cptx86.com 3.123  
 #	   Begin testing old script 
 #       set -x
@@ -6,26 +8,26 @@
 #
 for NODE in one four five ; do
    echo $NODE;
-#	is this a manager ????  then to worker else skip
-#	This is a known incident with this nov. 22, 2016
+   #    is this a manager ????  then to worker else skip
+   #    This is a known incident with this nov. 22, 2016
    docker node demote $NODE;
    sleep 8;
    docker node update --availability drain $NODE;
    sleep 8;
    ssh uadmin@$NODE.cptx86.com docker swarm leave ;
-#	are there any danging volume ????  then remove  else skip
+   #    are there any danging volume ????  then remove  else skip
    if [ ssh uadmin@$NODE.cptx86.com $(docker volume ls --filter dangling=true -q | wc -l) ] ; then
       echo "Removing volume(s) from host $NODE"; 
       ssh uadmin@$NODE.cptx86.com 'docker volume rm $(docker volume ls --filter dangling=true -q)';
       sleep 8;
    fi
    docker node rm $NODE;
-#	are there any containers ????  then remove  else skip
+   #    are there any containers ????  then remove  else skip
    if [ $(docker ps -qa | wc -l) ] ; then
       echo "Removing container(s) from host $NODE"; 
       ssh uadmin@$NODE.cptx86.com 'docker rm $(docker ps -qa)';
    fi
-#	are there any custom-built networks ????  then remove  else skip
+   #    are there any custom-built networks ????  then remove  else skip
    if [ $(docker network ls -q --filter label=custom-built | wc -l) ] ; then
       echo "Removing network(s) from host $NODE"; 
       ssh uadmin@$NODE.cptx86.com ‘docker network rm $(docker network ls -q --filter label=custom-built)’;
