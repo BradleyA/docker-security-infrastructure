@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/check-host-tls.sh  4.2.7.1298  2020-06-26T16:15:50.936528-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  master  uadmin  five-rpi3b.cptx86.com 4.2.6-8-gc055369  
+# 	   docker-TLS/check-host-tls.sh -->   change output color  
 # 	docker-TLS/check-host-tls.sh  4.1.1211  2019-12-30T11:34:26.630795-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.565-13-g1455a67  
 # 	   docker-TLS/*   New Release 4.1 
 # 	docker-TLS/check-host-tls.sh  3.551.1119  2019-12-15T16:04:40.046301-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.550 
@@ -241,17 +243,21 @@ fi
 
 #    View dockerd daemon certificate issuer data of the ca.pem file
 TEMP=$(openssl x509 -in "${CERT_DAEMON_DIR}/ca.pem" -noout -issuer)
-echo -e "\n\tView dockerd daemon certificate issuer data of the ca.pem file:\n\t${BOLD}${TEMP}${NORMAL}"
+echo -e "\n\tView dockerd daemon certificate issuer data of the ca.pem file:\n\t${BOLD}${TEMP}${NORMAL}\n"
 
 #    View dockerd daemon certificate issuer data of the cert.pem file
 TEMP=$(openssl x509 -in "${CERT_DAEMON_DIR}/cert.pem" -noout -issuer)
-echo -e "\n\tView dockerd daemon certificate issuer data of the cert.pem file:\n\t${BOLD}${TEMP}${NORMAL}"
+echo -e "\tView dockerd daemon certificate issuer data of the cert.pem file:\n\t${BOLD}${TEMP}${NORMAL}\n"
 
 #    Verify that dockerd daemon certificate was issued by the CA.
 TEMP=$(openssl verify -verbose -CAfile "${CERT_DAEMON_DIR}/ca.pem" "${CERT_DAEMON_DIR}cert.pem")
-echo -e "\n\tVerify that dockerd daemon certificate was issued by the CA:\n\t${BOLD}${YELLOW}${TEMP}${NORMAL}"
+if [[ ${TEMP} != *"error"* ]] ; then
+  echo -e "\tVerify that dockerd daemon certificate was issued by the CA:\n\t${BOLD}${YELLOW}${TEMP}${NORMAL}\n"
+else
+  echo -e "\tVerify that dockerd daemon certificate was issued by the CA:\n\t${BOLD}${RED}${TEMP}${NORMAL}\n"
+fi
 
-echo -e "\n\tVerify and correct file permissions."
+echo -e "\tVerify and correct file permissions."
 
 #    Verify and correct file permissions for ${CERT_DAEMON_DIR}/ca.pem
 if [[ "$(stat -Lc %a "${CERT_DAEMON_DIR}/ca.pem")" != 444 ]] ; then
