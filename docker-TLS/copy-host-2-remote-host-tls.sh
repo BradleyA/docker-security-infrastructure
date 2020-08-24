@@ -1,4 +1,6 @@
 #!/bin/bash
+# 	docker-TLS/copy-host-2-remote-host-tls.sh  4.2.8.1305  2020-08-24T15:24:08.022153-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  master  uadmin  five-rpi3b.cptx86.com 4.2.7-6-g8583a9e  
+# 	   docker-TLS/copy-host-2-remote-host-tls.sh -->   added help hint to include 18.04, 20.04  
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  4.2.1.1273  2020-04-18T15:20:29.932587-05:00 (CDT)  https://github.com/BradleyA/docker-security-infrastructure.git  master  uadmin  five-rpi3b.cptx86.com 4.2-47-g4ac099b  
 # 	   docker-TLS/copy-host-2-remote-host-tls.sh   display_help description typos close #72   update to Production standard 0.3.579 --help 
 # 	docker-TLS/copy-host-2-remote-host-tls.sh  4.1.1211  2019-12-30T11:34:27.128441-06:00 (CST)  https://github.com/BradleyA/docker-security-infrastructure.git  uadmin  five-rpi3b.cptx86.com 3.565-13-g1455a67  
@@ -333,12 +335,12 @@ echo -e "\t(--tlsverify, --tlscacert, --tlscert, --tlskey).  Scripts that will"
 echo -e "\thelp with setup and operations of Docker using TLS can be found:"
 echo    "https://github.com/BradleyA/docker-security-infrastructure/tree/master/dockerd-configuration-options"
 echo -e "\tThe ${YELLOW}dockerd-configuration-options${WHITE} scripts will help with configuration"
-echo -e "\tof dockerd on systems running Ubuntu 16.04 (systemd) and Ubuntu 14.04"
-echo -e "\t(Upstart)."
+echo -e "\tof dockerd on systems running Ubuntu 16.04, 18.04, 20.04 (systemd)"
+echo -e "\tand Ubuntu 14.04 (Upstart)."
 #
 echo -e "\n\tIf dockerd is already using TLS certifications then entering one of the"
 echo -e "\tfollowing will restart dockerd with the new certifications.\n"
-echo -e "\tUbuntu 16.04 (Systemd) ${BOLD}${YELLOW}ssh -t ${REMOTE_HOST} 'sudo systemctl restart docker'${NORMAL}"
+echo -e "\tUbuntu 16.04, 18.04, 20.04 (Systemd) ${BOLD}${YELLOW}ssh -t ${REMOTE_HOST} 'sudo systemctl restart docker'${NORMAL}"
 echo -e "\tUbuntu 14.04 (Upstart) ${BOLD}${YELLOW}ssh -t ${REMOTE_HOST} 'sudo service docker restart'${NORMAL}"
 
 # >>>	May want to create a version of this script that automates this process for SRE tools,
