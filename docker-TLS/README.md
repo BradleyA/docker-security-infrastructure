@@ -425,7 +425,8 @@ To install the scripts, change to the directory you have write permission (examp
 
 #### System OS script tested
  * Ubuntu 14.04.4 LTS
- * Ubuntu 16.04.3 LTS (armv7l)
+ * Ubuntu 16.04.7 LTS (armv7l)
+ * Ubuntu 18.04.5 LTS (armv7l)
 
 #### Design Principles
  * Have a simple setup process and a minimal learning curve
