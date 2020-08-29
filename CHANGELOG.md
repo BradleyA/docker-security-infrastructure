@@ -4,7 +4,7 @@
 
 
 ## Next Version Under Construction {Version  X.X.????}  <img id="Construction" src="images/construction-icon.gif" width="120">
-#### Release Name  {unreleased rc-# alpha-# beta prerelease latest}
+#### Release Name  prerelease
 #### Release Date  ????
 ### Features Added
 ### Features Changes
