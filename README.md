@@ -1,7 +1,5 @@
 # docker-security-infrastructure
-[![Stable Release](https://img.shields.io/badge/Release-4.1-blue.svg)](https://github.com/BradleyA/docker-security-infrastructure/releases/tag/4.1)
-[![GitHub commits](https://img.shields.io/github/commits-since/BradleyA/docker-security-infrastructure/4.1.svg)](https://github.com/BradleyA/docker-security-infrastructure/commits/)
-[![MIT License](http://img.shields.io/badge/License-MIT-red.png)](LICENSE)
+
 [<img alt="Clones" src="https://img.shields.io/static/v1?label=Clones&message=224&color=blue">](images/clone.table.md)
 [<img alt="Views" src="https://img.shields.io/static/v1?label=Views&message=2203&color=blue">](images/view.table.md)
 
@@ -12,8 +10,8 @@
 
 [![GitHub Open Issues](https://img.shields.io/github/issues/BradleyA/docker-security-infrastructure?color=purple)](https://github.com/BradleyA/docker-security-infrastructure/issues?q=is%3Aopen+is%3Aissue)
 [![GitHub Closed Issues](https://img.shields.io/github/issues-closed/BradleyA/docker-security-infrastructure?color=purple)](https://github.com/BradleyA/docker-security-infrastructure/issues?q=is%3Aclosed+is%3Aissue)
-[<img alt="GitHub Clones" src="https://img.shields.io/static/v1?label=Clones&message=190&color=blueviolet">](https://github.com/BradleyA/docker-security-infrastructure/blob/master/images/clone.table.md)
-[<img alt="GitHub Views" src="https://img.shields.io/static/v1?label=Views&message=3071&color=blueviolet">](https://github.com/BradleyA/docker-security-infrastructure/blob/master/images/view.table.md)
+[<img alt="GitHub Clones" src="https://img.shields.io/static/v1?label=Clones&message=224&color=blueviolet">](https://github.com/BradleyA/docker-security-infrastructure/blob/master/images/clone.table.md)
+[<img alt="GitHub Views" src="https://img.shields.io/static/v1?label=Views&message=2203&color=blueviolet">](https://github.com/BradleyA/docker-security-infrastructure/blob/master/images/view.table.md)
 [![GitHub Size](https://img.shields.io/github/repo-size/BradleyA/docker-security-infrastructure.svg)](https://github.com/BradleyA/docker-security-infrastructure/)
 ![Written in Bash](https://img.shields.io/badge/written%20in-bash-blue.svg)
 [![MIT License](http://img.shields.io/badge/License-MIT-blue.png)](LICENSE)
