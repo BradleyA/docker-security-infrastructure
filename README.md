@@ -5,6 +5,21 @@
 [<img alt="Clones" src="https://img.shields.io/static/v1?label=Clones&message=224&color=blue">](images/clone.table.md)
 [<img alt="Views" src="https://img.shields.io/static/v1?label=Views&message=2203&color=blue">](images/view.table.md)
 
+[![GitHub Stable Release](https://img.shields.io/badge/Release-v2.2-blue.svg)](https://github.com/BradleyA/Search-docker-registry-v2-script/releases/tag/v2.2)
+![GitHub Release Date](https://img.shields.io/github/release-date/BradleyA/Search-docker-registry-v2-script?color=blue)
+[![GitHub Commits Since](https://img.shields.io/github/commits-since/BradleyA/Search-docker-registry-v2-script/v2.2?color=orange)](https://github.com/BradleyA/Search-docker-registry-v2-script/commits/)
+[![GitHub Last Commits](https://img.shields.io/github/last-commit/BradleyA/Search-docker-registry-v2-script.svg)](https://github.com/BradleyA/Search-docker-registry-v2-script/commits/)
+
+[![GitHub Open Issues](https://img.shields.io/github/issues/BradleyA/Search-docker-registry-v2-script?color=purple)](https://github.com/BradleyA/Search-docker-registry-v2-script/issues?q=is%3Aopen+is%3Aissue)
+[![GitHub Closed Issues](https://img.shields.io/github/issues-closed/BradleyA/Search-docker-registry-v2-script?color=purple)](https://github.com/BradleyA/Search-docker-registry-v2-script/issues?q=is%3Aclosed+is%3Aissue)
+[<img alt="GitHub Clones" src="https://img.shields.io/static/v1?label=Clones&message=190&color=blueviolet">](https://github.com/BradleyA/Search-docker-registry-v2-script/blob/master/images/clone.table.md)
+[<img alt="GitHub Views" src="https://img.shields.io/static/v1?label=Views&message=3071&color=blueviolet">](https://github.com/BradleyA/Search-docker-registry-v2-script/blob/master/images/view.table.md)
+[![GitHub Size](https://img.shields.io/github/repo-size/BradleyA/Search-docker-registry-v2-script.svg)](https://github.com/BradleyA/Search-docker-registry-v2-script/)
+![Written in Bash](https://img.shields.io/badge/written%20in-bash-blue.svg)
+[![MIT License](http://img.shields.io/badge/License-MIT-blue.png)](LICENSE)
+
+----
+
 This repository contains shell scripts that check user ssh permissions, setup and manage both TLS and dockerd on Ubuntu 14.04 (upstart) and Ubuntu 16.04 (systemd).  Most scripts in this repository support --help and --usage options.
   
 #### If you like this repository, select in the upper-right corner,  STAR,  thank you.
