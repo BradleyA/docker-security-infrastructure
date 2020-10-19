@@ -4,8 +4,10 @@
 [![GitHub Commits Since](https://img.shields.io/github/commits-since/BradleyA/docker-security-infrastructure/4.1?color=orange)](https://github.com/BradleyA/docker-security-infrastructure/commits/)
 [![GitHub Last Commits](https://img.shields.io/github/last-commit/BradleyA/docker-security-infrastructure.svg)](https://github.com/BradleyA/docker-security-infrastructure/commits/)
 
+[![Open GitHub Issue](https://img.shields.io/badge/Open-Incident-brightgreen.svg)](https://github.com/BradleyA/docker-security-infrastructure/issues/new/choose)
 [![GitHub Open Issues](https://img.shields.io/github/issues/BradleyA/docker-security-infrastructure?color=purple)](https://github.com/BradleyA/docker-security-infrastructure/issues?q=is%3Aopen+is%3Aissue)
 [![GitHub Closed Issues](https://img.shields.io/github/issues-closed/BradleyA/docker-security-infrastructure?color=purple)](https://github.com/BradleyA/docker-security-infrastructure/issues?q=is%3Aclosed+is%3Aissue)
+
 [<img alt="GitHub Clones" src="https://img.shields.io/static/v1?label=Clones&message=421&color=blueviolet">](https://github.com/BradleyA/docker-security-infrastructure/blob/master/images/clone.table.md)
 [<img alt="GitHub Views" src="https://img.shields.io/static/v1?label=Views&message=2452&color=blueviolet">](https://github.com/BradleyA/docker-security-infrastructure/blob/master/images/view.table.md)
 [![GitHub Size](https://img.shields.io/github/repo-size/BradleyA/docker-security-infrastructure.svg)](https://github.com/BradleyA/docker-security-infrastructure/)
