@@ -29,7 +29,7 @@ Setup a dockerd configuration file with dockerd flags for both systemd and Upsta
  
  * [dockerd-configuration-options](https://github.com/BradleyA/docker-security-infrastructure/tree/master/dockerd-configuration-options)
 
-These bash scripts allows users to make sure that the ssh files and directory permissions are correct.
+These bash scripts allows users and administrators to make sure that the ssh files and directory permissions are correct.
 
  * [ssh](https://github.com/BradleyA/docker-security-infrastructure/tree/master/ssh)
  
