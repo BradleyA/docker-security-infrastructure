@@ -20,12 +20,8 @@ This repository contains shell scripts that check user ssh permissions, setup an
   
 #### If you like this repository, select in the upper-right corner, [![GitHub stars](https://img.shields.io/github/stars/BradleyA/docker-security-infrastructure.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/BradleyA/docker-security-infrastructure/stargazers/), thank you.
 
-## Install
+----
 
-To install, change to the location you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have git then enter; "sudo apt-get install git" if using Ubuntu. On the github repository page of this script use the "Clone with HTTPS" URL with the 'git clone' command.
-
-    git clone https://github.com/BradleyA/docker-security-infrastructure.git
-    cd docker-security-infrastructure
 
  * [docker-TLS](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS)
  * [dockerd-configuration-options](https://github.com/BradleyA/docker-security-infrastructure/tree/master/dockerd-configuration-options)
