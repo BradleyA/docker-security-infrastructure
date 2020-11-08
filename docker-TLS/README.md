@@ -2,6 +2,8 @@
 
 These bash scripts will create, copy, and check TLS public keys, private keys, and self-signed certificates for the docker user, daemon, and docker swarm.  After many reinstalls of OS's and Docker, I got tried of entering the cryptic command line text required to setup Docker to use TLS.
 
+#### If you like this repository, select in the upper-right corner, [![GitHub stars](https://img.shields.io/github/stars/BradleyA/docker-security-infrastructure.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/BradleyA/docker-security-infrastructure/stargazers/), thank you.
+
 These bash scripts also help minimize the exposure to risk when incidents happen requiring you to be agile and replace impacted certificates quickly. 
 
 **create-site-private-public-tls.sh** - Run this script first on your host that will be creating all your TLS keys other than your registry certifications.  It creates the site private and CA keys that all other TLS keys at your site will be using.  It creates the working directories  $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private for your site public and private keys.  If you later choose to use a different host to continue creating your user and host TLS keys; copy the files in $HOME/.docker/docker-ca and $HOME/.docker/docker-ca/.private to the new host then run create-new-openssl.cnf-tls.sh scipt on the new host.
