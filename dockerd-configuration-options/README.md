@@ -8,8 +8,9 @@ Goal is to use one dockerd configuration file with dockerd flags for both Ubuntu
 <details>
 
 - [Description](#Description)
-
-
+- [Install](#Install)
+- [Download files](#Download-files)
+- [ARCHITECTURE TREE](#ARCHITECTURE-TREE)
 ----
 - [Contribute](#Contribute)
 - [Author](#Author)
