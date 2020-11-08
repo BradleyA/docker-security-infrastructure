@@ -29,8 +29,10 @@ number is not required when creating a private registry certificates.  It is use
 
 **check-registry-tls.sh** - This script has to be run as root to check daemon registry cert (ca.crt), registry cert (domain.crt), and registry private key (domain.key) in /etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/ and <DATA_DIR>/<CLUSTER>/docker-registry/<REGISTRY_HOST>-<REGISTRY_PORT>/certs/ directories.  The certification files and directory permissions are also checked.  This script works for the local host only.  To use check-registry-tls.sh on a remote hosts (one-rpi3b.cptx86.com) with ssh port of 12323 as uadmin user; **ssh -tp 12323 uadmin@one-rpi3b.cptx86.com 'sudo check-registry-tls.sh two.cptx86.com 17313'**.  To loop through a list of hosts in the cluster use, https://github.com/BradleyA/Linux-admin/tree/master/cluster-command, **cluster-command.sh special 'sudo check-registry-tls.sh two.cptx86.com 17313'**
 
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
+
 ## Install
-To clone, change to the directory you want to download the scripts.  Use git to clone these scripts into your directory.  If you do not have git then enter; "sudo apt-get install git".  On the github page of this script use the "HTTPS clone URL" with the 'git clone' command. 
+To Install, change into a directory that you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have Git installed then enter; "sudo apt-get install git" if using Debian/Ubuntu. Other Linux distribution install methods can be found here: https://git-scm.com/download/linux. On the GitHub page of this script use the "HTTPS clone URL" with the 'git clone' command.
     
     git clone https://github.com/BradleyA/docker-security-infrastructure
     cd docker-security-infrastructure/docker-TLS
@@ -41,6 +43,8 @@ To clone, change to the directory you want to download the scripts.  Use git to 
     mv c* /usr/local/bin
     cd ../..
     rm -rf docker-security-infrastructure
+
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
 
 ## Usage
 Run this script first on your host to create your site private and public TLS keys.  To change the default number of days (730 days = 2 years) enter a number of days as the parameter (example: create-site-private-public-tls 365 ).
@@ -94,6 +98,8 @@ Run this script first on your host to create your site private and public TLS ke
 	entry about 15 days before renewal as a reminder.
     2019-12-29T14:56:22.250857-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/create-site-private-public-tls.sh[27357] 3.560.1137 272 uadmin 10000:10000 [INFO]    Operation finished...
 
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
+
 ## Usage
 Run this script second on your host that will be used to create all your certificates.  This script makes a change to the openssl.cnf file.
 
@@ -111,6 +117,8 @@ Run this script second on your host that will be used to create all your certifi
     2019-12-29T15:08:13.475798-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/create-new-openssl.cnf-tls.sh[30842] 3.558.1133 174 root 0:0 [INFO]    Adding the extended KeyUsage at the beginning of [ v3_ca ] section.
     2019-12-29T15:08:13.488252-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/create-new-openssl.cnf-tls.sh[30842] 3.558.1133 181 root 0:0 [INFO]    Operation finished...
 
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
+
 ## Usage
 Run this script for each user that requires a new Docker public and private TLS key.
 
@@ -118,7 +126,9 @@ Run this script for each user that requires a new Docker public and private TLS 
 
 ## Output
 <img id="create-user-tls.sh" src="../images/create-user-tls.gif" >
-	
+
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
+
 ## Usage
 Run this script for each host that requires a new Docker public and private TLS key.
 
@@ -127,6 +137,8 @@ Run this script for each host that requires a new Docker public and private TLS 
 ## Output
 <img id="create-host-tls.sh" src="../images/create-host-tls.gif" >
 
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
+
 ## Usage
 An administration user can run this script to copy user public, private TLS keys, and CA to a remote host.
 
@@ -134,6 +146,8 @@ An administration user can run this script to copy user public, private TLS keys
     
 ## Output
 <img id="copy-user-2-remote-host-tls.sh" src="../images/copy-user-2-remote-host-tls.gif" >
+
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
 
 ## Usage
 A user with administration authority (uadmin) uses this script to copy host TLS CA, public, and private keys from /home/uadmin/.docker/docker-ca directory on this system to /etc/docker/certs.d directory on a remote system.  The administration user may receive password and/or passphrase prompts from a remote systen; running the following may stop the prompts in your cluster.
@@ -144,6 +158,8 @@ A user with administration authority (uadmin) uses this script to copy host TLS 
 ## Output
 <img id="copy-host-2-remote-host-tls.sh" src="../images/copy-host-2-remote-host-tls.gif" >
 
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
+
 ## Usage
 A user can check their public, private keys, and CA in $HOME/.docker or a user can check other users certificates by using sudo.
     
@@ -151,6 +167,8 @@ A user can check their public, private keys, and CA in $HOME/.docker or a user c
 
 ## Output
 <img id="check-user-tls.sh" src="../images/check-user-tls.gif" >
+
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
 
 ## Usage
 Print start and end dates of a Docker CA, ca.pem, in /home/uthree/.docker.  Other Docker CA file names in other directories can be checked using options.
@@ -160,12 +178,16 @@ Print start and end dates of a Docker CA, ca.pem, in /home/uthree/.docker.  Othe
 ## Output
 <img id="check-ca-tls.sh" src="../images/check-ca-tls.gif" >
 
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
+
 ## Usage
 
     check-host-tls.sh
 
 ## Output
 <img id="check-host-tls2.sh" src="../images/check-host-tls2.gif" >
+
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
 
  ## Usage
 Run this script to create Docker private registry certificates on any host in the directory; ~/.docker/.
@@ -205,6 +227,7 @@ Run this script to create Docker private registry certificates on any host in th
 
     2019-12-29T21:19:06.206093-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/create-registry-tls.sh[27753] 3.564.1195 261 uadmin 10000:10000 [INFO]    Operation finished...
 
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
 
 ## Usage
 A user with administration authority uses this script to copy Docker private registry certificates from ~/.docker/registry-certs-<REGISTRY_HOST>-<REGISTRY_PORT> directory on this system to systems in <SYSTEMS_FILE>.
@@ -262,6 +285,8 @@ A user with administration authority uses this script to copy Docker private reg
 	domain.key already exists, renaming existing keys so new keys can be copied.
     2019-12-29T21:31:05.591271-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/copy-registry-tls.sh[30966] 3.556.1129 390 uadmin 10000:10000 [INFO]    Operation finished...
 
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
+
 ## Usage
 This script has to be run as root to check daemon registry cert (ca.crt), registry cert (domain.crt), and registry private key (domain.key) in /etc/docker/certs.d/<REGISTRY_HOST>:<REGISTRY_PORT>/ and <DATA_DIR>/<CLUSTER>/docker-registry/<REGISTRY_HOST>-<REGISTRY_PORT>/certs/ directories.
     
@@ -284,6 +309,8 @@ This script has to be run as root to check daemon registry cert (ca.crt), regist
 
 	Verify and correct file permissions.
     2019-12-29T22:00:55.899717-06:00 (CST) five-rpi3b.cptx86.com docker-TLS/check-registry-tls.sh[8164] 3.553.1123 373 root 0:0 [INFO]    Operation finished...
+
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
 
 #### ARCHITECTURE TREE
 
@@ -411,6 +438,8 @@ This script has to be run as root to check daemon registry cert (ca.crt), regist
                                                    execution state files using
                                                    user namespace
 
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
+
 #### Install Scripts
 To install the scripts, change to the directory you have write permission (examples: ~/bin, /usr/local/bin) 
 
@@ -418,20 +447,34 @@ To install the scripts, change to the directory you have write permission (examp
 
 #### To watch future updates in this repository select in the upper-right corner, the "Watch" list, and select Watching.
 
-#### Author
-[<img id="twitter" src="../images/twitter.png" width="50" a="twitter.com/bradleyaustintx/">
-](https://twitter.com/bradleyaustintx/)   [<img id="github" src="../images/github.png" width="50" a="https://github.com/BradleyA/">
-](https://github.com/BradleyA/)    [<img src="../images/linkedin.png" style="max-width:100%;" >](https://www.linkedin.com/in/bradleyhallen)
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
 
-#### System OS script tested
- * Ubuntu 14.04.4 LTS
- * Ubuntu 16.04.7 LTS (armv7l)
- * Ubuntu 18.04.5 LTS (armv7l)
+----
+
+#### Contribute
+Please do contribute!  Issues and pull requests are welcome.  Thank you for your help improving software.
+
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
+
+#### Author
+[<img id="github" src="images/github.png" width="50" a="https://github.com/BradleyA/">](https://github.com/BradleyA/)    [<img src="images/linkedin.png" style="max-width:100%;" >](https://www.linkedin.com/in/bradleyhallen) [<img id="twitter" src="images/twitter.png" width="50" a="twitter.com/bradleyaustintx/">](https://twitter.com/bradleyaustintx/)       <a href="https://twitter.com/intent/follow?screen_name=bradleyaustintx"> <img src="https://img.shields.io/twitter/follow/bradleyaustintx.svg?label=Follow%20@bradleyaustintx" alt="Follow @bradleyaustintx" />    </a>          [![GitHub followers](https://img.shields.io/github/followers/BradleyA.svg?style=social&label=Follow&maxAge=2592000)](https://github.com/BradleyA?tab=followers)
+
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
+
+#### Tested OS
+ * Ubuntu 14.04.6 LTS (amd64,armv7l)
+ * Ubuntu 16.04.7 LTS (amd64,armv7l)
+ * Ubuntu 18.04.5 LTS (amd64,armv7l)
+ * Raspbian GNU/Linux 10 (buster)
+
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
 
 #### Design Principles
  * Have a simple setup process and a minimal learning curve
  * Be usable as non-root when able
  * Be easy to install and configure
+
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
 
 ## License
 MIT License
@@ -443,3 +486,5 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
