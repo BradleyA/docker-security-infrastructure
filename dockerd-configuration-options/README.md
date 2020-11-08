@@ -8,6 +8,8 @@ Running sudo ./setup-dockerd.sh will move files into /etc/docker and create or u
 
 This has not been tested for other Linux OS's but should work.  Let me know if you use it on other Linus OS's.
 
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/blob/master/dockerd-configuration-options/README.md#dockerd-configuration-options)
+
 ## Install
 To Install, change into a directory that you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have Git installed then enter; "sudo apt-get install git" if using Debian/Ubuntu. Other Linux distribution install methods can be found here: https://git-scm.com/download/linux. On the GitHub page of this script use the "HTTPS clone URL" with the 'git clone' command.
 
@@ -47,6 +49,8 @@ To verfy that upstart started dockerd with no incidents, enter the following:
 
     sudo cat /var/log/upstart/docker.log
 
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/blob/master/dockerd-configuration-options/README.md#dockerd-configuration-options)
+
 #### Download files:
     
 **644	10-override.begin** - beginning default lines for /etc/systemd/system/docker.service.d/10-override.conf file used by systemd docker.service.  Additional lines for /etc/systemd/system/docker.service.d/10-override.conf file will be created by running /etc/docker/start-dockerd-with-systemd.sh.
@@ -62,6 +66,8 @@ To verfy that upstart started dockerd with no incidents, enter the following:
 **644	start-dockerd-with-systemd.end** - end of /etc/docker/start-dockerd-with-systemd.sh script which creates 10-override.conf file and moves it into /etc/systemd/system/docker.service.d directory and runs /bin/systemctl daemon-reload so docker.service will use latest copy of dockerd-configuration-file.service file.
 
 **700 uninstall-dockerd-scripts.sh** - script removes from your system the above files from /etc/docker directory and /etc/systemd/system/dockerd-configuration-file.service file; removes files and directories from /etc/systemd/system/docker.service.d and /etc/systemd/system/docker.service.wants; and displays what commands to run to remove this script and information from memory by dockerd.  Thus resetting your system back to its previous state.
+
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/blob/master/dockerd-configuration-options/README.md#dockerd-configuration-options)
 
 #### ARCHITECTURE TREE
 
@@ -94,19 +100,34 @@ To verfy that upstart started dockerd with no incidents, enter the following:
 
 #### To watch future updates in this repository select in the upper-right corner, the "Watch" list, and select Watching.
 
-#### Author
-[<img id="twitter" src="../images/twitter.png" width="50" a="twitter.com/bradleyaustintx/">
-](https://twitter.com/bradleyaustintx/)   [<img id="github" src="../images/github.png" width="50" a="https://github.com/BradleyA/">
-](https://github.com/BradleyA/)    [<img src="../images/linkedin.png" style="max-width:100%;" >](https://www.linkedin.com/in/bradleyhallen)
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/blob/master/dockerd-configuration-options/README.md#dockerd-configuration-options)
 
-#### System OS script tested
- * Ubuntu 14.04.4 LTS
- * Ubuntu 16.04.3 LTS (armv7l)
+----
+
+#### Contribute
+Please do contribute!  Issues and pull requests are welcome.  Thank you for your help improving software.
+
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/blob/master/dockerd-configuration-options/README.md#dockerd-configuration-options)
+
+#### Author
+[<img id="github" src="images/github.png" width="50" a="https://github.com/BradleyA/">](https://github.com/BradleyA/)    [<img src="images/linkedin.png" style="max-width:100%;" >](https://www.linkedin.com/in/bradleyhallen) [<img id="twitter" src="images/twitter.png" width="50" a="twitter.com/bradleyaustintx/">](https://twitter.com/bradleyaustintx/)       <a href="https://twitter.com/intent/follow?screen_name=bradleyaustintx"> <img src="https://img.shields.io/twitter/follow/bradleyaustintx.svg?label=Follow%20@bradleyaustintx" alt="Follow @bradleyaustintx" />    </a>          [![GitHub followers](https://img.shields.io/github/followers/BradleyA.svg?style=social&label=Follow&maxAge=2592000)](https://github.com/BradleyA?tab=followers)
+
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/blob/master/dockerd-configuration-options/README.md#dockerd-configuration-options)
+
+#### Tested OS
+ * Ubuntu 14.04.6 LTS (amd64,armv7l)
+ * Ubuntu 16.04.7 LTS (amd64,armv7l)
+ * Ubuntu 18.04.5 LTS (amd64,armv7l)
+ * Raspbian GNU/Linux 10 (buster)
+
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/blob/master/dockerd-configuration-options/README.md#dockerd-configuration-options)
 
 #### Design Principles
  * Have a simple setup process and a minimal learning curve
  * Be usable as non-root - [failed- must use sudo ]
  * Be easy to install and configure
+
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/blob/master/dockerd-configuration-options/README.md#dockerd-configuration-options)
 
 ## License
 MIT License
@@ -118,3 +139,5 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+[Return to top](https://github.com/BradleyA/docker-security-infrastructure/blob/master/dockerd-configuration-options/README.md#dockerd-configuration-options)
