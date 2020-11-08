@@ -8,6 +8,8 @@ Running sudo ./setup-dockerd.sh will move files into /etc/docker and create or u
 
 This has not been tested for other Linux OS's but should work.  Let me know if you use it on other Linus OS's.
 
+#### If you like this repository, select in the upper-right corner, [![GitHub stars](https://img.shields.io/github/stars/BradleyA/docker-security-infrastructure.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/BradleyA/docker-security-infrastructure/stargazers/), thank you.
+
 [Return to top](https://github.com/BradleyA/docker-security-infrastructure/blob/master/dockerd-configuration-options/README.md#dockerd-configuration-options)
 
 ## Install
