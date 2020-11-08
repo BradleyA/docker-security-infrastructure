@@ -6,10 +6,10 @@ Goal is to use one dockerd configuration file with dockerd flags for both Ubuntu
 
 Running sudo ./setup-dockerd.sh will move files into /etc/docker and create or update the /etc/systemd/system/docker.service.d/10-override.conf file (Ubuntu 16.04, systemd) and the /etc/default/docker (Ubuntu 14.04, Upstart).  To change the docker daemon flags, sudo edit /etc/docker/dockerd-configuration-file and run sudo /etc/docker/setup-dockerd.sh.  Docker daemon flag changes can be distributed to any Ubuntu cluster that use systemd or upstart by copying /etc/docker/dockerd-configuration-file to each system that is setup like this and running sudo /etc/docker/setup-dockerd.sh on each system.
 
-This has not been tested for other Linux OS's.  Let me know if you use it on other Linus OS's.
+This has not been tested for other Linux OS's but should work.  Let me know if you use it on other Linus OS's.
 
 ## Install
-To install, change to a location you want to download these files. Use git to pull or clone these files into a directory. If you do not have git then enter; "sudo apt-get install git". On the github repository page use the "HTTPS clone URL" with the 'git clone' command.
+To Install, change into a directory that you want to download the scripts. Use git to pull or clone these scripts into the directory. If you do not have Git installed then enter; "sudo apt-get install git" if using Debian/Ubuntu. Other Linux distribution install methods can be found here: https://git-scm.com/download/linux. On the GitHub page of this script use the "HTTPS clone URL" with the 'git clone' command.
 
     mkdir temp
     cd temp
