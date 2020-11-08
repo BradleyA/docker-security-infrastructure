@@ -22,9 +22,11 @@ This repository contains shell scripts that check user ssh permissions, setup an
 
 ----
 
-
+These bash scripts will create, copy, and check TLS public keys, private keys, and self-signed certificates for the docker user, daemon, and docker swarm. 
  * [docker-TLS](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS)
+ 
  * [dockerd-configuration-options](https://github.com/BradleyA/docker-security-infrastructure/tree/master/dockerd-configuration-options)
+ 
  * [ssh](https://github.com/BradleyA/docker-security-infrastructure/tree/master/ssh)
  
  [Return to top](https://github.com/BradleyA/docker-security-infrastructure/blob/master/README.md#docker-security-infrastructure)
