@@ -9,7 +9,7 @@
 [![GitHub Closed Issues](https://img.shields.io/github/issues-closed/BradleyA/docker-security-infrastructure?color=purple)](https://github.com/BradleyA/docker-security-infrastructure/issues?q=is%3Aclosed+is%3Aissue)
 
 [<img alt="GitHub Clones" src="https://img.shields.io/static/v1?label=Clones&message=460&color=blueviolet">](https://github.com/BradleyA/docker-security-infrastructure/blob/master/images/clone.table.md)
-[<img alt="GitHub Views" src="https://img.shields.io/static/v1?label=Views&message=2452&color=blueviolet">](https://github.com/BradleyA/docker-security-infrastructure/blob/master/images/view.table.md)
+[<img alt="GitHub Views" src="https://img.shields.io/static/v1?label=Views&message=2851&color=blueviolet">](https://github.com/BradleyA/docker-security-infrastructure/blob/master/images/view.table.md)
 [![GitHub Size](https://img.shields.io/github/repo-size/BradleyA/docker-security-infrastructure.svg)](https://github.com/BradleyA/docker-security-infrastructure/)
 ![Language Bash](https://img.shields.io/badge/%20Language-bash-blue.svg)
 [![MIT License](http://img.shields.io/badge/License-MIT-blue.png)](LICENSE)
