@@ -17,4 +17,4 @@ Total clones: 128
 ###### Updated: 2019-12-30
 **Note**  Data collection stopped between 10/14/2019 & 12/9/2019
 
-[Return to README](https://github.com/BradleyA/docker-security-infrastructure/blob/master/README.md#docker-security-infrastructure)
+[Return to README](https://github.com/BradleyA/docker-security-infrastructure/blob/master/README.md)
