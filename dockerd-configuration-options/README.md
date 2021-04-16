@@ -126,7 +126,7 @@ To verfy that upstart started dockerd with no incidents, enter the following:
 ----
 
 #### Contribute
-Please do contribute!  Issues and pull requests are welcome.  Thank you for your help improving software.
+Please do contribute!  Issues, comments, and pull requests are welcome.  Thank you for your help improving software.
 
 [Return to top](https://github.com/BradleyA/docker-security-infrastructure/blob/master/dockerd-configuration-options/README.md#dockerd-configuration-options)
 
