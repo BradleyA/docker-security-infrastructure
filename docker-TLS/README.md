@@ -454,7 +454,7 @@ To install the scripts, change to the directory you have write permission (examp
 ----
 
 #### Contribute
-Please do contribute!  Issues and pull requests are welcome.  Thank you for your help improving software.
+Please do contribute!  Issues, comments, and pull requests are welcome.  Thank you for your help improving software.
 
 [Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/docker-TLS#docker-tls)
 
