@@ -110,7 +110,7 @@ To remove a host from ~/.ssh/authorized_keys file:
 ----
 
 #### Contribute
-Please do contribute!  Issues and pull requests are welcome.  Thank you for your help improving software.
+Please do contribute!  Issues, comments, and pull requests are welcome.  Thank you for your help improving software.
 
 [Return to top](https://github.com/BradleyA/docker-security-infrastructure/tree/master/ssh#ssh)
 
