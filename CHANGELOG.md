@@ -2,7 +2,6 @@
 
     git clone https://github.com/BradleyA/<REPOSITORY>.git --branch 4.1
 
-
 ## Next Version Under Construction {Version  4.2.????}  <img id="Construction" src="images/construction-icon.gif" width="120">
 #### Release Name  prerelease 4.2.????
 #### Release Date  ????
