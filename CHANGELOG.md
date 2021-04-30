@@ -3,13 +3,14 @@
     git clone https://github.com/BradleyA/<REPOSITORY>.git --branch 4.1
 
 
-## Next Version Under Construction {Version  X.X.????}  <img id="Construction" src="images/construction-icon.gif" width="120">
-#### Release Name  prerelease
+## Next Version Under Construction {Version  4.2.????}  <img id="Construction" src="images/construction-icon.gif" width="120">
+#### Release Name  prerelease 4.2.????
 #### Release Date  ????
 ### Features Added
 ### Features Changes
 ### Features Deprecations
 ### Issues
+ * close #11 dockerd-configuration-options - why systemd
  * close #37 Incident Report - dockerd-configuration-options/README - review and update BUG
  * close #72 docker-TLS/copy-host-2-remote-host-tls.sh - display_help description typos
  * close #73 Incident Report - dockerd-configuration-options/start-dockerd-with-systemd.sh - line 166: /bin/systemctl No such file or directory
@@ -18,7 +19,6 @@
 ### Misc
 * backlog
     * #10 dockerd-configuration-options/setup-dockerd.sh systemctl daemon-reload testing
-    * #11 dockerd-configuration-options - why systemd
     * #40 swarm/{docker-enter,docker-swarm-clear} - test swarm script from 2016 clusters and upgrade
     * #44 registry solve the incident requiring --disable-content-trust
     * #45 ufw/create-ufw.sh - create firewall Uncomplicated Firwwall (UFW)
